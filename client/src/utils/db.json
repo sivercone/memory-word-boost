@@ -1,0 +1,34 @@
+{
+  "words": [
+    {
+      "id": 1,
+      "title": "Quis mollit mollit sint aliquip adipisicing ad sint.",
+      "description": "Ea mollit exercitation excepteur ex labore labore proident nulla ullamco nisi ullamco. Esse laborum est cupidatat occaecat duis. Enim esse ea est commodo eu. Deserunt Lorem ullamco sit incididunt ut adipisicing ea esse fugiat reprehenderit. Laboris quis tempor reprehenderit nisi pariatur.",
+      "tags": ["english - russian", "intermediate", "b1"],
+      "cards": []
+    },
+    {
+      "id": 2,
+      "title": "Do sunt deserunt officia est reprehenderit dolore",
+      "description": "Velit est elit Lorem magna do.",
+      "tags": ["spanish - english", "pre-intermediate", "a2", "easy"],
+      "cards": [
+        {
+          "id": 1,
+          "term": "umbrella",
+          "definiton": "зонт"
+        },
+        {
+          "id": 2,
+          "term": "bridge",
+          "definiton": "мост"
+        },
+        {
+          "id": 3,
+          "term": "behind",
+          "definiton": "сзади, позади"
+        }
+      ]
+    }
+  ]
+}

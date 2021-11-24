@@ -1,0 +1,101 @@
+.card {
+  &__h1 {
+    color: black;
+    font-size: 2.5rem;
+
+    span {
+      -webkit-text-stroke-width: 1px;
+      -webkit-text-fill-color: rgba(0, 0, 0, 0);
+      -webkit-text-stroke-color: black;
+    }
+  }
+
+  &__tags {
+    display: flex;
+    margin-top: 1rem;
+
+    li {
+      padding: 0 0.5rem;
+      margin-left: 0.5rem;
+      border-radius: 25px;
+      background-color: #cccccc;
+      color: #000000;
+    }
+
+    li:nth-child(1) {
+      margin-left: 0;
+    }
+  }
+
+  &__studies {
+    display: flex;
+    flex-wrap: wrap;
+
+    li {
+      width: 50%;
+      display: flex;
+      flex-direction: column;
+      padding: 1rem;
+      border-radius: 10px;
+      background-color: #181818;
+      color: #cccccc;
+      text-align: center;
+
+      span:nth-child(2) {
+        margin-top: 0.5rem;
+      }
+    }
+
+    li:nth-child(even) {
+      margin-left: 1rem;
+      width: calc(50% - 1rem);
+    }
+  }
+}
+
+.listset {
+  ul {
+    display: flex;
+    flex-direction: column;
+
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+      border-radius: 10px;
+      background-color: #181818;
+      color: #cccccc;
+
+      span {
+        flex-basis: 100%;
+      }
+
+      div {
+        display: flex;
+        gap: 0.5rem;
+      }
+    }
+  }
+}
+
+.createdby {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  margin: 1rem 0;
+  border: 3px solid #181818;
+  font-weight: 700;
+
+  &__author {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  &__movements {
+    display: flex;
+    gap: 0.5rem;
+  }
+}
