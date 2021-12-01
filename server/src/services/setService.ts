@@ -17,10 +17,16 @@ class SetService {
     return data;
   }
 
-  // https://www.tutorialrepublic.com/faq/how-to-convert-comma-separated-string-into-an-array-in-javascript.php
   public async create(payload: SetInterface): Promise<void> {
     if (isEmpty(payload)) throw new HttpException(400, 'No payload');
+    payload.tags = ((payload.tags as unknown) as string).replace(/\s+/g, '').split(',');
     await this.setModel.create(payload);
+  }
+
+  public async delete(payload: string): Promise<void> {
+    if (isEmpty(payload)) throw new HttpException(400, 'No payload');
+    const data = await this.setModel.findByIdAndDelete(payload);
+    if (!data) throw new HttpException(409, 'Conflict');
   }
 }
 

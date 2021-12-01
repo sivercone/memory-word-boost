@@ -14,5 +14,6 @@ export class setRoute implements Routes {
     this.router.get(`${this.path}`, setController.getSets);
     this.router.get(`${this.path}/:id`, setController.getSetById);
     this.router.post(`${this.path}`, setController.createSet);
+    this.router.delete(`${this.path}/:id`, setController.deleteSet);
   }
 }
