@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import request from 'supertest';
 import App from '@/app';
 import { CreateUserDto } from '@dtos/users.dto';
-import UsersRoute from '@routes/users.route';
+import UsersRoute from '@/routes/userRoute';
 
 afterAll(async () => {
   await new Promise<void>(resolve => setTimeout(() => resolve(), 500));

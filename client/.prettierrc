@@ -1,0 +1,9 @@
+{
+   "tabWidth": 3,
+   "singleQuote": true,
+   "trailingComma": "all",
+   "semi": true,
+   "jsxBracketSameLine": true,
+   "printWidth": 135,
+   "emmet.triggerExpansionOnTab": true
+}

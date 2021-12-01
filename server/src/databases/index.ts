@@ -9,6 +9,6 @@ export const dbConnection = {
     useNewUrlParser: true,
     useCreateIndex: true, // todo - without this crashing
     useUnifiedTopology: true,
-    useFindAndModify: false,
+    useFindAndModify: true,
   },
 };
