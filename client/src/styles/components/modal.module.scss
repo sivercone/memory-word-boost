@@ -1,0 +1,71 @@
+.overlay {
+   position: fixed;
+   top: 0;
+   left: 0;
+   bottom: 0;
+   width: 100%;
+   height: 100%;
+   background-color: #00000083;
+   //    transition: opacity 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+   // pointer-events: none;
+   backdrop-filter: blur(2px);
+}
+
+.modal {
+   position: fixed;
+   top: 50%;
+   left: 50%;
+   display: flex;
+   flex-direction: column;
+   max-width: 100%;
+   width: 420px;
+   overflow: hidden;
+   overflow-y: auto;
+   border-radius: 8px;
+   background-color: var(--white);
+   color: var(--black);
+   //    transition: opacity 0.1s cubic-bezier(0.4, 0, 0.2, 1), transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+
+   &__body {
+      padding: 1rem;
+
+      h3 {
+         padding: 1rem;
+         text-align: center;
+      }
+
+      p {
+         text-align: center;
+      }
+   }
+
+   &__actions {
+      position: sticky;
+      bottom: 0;
+      display: flex;
+      overflow: hidden;
+      border-bottom-right-radius: 8px;
+      border-bottom-left-radius: 8px;
+      border-top: 1px solid var(--black);
+
+      button {
+         flex: 1 1 100%;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         padding: 1rem 0;
+         text-transform: uppercase;
+         color: var(--black);
+         background: var(--white);
+         transition: all 0.2s ease-in-out;
+      }
+
+      button:first-child {
+         border-right: 1px solid var(--black);
+      }
+
+      button:hover {
+         background-color: darken($color: #cccccc, $amount: 5);
+      }
+   }
+}
