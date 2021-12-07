@@ -17,10 +17,19 @@ class SetService {
     return data;
   }
 
-  public async create(payload: SetInterface): Promise<void> {
+  public async create(payload: SetInterface): Promise<SetInterface> {
     if (isEmpty(payload)) throw new HttpException(400, 'No payload');
-    payload.tags = ((payload.tags as unknown) as string).replace(/\s+/g, '').split(',');
-    await this.setModel.create(payload);
+    if (!Array.isArray(payload.tags)) payload.tags = (payload.tags as string).replace(/\s+/g, '').split(',');
+    const data = await this.setModel.create(payload);
+    return data;
+  }
+
+  public async update(payload: SetInterface): Promise<SetInterface> {
+    if (isEmpty(payload)) throw new HttpException(400, 'No payload');
+    if (!Array.isArray(payload.tags)) payload.tags = (payload.tags as string).replace(/\s+/g, '').split(',');
+    const data = await this.setModel.findByIdAndUpdate(payload._id, payload);
+    if (!data) throw new HttpException(409, 'Conflict');
+    return data;
   }
 
   public async delete(payload: string): Promise<void> {

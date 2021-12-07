@@ -24,8 +24,18 @@ class SetController {
   public createSet = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const payload = req.body;
-      await setService.create(payload);
-      res.status(201).json({ message: 'created' });
+      const data = await setService.create(payload);
+      res.status(201).json(data._id);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public updateSet = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const payload = req.body;
+      const data = await setService.update(payload);
+      res.status(201).json(data._id);
     } catch (error) {
       next(error);
     }
