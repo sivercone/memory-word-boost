@@ -4,4 +4,6 @@ export interface SetInterface {
    description: string;
    tags: string[];
    cards: { _id: string; term: string; definition: string }[];
+   createdAt: string;
+   updateddAt: string;
 }

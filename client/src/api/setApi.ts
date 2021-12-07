@@ -15,13 +15,24 @@ export const setApi = {
       return response.json();
    },
 
-   async createSet(payload: SetInterface): Promise<void> {
+   async createSet(payload: SetInterface): Promise<string> {
       const response = await fetch(path, {
          method: 'POST',
          headers: { 'Content-Type': 'application/json' },
          body: JSON.stringify(payload),
       });
       if (!response.ok) throw new Error(response.statusText);
+      return response.json();
+   },
+
+   async updateSet(payload: SetInterface): Promise<string> {
+      const response = await fetch(path, {
+         method: 'PUT',
+         headers: { 'Content-Type': 'application/json' },
+         body: JSON.stringify(payload),
+      });
+      if (!response.ok) throw new Error(response.statusText);
+      return response.json();
    },
 
    async deleteSet(payload: string): Promise<void> {

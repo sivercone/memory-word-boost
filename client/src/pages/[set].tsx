@@ -8,11 +8,18 @@ import { useRouter } from 'next/dist/client/router';
 import { notify } from 'utils/notify';
 import { Modal, ModalBody, ModalActions } from 'components/Modal';
 import Custom404 from './404';
+import { useSetStore } from 'storage/useSetStore';
 
-const SetPage: NextPage<{ pagekey?: string }> = ({ pagekey }) => {
-   const set = useQuery(['set', pagekey], () => setApi.getSetById(pagekey!), { enabled: !!pagekey });
+const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
+   const set = useQuery(['set', pagekey], () => setApi.getSetById(pagekey), { enabled: !!pagekey });
    if (!set.data) return <Custom404 />;
    const router = useRouter();
+
+   const { setSetFigure } = useSetStore();
+   const onEdit = () => {
+      setSetFigure(set.data);
+      router.push(`/update-set/${set.data._id}`);
+   };
 
    const { mutateAsync } = useMutation(setApi.deleteSet);
    const onDeleteSet = async () => {
@@ -23,20 +30,12 @@ const SetPage: NextPage<{ pagekey?: string }> = ({ pagekey }) => {
       } catch (error) {}
    };
 
-   const [shownModal, setShownModal] = React.useState<boolean>(false);
-   const toggleShownModal = () => setShownModal(!shownModal);
+   const [shownModal, setShownModal] = React.useState<'del' | 'info'>();
+   const openModal = (payload: 'del' | 'info') => setShownModal(payload);
+   const closeModal = () => setShownModal(undefined);
 
    return (
       <>
-         <Modal isOpen={shownModal} onClose={toggleShownModal}>
-            <ModalBody>
-               <h3>Are you sure you want to delete this set?</h3>
-            </ModalBody>
-            <ModalActions>
-               <button onClick={toggleShownModal}>Cancel</button>
-               <button onClick={onDeleteSet}>Delete</button>
-            </ModalActions>
-         </Modal>
          <div className="container">
             <div className={style.card}>
                <h1 className={style.card__h1}>
@@ -50,7 +49,7 @@ const SetPage: NextPage<{ pagekey?: string }> = ({ pagekey }) => {
                </ul>
                <ul className={style.card__studies}>
                   <li>
-                     <Link href={`/learn/${pagekey}`}>
+                     <Link href={`/learn/${set.data._id}`}>
                         <a>
                            <span>
                               <svg xmlns="http://www.w3.org/2000/svg" width="5rem" height="5rem" viewBox="0 0 512 512">
@@ -66,7 +65,7 @@ const SetPage: NextPage<{ pagekey?: string }> = ({ pagekey }) => {
                      </Link>
                   </li>
                   <li>
-                     <Link href={`/cards/${pagekey}`}>
+                     <Link href={`/cards/${set.data._id}`}>
                         <a>
                            <span>
                               <svg xmlns="http://www.w3.org/2000/svg" width="5rem" height="5rem" viewBox="0 0 512 512">
@@ -89,19 +88,19 @@ const SetPage: NextPage<{ pagekey?: string }> = ({ pagekey }) => {
                   <span>SIVERCONE (you)</span>
                </div>
                <div className={style.createdby__movements}>
-                  <button onClick={toggleShownModal} title="edit">
+                  <button onClick={onEdit} title="edit">
                      <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#181818">
                         <path d="M0 0h24v24H0V0z" fill="none" />
                         <path d="M14.06 9.02l.92.92L5.92 19H5v-.92l9.06-9.06M17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83 3.75 3.75 1.83-1.83c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29zm-3.6 3.19L3 17.25V21h3.75L17.81 9.94l-3.75-3.75z" />
                      </svg>
                   </button>
-                  <button onClick={toggleShownModal} title="delete">
+                  <button onClick={() => openModal('del')} title="delete">
                      <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="#181818">
                         <path d="M0 0h24v24H0V0z" fill="none" />
                         <path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z" />
                      </svg>
                   </button>
-                  <button title="info">
+                  <button onClick={() => openModal('info')} title="info">
                      <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="#181818">
                         <path d="M0 0h24v24H0V0z" fill="none" />
                         <path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
@@ -151,6 +150,34 @@ const SetPage: NextPage<{ pagekey?: string }> = ({ pagekey }) => {
                </ul>
             </div>
          </div>
+         <Modal isOpen={!!shownModal} onClose={closeModal}>
+            <ModalBody>
+               {shownModal
+                  ? {
+                       del: <h3>Are you sure you want to delete this set?</h3>,
+                       info: (
+                          <>
+                             <h3>Information</h3>
+                             <p>This set was created {set.data.createdAt}</p>
+                          </>
+                       ),
+                    }[shownModal]
+                  : undefined}
+            </ModalBody>
+            <ModalActions>
+               {shownModal
+                  ? {
+                       del: (
+                          <>
+                             <button onClick={closeModal}>Cancel</button>
+                             <button onClick={onDeleteSet}>Delete</button>
+                          </>
+                       ),
+                       info: <button onClick={closeModal}>OK</button>,
+                    }[shownModal]
+                  : undefined}
+            </ModalActions>
+         </Modal>
       </>
    );
 };

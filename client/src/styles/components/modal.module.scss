@@ -60,7 +60,7 @@
          transition: all 0.2s ease-in-out;
       }
 
-      button:first-child {
+      button:not(:only-child):not(:last-child) {
          border-right: 1px solid var(--black);
       }
 

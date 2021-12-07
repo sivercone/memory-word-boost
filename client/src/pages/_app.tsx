@@ -15,7 +15,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
          <Head>
             <title>MWB</title>
          </Head>
-         <Header />
+         {true ? <Header /> : undefined}
          <QueryClientProvider client={queryClient}>
             <Hydrate state={pageProps.dehydratedState}>
                <AnimatePresence exitBeforeEnter>
