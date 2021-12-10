@@ -68,4 +68,38 @@
          background-color: darken($color: #cccccc, $amount: 5);
       }
    }
+
+   &__inputs {
+      label {
+         border-left: 1px solid var(--black);
+         border-right: 1px solid var(--black);
+         border-top: 1px solid var(--black);
+         border-bottom: 0;
+      }
+
+      label:last-child {
+         border-bottom: 1px solid var(--black);
+      }
+   }
+
+   &__list {
+      padding: 0 1rem 2rem 1rem;
+
+      li {
+         padding: 0.5rem 1rem;
+         background-color: #ffffff73;
+      }
+
+      li:not(:last-child) {
+         border-bottom: 1px solid var(--white);
+      }
+
+      li:first-child {
+         border-radius: 10px 10px 0 0;
+      }
+
+      li:last-child {
+         border-radius: 0 0 10px 10px;
+      }
+   }
 }

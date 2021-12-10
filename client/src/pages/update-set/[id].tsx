@@ -9,7 +9,7 @@ import Custom404 from 'pages/404';
 const UpdateSet: NextPage<{ pagekey: string }> = ({ pagekey }) => {
    const { setFigure } = useSetStore();
    // if(!setFigure)
-   const fetch = useQuery(['set', pagekey], () => setApi.getSetById(pagekey), { enabled: !!!setFigure });
+   const fetch = useQuery(['set', pagekey], () => setApi.getById(pagekey), { enabled: !!!setFigure });
 
    const data = setFigure || fetch.data;
 

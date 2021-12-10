@@ -12,7 +12,7 @@
 
    &__tags {
       display: flex;
-      margin-top: 1rem;
+      margin: 1rem 0;
 
       li {
          padding: 0 0.5rem;
@@ -59,6 +59,10 @@
 }
 
 .listset {
+   h2 {
+      margin-bottom: 1rem;
+   }
+
    ul {
       display: flex;
       flex-direction: column;

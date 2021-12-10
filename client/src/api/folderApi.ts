@@ -1,21 +1,15 @@
-import { SetInterface } from 'interfaces';
+import { FolderInterface } from 'interfaces';
 
-const path = 'http://localhost:7001/set';
+const path = 'http://localhost:7001/folder';
 
-export const setApi = {
-   async get(): Promise<SetInterface[]> {
+export const folderApi = {
+   async get(): Promise<FolderInterface[]> {
       const response = await fetch(`${path}s`);
       if (!response.ok) throw new Error(response.statusText);
       return response.json();
    },
 
-   async getById(payload: string): Promise<SetInterface> {
-      const response = await fetch(`${path}/${payload}`);
-      if (!response.ok) throw new Error(response.statusText);
-      return response.json();
-   },
-
-   async create(payload: SetInterface): Promise<string> {
+   async create(payload: FolderInterface): Promise<void> {
       const response = await fetch(path, {
          method: 'POST',
          headers: { 'Content-Type': 'application/json' },
@@ -25,7 +19,7 @@ export const setApi = {
       return response.json();
    },
 
-   async update(payload: SetInterface): Promise<string> {
+   async update(payload: FolderInterface): Promise<void> {
       const response = await fetch(path, {
          method: 'PUT',
          headers: { 'Content-Type': 'application/json' },

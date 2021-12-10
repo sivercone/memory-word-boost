@@ -19,11 +19,11 @@ interface SetFigure {
 
 const SetEditing: NextPage<{ setFigure?: SetFigure }> = ({ setFigure }) => {
    const router = useRouter();
-   const { register, handleSubmit, reset, control } = useForm<SetInterface>({ defaultValues: setFigure });
+   const { register, handleSubmit, control } = useForm<SetInterface>({ defaultValues: setFigure });
    const { fields, append, remove } = useFieldArray({ name: 'cards', control });
 
-   const create = useMutation(setApi.createSet);
-   const update = useMutation(setApi.updateSet);
+   const create = useMutation(setApi.create);
+   const update = useMutation(setApi.update);
    const onSubmit = async (payload: SetInterface) => {
       try {
          if (setFigure && setFigure._id) await update.mutateAsync(payload);

@@ -6,13 +6,16 @@ import { QueryClient, useQuery, dehydrate, useMutation } from 'react-query';
 import { setApi } from 'api/setApi';
 import { useRouter } from 'next/dist/client/router';
 import { notify } from 'utils/notify';
-import { Modal, ModalBody, ModalActions } from 'components/Modal';
+import { Modal, ModalBody, ModalActions, ModalList } from 'components/Modal';
 import Custom404 from './404';
 import { useSetStore } from 'storage/useSetStore';
+import { folderApi } from 'api/folderApi';
 
 const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
-   const set = useQuery(['set', pagekey], () => setApi.getSetById(pagekey), { enabled: !!pagekey });
+   const set = useQuery(['set', pagekey], () => setApi.getById(pagekey), { enabled: !!pagekey });
    if (!set.data) return <Custom404 />;
+
+   const folder = useQuery('folders', folderApi.get);
    const router = useRouter();
 
    const { setSetFigure } = useSetStore();
@@ -21,7 +24,7 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
       router.push(`/update-set/${set.data._id}`);
    };
 
-   const { mutateAsync } = useMutation(setApi.deleteSet);
+   const { mutateAsync } = useMutation(setApi.delete);
    const onDeleteSet = async () => {
       try {
          await mutateAsync(set.data._id);
@@ -33,6 +36,9 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
    const [shownModal, setShownModal] = React.useState<'del' | 'info'>();
    const openModal = (payload: 'del' | 'info') => setShownModal(payload);
    const closeModal = () => setShownModal(undefined);
+
+   const [isModal, setIsModal] = React.useState(false);
+   const toggleIsModal = () => setIsModal(!isModal);
 
    return (
       <>
@@ -92,6 +98,12 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                      <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#181818">
                         <path d="M0 0h24v24H0V0z" fill="none" />
                         <path d="M14.06 9.02l.92.92L5.92 19H5v-.92l9.06-9.06M17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83 3.75 3.75 1.83-1.83c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29zm-3.6 3.19L3 17.25V21h3.75L17.81 9.94l-3.75-3.75z" />
+                     </svg>
+                  </button>
+                  <button onClick={toggleIsModal} title="add to folder">
+                     <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="#181818">
+                        <path d="M0 0h24v24H0V0z" fill="none" />
+                        <path d="M20 6h-8l-2-2H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm0 12H4V6h5.17l2 2H20v10zm-8-4h2v2h2v-2h2v-2h-2v-2h-2v2h-2z" />
                      </svg>
                   </button>
                   <button onClick={() => openModal('del')} title="delete">
@@ -178,6 +190,27 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                   : undefined}
             </ModalActions>
          </Modal>
+         <Modal isOpen={isModal} onClose={toggleIsModal}>
+            <ModalBody>
+               <h3>Folder Management</h3>
+            </ModalBody>
+            <ModalList>
+               {folder.data
+                  ? folder.data.map((content) => (
+                       <li key={content._id}>
+                          <label className="checkbox">
+                             <span>{content.name}</span>
+                             <input type="checkbox" defaultChecked={set.data.folder ? set.data.folder.includes(content._id) : false} />
+                          </label>
+                       </li>
+                    ))
+                  : undefined}
+            </ModalList>
+            <ModalActions>
+               <button>Cancel</button>
+               <button>Apply</button>
+            </ModalActions>
+         </Modal>
       </>
    );
 };
@@ -185,7 +218,7 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
 SetPage.getInitialProps = async ({ query }) => {
    const pagekey = typeof query.set === 'string' ? query.set : '';
    const queryClient = new QueryClient();
-   if (pagekey) await queryClient.prefetchQuery(['set', pagekey], () => setApi.getSetById(pagekey));
+   if (pagekey) await queryClient.prefetchQuery(['set', pagekey], () => setApi.getById(pagekey));
    return { pagekey, dehydratedState: dehydrate(queryClient) };
 };
 

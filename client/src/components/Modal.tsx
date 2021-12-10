@@ -20,6 +20,10 @@ const fade = {
 export const ModalBody: React.FC<{ children: React.ReactNode }> = ({ children }) => (
    <div className={style.modal__body}>{children}</div>
 );
+export const ModalInputs: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+   <div className={style.modal__inputs}>{children}</div>
+);
+export const ModalList: React.FC<{ children: React.ReactNode }> = ({ children }) => <ul className={style.modal__list}>{children}</ul>;
 export const ModalActions: React.FC<{ children: React.ReactNode }> = ({ children }) => (
    <div className={style.modal__actions}>{children}</div>
 );
