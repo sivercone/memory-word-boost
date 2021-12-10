@@ -6,6 +6,7 @@ const setSchema: Schema = new Schema({
   description: String,
   tags: [String],
   cards: [{ term: String, definition: String }],
+  folder: [{ type: Schema.Types.ObjectId, ref: 'Folder' }],
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });

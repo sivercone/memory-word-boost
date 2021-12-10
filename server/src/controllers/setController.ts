@@ -35,7 +35,7 @@ class SetController {
     try {
       const payload = req.body;
       const data = await setService.update(payload);
-      res.status(201).json(data._id);
+      res.status(200).json(data._id);
     } catch (error) {
       next(error);
     }
