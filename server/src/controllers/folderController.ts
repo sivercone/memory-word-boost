@@ -11,6 +11,16 @@ class FolderController {
     }
   };
 
+  public getFolderById = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const payload = req.params.id;
+      const data = await folderService.findById(payload);
+      res.status(200).json(data);
+    } catch (error) {
+      next(error);
+    }
+  };
+
   public createFolder = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const payload = req.body;

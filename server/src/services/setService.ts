@@ -12,6 +12,7 @@ class SetService {
   }
 
   public async findById(payload: string): Promise<SetInterface> {
+    if (isEmpty(payload)) throw new HttpException(400, 'No payload');
     const data = await this.setModel.findById(payload);
     if (!data) throw new HttpException(404, 'Not Found');
     return data;
