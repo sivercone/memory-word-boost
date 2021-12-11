@@ -10,26 +10,21 @@ import { PageTransition } from 'components/PageTransition';
 import { queryClient } from 'utils/queryClient';
 
 function MyApp({ Component, pageProps, router }: AppProps) {
-   return (
-      <QueryClientProvider client={queryClient}>
-         <Hydrate state={pageProps.dehydratedState}>
-            <Head>
-               <title>MWB</title>
-            </Head>
-            {true ? <Header /> : undefined}
-            <AnimatePresence exitBeforeEnter>
-               <PageTransition key={router.route}>
-                  <Component {...pageProps} />
-               </PageTransition>
-            </AnimatePresence>
-            <ToastContainer
-               progressStyle={{ background: 'var(--yellow)' }}
-               position="bottom-right"
-               autoClose={6000}
-               draggable={false}
-            />
-         </Hydrate>
-      </QueryClientProvider>
-   );
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Hydrate state={pageProps.dehydratedState}>
+        <Head>
+          <title>MWB</title>
+        </Head>
+        {true ? <Header /> : undefined}
+        <AnimatePresence exitBeforeEnter>
+          <PageTransition key={router.route}>
+            <Component {...pageProps} />
+          </PageTransition>
+        </AnimatePresence>
+        <ToastContainer progressStyle={{ background: 'var(--yellow)' }} position="bottom-right" autoClose={6000} draggable={false} />
+      </Hydrate>
+    </QueryClientProvider>
+  );
 }
 export default MyApp;

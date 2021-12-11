@@ -1,19 +1,19 @@
 .flipper {
-   position: sticky;
-   top: 25%;
-   //    position: relative;
-   transform-style: preserve-3d;
+  position: sticky;
+  top: 25%;
+  //    position: relative;
+  transform-style: preserve-3d;
 
-   &__picture {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      backface-visibility: hidden;
-      object-fit: contain;
+  &__picture {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    backface-visibility: hidden;
+    object-fit: contain;
 
-      max-width: 90vw;
-      max-height: 50vh;
-      width: 100%;
-   }
+    max-width: 90vw;
+    max-height: 50vh;
+    width: 100%;
+  }
 }

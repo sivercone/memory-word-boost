@@ -7,20 +7,20 @@ import SetEditing from 'components/SetEditing';
 import Custom404 from 'pages/404';
 
 const UpdateSet: NextPage<{ pagekey: string }> = ({ pagekey }) => {
-   const { setFigure } = useSetStore();
-   // if(!setFigure)
-   const fetch = useQuery(['set', pagekey], () => setApi.getById(pagekey), { enabled: !!!setFigure });
+  const { setFigure } = useSetStore();
+  // if(!setFigure)
+  const fetch = useQuery(['set', pagekey], () => setApi.getById(pagekey), { enabled: !!!setFigure });
 
-   const data = setFigure || fetch.data;
+  const data = setFigure || fetch.data;
 
-   if (!data) return <Custom404 />;
+  if (!data) return <Custom404 />;
 
-   return <SetEditing setFigure={data} />;
+  return <SetEditing setFigure={data} />;
 };
 
 UpdateSet.getInitialProps = async ({ query }) => {
-   const pagekey = typeof query.id === 'string' ? query.id : '';
-   return { pagekey };
+  const pagekey = typeof query.id === 'string' ? query.id : '';
+  return { pagekey };
 };
 
 export default UpdateSet;
