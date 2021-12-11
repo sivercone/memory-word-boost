@@ -6,7 +6,7 @@ import { CreateUserDto } from '@dtos/users.dto';
 import UsersRoute from '@/routes/userRoute';
 
 afterAll(async () => {
-  await new Promise<void>(resolve => setTimeout(() => resolve(), 500));
+  await new Promise<void>((resolve) => setTimeout(() => resolve(), 500));
 });
 
 describe('Testing Users', () => {

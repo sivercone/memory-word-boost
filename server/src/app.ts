@@ -47,11 +47,14 @@ class App {
   }
 
   private connectToDatabase() {
-    if (this.env !== 'production') {
-      set('debug', true);
-    }
-
-    connect(dbConnection.url, dbConnection.options);
+    connect(dbConnection.url, dbConnection.options)
+      .then(() => {
+        logger.info('The database is connected.');
+      })
+      .catch((error) => {
+        logger.error(`Error to connect with database: ${error}.`);
+        if (this.env !== 'production') logger.error(`Error: set info - ${set}.`);
+      });
   }
 
   private initializeMiddlewares() {
@@ -66,7 +69,7 @@ class App {
   }
 
   private initializeRoutes(routes: Routes[]) {
-    routes.forEach(route => {
+    routes.forEach((route) => {
       this.app.use('/', route.router);
     });
   }
