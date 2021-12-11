@@ -2,7 +2,7 @@ import React from 'react';
 import type { NextPage } from 'next';
 import style from 'styles/pages/set.module.scss';
 import Link from 'next/link';
-import { QueryClient, useQuery, dehydrate, useMutation } from 'react-query';
+import { QueryClient, useQuery, dehydrate, useMutation, useQueryClient } from 'react-query';
 import { setApi } from 'api/setApi';
 import { useRouter } from 'next/dist/client/router';
 import { notify } from 'utils/notify';
@@ -47,7 +47,8 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
       if (includedFolders.includes(payload)) setIncludedFolders(includedFolders.filter((el) => el !== payload));
       else setIncludedFolders([...includedFolders, payload]);
    };
-   const fetchUpdate = useMutation(setApi.update);
+   const queryClient = useQueryClient();
+   const fetchUpdate = useMutation(setApi.update, { onSuccess: () => queryClient.invalidateQueries(['set', pagekey]) });
    const updateSetFolders = async () => {
       try {
          await fetchUpdate.mutateAsync({ ...set.data, folder: includedFolders });
