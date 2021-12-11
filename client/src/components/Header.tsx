@@ -1,11 +1,7 @@
-import { folderApi } from 'api/folderApi';
-import { FolderInterface } from 'interfaces';
 import Link from 'next/link';
 import React from 'react';
-import { useForm } from 'react-hook-form';
-import { useMutation } from 'react-query';
 import style from 'styles/components/header.module.scss';
-import { Modal, ModalActions, ModalBody, ModalInputs } from './Modal';
+import { FolderEditing } from './FolderEditing';
 
 export const Header: React.FC = () => {
    const [shownFolder, setShownFolder] = React.useState<boolean>(false);
@@ -35,42 +31,7 @@ export const Header: React.FC = () => {
                <img src="/assets/download.webp" alt="" />
             </button>
          </div>
-         <CreateFolder isOpen={shownFolder} toggleShown={toggleShownFolder} />
+         <FolderEditing isOpen={shownFolder} toggleShown={toggleShownFolder} />
       </header>
-   );
-};
-
-const CreateFolder: React.FC<{ isOpen: boolean; toggleShown: () => void }> = ({ isOpen, toggleShown }) => {
-   const { register, handleSubmit } = useForm<FolderInterface>();
-   const { mutateAsync } = useMutation(folderApi.create);
-   const onSubmit = async (data: FolderInterface) => {
-      try {
-         await mutateAsync(data);
-      } catch (error) {}
-   };
-   return (
-      <Modal isOpen={isOpen} onClose={toggleShown}>
-         <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
-            <ModalBody>
-               <h3>Create a new folder</h3>
-               <ModalInputs>
-                  <label className="input">
-                     <span>Name</span>
-                     <input {...register('name')} />
-                  </label>
-                  <label className="input">
-                     <span>Description (optional)</span>
-                     <input {...register('description')} />
-                  </label>
-               </ModalInputs>
-            </ModalBody>
-            <ModalActions>
-               <button onClick={toggleShown} type="button">
-                  Cancel
-               </button>
-               <button type="submit">Create</button>
-            </ModalActions>
-         </form>
-      </Modal>
    );
 };
