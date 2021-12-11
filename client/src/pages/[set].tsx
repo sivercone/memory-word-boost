@@ -11,6 +11,8 @@ import Custom404 from './404';
 import { useSetStore } from 'storage/useSetStore';
 import { folderApi } from 'api/folderApi';
 
+type ModalVariants = 'del' | 'info' | 'folder';
+
 const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
    const set = useQuery(['set', pagekey], () => setApi.getById(pagekey), { enabled: !!pagekey });
    if (!set.data) return <Custom404 />;
@@ -24,21 +26,34 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
       router.push(`/update-set/${set.data._id}`);
    };
 
-   const { mutateAsync } = useMutation(setApi.delete);
+   const fetchDelete = useMutation(setApi.delete);
    const onDeleteSet = async () => {
       try {
-         await mutateAsync(set.data._id);
+         await fetchDelete.mutateAsync(set.data._id);
          router.push('/');
          notify(`Successfully deleted Study Set: ${set.data.title}`);
       } catch (error) {}
    };
 
-   const [shownModal, setShownModal] = React.useState<'del' | 'info'>();
-   const openModal = (payload: 'del' | 'info') => setShownModal(payload);
+   const [shownModal, setShownModal] = React.useState<ModalVariants>();
+   const openModal = (payload: ModalVariants) => setShownModal(payload);
    const closeModal = () => setShownModal(undefined);
 
-   const [isModal, setIsModal] = React.useState(false);
-   const toggleIsModal = () => setIsModal(!isModal);
+   const [includedFolders, setIncludedFolders] = React.useState<string[]>([]);
+   React.useEffect(() => {
+      if (set.data) setIncludedFolders(set.data.folder);
+   }, [set.data]);
+   const toggleIncludeFolder = (payload: string) => {
+      if (includedFolders.includes(payload)) setIncludedFolders(includedFolders.filter((el) => el !== payload));
+      else setIncludedFolders([...includedFolders, payload]);
+   };
+   const fetchUpdate = useMutation(setApi.update);
+   const updateSetFolders = async () => {
+      try {
+         await fetchUpdate.mutateAsync({ ...set.data, folder: includedFolders });
+         closeModal();
+      } catch (error) {}
+   };
 
    return (
       <>
@@ -90,8 +105,7 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
             </div>
             <div className={style.createdby}>
                <div className={style.createdby__author}>
-                  <span>Created by</span>
-                  <span>SIVERCONE (you)</span>
+                  <span>Created by SIVERCONE (you)</span>
                </div>
                <div className={style.createdby__movements}>
                   <button onClick={onEdit} title="edit">
@@ -100,7 +114,7 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                         <path d="M14.06 9.02l.92.92L5.92 19H5v-.92l9.06-9.06M17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83 3.75 3.75 1.83-1.83c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29zm-3.6 3.19L3 17.25V21h3.75L17.81 9.94l-3.75-3.75z" />
                      </svg>
                   </button>
-                  <button onClick={toggleIsModal} title="add to folder">
+                  <button onClick={() => openModal('folder')} title="add to folder">
                      <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="#181818">
                         <path d="M0 0h24v24H0V0z" fill="none" />
                         <path d="M20 6h-8l-2-2H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm0 12H4V6h5.17l2 2H20v10zm-8-4h2v2h2v-2h2v-2h-2v-2h-2v2h-2z" />
@@ -173,9 +187,27 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                              <p>This set was created {set.data.createdAt}</p>
                           </>
                        ),
+                       folder: <h3>Folder Management</h3>,
                     }[shownModal]
                   : undefined}
             </ModalBody>
+            {shownModal === 'folder' ? (
+               <ModalList>
+                  {folder.data
+                     ? folder.data.map((content) => (
+                          <li onClick={() => toggleIncludeFolder(content._id)} key={content._id}>
+                             <label className="checkbox">
+                                <span>{content.name}</span>
+                                <input
+                                   type="checkbox"
+                                   defaultChecked={set.data.folder ? set.data.folder.includes(content._id) : false}
+                                />
+                             </label>
+                          </li>
+                       ))
+                     : undefined}
+               </ModalList>
+            ) : undefined}
             <ModalActions>
                {shownModal
                   ? {
@@ -186,29 +218,14 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                           </>
                        ),
                        info: <button onClick={closeModal}>OK</button>,
+                       folder: (
+                          <>
+                             <button onClick={closeModal}>Cancel</button>
+                             <button onClick={updateSetFolders}>Apply</button>
+                          </>
+                       ),
                     }[shownModal]
                   : undefined}
-            </ModalActions>
-         </Modal>
-         <Modal isOpen={isModal} onClose={toggleIsModal}>
-            <ModalBody>
-               <h3>Folder Management</h3>
-            </ModalBody>
-            <ModalList>
-               {folder.data
-                  ? folder.data.map((content) => (
-                       <li key={content._id}>
-                          <label className="checkbox">
-                             <span>{content.name}</span>
-                             <input type="checkbox" defaultChecked={set.data.folder ? set.data.folder.includes(content._id) : false} />
-                          </label>
-                       </li>
-                    ))
-                  : undefined}
-            </ModalList>
-            <ModalActions>
-               <button>Cancel</button>
-               <button>Apply</button>
             </ModalActions>
          </Modal>
       </>

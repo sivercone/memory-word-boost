@@ -1,10 +1,16 @@
-import { FolderInterface } from 'interfaces';
+import { FolderInterface, SetInterface } from 'interfaces';
 
 const path = 'http://localhost:7001/folder';
 
 export const folderApi = {
    async get(): Promise<FolderInterface[]> {
       const response = await fetch(`${path}s`);
+      if (!response.ok) throw new Error(response.statusText);
+      return response.json();
+   },
+
+   async getById(payload: string): Promise<{ folder: FolderInterface; sets: SetInterface[] }> {
+      const response = await fetch(`${path}/${payload}`);
       if (!response.ok) throw new Error(response.statusText);
       return response.json();
    },
