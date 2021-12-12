@@ -26,7 +26,7 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     router.push(`/update-set/${set.data.id}`);
   };
 
-  const fetchDelete = useMutation(setApi.delete, { onSuccess: () => queryClient.invalidateQueries(['set', pagekey]) });
+  const fetchDelete = useMutation(setApi.delete, { onSuccess: () => queryClient.invalidateQueries('sets') });
   const onDeleteSet = async () => {
     try {
       await fetchDelete.mutateAsync(set.data.id);
