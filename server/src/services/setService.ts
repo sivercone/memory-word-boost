@@ -1,19 +1,20 @@
 import { SetInterface } from '@/interfaces';
-import setModel from '@/models/setModel';
+import SetEntity from '@/entity/SetEntity';
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
+import { getRepository } from 'typeorm';
 
 class SetService {
-  public setModel = setModel;
-
   public async findAll(): Promise<SetInterface[]> {
-    const sets = await this.setModel.find();
+    const setRepo = getRepository(SetEntity);
+    const sets = await setRepo.find({ relations: ['folders'] });
     return sets;
   }
 
   public async findById(payload: string): Promise<SetInterface> {
     if (isEmpty(payload)) throw new HttpException(400, 'No payload');
-    const data = await this.setModel.findById(payload);
+    const setRepo = getRepository(SetEntity);
+    const data = await setRepo.findOne({ where: { id: payload }, relations: ['folders'] });
     if (!data) throw new HttpException(404, 'Not Found');
     return data;
   }
@@ -21,22 +22,27 @@ class SetService {
   public async create(payload: SetInterface): Promise<SetInterface> {
     if (isEmpty(payload)) throw new HttpException(400, 'No payload');
     if (!Array.isArray(payload.tags)) payload.tags = (payload.tags as string).replace(/\s+/g, '').split(',');
-    const data = await this.setModel.create(payload);
-    return data;
+    const setRepo = getRepository(SetEntity);
+    const saveSet = await setRepo.save(payload);
+    return saveSet;
   }
 
   public async update(payload: SetInterface): Promise<SetInterface> {
     if (isEmpty(payload)) throw new HttpException(400, 'No payload');
+    const setRepo = getRepository(SetEntity);
+    const findSet = await setRepo.findOne({ where: { id: payload.id } });
+    if (!findSet) throw new HttpException(409, 'Conflict');
     if (!Array.isArray(payload.tags)) payload.tags = (payload.tags as string).replace(/\s+/g, '').split(',');
-    const data = await this.setModel.findByIdAndUpdate(payload._id, payload);
-    if (!data) throw new HttpException(409, 'Conflict');
-    return data;
+    const saveSet = await setRepo.save(payload);
+    return saveSet;
   }
 
   public async delete(payload: string): Promise<void> {
     if (isEmpty(payload)) throw new HttpException(400, 'No payload');
-    const data = await this.setModel.findByIdAndDelete(payload);
+    const setRepo = getRepository(SetEntity);
+    const data = await setRepo.findOne({ where: { id: payload } });
     if (!data) throw new HttpException(409, 'Conflict');
+    await setRepo.delete({ id: payload });
   }
 }
 

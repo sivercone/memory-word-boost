@@ -1,19 +1,19 @@
 export interface SetInterface {
-  _id?: string;
+  id: string;
   title: string;
   description: string;
   tags: string[];
-  cardSet: { term: string; definition: string }[];
-  folder?: string[];
-  createdAt?: string;
-  updatedAt?: string;
+  cards: { term: string; definition: string }[];
+  folders?: FolderInterface[];
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface FolderInterface {
-  _id?: string;
+  id: string;
   name: string;
   description: string;
-  sets?: string[];
-  createdAt?: string;
-  updatedAt?: string;
+  sets?: SetInterface[];
+  createdAt: string;
+  updatedAt: string;
 }

@@ -2,8 +2,11 @@
   "env": "production",
   "dbConfig": {
     "host": "localhost",
-    "database": "mongoose",
-    "port": 27017
+    "database": "mwb",
+    "port": 5432,
+    "user": "sivercone",
+    "password": "",
+    "synchronize": false
   },
   "secretKey": "secretKey",
   "log": {

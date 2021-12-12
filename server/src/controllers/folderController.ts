@@ -25,7 +25,7 @@ class FolderController {
     try {
       const payload = req.body;
       const data = await folderService.create(payload);
-      res.status(201).json(data._id);
+      res.status(201).json(data.id);
     } catch (error) {
       next(error);
     }

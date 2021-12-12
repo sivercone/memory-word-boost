@@ -8,13 +8,13 @@ import express from 'express';
 import helmet from 'helmet';
 import hpp from 'hpp';
 import morgan from 'morgan';
-import { connect, set } from 'mongoose';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { dbConnection } from '@databases';
 import { Routes } from '@interfaces/routes.interface';
 import errorMiddleware from '@middlewares/error.middleware';
 import { logger, stream } from '@utils/logger';
+import { createConnection } from 'typeorm';
 
 class App {
   public app: express.Application;
@@ -47,14 +47,9 @@ class App {
   }
 
   private connectToDatabase() {
-    connect(dbConnection.url, dbConnection.options)
-      .then(() => {
-        logger.info('The database is connected.');
-      })
-      .catch((error) => {
-        logger.error(`Error to connect with database: ${error}.`);
-        if (this.env !== 'production') logger.error(`Error: set info - ${set}.`);
-      });
+    createConnection(dbConnection)
+      .then(() => logger.info('The database is connected.'))
+      .catch((error) => logger.error(`Error to connect with database: ${error}.`));
   }
 
   private initializeMiddlewares() {

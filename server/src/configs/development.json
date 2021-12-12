@@ -2,8 +2,11 @@
   "env": "development",
   "dbConfig": {
     "host": "localhost",
-    "database": "memorywordboost",
-    "port": 27017
+    "database": "mwb",
+    "port": 5432,
+    "user": "sivercone",
+    "password": "",
+    "synchronize": true
   },
   "secretKey": "secretKey",
   "log": {

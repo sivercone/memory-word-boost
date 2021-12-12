@@ -5,7 +5,7 @@ import { CreateUserDto } from '@dtos/users.dto';
 import { HttpException } from '@exceptions/HttpException';
 import { DataStoredInToken, TokenData } from '@interfaces/auth.interface';
 import { User } from '@interfaces/users.interface';
-import userModel from '@/models/userModel';
+import userModel from '@/entity/userModel';
 import { isEmpty } from '@utils/util';
 
 class AuthService {
