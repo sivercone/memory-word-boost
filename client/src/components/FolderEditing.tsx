@@ -21,7 +21,7 @@ interface SingleFolderInterface {
 }
 
 export const FolderEditing: React.FC<Props> = ({ isOpen, onClose, folderFigure }) => {
-  const { register, handleSubmit } = useForm<SingleFolderInterface>({ defaultValues: folderFigure });
+  const { register, handleSubmit, reset } = useForm<SingleFolderInterface>({ defaultValues: folderFigure });
   const queryClient = useQueryClient();
   const router = useRouter();
   const create = useMutation(folderApi.create);
@@ -31,11 +31,12 @@ export const FolderEditing: React.FC<Props> = ({ isOpen, onClose, folderFigure }
       if (folderFigure && folderFigure.id) await update.mutateAsync(data);
       else await create.mutateAsync(data);
       onClose();
+      reset();
     } catch (error) {}
   };
 
   React.useEffect(() => {
-    if (create.isSuccess) router.push(`folder/${create.data}`);
+    if (create.isSuccess) router.push(`/folder/${create.data}`);
   }, [create.isSuccess]);
 
   return (
