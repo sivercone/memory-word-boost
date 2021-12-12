@@ -24,8 +24,8 @@ class FolderController {
   public createFolder = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const payload = req.body;
-      await folderService.create(payload);
-      res.status(201).json('success');
+      const data = await folderService.create(payload);
+      res.status(201).json(data._id);
     } catch (error) {
       next(error);
     }

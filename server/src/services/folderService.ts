@@ -21,15 +21,17 @@ class FolderService {
     return { folder, sets };
   }
 
-  public async create(payload: FolderInterface): Promise<void> {
+  public async create(payload: FolderInterface): Promise<FolderInterface> {
     if (isEmpty(payload)) throw new HttpException(400, 'No payload');
-    await this.folderModel.create(payload);
+    const data = await this.folderModel.create(payload);
+    return data;
   }
 
   public async update(payload: FolderInterface): Promise<void> {
     if (isEmpty(payload)) throw new HttpException(400, 'No payload');
-    const data = await this.folderModel.findByIdAndUpdate(payload._id, payload);
-    if (!data) throw new HttpException(409, 'Conflict');
+    const folder = await this.folderModel.findByIdAndUpdate(payload._id, payload);
+    if (!folder) throw new HttpException(409, 'Conflict');
+    await this.setModel.updateMany({ id: folder.sets }, { folder: folder.id });
   }
 
   public async delete(payload: string): Promise<void> {
