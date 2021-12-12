@@ -7,7 +7,7 @@
   color: #cccccc;
   background-color: #181818;
 
-  a {
+  > a {
     text-transform: uppercase;
     font-weight: 700;
     font-size: 2rem;
@@ -23,6 +23,78 @@
       height: 100%;
       width: 100%;
       object-fit: cover;
+    }
+  }
+
+  .plus {
+    position: relative;
+
+    &__button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      svg {
+        margin: 0 -2.5px;
+      }
+    }
+
+    &__menu {
+      position: absolute;
+      top: 110%;
+      right: 0;
+      z-index: 100;
+      width: 160px;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      margin-top: 2px;
+      border: 1px solid #666;
+      border-radius: 10px;
+      color: var(--black);
+      background-color: var(--white);
+
+      &::before,
+      &::after {
+        position: absolute;
+        display: inline-block;
+        content: '';
+      }
+
+      &::before {
+        top: -16px;
+        right: 19px;
+        left: auto;
+        border: 8px solid transparent;
+        border-bottom-color: #666;
+      }
+
+      &::after {
+        top: -14px;
+        right: 19px;
+        left: auto;
+        border: 8px solid transparent;
+        border-bottom-color: var(--white);
+      }
+
+      li {
+        display: block;
+        margin: 0.25rem 0.5rem;
+
+        button,
+        a {
+          display: block;
+          width: 100%;
+          padding: 0.5rem;
+          border-radius: 10px;
+          border: 1px solid transparent;
+          text-align: left;
+
+          &:hover {
+            background-color: var(--yellow);
+            border: 1px solid #666;
+          }
+        }
+      }
     }
   }
 }
