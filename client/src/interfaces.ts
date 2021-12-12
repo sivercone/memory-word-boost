@@ -1,19 +1,19 @@
 export interface SetInterface {
-  _id: string;
+  id: string;
   title: string;
   description: string;
   tags: string[];
-  cards: { _id: string; term: string; definition: string }[];
-  folder: string[];
+  cards: { term: string; definition: string }[]; // todo: here is no ID
+  folders: FolderInterface[];
   createdAt: string;
   updateddAt: string;
 }
 
 export interface FolderInterface {
-  _id: string;
+  id: string;
   name: string;
   description: string;
-  sets: string[];
+  sets: SetInterface[];
   createdAt?: string;
   updatedAt?: string;
 }

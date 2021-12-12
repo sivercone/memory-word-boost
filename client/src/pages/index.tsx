@@ -23,7 +23,7 @@ const Home: NextPage = () => {
         <div className={style.cardlist}>
           {set.data
             ? set.data.map((content) => (
-                <Link href={`/${content._id}`} key={content._id}>
+                <Link href={`/${content.id}`} key={content.id}>
                   <a className={style.cardlist__item}>
                     <div className={style.cardlist__text}>
                       <h2>{content.title}</h2>
@@ -43,7 +43,7 @@ const Home: NextPage = () => {
         <div className={style.cardlist}>
           {folder.data
             ? folder.data.map((content) => (
-                <Link href={`/folder/${content._id}`} key={content._id}>
+                <Link href={`/folder/${content.id}`} key={content.id}>
                   <a className={style.cardlist__item}>
                     <div className={style.cardlist__text}>
                       <h2>{content.name}</h2>

@@ -31,7 +31,7 @@ export const Header: React.FC = () => {
           <img src="/assets/download.webp" alt="" />
         </button>
       </div>
-      <FolderEditing isOpen={shownFolder} toggleShown={toggleShownFolder} />
+      <FolderEditing isOpen={shownFolder} onClose={toggleShownFolder} />
     </header>
   );
 };

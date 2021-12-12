@@ -1,18 +1,21 @@
+import { setApi } from 'api/setApi';
+import { NextPage } from 'next';
+import Custom404 from 'pages/404';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { dehydrate, QueryClient, useQuery } from 'react-query';
 import style from 'styles/pages/learn.module.scss';
-import db from 'utils/db.json';
-import { PageTransition } from 'components/PageTransition';
 
-const learn = () => {
-  const data = db.words[1].cards;
+const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
+  const set = useQuery(['set', pagekey], () => setApi.getById(pagekey));
+  if (!set.data) return <Custom404 />;
   const [currentIndex, setCurrentIndex] = React.useState<number>(0);
-  const scorePercent = Math.round((currentIndex / data.length) * 100);
+  const scorePercent = Math.round((currentIndex / set.data.cards.length) * 100);
   const [status, setStatus] = React.useState<'T' | 'F' | 'E'>();
 
   const { register, handleSubmit, reset } = useForm();
   const onSubmit = (payload: { answer: string }) => {
-    if (payload.answer === data[currentIndex].definiton) {
+    if (payload.answer === set.data.cards[currentIndex].definition) {
       setStatus('T');
       setCurrentIndex(currentIndex + 1);
       reset();
@@ -27,11 +30,11 @@ const learn = () => {
         </div>
         <div className={style.class__main}>
           <div>
-            <span>{data[currentIndex].term}</span>
+            <span>{set.data.cards[currentIndex].term}</span>
             {status === 'F' ? (
               <>
                 <span>correct answer</span>
-                <span>{data[currentIndex].definiton}</span>
+                <span>{set.data.cards[currentIndex].definition}</span>
               </>
             ) : undefined}
           </div>
@@ -48,4 +51,11 @@ const learn = () => {
   );
 };
 
-export default learn;
+LearnPage.getInitialProps = async ({ query }) => {
+  const pagekey = typeof query.id === 'string' ? query.id : '';
+  const queryClient = new QueryClient();
+  if (pagekey) await queryClient.prefetchQuery(['set', pagekey], () => setApi.getById(pagekey));
+  return { pagekey, dehydratedState: dehydrate(queryClient) };
+};
+
+export default LearnPage;

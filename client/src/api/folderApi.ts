@@ -9,13 +9,13 @@ export const folderApi = {
     return response.json();
   },
 
-  async getById(payload: string): Promise<{ folder: FolderInterface; sets: SetInterface[] }> {
+  async getById(payload: string): Promise<FolderInterface> {
     const response = await fetch(`${path}/${payload}`);
     if (!response.ok) throw new Error(response.statusText);
     return response.json();
   },
 
-  async create(payload: FolderInterface): Promise<void> {
+  async create(payload: FolderInterface): Promise<string> {
     const response = await fetch(path, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -32,7 +32,6 @@ export const folderApi = {
       body: JSON.stringify(payload),
     });
     if (!response.ok) throw new Error(response.statusText);
-    return response.json();
   },
 
   async delete(payload: string): Promise<void> {

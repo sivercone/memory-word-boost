@@ -10,6 +10,7 @@ import { Modal, ModalBody, ModalActions, ModalList } from 'components/Modal';
 import Custom404 from './404';
 import { useSetStore } from 'storage/useSetStore';
 import { folderApi } from 'api/folderApi';
+import { FolderInterface } from 'interfaces';
 
 type ModalVariants = 'del' | 'info' | 'folder';
 
@@ -17,21 +18,20 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const set = useQuery(['set', pagekey], () => setApi.getById(pagekey), { enabled: !!pagekey });
   if (!set.data) return <Custom404 />;
 
-  const folder = useQuery('folders', folderApi.get);
   const router = useRouter();
 
   const { setSetFigure } = useSetStore();
   const onEdit = () => {
     setSetFigure(set.data);
-    router.push(`/update-set/${set.data._id}`);
+    router.push(`/update-set/${set.data.id}`);
   };
 
-  const fetchDelete = useMutation(setApi.delete);
+  const fetchDelete = useMutation(setApi.delete, { onSuccess: () => queryClient.invalidateQueries(['set', pagekey]) });
   const onDeleteSet = async () => {
     try {
-      await fetchDelete.mutateAsync(set.data._id);
+      await fetchDelete.mutateAsync(set.data.id);
       router.push('/');
-      notify(`Successfully deleted Study Set: ${set.data.title}`);
+      notify(`Successfully deleted study set: ${set.data.title}`);
     } catch (error) {}
   };
 
@@ -39,19 +39,20 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const openModal = (payload: ModalVariants) => setShownModal(payload);
   const closeModal = () => setShownModal(undefined);
 
-  const [includedFolders, setIncludedFolders] = React.useState<string[]>([]);
+  const folder = useQuery('folders', folderApi.get, { enabled: shownModal === 'folder' });
+  const [includedFolders, setIncludedFolders] = React.useState<FolderInterface[]>([]);
   React.useEffect(() => {
-    if (set.data) setIncludedFolders(set.data.folder);
+    if (set.data) setIncludedFolders(set.data.folders);
   }, [set.data]);
-  const toggleIncludeFolder = (payload: string) => {
-    if (includedFolders.includes(payload)) setIncludedFolders(includedFolders.filter((el) => el !== payload));
+  const toggleIncludeFolder = (payload: FolderInterface) => {
+    if (!!includedFolders.find((el) => el.id === payload.id)) setIncludedFolders(includedFolders.filter((el) => el.id !== payload.id));
     else setIncludedFolders([...includedFolders, payload]);
   };
   const queryClient = useQueryClient();
   const fetchUpdate = useMutation(setApi.update, { onSuccess: () => queryClient.invalidateQueries(['set', pagekey]) });
   const updateSetFolders = async () => {
     try {
-      await fetchUpdate.mutateAsync({ ...set.data, folder: includedFolders });
+      await fetchUpdate.mutateAsync({ ...set.data, folders: includedFolders });
       closeModal();
     } catch (error) {}
   };
@@ -71,7 +72,7 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
           </ul>
           <ul className={style.card__studies}>
             <li>
-              <Link href={`/learn/${set.data._id}`}>
+              <Link href={`/learn/${set.data.id}`}>
                 <a>
                   <span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="5rem" height="5rem" viewBox="0 0 512 512">
@@ -87,7 +88,7 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
               </Link>
             </li>
             <li>
-              <Link href={`/cards/${set.data._id}`}>
+              <Link href={`/cards/${set.data.id}`}>
                 <a>
                   <span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="5rem" height="5rem" viewBox="0 0 512 512">
@@ -140,8 +141,7 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                 height="24"
                 viewBox="0 0 24 24"
                 width="24"
-                fill="#181818"
-              >
+                fill="#181818">
                 <g>
                   <rect fill="none" height="24" width="24" />
                 </g>
@@ -182,14 +182,20 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
         <ModalBody>
           {shownModal
             ? {
-                del: <h3>Are you sure you want to delete this set?</h3>,
+                del: (
+                  <>
+                    <h3>Are you sure you want to delete this set?</h3>
+                    <p>Deleting a set is a permanent action.</p>
+                    <p>This cannot be undone.</p>
+                  </>
+                ),
                 info: (
                   <>
                     <h3>Information</h3>
                     <p>This set was created {set.data.createdAt}</p>
                   </>
                 ),
-                folder: folder.data ? (
+                folder: folder.data?.length ? (
                   <>
                     <h3>Folder Management</h3>
                     <p>Include or exclude this set from folders</p>
@@ -204,26 +210,23 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
             : undefined}
         </ModalBody>
         {shownModal === 'folder' ? (
-          folder.data ? (
+          folder.data?.length ? (
             <ModalList>
               {folder.data.map((content) => (
-                <li onClick={() => toggleIncludeFolder(content._id)} key={content._id}>
+                <li key={content.id}>
                   <label className="checkbox">
                     <span>{content.name}</span>
-                    <input type="checkbox" defaultChecked={set.data.folder ? set.data.folder.includes(content._id) : false} />
+                    <input
+                      onClick={() => toggleIncludeFolder(content)}
+                      type="checkbox"
+                      defaultChecked={!!set.data.folders.find((el) => el.id === content.id)}
+                    />
                   </label>
                 </li>
               ))}
             </ModalList>
           ) : (
-            <div style={{ textAlign: 'center' }}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="5em" height="5em" viewBox="0 0 512 512">
-                <path
-                  d="M402.488 45.148c-29.932 24.474-69.636 42.525-111.175 57.262 43.727-8.11 84.957-18.594 121.822-32.43-2.7-8.61-6.116-16.916-10.647-24.83zM41 73v135.764c11.918-41.227 23.38-84.748 34.512-126.996L77.82 73H41zm41.518 0 5.884 3.096c27.917 14.682 57.075 28.881 87.127 42.482 2.96-.305 5.913-.62 8.866-.937L169.514 73H82.518zm366.652 1.447c-88.208 40.349-203.608 56.834-319.715 66.387L131.451 151h327.77c-4.066-30.318-7.69-57.252-10.051-76.553zM90.059 97.143C71.419 167.87 51.807 241.39 30.283 302.035l24.479 10.158L88.697 151h24.412l-3.246-16.525-1.947-9.91 10.07-.795c7.394-.584 14.783-1.197 22.164-1.84a1638.49 1638.49 0 0 1-50.09-24.787zM103.303 169 43.092 455h381.605l60.211-286H103.303zM477.27 292.654l-19.336 91.852c9.008-.398 17.683-.77 27.27-1.213-.725-21.697-3.794-54.23-7.934-90.639zM41 325.97v51.594l9.99-47.45L41 325.97z"
-                  fill="#181818"
-                />
-              </svg>
-            </div>
+            <div style={{ textAlign: 'center', paddingBottom: '2rem', fontSize: '4rem' }}>📁</div>
           )
         ) : undefined}
         <ModalActions>
@@ -236,7 +239,7 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                   </>
                 ),
                 info: <button onClick={closeModal}>OK</button>,
-                folder: folder.data ? (
+                folder: folder.data?.length ? (
                   <>
                     <button onClick={closeModal}>Cancel</button>
                     <button onClick={updateSetFolders}>Apply</button>

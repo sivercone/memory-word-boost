@@ -1,6 +1,6 @@
 import React from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import style from 'styles/pages/createset.module.scss';
 import { setApi } from 'api/setApi';
 import { SetInterface } from 'interfaces';
@@ -8,25 +8,26 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/dist/client/router';
 
 interface SetFigure {
-  _id?: string;
+  id?: string;
   title?: string;
   description?: string;
   tags?: string[];
-  cards?: { _id?: string; term?: string; definition?: string }[];
+  cards?: { term?: string; definition?: string }[];
   createdAt?: string;
   updateddAt?: string;
 }
 
 const SetEditing: NextPage<{ setFigure?: SetFigure }> = ({ setFigure }) => {
   const router = useRouter();
-  const { register, handleSubmit, control } = useForm<SetInterface>({ defaultValues: setFigure });
+  const { register, handleSubmit, control } = useForm<SetFigure>({ defaultValues: setFigure });
   const { fields, append, remove } = useFieldArray({ name: 'cards', control });
 
+  const queryClient = useQueryClient();
   const create = useMutation(setApi.create);
-  const update = useMutation(setApi.update);
+  const update = useMutation(setApi.update, { onSuccess: () => queryClient.invalidateQueries('sets') });
   const onSubmit = async (payload: SetInterface) => {
     try {
-      if (setFigure && setFigure._id) await update.mutateAsync(payload);
+      if (setFigure && setFigure.id) await update.mutateAsync(payload);
       else await create.mutateAsync(payload);
     } catch (error) {}
   };
@@ -39,7 +40,7 @@ const SetEditing: NextPage<{ setFigure?: SetFigure }> = ({ setFigure }) => {
   return (
     <div className={`container ${style.class}`}>
       <div className={style.class__header}>
-        <span>{setFigure && setFigure._id ? 'Update study set' : 'Create a new study set'}</span>
+        <span>{setFigure && setFigure.id ? 'Update study set' : 'Create a new study set'}</span>
       </div>
       <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
         <div className={style.class__general}>
@@ -59,7 +60,7 @@ const SetEditing: NextPage<{ setFigure?: SetFigure }> = ({ setFigure }) => {
               <input {...register('tags')} />
             </label>
             <button className="button button_dark" type="submit">
-              <span>{setFigure && setFigure._id ? 'update' : 'create'}</span>
+              <span>{setFigure && setFigure.id ? 'update' : 'create'}</span>
             </button>
           </div>
         </div>

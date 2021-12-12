@@ -83,7 +83,16 @@
   }
 
   &__list {
-    padding: 0 1rem 2rem 1rem;
+    margin-right: 1rem;
+    margin-left: 1rem;
+    margin-bottom: 2rem;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  &__listWrapper {
+    max-height: 300px;
+    overflow-y: auto;
 
     li {
       padding: 0.5rem 1rem;

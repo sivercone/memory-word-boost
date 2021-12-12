@@ -9,8 +9,8 @@ interface Props {
 }
 
 const fadeUp = {
-  init: { x: '-50%', y: '50%', opacity: 0, transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] } },
-  anim: { x: '-50%', y: '-50%', opacity: 1, transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] } },
+  init: { x: '-50%', y: '-50%', scale: 2, opacity: 0, transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] } },
+  anim: { x: '-50%', y: '-50%', scale: 1, opacity: 1, transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] } },
 };
 const fade = {
   init: { opacity: 0, transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] } },
@@ -23,7 +23,11 @@ export const ModalBody: React.FC<{ children: React.ReactNode }> = ({ children })
 export const ModalInputs: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <div className={style.modal__inputs}>{children}</div>
 );
-export const ModalList: React.FC<{ children: React.ReactNode }> = ({ children }) => <ul className={style.modal__list}>{children}</ul>;
+export const ModalList: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <div className={style.modal__list}>
+    <ul className={style.modal__listWrapper}>{children}</ul>
+  </div>
+);
 export const ModalActions: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <div className={style.modal__actions}>{children}</div>
 );
@@ -39,8 +43,7 @@ export const Modal: React.FC<Props> = ({ isOpen, onClose, children }) => {
             initial="init"
             animate="anim"
             exit="init"
-            className={style.overlay}
-          ></motion.div>
+            className={style.overlay}></motion.div>
           <motion.div variants={fadeUp} initial="init" animate="anim" exit="init" className={style.modal}>
             {children}
           </motion.div>
