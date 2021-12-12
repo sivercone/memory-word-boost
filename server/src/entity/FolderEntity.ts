@@ -13,7 +13,7 @@ class FolderEntity implements FolderInterface {
   @Column()
   description: string;
 
-  @ManyToMany(() => SetEntity, (x) => x.folders)
+  @ManyToMany(() => SetEntity, (x) => x.folders, { onDelete: 'CASCADE' })
   sets: SetEntity[];
 
   @Column()

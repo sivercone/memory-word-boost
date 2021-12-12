@@ -19,7 +19,7 @@ class SetEntity implements SetInterface {
   @Column('simple-json')
   cards: { term: string; definition: string }[];
 
-  @ManyToMany(() => FolderEntity, (x) => x.sets, { cascade: true })
+  @ManyToMany(() => FolderEntity, (x) => x.sets)
   @JoinTable()
   folders: FolderEntity[];
 
