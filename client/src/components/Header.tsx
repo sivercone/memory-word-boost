@@ -53,9 +53,11 @@ export const Header: React.FC = () => {
             </li>
           </motion.ul>
         </div>
-        <button className={style.header__profilepic}>
-          <img src="/assets/download.webp" alt="" />
-        </button>
+        <Link href={`/u/1`}>
+          <a className={style.header__profilepic}>
+            <img src="/assets/download.webp" alt="" />
+          </a>
+        </Link>
       </div>
       <FolderEditing isOpen={shownFolder} onClose={toggleShownFolder} />
     </header>

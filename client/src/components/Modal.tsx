@@ -1,6 +1,7 @@
 import React from 'react';
 import style from 'styles/components/modal.module.scss';
 import { AnimatePresence, motion } from 'framer-motion';
+import ReactDOM from 'react-dom';
 
 interface Props {
   isOpen: boolean;
@@ -11,6 +12,7 @@ interface Props {
 const fadeUp = {
   init: { x: '-50%', y: '-50%', scale: 2, opacity: 0, transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] } },
   anim: { x: '-50%', y: '-50%', scale: 1, opacity: 1, transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] } },
+  exit: { x: '-50%', y: '0%', scale: 1, opacity: 0, transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] } },
 };
 const fade = {
   init: { opacity: 0, transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] } },
@@ -33,7 +35,10 @@ export const ModalActions: React.FC<{ children: React.ReactNode }> = ({ children
 );
 
 export const Modal: React.FC<Props> = ({ isOpen, onClose, children }) => {
-  return (
+  const nextdiv = typeof window !== 'undefined' ? document.getElementById('__next') : null;
+  if (!nextdiv) return <></>;
+
+  return ReactDOM.createPortal(
     <AnimatePresence exitBeforeEnter>
       {isOpen ? (
         <>
@@ -43,12 +48,14 @@ export const Modal: React.FC<Props> = ({ isOpen, onClose, children }) => {
             initial="init"
             animate="anim"
             exit="init"
-            className={style.overlay}></motion.div>
-          <motion.div variants={fadeUp} initial="init" animate="anim" exit="init" className={style.modal}>
+            className={style.overlay}
+            id="modal"></motion.div>
+          <motion.div variants={fadeUp} initial="init" animate="anim" exit="exit" className={style.modal}>
             {children}
           </motion.div>
         </>
       ) : undefined}
-    </AnimatePresence>
+    </AnimatePresence>,
+    nextdiv,
   );
 };

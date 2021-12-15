@@ -7,7 +7,7 @@ import { setApi } from 'api/setApi';
 import { useRouter } from 'next/dist/client/router';
 import { notify } from 'utils/notify';
 import { Modal, ModalBody, ModalActions, ModalList } from 'components/Modal';
-import Custom404 from './404';
+import Custom404 from 'pages/404';
 import { useSetStore } from 'storage/useSetStore';
 import { folderApi } from 'api/folderApi';
 import { FolderInterface } from 'interfaces';
@@ -72,7 +72,7 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
           </ul>
           <ul className={style.card__studies}>
             <li>
-              <Link href={`/learn/${set.data.id}`}>
+              <Link href={`${pagekey}/learn`}>
                 <a>
                   <span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="5rem" height="5rem" viewBox="0 0 512 512">
@@ -88,7 +88,7 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
               </Link>
             </li>
             <li>
-              <Link href={`/cards/${set.data.id}`}>
+              <Link href={`${pagekey}/cards`}>
                 <a>
                   <span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="5rem" height="5rem" viewBox="0 0 512 512">

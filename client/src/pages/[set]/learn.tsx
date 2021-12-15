@@ -52,10 +52,10 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
 };
 
 LearnPage.getInitialProps = async ({ query }) => {
-  const pagekey = typeof query.id === 'string' ? query.id : '';
+  const pagekey = typeof query.set === 'string' ? query.set : '';
   const queryClient = new QueryClient();
   if (pagekey) await queryClient.prefetchQuery(['set', pagekey], () => setApi.getById(pagekey));
-  return { pagekey, dehydratedState: dehydrate(queryClient) };
+  return { pagekey, query, dehydratedState: dehydrate(queryClient) };
 };
 
 export default LearnPage;
