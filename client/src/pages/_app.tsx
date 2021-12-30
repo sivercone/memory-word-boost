@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import { Header } from 'components/Header';
 import { PageTransition } from 'components/PageTransition';
 import { queryClient } from 'utils/queryClient';
+import { AuthCheck } from 'components/AuthCheck';
 
 function MyApp({ Component, pageProps, router }: AppProps) {
   return (
@@ -16,10 +17,11 @@ function MyApp({ Component, pageProps, router }: AppProps) {
         <Head>
           <title>MWB</title>
         </Head>
-        {true ? <Header /> : undefined}
+        <Header />
         <AnimatePresence exitBeforeEnter>
           <PageTransition key={router.route}>
             <Component {...pageProps} />
+            <AuthCheck />
           </PageTransition>
         </AnimatePresence>
         <ToastContainer progressStyle={{ background: 'var(--yellow)' }} position="bottom-right" autoClose={6000} draggable={false} />

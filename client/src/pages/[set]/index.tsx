@@ -23,7 +23,7 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const { setSetFigure } = useSetStore();
   const onEdit = () => {
     setSetFigure(set.data);
-    router.push(`/update-set/${set.data.id}`);
+    router.push(`${pagekey}/update`);
   };
 
   const fetchDelete = useMutation(setApi.delete, { onSuccess: () => queryClient.invalidateQueries('sets') });

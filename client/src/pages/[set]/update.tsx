@@ -19,7 +19,7 @@ const UpdateSet: NextPage<{ pagekey: string }> = ({ pagekey }) => {
 };
 
 UpdateSet.getInitialProps = async ({ query }) => {
-  const pagekey = typeof query.id === 'string' ? query.id : '';
+  const pagekey = typeof query.set === 'string' ? query.set : '';
   return { pagekey };
 };
 

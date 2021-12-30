@@ -45,7 +45,8 @@
     flex-direction: column;
     gap: 2rem;
 
-    button {
+    button,
+    a {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -55,10 +56,10 @@
       background-color: var(--white);
       color: var(--black);
       border-radius: 10px;
-    }
 
-    button:hover {
-      background-color: var(--yellow);
+      &:hover {
+        background-color: var(--yellow);
+      }
     }
   }
 }

@@ -5,6 +5,7 @@ import style from 'styles/pages/home.module.scss';
 import { useQuery } from 'react-query';
 import { setApi } from 'api/setApi';
 import { folderApi } from 'api/folderApi';
+import React from 'react';
 
 // https://quizlet.com/upgrade?source=rich_text_formatting
 

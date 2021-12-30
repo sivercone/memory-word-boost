@@ -5,33 +5,36 @@ import React from 'react';
 import { useQuery } from 'react-query';
 import style from 'styles/pages/user.module.scss';
 import s from 'styles/pages/home.module.scss';
+import { authApi } from 'api/authApi';
+import Custom404 from 'pages/404';
 
 const User: NextPage = () => {
   const set = useQuery('sets', setApi.get);
 
+  const user = useQuery(['user'], () => authApi.me());
+
+  if (!user.data) return <Custom404 />;
+
   return (
     <div className="container">
       <section className={style.header}>
-        <div className={style.header__cover}>{/* <img src="/assets/download.webp" alt="" /> */}</div>
-        <div className={style.header__wrapper}>
-          <div className={style.header__avatar}>
-            <img src="/assets/rei.jpg" alt="" />
-          </div>
-          <div className={style.header__title}>
-            <span>Danylo Trofimenko</span>
-          </div>
-          <div className={style.header__bio}>
-            <span>Software Engineer</span>
-          </div>
-          <div className={style.header__bio}>
-            <span>On project since 24 nov 2021</span>
-          </div>
-          <ul className={style.header__tabs}>
-            <li className={style.header__tabsActive}>Sets</li>
-            <li>Folders</li>
-            <li>Edit profile</li>
-          </ul>
+        <div className={style.header__avatar}>
+          <img src={user.data.avatar} alt="" />
         </div>
+        <div className={style.header__title}>
+          <span>{user.data.name}</span>
+        </div>
+        <div className={style.header__bio}>
+          <span>Software Engineer</span>
+        </div>
+        <div className={style.header__bio}>
+          <span>On project since 24 nov 2021</span>
+        </div>
+        <ul className={style.header__tabs}>
+          <li className={style.header__tabsActive}>Sets</li>
+          <li>Folders</li>
+          <li>Edit profile</li>
+        </ul>
       </section>
       <section style={{ marginTop: '1rem' }} className={s.cardlist}>
         {set.data
