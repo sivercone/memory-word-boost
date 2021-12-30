@@ -1,6 +1,6 @@
 import { SetInterface } from '@/interfaces';
 import SetEntity from '@/entity/SetEntity';
-import { HttpException } from '@exceptions/HttpException';
+import { HttpException } from '@/utils/HttpException';
 import { isEmpty } from '@utils/util';
 import { getRepository } from 'typeorm';
 

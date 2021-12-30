@@ -1,6 +1,7 @@
 import { SetInterface } from '@/interfaces';
-import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import FolderEntity from './FolderEntity';
+import UserEntity from './UserEntity';
 
 @Entity()
 class SetEntity implements SetInterface {
@@ -22,6 +23,9 @@ class SetEntity implements SetInterface {
   @ManyToMany(() => FolderEntity, (x) => x.sets)
   @JoinTable()
   folders: FolderEntity[];
+
+  @ManyToOne(() => UserEntity, (x) => x.sets)
+  user: UserEntity;
 
   @Column()
   @CreateDateColumn()

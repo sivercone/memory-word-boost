@@ -17,3 +17,17 @@ export interface FolderInterface {
   createdAt: string;
   updatedAt: string;
 }
+
+/* user */
+export interface UserInterface {
+  id: string;
+  email: string;
+  name: string;
+  bio: string;
+  avatar: string;
+  access_token: string;
+  refresh_token: string;
+  fingerprint: string;
+  createdAt: string;
+  updatedAt: string;
+}
