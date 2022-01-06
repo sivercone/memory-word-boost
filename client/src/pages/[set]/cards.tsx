@@ -1,7 +1,10 @@
 import React from 'react';
 import style from 'styles/pages/cards.module.scss';
 import { motion } from 'framer-motion';
-import db from 'utils/db.json';
+import { NextPage } from 'next';
+import { dehydrate, QueryClient, useQuery } from 'react-query';
+import { setApi } from 'api/setApi';
+import Custom404 from 'pages/404';
 
 // drag - https://codesandbox.io/s/5trtt
 
@@ -15,8 +18,9 @@ const alignX = { translateX: 0, opacity: 1, transition: { duration: 0.3 } };
 const translateLeft = { translateX: '100%', opacity: 0, transition: { duration: 0.3 } };
 const translateRight = { translateX: '-100%', opacity: 0, transition: { duration: 0.3 } };
 
-function cards() {
-  const data = db.words[1].cards;
+const CardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
+  const set = useQuery(['set', pagekey], () => setApi.getById(pagekey));
+  if (!set.data) return <Custom404 />;
   const [toggled, setToggled] = React.useState(false);
   const onToggle = () => setToggled(!toggled);
 
@@ -49,7 +53,7 @@ function cards() {
             <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
           </svg>
         </button>
-        <span>{`${currentIndex + 1}/${data.length}`}</span>
+        <span>{`${currentIndex + 1}/${set.data.cards.length}`}</span>
         <div style={{ display: 'flex', gap: '0.5rem' }}>
           <button title="undo">
             <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="#181818">
@@ -66,7 +70,7 @@ function cards() {
         </div>
       </div>
       <div className={style.class__card}>
-        {currentIndex >= data.length ? (
+        {currentIndex >= set.data.cards.length ? (
           <div>
             <p>nice work</p>
             <p>You just studied 35 terms! / Keep practicing to master the 34 remaining</p>
@@ -75,44 +79,51 @@ function cards() {
           </div>
         ) : (
           <>
-            <button onClick={toRepeat} title="study again">
+            <button onClick={toRepeat} className={style.class__arrow}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 enableBackground="new 0 0 24 24"
                 height="24"
                 viewBox="0 0 24 24"
                 width="24"
-                fill="#181818"
-              >
+                fill="#181818">
                 <rect fill="none" height="24" width="24" />
                 <path d="M9,19l1.41-1.41L5.83,13H22V11H5.83l4.59-4.59L9,5l-7,7L9,19z" />
               </svg>
+              <span>Study again</span>
             </button>
             <motion.div animate={increased ? translateLeft : toRepeated ? translateRight : alignX}>
               <motion.button animate={toggled ? rotateX.anim : rotateX.init} onClick={onToggle} className={style.class__block}>
                 <motion.span animate={toggled ? rotateX.anim : rotateX.init}>
-                  {toggled ? data[currentIndex].definiton : data[currentIndex].term}
+                  {toggled ? set.data.cards[currentIndex].definition : set.data.cards[currentIndex].term}
                 </motion.span>
               </motion.button>
             </motion.div>
-            <button onClick={increaseIndex} title="got it">
+            <button onClick={increaseIndex} className={style.class__arrow}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 enableBackground="new 0 0 24 24"
                 height="24"
                 viewBox="0 0 24 24"
                 width="24"
-                fill="#181818"
-              >
+                fill="#181818">
                 <rect fill="none" height="24" width="24" />
                 <path d="M15,5l-1.41,1.41L18.17,11H2V13h16.17l-4.59,4.59L15,19l7-7L15,5z" />
               </svg>
+              <span>Got it</span>
             </button>
           </>
         )}
       </div>
     </div>
   );
-}
+};
 
-export default cards;
+CardsPage.getInitialProps = async ({ query }) => {
+  const pagekey = typeof query.set === 'string' ? query.set : '';
+  const queryClient = new QueryClient();
+  if (pagekey) await queryClient.prefetchQuery(['set', pagekey], () => setApi.getById(pagekey));
+  return { pagekey, query, dehydratedState: dehydrate(queryClient) };
+};
+
+export default CardsPage;

@@ -145,7 +145,14 @@ input {
   min-height: 3.5rem;
   padding: 0 2rem;
   border-radius: 50px;
-  // transition: transform 0.1s ease;
+
+  &:hover {
+    transform: scale(1.03);
+  }
+
+  &:active {
+    transform: scale(1);
+  }
 
   span {
     text-align: center;
@@ -155,4 +162,17 @@ input {
 .button_dark {
   color: var(--white);
   background-color: var(--black);
+
+  &:focus {
+    outline: 0.5rem double var(--black);
+  }
+}
+
+.button_light {
+  color: var(--black);
+  background-color: var(--white);
+
+  &:focus {
+    outline: 0.5rem double var(--white);
+  }
 }

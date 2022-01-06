@@ -18,6 +18,13 @@
   &__card {
     display: flex;
     gap: 2rem;
+    align-items: center;
+  }
+
+  &__arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   &__block {
