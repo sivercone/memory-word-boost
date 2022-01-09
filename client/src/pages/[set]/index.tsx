@@ -99,7 +99,7 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                       />
                     </svg>
                   </span>
-                  <span>Cards</span>
+                  <span>Flashcards</span>
                 </a>
               </Link>
             </li>

@@ -18,7 +18,7 @@
       padding: 0 0.5rem;
       margin-left: 0.5rem;
       border-radius: 25px;
-      background-color: #cccccc;
+      background-color: var(--white);
       color: #000000;
     }
 
@@ -34,16 +34,15 @@
 
     li {
       width: 50%;
-      padding: 1rem;
-      //  margin-bottom: 1rem;
       border-radius: 10px;
-      background-color: #181818;
-      color: #cccccc;
+      background-color: var(--black);
+      color: var(--white);
       text-align: center;
 
       a {
         display: flex;
         flex-direction: column;
+        padding: 1rem;
       }
 
       span:nth-child(2) {
@@ -74,8 +73,8 @@
       padding: 0.5rem;
       margin-bottom: 1rem;
       border-radius: 10px;
-      background-color: #181818;
-      color: #cccccc;
+      background-color: var(--black);
+      color: var(--white);
 
       span {
         flex-basis: 100%;
@@ -95,7 +94,7 @@
   align-items: center;
   padding: 1rem;
   margin: 1rem 0;
-  border: 3px solid #181818;
+  border: 3px solid var(--black);
   font-weight: 700;
 
   &__author {
