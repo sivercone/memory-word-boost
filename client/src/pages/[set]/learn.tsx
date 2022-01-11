@@ -68,10 +68,9 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     setCards(set.data.cards.sort(() => Math.random() - 0.5));
     setCurrentIndex(0);
     setRound(1);
+    setResults([]);
     setStatus('T');
   };
-
-  console.log(results);
 
   // TODO
   // 1. add fade animations for changing text in blocks
