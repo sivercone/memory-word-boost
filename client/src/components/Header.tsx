@@ -17,7 +17,7 @@ const fade = {
 
 export const Header: React.FC = () => {
   const { pathname } = useRouter();
-  if (pathname === '/login') return <></>;
+  if (['/login', '/[set]/flashcards'].includes(pathname)) return <></>;
 
   const { user } = useUserStore();
 

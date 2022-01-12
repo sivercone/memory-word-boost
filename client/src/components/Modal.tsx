@@ -49,7 +49,8 @@ export const Modal: React.FC<Props> = ({ isOpen, onClose, children }) => {
             animate="anim"
             exit="init"
             className={style.overlay}
-            id="modal"></motion.div>
+            id="modal"
+          />
           <motion.div variants={fadeUp} initial="init" animate="anim" exit="exit" className={style.modal}>
             {children}
           </motion.div>

@@ -24,7 +24,7 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     if (set.data) setCards(set.data.cards.sort(() => Math.random() - 0.5));
   }, [set.data]);
   const [currentIndex, setCurrentIndex] = React.useState<number>(0);
-  const scorePercent = Math.round((currentIndex / cards.length) * 100);
+  const scorePercent = Math.round(((currentIndex + 1) / cards.length) * 100);
   const [status, setStatus] = React.useState<'T' | 'F' | 'E'>('T');
   const [round, setRound] = React.useState<number>(1);
   const [incorrect, setIncorrect] = React.useState<{ term: string; definition: string }[]>([]);
