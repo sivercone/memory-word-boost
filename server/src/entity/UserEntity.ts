@@ -20,13 +20,13 @@ class UserEntity implements UserInterface {
   @Column()
   avatar: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, select: false })
   access_token: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, select: false })
   refresh_token: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, select: false })
   fingerprint: string;
 
   @OneToMany(() => SetEntity, (x) => x.user)

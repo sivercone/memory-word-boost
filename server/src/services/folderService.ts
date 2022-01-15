@@ -14,13 +14,13 @@ class FolderService {
   public async findById(payload: string): Promise<FolderInterface> {
     if (isEmpty(payload)) throw new HttpException(400, 'No payload');
     const folderRepo = getRepository(FolderEntity);
-    const folder = await folderRepo.findOne({ where: { id: payload }, relations: ['sets'] });
+    const folder = await folderRepo.findOne({ where: { id: payload }, relations: ['sets', 'user'] });
     if (!folder) throw new HttpException(404, 'Not Found');
     return folder;
   }
 
   public async create(payload: FolderInterface): Promise<FolderInterface> {
-    if (isEmpty(payload)) throw new HttpException(400, 'No payload');
+    if (isEmpty(payload) || !payload.user) throw new HttpException(400, 'No payload');
     const folderRepo = getRepository(FolderEntity);
     const data = await folderRepo.save(payload);
     return data;

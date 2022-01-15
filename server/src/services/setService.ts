@@ -14,13 +14,13 @@ class SetService {
   public async findById(payload: string): Promise<SetInterface> {
     if (isEmpty(payload)) throw new HttpException(400, 'No payload');
     const setRepo = getRepository(SetEntity);
-    const data = await setRepo.findOne({ where: { id: payload }, relations: ['folders'] });
+    const data = await setRepo.findOne({ where: { id: payload }, relations: ['folders', 'user'] });
     if (!data) throw new HttpException(404, 'Not Found');
     return data;
   }
 
   public async create(payload: SetInterface): Promise<SetInterface> {
-    if (isEmpty(payload)) throw new HttpException(400, 'No payload');
+    if (isEmpty(payload) || !payload.user) throw new HttpException(400, 'No payload');
     if (!Array.isArray(payload.tags)) payload.tags = (payload.tags as string).replace(/\s+/g, '').split(',');
     const setRepo = getRepository(SetEntity);
     const saveSet = await setRepo.save(payload);

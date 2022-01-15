@@ -82,9 +82,7 @@ class AuthController {
         res.cookie('refresh_token', req.refresh_token, { maxAge: 24 * 60 * 3600000, httpOnly: true, sameSite: 'strict' });
 
       const findUser = await userService.findById(req.userId);
-      res
-        .status(200)
-        .json({ id: findUser.id, email: findUser.email, name: findUser.name, avatar: findUser.avatar, bio: findUser.bio });
+      res.status(200).json(findUser);
     } catch (error) {
       next(error);
     }

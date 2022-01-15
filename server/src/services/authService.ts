@@ -32,7 +32,12 @@ class AuthService {
     if (!refreshToken) throw new HttpException(401, 'No payload');
     try {
       const userRepo = getRepository(UserEntity);
-      const findUser = await userRepo.findOne({ where: { refresh_token: refreshToken } });
+      // const findUser = await userRepo.findOne({ where: { refresh_token: refreshToken } });
+      const findUser = await userRepo
+        .createQueryBuilder('user')
+        .addSelect('user.refresh_token')
+        .where('user.refresh_token = :refresh_token', { refresh_token: refreshToken })
+        .getOne();
       if (!findUser) throw new HttpException(401, 'No found session');
 
       const foundRefreshToken: string = findUser.refresh_token;

@@ -5,6 +5,7 @@ export interface SetInterface {
   tags: string[];
   cards: { term: string; definition: string }[];
   folders?: FolderInterface[];
+  user: UserInterface;
   createdAt: string;
   updatedAt: string;
 }
@@ -14,6 +15,7 @@ export interface FolderInterface {
   name: string;
   description: string;
   sets?: SetInterface[];
+  user: UserInterface;
   createdAt: string;
   updatedAt: string;
 }
