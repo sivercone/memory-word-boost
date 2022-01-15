@@ -1,9 +1,10 @@
-import { folderApi } from 'api/folderApi';
-import { FolderInterface } from 'interfaces';
-import { useRouter } from 'next/dist/client/router';
 import React from 'react';
+import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from 'react-query';
+import { folderApi } from 'api/folderApi';
+import { FolderInterface, UserInterface } from 'interfaces';
+import { useUserStore } from 'storage/useUserStore';
 import { Modal, ModalBody, ModalInputs, ModalActions } from './Modal';
 
 interface Props {
@@ -16,17 +17,20 @@ interface SingleFolderInterface {
   id: string;
   name: string;
   description: string;
+  user: UserInterface;
   createdAt?: string;
   updatedAt?: string;
 }
 
 export const FolderEditing: React.FC<Props> = ({ isOpen, onClose, folderFigure }) => {
-  const { register, handleSubmit, reset } = useForm<SingleFolderInterface>({ defaultValues: folderFigure });
-  const queryClient = useQueryClient();
   const router = useRouter();
+  const queryClient = useQueryClient();
+  const { user } = useUserStore();
+  const { register, handleSubmit, reset } = useForm<SingleFolderInterface>({ defaultValues: { ...folderFigure, user } }); // https://stackoverflow.com/a/64307087
   const create = useMutation(folderApi.create);
   const update = useMutation(folderApi.update, { onSuccess: () => queryClient.invalidateQueries(['folder', folderFigure?.id]) });
   const onSubmit = async (data: FolderInterface) => {
+    if (user) data.user = user;
     try {
       if (folderFigure && folderFigure.id) await update.mutateAsync(data);
       else await create.mutateAsync(data);

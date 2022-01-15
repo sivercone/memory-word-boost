@@ -12,6 +12,7 @@ import { Modal, ModalActions, ModalBody, ModalList } from 'components/Modal';
 import { notify } from 'utils/notify';
 import { setApi } from 'api/setApi';
 import { SetInterface } from 'interfaces';
+import { useUserStore } from 'storage/useUserStore';
 
 type ModalVariants = 'edit' | 'del' | 'sets';
 
@@ -20,6 +21,7 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   if (!folder.data) return <Custom404 />;
 
   const router = useRouter();
+  const { user } = useUserStore();
 
   // update folder
   const [shownModal, setShownModal] = React.useState<ModalVariants>();
@@ -65,7 +67,13 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
       </div>
       <div className={style.createdby}>
         <div className={style.createdby__author}>
-          <span>Created by SIVERCONE (you)</span>
+          <span>
+            Created by{' '}
+            <Link href={`/u/${folder.data.user.id}`}>
+              <a>{folder.data.user.name}</a>
+            </Link>{' '}
+            {folder.data.user.id === user?.id ? '(you)' : undefined}
+          </span>
         </div>
         <div className={style.createdby__movements}>
           <button onClick={() => openModal('edit')} title="edit">

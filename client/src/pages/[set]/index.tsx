@@ -11,6 +11,8 @@ import Custom404 from 'pages/404';
 import { useSetStore } from 'storage/useSetStore';
 import { folderApi } from 'api/folderApi';
 import { FolderInterface } from 'interfaces';
+import { useUserStore } from 'storage/useUserStore';
+import { formatDate } from 'utils/formatDate';
 
 type ModalVariants = 'del' | 'info' | 'folder';
 
@@ -19,6 +21,7 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   if (!set.data) return <Custom404 />;
 
   const router = useRouter();
+  const { user } = useUserStore();
 
   const { setSetFigure } = useSetStore();
   const onEdit = () => {
@@ -122,7 +125,13 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
         </div>
         <div className={style.createdby}>
           <div className={style.createdby__author}>
-            <span>Created by SIVERCONE (you)</span>
+            <span>
+              Created by{' '}
+              <Link href={`/u/${set.data.user.id}`}>
+                <a>{set.data.user.name}</a>
+              </Link>{' '}
+              {set.data.user.id === user?.id ? '(you)' : undefined}
+            </span>
           </div>
           <div className={style.createdby__movements}>
             <button onClick={onEdit} title="edit">
@@ -174,14 +183,6 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
               <li key={i}>
                 <span>{content.term}</span>
                 <span>{content.definition}</span>
-                <div>
-                  <button title="edit">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#cccccc">
-                      <path d="M0 0h24v24H0V0z" fill="none" />
-                      <path d="M14.06 9.02l.92.92L5.92 19H5v-.92l9.06-9.06M17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83 3.75 3.75 1.83-1.83c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29zm-3.6 3.19L3 17.25V21h3.75L17.81 9.94l-3.75-3.75z" />
-                    </svg>
-                  </button>
-                </div>
               </li>
             ))}
           </ul>
@@ -201,7 +202,7 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                 info: (
                   <>
                     <h3>Information</h3>
-                    <p>This set was created {set.data.createdAt}</p>
+                    <p>{`This set was created ${formatDate({ createdAt: set.data.createdAt, pattern: 'dd MMM yyyy' })}`}</p>
                   </>
                 ),
                 folder: folder.data?.length ? (

@@ -1,11 +1,13 @@
 import React from 'react';
+import { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { useMutation, useQueryClient } from 'react-query';
 import style from 'styles/pages/createset.module.scss';
 import { setApi } from 'api/setApi';
-import { SetInterface } from 'interfaces';
-import { NextPage } from 'next';
-import { useRouter } from 'next/dist/client/router';
+import { SetInterface, UserInterface } from 'interfaces';
+import { useUserStore } from 'storage/useUserStore';
+import { Modal, ModalActions, ModalBody } from './Modal';
 
 interface SetFigure {
   id?: string;
@@ -13,19 +15,23 @@ interface SetFigure {
   description?: string;
   tags?: string[];
   cards?: { term?: string; definition?: string }[];
+  user: UserInterface;
   createdAt?: string;
   updateddAt?: string;
 }
 
 const SetEditing: NextPage<{ setFigure?: SetFigure }> = ({ setFigure }) => {
   const router = useRouter();
-  const { register, handleSubmit, control } = useForm<SetFigure>({ defaultValues: setFigure });
+  const { user } = useUserStore();
+  const { register, handleSubmit, control } = useForm<SetFigure>({ defaultValues: { ...setFigure, user } });
   const { fields, append, remove } = useFieldArray({ name: 'cards', control });
 
   const queryClient = useQueryClient();
   const create = useMutation(setApi.create);
   const update = useMutation(setApi.update, { onSuccess: () => queryClient.invalidateQueries('sets') });
   const onSubmit = async (payload: SetInterface) => {
+    console.log('s', payload);
+    if (payload.cards.length < 2) return toggleModalShown();
     try {
       if (setFigure && setFigure.id) await update.mutateAsync(payload);
       else await create.mutateAsync(payload);
@@ -37,6 +43,9 @@ const SetEditing: NextPage<{ setFigure?: SetFigure }> = ({ setFigure }) => {
     if (create.isSuccess) router.push(`/${create.data}`);
   }, [update.isSuccess, create.isSuccess]);
 
+  const [isModalShown, setIsModalShown] = React.useState(false);
+  const toggleModalShown = () => setIsModalShown(!isModalShown);
+
   return (
     <div className={`container ${style.class}`}>
       <div className={style.class__header}>
@@ -47,7 +56,7 @@ const SetEditing: NextPage<{ setFigure?: SetFigure }> = ({ setFigure }) => {
           <div style={{ display: 'flex', gap: '1rem' }}>
             <label className="input">
               <span>Title</span>
-              <input {...register('title')} />
+              <input {...register('title')} required />
             </label>
             <label className="input">
               <span>Description</span>
@@ -68,8 +77,8 @@ const SetEditing: NextPage<{ setFigure?: SetFigure }> = ({ setFigure }) => {
         <ul className={style.cards}>
           {fields.map((content, i) => (
             <li key={content.id} className={style.cards__block}>
-              <input type="text" placeholder="term" {...register(`cards.${i}.term`)} />
-              <input type="text" placeholder="definition" {...register(`cards.${i}.definition`)} />
+              <input type="text" placeholder="term" {...register(`cards.${i}.term`)} required />
+              <input type="text" placeholder="definition" {...register(`cards.${i}.definition`)} required />
               <button onClick={() => remove(i)} type="button" title="delete">
                 <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="#cccccc">
                   <path d="M0 0h24v24H0V0z" fill="none" />
@@ -85,6 +94,15 @@ const SetEditing: NextPage<{ setFigure?: SetFigure }> = ({ setFigure }) => {
           </li>
         </ul>
       </form>
+      <Modal isOpen={isModalShown} onClose={toggleModalShown}>
+        <ModalBody>
+          <h3>Information</h3>
+          <p>You need to add at least two cards to create a study set</p>
+        </ModalBody>
+        <ModalActions>
+          <button onClick={toggleModalShown}>OK</button>
+        </ModalActions>
+      </Modal>
     </div>
   );
 };

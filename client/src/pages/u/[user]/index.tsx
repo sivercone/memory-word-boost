@@ -7,6 +7,7 @@ import style from 'styles/pages/user.module.scss';
 import s from 'styles/pages/home.module.scss';
 import { authApi } from 'api/authApi';
 import Custom404 from 'pages/404';
+import { formatDate } from 'utils/formatDate';
 
 const User: NextPage = () => {
   const set = useQuery('sets', setApi.get);
@@ -28,7 +29,7 @@ const User: NextPage = () => {
           <span>Software Engineer</span>
         </div>
         <div className={style.header__bio}>
-          <span>On project since 24 nov 2021</span>
+          <span>{`On project since ${formatDate({ createdAt: user.data.createdAt, pattern: 'dd MMM yyyy' })}`}</span>
         </div>
         <ul className={style.header__tabs}>
           <li className={style.header__tabsActive}>Sets</li>
