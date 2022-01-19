@@ -1,4 +1,4 @@
-import { SetInterface } from '@/interfaces';
+import { SetInterface, UserInterface } from '@/interfaces';
 import SetEntity from '@/entity/SetEntity';
 import { HttpException } from '@/utils/HttpException';
 import { isEmpty } from '@utils/util';
@@ -16,6 +16,13 @@ class SetService {
     const setRepo = getRepository(SetEntity);
     const data = await setRepo.findOne({ where: { id: payload }, relations: ['folders', 'user'] });
     if (!data) throw new HttpException(404, 'Not Found');
+    return data;
+  }
+
+  async findByUser(payload: UserInterface): Promise<SetInterface[]> {
+    if (isEmpty(payload)) throw new HttpException(400, 'No payload');
+    const setRepo = getRepository(SetEntity);
+    const data = await setRepo.find({ where: { user: payload } });
     return data;
   }
 

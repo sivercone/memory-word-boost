@@ -88,6 +88,16 @@ class AuthController {
     }
   }
 
+  public updateUser = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const payload = req.body;
+      await userService.update(payload);
+      res.status(200).json({ message: 'updated' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   public deleteUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const payload = req.params.id;

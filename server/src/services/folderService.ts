@@ -1,4 +1,4 @@
-import { FolderInterface } from '@/interfaces';
+import { FolderInterface, UserInterface } from '@/interfaces';
 import FolderEntity from '@/entity/FolderEntity';
 import { HttpException } from '@/utils/HttpException';
 import { isEmpty } from '@utils/util';
@@ -17,6 +17,13 @@ class FolderService {
     const folder = await folderRepo.findOne({ where: { id: payload }, relations: ['sets', 'user'] });
     if (!folder) throw new HttpException(404, 'Not Found');
     return folder;
+  }
+
+  async findByUser(payload: UserInterface): Promise<FolderInterface[]> {
+    if (isEmpty(payload)) throw new HttpException(400, 'No payload');
+    const folderRepo = getRepository(FolderEntity);
+    const data = await folderRepo.find({ where: { user: payload } });
+    return data;
   }
 
   public async create(payload: FolderInterface): Promise<FolderInterface> {

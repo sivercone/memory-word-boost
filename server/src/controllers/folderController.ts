@@ -21,6 +21,16 @@ class FolderController {
     }
   };
 
+  public getFolderByUser = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const payload = req.body;
+      const data = await folderService.findByUser(payload);
+      res.status(200).json(data);
+    } catch (error) {
+      next(error);
+    }
+  };
+
   public createFolder = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const payload = req.body;
