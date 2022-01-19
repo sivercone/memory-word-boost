@@ -93,7 +93,7 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
           </svg>
         </button>
         <Link href="/">
-          <a className={style.header__logo}>Memory Word Boost</a>
+          <a className={style.header__logo}>Project MWB</a>
         </Link>
         <div style={{ display: 'flex', gap: '0.5rem' }}>
           <button onClick={onUndo} title="undo">

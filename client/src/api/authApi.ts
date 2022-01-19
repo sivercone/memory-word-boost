@@ -11,4 +11,13 @@ export const authApi = {
     if (!response.ok) throw new Error(response.statusText);
     return response.json();
   },
+
+  async update(payload: UserInterface): Promise<void> {
+    const response = await fetch(`${path}/user/update`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!response.ok) throw new Error(response.statusText);
+  },
 };

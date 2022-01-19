@@ -1,4 +1,4 @@
-import { SetInterface } from 'interfaces';
+import { SetInterface, UserInterface } from 'interfaces';
 
 const path = 'http://localhost:7001/set';
 
@@ -11,6 +11,16 @@ export const setApi = {
 
   async getById(payload: string): Promise<SetInterface> {
     const response = await fetch(`${path}/${payload}`);
+    if (!response.ok) throw new Error(response.statusText);
+    return response.json();
+  },
+
+  async getByUser(payload: UserInterface): Promise<SetInterface[]> {
+    const response = await fetch(`${path}/byuser`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
     if (!response.ok) throw new Error(response.statusText);
     return response.json();
   },

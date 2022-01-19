@@ -1,0 +1,36 @@
+.cardbox {
+  display: block;
+  width: calc(50% - 1rem);
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 5px;
+  background-color: #181818;
+  color: #cccccc;
+
+  &:hover {
+    background-color: lighten($color: #181818, $amount: 5);
+  }
+
+  &__text {
+    p {
+      margin-top: 0.5rem;
+    }
+  }
+
+  &__tags {
+    display: flex;
+    margin-top: 1rem;
+
+    li {
+      padding: 0 0.5rem;
+      margin-left: 0.5rem;
+      border-radius: 25px;
+      background-color: #cccccc;
+      color: #000000;
+    }
+
+    li:nth-child(1) {
+      margin-left: 0;
+    }
+  }
+}

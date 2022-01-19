@@ -38,7 +38,14 @@
     margin-top: 1rem;
 
     li {
-      padding: 0.25rem 0.5rem;
+      border-radius: 10px;
+      border: 1px solid transparent;
+
+      a {
+        display: block;
+        padding: 0.25rem 0.5rem;
+        border-radius: 10px;
+      }
     }
   }
 
@@ -47,5 +54,18 @@
     background-color: var(--yellow);
     border-radius: 10px;
     border: 1px solid var(--black);
+  }
+}
+
+.settings {
+  &__header {
+    margin-bottom: 1rem;
+    font-size: 3rem;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
   }
 }

@@ -11,7 +11,7 @@ const login: NextPage = () => {
       <section className={style.auth}>
         <div className={style.auth__wrapper}>
           <span className={style.auth__title}>
-            Welcome to the <strong>MEMORY WORD BOOST</strong>
+            Welcome to the <strong>PROJECT MWB</strong>
           </span>
           <span className={style.auth__suptitle}>
             <p>
@@ -68,7 +68,7 @@ const login: NextPage = () => {
         </div>
       </section>
       <footer className={style.footer}>
-        <span>MEMORY WORD BOOST</span>
+        <span>PROJECT MWB</span>
         <div>
           <a href="github.com">Report a bug</a>
           <a href="github.com">

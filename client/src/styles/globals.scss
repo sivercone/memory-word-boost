@@ -82,6 +82,8 @@ input {
   border-bottom: 2px solid var(--black);
 
   &:focus-within {
+    background-color: #e6e6e6;
+
     span {
       color: #444;
     }

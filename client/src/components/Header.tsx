@@ -30,7 +30,7 @@ export const Header: React.FC = () => {
   return (
     <header className={style.header}>
       <Link href="/">
-        <a>Memory Word Boost</a>
+        <a>Project MWB</a>
       </Link>
       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
         <div
@@ -81,7 +81,7 @@ export const Header: React.FC = () => {
               </button>
               <motion.ul animate={shownDropdown === 'profile' ? fade.anim : fade.init} className={style.plus__menu} role="menu">
                 <li onClick={closeDropdown}>
-                  <Link href="/u/settings">
+                  <Link href={`/u/${user.id}/settings`}>
                     <a>Settings</a>
                   </Link>
                 </li>

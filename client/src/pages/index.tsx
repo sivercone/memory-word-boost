@@ -6,6 +6,7 @@ import { useQuery } from 'react-query';
 import { setApi } from 'api/setApi';
 import { folderApi } from 'api/folderApi';
 import React from 'react';
+import { CardBoxSet, CardBoxFolder } from 'components/CardBox';
 
 // https://quizlet.com/upgrade?source=rich_text_formatting
 
@@ -21,39 +22,10 @@ const Home: NextPage = () => {
       </Head>
       <div className="container">
         <h1 style={{ marginBottom: '1rem' }}>Study sets</h1>
-        <div className={style.cardlist}>
-          {set.data
-            ? set.data.map((content) => (
-                <Link href={`/${content.id}`} key={content.id}>
-                  <a className={style.cardlist__item}>
-                    <div className={style.cardlist__text}>
-                      <h2>{content.title}</h2>
-                      <p>{content.description}</p>
-                    </div>
-                    <ul className={style.cardlist__tags}>
-                      {content.tags.map((tag, i) => (
-                        <li key={tag + i}>{tag}</li>
-                      ))}
-                    </ul>
-                  </a>
-                </Link>
-              ))
-            : undefined}
-        </div>
+        <div className={style.cardlist}>{set.data ? set.data.map((content) => <CardBoxSet content={content} />) : undefined}</div>
         <h1 style={{ marginBottom: '1rem' }}>Folders</h1>
         <div className={style.cardlist}>
-          {folder.data
-            ? folder.data.map((content) => (
-                <Link href={`/folder/${content.id}`} key={content.id}>
-                  <a className={style.cardlist__item}>
-                    <div className={style.cardlist__text}>
-                      <h2>{content.name}</h2>
-                      <p>{content.description}</p>
-                    </div>
-                  </a>
-                </Link>
-              ))
-            : undefined}
+          {folder.data ? folder.data.map((content) => <CardBoxFolder key={content.id} content={content} />) : undefined}
         </div>
       </div>
     </>

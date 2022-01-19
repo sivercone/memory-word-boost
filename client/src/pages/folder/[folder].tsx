@@ -13,6 +13,7 @@ import { notify } from 'utils/notify';
 import { setApi } from 'api/setApi';
 import { SetInterface } from 'interfaces';
 import { useUserStore } from 'storage/useUserStore';
+import { CardBoxSet } from 'components/CardBox';
 
 type ModalVariants = 'edit' | 'del' | 'sets';
 
@@ -138,19 +139,7 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
       <h2 style={{ marginBottom: '1rem' }}>Study sets in this folder ({folder.data.sets.length})</h2>
       <div className={style2.cardlist}>
         {folder.data.sets.map((content) => (
-          <Link href={`/${content.id}`} key={content.id}>
-            <a className={style2.cardlist__item}>
-              <div className={style2.cardlist__text}>
-                <h2>{content.title}</h2>
-                <p>{content.description}</p>
-              </div>
-              <ul className={style2.cardlist__tags}>
-                {content.tags.map((tag, i) => (
-                  <li key={tag + i}>{tag}</li>
-                ))}
-              </ul>
-            </a>
-          </Link>
+          <CardBoxSet key={content.id} content={content} />
         ))}
       </div>
       <FolderEditing folderFigure={folder.data} isOpen={shownModal === 'edit'} onClose={closeModal} />
