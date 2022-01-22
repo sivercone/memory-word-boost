@@ -22,7 +22,9 @@ const Home: NextPage = () => {
       </Head>
       <div className="container">
         <h1 style={{ marginBottom: '1rem' }}>Study sets</h1>
-        <div className={style.cardlist}>{set.data ? set.data.map((content) => <CardBoxSet content={content} />) : undefined}</div>
+        <div className={style.cardlist}>
+          {set.data ? set.data.map((content) => <CardBoxSet key={content.id} content={content} />) : undefined}
+        </div>
         <h1 style={{ marginBottom: '1rem' }}>Folders</h1>
         <div className={style.cardlist}>
           {folder.data ? folder.data.map((content) => <CardBoxFolder key={content.id} content={content} />) : undefined}

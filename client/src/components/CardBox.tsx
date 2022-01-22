@@ -13,7 +13,7 @@ interface FolderProps {
 
 export const CardBoxSet: React.FC<SetProps> = ({ content, fullsize }) => {
   return (
-    <Link href={`/${content.id}`} key={content.id}>
+    <Link href={`/${content.id}`}>
       <a style={fullsize ? { width: '100%' } : undefined} className={style.cardbox}>
         <div className={style.cardbox__text}>
           <h2>{content.title}</h2>
@@ -31,7 +31,7 @@ export const CardBoxSet: React.FC<SetProps> = ({ content, fullsize }) => {
 
 export const CardBoxFolder: React.FC<FolderProps> = ({ content, fullsize }) => {
   return (
-    <Link href={`/folder/${content.id}`} key={content.id}>
+    <Link href={`/folder/${content.id}`}>
       <a style={fullsize ? { width: '100%' } : undefined} className={style.cardbox}>
         <div className={style.cardbox__text}>
           <h2>{content.name}</h2>
