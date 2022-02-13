@@ -18,7 +18,6 @@ type ModalVariants = 'del' | 'info' | 'folder';
 
 const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const set = useQuery(['set', pagekey], () => setApi.getById(pagekey), { enabled: !!pagekey });
-  if (!set.data) return <Custom404 />;
 
   const router = useRouter();
   const { user } = useUserStore();
@@ -31,6 +30,7 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
 
   const fetchDelete = useMutation(setApi.delete, { onSuccess: () => queryClient.invalidateQueries('sets') });
   const onDeleteSet = async () => {
+    if (!set.data) return;
     try {
       await fetchDelete.mutateAsync(set.data.id);
       router.push('/');
@@ -54,12 +54,14 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const queryClient = useQueryClient();
   const fetchUpdate = useMutation(setApi.update, { onSuccess: () => queryClient.invalidateQueries(['set', pagekey]) });
   const updateSetFolders = async () => {
+    if (!set.data) return;
     try {
       await fetchUpdate.mutateAsync({ ...set.data, folders: includedFolders });
       closeModal();
     } catch (error) {}
   };
 
+  if (!set.data) return <Custom404 />;
   return (
     <>
       <div className="container">
@@ -212,7 +214,7 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                   </>
                 ) : (
                   <>
-                    <h3>You don't have folders</h3>
+                    <h3>You don&#39;t have folders</h3>
                     <p>Create folders to include or exclude this set to folders</p>
                   </>
                 ),

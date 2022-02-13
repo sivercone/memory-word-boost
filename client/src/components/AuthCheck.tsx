@@ -10,6 +10,7 @@ export const AuthCheck: React.FC = () => {
 
   React.useEffect(() => {
     if (!sessionMemory.get('logged') || sessionMemory.get('logged') === 'yes') refetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   React.useEffect(() => {
@@ -18,7 +19,7 @@ export const AuthCheck: React.FC = () => {
       setUser(data);
       sessionMemory.set('logged', 'yes');
     }
-  }, [status]);
+  }, [status, data, setUser]);
 
   React.useEffect(() => {
     if (status === 'error') window.location.replace('/login');

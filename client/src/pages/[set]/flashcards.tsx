@@ -22,7 +22,6 @@ const translateRight = { translateX: '-100%', opacity: 0, transition: { duration
 
 const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const set = useQuery(['set', pagekey], () => setApi.getById(pagekey));
-  if (!set.data) return <Custom404 />;
 
   const [cards, setCards] = React.useState<any[]>([]);
   React.useEffect(() => {
@@ -65,6 +64,7 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   };
 
   const onRestart = () => {
+    if (!set.data) return;
     setRepeatCards([]);
     setCards(set.data.cards);
     setCurrentIndex(0);
@@ -83,6 +83,7 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     }
   };
 
+  if (!set.data) return <Custom404 />;
   return (
     <>
       <header className={style.header}>

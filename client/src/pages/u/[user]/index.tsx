@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React from 'react';
 import { NextPage } from 'next';
 import Link from 'next/link';
@@ -72,13 +73,13 @@ const UserPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
               idle: undefined,
               error: 'error',
               loading: 'loading',
-              success: sets.data?.map((content) => <CardBoxSet content={content} fullsize />),
+              success: sets.data?.map((content) => <CardBoxSet key={content.id} content={content} fullsize />),
             }[sets.status],
             folders: {
               idle: undefined,
               error: 'error',
               loading: 'loading',
-              success: folders.data?.map((content) => <CardBoxFolder content={content} fullsize />),
+              success: folders.data?.map((content) => <CardBoxFolder key={content.id} content={content} fullsize />),
             }[folders.status],
           }[router.query.entries as 'sets' | 'folders']
         }

@@ -19,7 +19,6 @@ type ModalVariants = 'edit' | 'del' | 'sets';
 
 const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const folder = useQuery(['folder', pagekey], () => folderApi.getById(pagekey), { enabled: !!pagekey });
-  if (!folder.data) return <Custom404 />;
 
   const router = useRouter();
   const { user } = useUserStore();
@@ -33,6 +32,7 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const queryClient = useQueryClient();
   const fetchDelete = useMutation(folderApi.delete, { onSuccess: () => queryClient.invalidateQueries('folders') });
   const onDelete = async () => {
+    if (!folder.data) return;
     try {
       await fetchDelete.mutateAsync(folder.data.id);
       router.push('/');
@@ -52,12 +52,14 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   };
   const fetchUpdate = useMutation(folderApi.update, { onSuccess: () => queryClient.invalidateQueries(['folder', pagekey]) });
   const updateFolderSets = async () => {
+    if (!folder.data) return;
     try {
       await fetchUpdate.mutateAsync({ ...folder.data, sets: includedSets });
       closeModal();
     } catch (error) {}
   };
 
+  if (!folder.data) return <Custom404 />;
   return (
     <div className="container">
       <div className={style.card}>
