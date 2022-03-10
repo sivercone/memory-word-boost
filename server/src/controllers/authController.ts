@@ -35,7 +35,6 @@ class AuthController {
 
   async ouathGoogle(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      console.log('-- 1 --');
       const { access_token, id_token } = await axios
         .post<GoogleTokens>('https://oauth2.googleapis.com/token', {
           client_id: process.env.GOOGLE_CLIENT_ID,
@@ -45,15 +44,12 @@ class AuthController {
           redirect_uri: 'http://localhost:7001/auth/google',
         })
         .then((res) => res.data);
-      console.log('-- 2 --');
       const { email, name, picture } = await axios
         .get<GoogleUser>(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`, {
           headers: { Authorization: `Bearer ${id_token}` },
         })
         .then((res) => res.data);
-      console.log('-- 3 --');
       const token = await authService.logIn({ email, name, avatar: picture });
-      console.log('-- 4 --');
       res.cookie('refresh_token', token, { maxAge: 24 * 60 * 3600000, httpOnly: true, sameSite: 'strict' });
       res.redirect('http://localhost:3000');
     } catch (error) {
