@@ -162,7 +162,13 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                   animate={toggled ? rotateX.anim : rotateX.init}
                   onClick={onToggle}
                   className={style.flashcards__mainblock}>
-                  <motion.span animate={toggled ? rotateX.anim : rotateX.init}>
+                  <motion.span
+                    animate={toggled ? rotateX.anim : rotateX.init}
+                    style={
+                      (toggled && cards[currentIndex].definition.length > 200) || (!toggled && cards[currentIndex].term.length > 200)
+                        ? { fontSize: '1.5rem' }
+                        : undefined
+                    }>
                     {toggled ? cards[currentIndex].definition : cards[currentIndex].term}
                   </motion.span>
                 </motion.button>
