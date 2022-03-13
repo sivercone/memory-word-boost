@@ -24,15 +24,6 @@ interface GoogleTokens {
 }
 
 class AuthController {
-  public getUsers = async (_: Request, res: Response, next: NextFunction) => {
-    try {
-      const data = await userService.findAll();
-      res.status(200).json(data);
-    } catch (error) {
-      next(error);
-    }
-  };
-
   async ouathGoogle(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { access_token, id_token } = await axios
@@ -69,26 +60,6 @@ class AuthController {
       next(error);
     }
   }
-
-  public updateUser = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const payload = req.body;
-      await userService.update(payload);
-      res.status(200).json({ message: 'updated' });
-    } catch (error) {
-      next(error);
-    }
-  };
-
-  public deleteUser = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const payload = req.params.id;
-      await userService.delete(payload);
-      res.status(200).json({ message: 'deleted' });
-    } catch (error) {
-      next(error);
-    }
-  };
 }
 
 export const authController = new AuthController();
