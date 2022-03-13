@@ -11,12 +11,17 @@ import { formatDate } from 'utils/formatDate';
 import { useRouter } from 'next/router';
 import { folderApi } from 'api/folderApi';
 import { CardBoxFolder, CardBoxSet } from 'components/CardBox';
+import { useUserStore } from 'storage/useUserStore';
 
 const UserPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
+  const { user: userState } = useUserStore();
   const router = useRouter();
-  const user = useQuery('user', () => authApi.me(), {
-    onSuccess: () => (!router.query.entries ? router.replace(`${pagekey}?entries=sets`) : null),
-  });
+  const user = useQuery(['user', pagekey], () => authApi.getById(pagekey));
+  React.useEffect(() => {
+    if (router.query?.entries) return;
+    router.replace(`/u/${pagekey}?entries=sets`);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pagekey]);
 
   const sets = useQuery(['sets', pagekey], () => setApi.getByUser(user.data!), {
     enabled: !!pagekey && !!user.data && router.query.entries === 'sets',
@@ -59,11 +64,13 @@ const UserPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
               <a>Learning activity</a>
             </Link>
           </li>
-          <li>
-            <Link href={`/u/${pagekey}/settings`}>
-              <a>Edit profile</a>
-            </Link>
-          </li>
+          {user.data.id === userState?.id ? (
+            <li>
+              <Link href={`/u/${pagekey}/settings`}>
+                <a>Edit profile</a>
+              </Link>
+            </li>
+          ) : undefined}
         </ul>
       </section>
       <section style={{ marginTop: '1rem' }}>
@@ -91,7 +98,7 @@ const UserPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
 UserPage.getInitialProps = async ({ query }) => {
   const pagekey = typeof query.user === 'string' ? query.user : '';
   const queryClient = new QueryClient();
-  if (pagekey) await queryClient.prefetchQuery('user', () => authApi.me());
+  if (pagekey) await queryClient.prefetchQuery(['user', pagekey], () => authApi.getById(pagekey));
   return { pagekey, dehydratedState: dehydrate(queryClient) };
 };
 

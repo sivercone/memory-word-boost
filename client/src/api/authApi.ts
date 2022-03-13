@@ -12,6 +12,12 @@ export const authApi = {
     return response.json();
   },
 
+  async getById(payload: string): Promise<UserInterface> {
+    const response = await fetch(`${path}/user/${payload}`);
+    if (!response.ok) throw new Error(response.statusText);
+    return response.json();
+  },
+
   async update(payload: UserInterface): Promise<void> {
     const response = await fetch(`${path}/user/update`, {
       method: 'PUT',
