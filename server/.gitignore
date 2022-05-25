@@ -3,6 +3,7 @@ node_modules
 /dist
 dist
 .vscode
+.DS_Store
 
 # env
 .env
