@@ -1,5 +1,5 @@
 import { HttpException } from '@/utils/HttpException';
-import { isEmpty } from '@utils/util';
+import { isEmpty } from '@/utils/isEmpty';
 import { UserInterface } from '@/interfaces';
 import { getRepository } from 'typeorm';
 import UserEntity from '@/entity/UserEntity';

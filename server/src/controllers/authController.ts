@@ -3,54 +3,9 @@ import axios from 'axios';
 import { userService } from '@/services/userService';
 import { authService } from '@/services/authService';
 import { RequestWithTokens } from '@/middlewares/isAuth';
-
-interface GoogleUser {
-  id: string;
-  email: string;
-  verified_email: boolean;
-  name: string;
-  given_name: string;
-  family_name: string;
-  picture: string;
-  locale: string;
-}
-
-interface GoogleTokens {
-  access_token: string;
-  expires_in: Number;
-  refresh_token: string;
-  scope: string;
-  id_token: string;
-}
+import { GoogleTokens, GoogleUser } from '@/interfaces';
 
 class AuthController {
-  public getUsers = async (_: Request, res: Response, next: NextFunction) => {
-    try {
-      const data = await userService.findAll();
-      res.status(200).json(data);
-    } catch (error) {
-      next(error);
-    }
-  };
-
-  // async oauthGithub(req: Request, res: Response, next: NextFunction): Promise<void> {
-  //   try {
-  //     const response = await axios.post(
-  //       `https://github.com/login/oauth/access_token?client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}&code=${req.query.code}`,
-  //       { headers: { 'Content-Type': 'application/json', Accept: 'application/json' } },
-  //     );
-  //     // console.log('🍟', response.data);
-  //     // const credits = await axios.get('https://api.github.com/user', {
-  //     //   headers: { Authorization: `token ${response.data.access_token}` },
-  //     // });
-
-  //     // res.cookie('access-token', response.data.access_token, { maxAge: 8 * 3600000, httpOnly: true, sameSite: 'strict' });
-  //     // res.redirect('http://localhost:3000');
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // }
-
   async ouathGoogle(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { access_token, id_token } = await axios
@@ -87,26 +42,6 @@ class AuthController {
       next(error);
     }
   }
-
-  public updateUser = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const payload = req.body;
-      await userService.update(payload);
-      res.status(200).json({ message: 'updated' });
-    } catch (error) {
-      next(error);
-    }
-  };
-
-  public deleteUser = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const payload = req.params.id;
-      await userService.delete(payload);
-      res.status(200).json({ message: 'deleted' });
-    } catch (error) {
-      next(error);
-    }
-  };
 }
 
 export const authController = new AuthController();

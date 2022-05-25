@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -17,7 +18,6 @@ const fade = {
 
 export const Header: React.FC = () => {
   const { pathname } = useRouter();
-  if (['/login', '/[set]/flashcards'].includes(pathname)) return <></>;
 
   const { user } = useUserStore();
 
@@ -27,6 +27,7 @@ export const Header: React.FC = () => {
   const [shownFolder, setShownFolder] = React.useState<boolean>(false);
   const toggleShownFolder = () => setShownFolder(!shownFolder);
 
+  if (['/login', '/[set]/flashcards'].includes(pathname)) return <></>;
   return (
     <header className={style.header}>
       <Link href="/">

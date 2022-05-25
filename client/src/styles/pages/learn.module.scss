@@ -6,6 +6,7 @@
   min-height: 90vh;
   gap: 1rem;
   margin-bottom: 1rem;
+  width: 100%;
 
   &__block {
     display: flex;
@@ -19,6 +20,7 @@
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0px 0px 3px 1px #00000094;
+    transition: all 0.3s ease;
   }
 
   &__progressbar {
@@ -128,5 +130,21 @@
     justify-content: center;
     gap: 1rem;
     margin-top: auto;
+  }
+}
+
+@media (max-width: 1000px) {
+  .class {
+    &__block {
+      width: 95%;
+    }
+    &__form {
+      flex-direction: column;
+    }
+    &__learn {
+      span {
+        font-size: 2rem;
+      }
+    }
   }
 }

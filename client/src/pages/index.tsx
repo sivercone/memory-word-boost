@@ -1,6 +1,5 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import Link from 'next/link';
 import style from 'styles/pages/home.module.scss';
 import { useQuery } from 'react-query';
 import { setApi } from 'api/setApi';

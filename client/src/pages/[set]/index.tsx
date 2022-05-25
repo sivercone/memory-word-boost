@@ -18,7 +18,6 @@ type ModalVariants = 'del' | 'info' | 'folder';
 
 const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const set = useQuery(['set', pagekey], () => setApi.getById(pagekey), { enabled: !!pagekey });
-  if (!set.data) return <Custom404 />;
 
   const router = useRouter();
   const { user } = useUserStore();
@@ -31,6 +30,7 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
 
   const fetchDelete = useMutation(setApi.delete, { onSuccess: () => queryClient.invalidateQueries('sets') });
   const onDeleteSet = async () => {
+    if (!set.data) return;
     try {
       await fetchDelete.mutateAsync(set.data.id);
       router.push('/');
@@ -54,12 +54,14 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const queryClient = useQueryClient();
   const fetchUpdate = useMutation(setApi.update, { onSuccess: () => queryClient.invalidateQueries(['set', pagekey]) });
   const updateSetFolders = async () => {
+    if (!set.data) return;
     try {
       await fetchUpdate.mutateAsync({ ...set.data, folders: includedFolders });
       closeModal();
     } catch (error) {}
   };
 
+  if (!set.data) return <Custom404 />;
   return (
     <>
       <div className="container">
@@ -134,24 +136,28 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
             </span>
           </div>
           <div className={style.createdby__movements}>
-            <button onClick={onEdit} title="edit">
-              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#181818">
-                <path d="M0 0h24v24H0V0z" fill="none" />
-                <path d="M14.06 9.02l.92.92L5.92 19H5v-.92l9.06-9.06M17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83 3.75 3.75 1.83-1.83c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29zm-3.6 3.19L3 17.25V21h3.75L17.81 9.94l-3.75-3.75z" />
-              </svg>
-            </button>
-            <button onClick={() => openModal('folder')} title="add to folder">
-              <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="#181818">
-                <path d="M0 0h24v24H0V0z" fill="none" />
-                <path d="M20 6h-8l-2-2H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm0 12H4V6h5.17l2 2H20v10zm-8-4h2v2h2v-2h2v-2h-2v-2h-2v2h-2z" />
-              </svg>
-            </button>
-            <button onClick={() => openModal('del')} title="delete">
-              <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="#181818">
-                <path d="M0 0h24v24H0V0z" fill="none" />
-                <path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z" />
-              </svg>
-            </button>
+            {set.data.user.id === user?.id ? (
+              <>
+                <button onClick={onEdit} title="edit">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#181818">
+                    <path d="M0 0h24v24H0V0z" fill="none" />
+                    <path d="M14.06 9.02l.92.92L5.92 19H5v-.92l9.06-9.06M17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83 3.75 3.75 1.83-1.83c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29zm-3.6 3.19L3 17.25V21h3.75L17.81 9.94l-3.75-3.75z" />
+                  </svg>
+                </button>
+                <button onClick={() => openModal('folder')} title="add to folder">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="#181818">
+                    <path d="M0 0h24v24H0V0z" fill="none" />
+                    <path d="M20 6h-8l-2-2H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm0 12H4V6h5.17l2 2H20v10zm-8-4h2v2h2v-2h2v-2h-2v-2h-2v2h-2z" />
+                  </svg>
+                </button>
+                <button onClick={() => openModal('del')} title="delete">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="#181818">
+                    <path d="M0 0h24v24H0V0z" fill="none" />
+                    <path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z" />
+                  </svg>
+                </button>
+              </>
+            ) : undefined}
             <button onClick={() => openModal('info')} title="info">
               <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="#181818">
                 <path d="M0 0h24v24H0V0z" fill="none" />
@@ -212,7 +218,7 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                   </>
                 ) : (
                   <>
-                    <h3>You don't have folders</h3>
+                    <h3>You don&#39;t have folders</h3>
                     <p>Create folders to include or exclude this set to folders</p>
                   </>
                 ),

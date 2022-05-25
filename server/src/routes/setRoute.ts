@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { Routes } from '@interfaces/routes.interface';
 import { setController } from '@controllers/setController';
+import { Routes } from '@/interfaces';
 
 class SetRoute implements Routes {
   public path = '/set';

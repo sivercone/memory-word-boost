@@ -1,10 +1,11 @@
+/* eslint-disable @next/next/no-img-element */
 import React from 'react';
 import style from 'styles/pages/landing.module.scss';
 
 // https://crackmagazine.digital/
 
-const landing = () => {
-  const [rotate, setRotate] = React.useState(0);
+const Landing = () => {
+  const [rotate, setRotate] = React.useState<number>(0);
   React.useEffect(() => (window.onscroll = () => setRotate(window.pageYOffset / 2)), []);
 
   return (
@@ -17,4 +18,4 @@ const landing = () => {
   );
 };
 
-export default landing;
+export default Landing;

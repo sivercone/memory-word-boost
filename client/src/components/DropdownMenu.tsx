@@ -26,14 +26,17 @@ export const DropdownList: React.FC<{ children?: React.ReactNode; isOpen: boolea
 
 export const DropdownMenu: React.FC<Props> = ({ children, onClose }) => {
   const dropdownRef = React.useRef<HTMLDivElement>(null);
-  const nonDropdownClick = (event: any) => {
-    const path = event.path || (event.composedPath && event.composedPath());
-    if (!path.includes(dropdownRef.current)) onClose();
-  };
+  const nonDropdownClick = React.useCallback(
+    (event: any) => {
+      const path = event.path || (event.composedPath && event.composedPath());
+      if (!path.includes(dropdownRef.current)) onClose();
+    },
+    [onClose],
+  );
   React.useEffect(() => {
     document.body.addEventListener('click', nonDropdownClick);
     return () => document.body.removeEventListener('click', nonDropdownClick);
-  }, []);
+  }, [nonDropdownClick]);
 
   return (
     <div ref={dropdownRef} className={style.plus}>

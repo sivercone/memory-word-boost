@@ -14,10 +14,8 @@ type Results = {
 };
 
 const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
-  const set = useQuery(['set', pagekey], () => setApi.getById(pagekey));
-  if (!set.data) return <Custom404 />;
-
   const { push } = useRouter();
+  const set = useQuery(['set', pagekey], () => setApi.getById(pagekey));
 
   const [cards, setCards] = React.useState<{ term: string; definition: string }[]>([]);
   React.useEffect(() => {
@@ -64,6 +62,7 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   };
 
   const restartRound = () => {
+    if (!set.data) return;
     setIncorrect([]);
     setCards(set.data.cards.sort(() => Math.random() - 0.5));
     setCurrentIndex(0);
@@ -76,6 +75,7 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   // 1. add fade animations for changing text in blocks
   // 2. add diffrent emojis, dependent on completing, for result header
 
+  if (!set.data) return <Custom404 />;
   return (
     <div className={style.class}>
       <div className={style.class__block}>
@@ -85,8 +85,8 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
               <div className={`${style.class__main} ${style.results}`}>
                 <header className={style.results__header}>
                   <span>Results of Round {round}</span>
-                  <p>Good, you're in progress 🤩</p>
-                  <p>Don't give up 😡 you can pull it up 💪</p>
+                  <p>Good, you&#39;re in progress 🤩</p>
+                  <p>Don&#39;t give up 😡 you can pull it up 💪</p>
                 </header>
                 <div className={style.results__content}>
                   <p style={{ color: 'green' }}>

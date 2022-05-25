@@ -10,7 +10,6 @@ import { useRouter } from 'next/router';
 
 const ExamPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const set = useQuery(['set', pagekey], () => setApi.getById(pagekey));
-  if (!set.data) return <Custom404 />;
 
   const { push } = useRouter();
 
@@ -59,6 +58,7 @@ const ExamPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     reset();
   };
 
+  if (!set.data) return <Custom404 />;
   return (
     <div className={style.class}>
       {formState.isSubmitted ? (

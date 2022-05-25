@@ -41,7 +41,7 @@ const SetEditing: NextPage<{ setFigure?: SetFigure }> = ({ setFigure }) => {
   React.useEffect(() => {
     if (update.isSuccess) router.push(`/${update.data}`);
     if (create.isSuccess) router.push(`/${create.data}`);
-  }, [update.isSuccess, create.isSuccess]);
+  }, [update, create, router]);
 
   const [isModalShown, setIsModalShown] = React.useState(false);
   const toggleModalShown = () => setIsModalShown(!isModalShown);

@@ -35,11 +35,14 @@
   &__tabs {
     display: flex;
     gap: 1rem;
-    margin-top: 1rem;
+    padding: 1rem 0;
+    overflow-x: auto;
 
     li {
+      flex-shrink: 0;
       border-radius: 10px;
       border: 1px solid transparent;
+      color: var(--white);
 
       a {
         display: block;
@@ -50,7 +53,7 @@
   }
 
   &__tabsActive {
-    color: var(--black);
+    color: var(--black) !important;
     background-color: var(--yellow);
     border-radius: 10px;
     border: 1px solid var(--black);

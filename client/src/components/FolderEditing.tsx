@@ -41,7 +41,7 @@ export const FolderEditing: React.FC<Props> = ({ isOpen, onClose, folderFigure }
 
   React.useEffect(() => {
     if (create.isSuccess) router.push(`/folder/${create.data}`);
-  }, [create.isSuccess]);
+  }, [create, router]);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -51,7 +51,7 @@ export const FolderEditing: React.FC<Props> = ({ isOpen, onClose, folderFigure }
           <ModalInputs>
             <label className="input">
               <span>Name</span>
-              <input {...register('name')} />
+              <input {...register('name')} autoFocus />
             </label>
             <label className="input">
               <span>Description (optional)</span>

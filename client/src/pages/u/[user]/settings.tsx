@@ -12,7 +12,7 @@ const SettingsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const { register, handleSubmit, reset } = useForm<UserInterface>({ defaultValues: { ...user.data } });
   React.useEffect(() => {
     if (user.data) reset(user.data);
-  }, [user.data]);
+  }, [user.data, reset]);
 
   const callUpdate = useMutation(authApi.update);
   const onSubmit = async (payload: UserInterface) => {
