@@ -3,25 +3,7 @@ import axios from 'axios';
 import { userService } from '@/services/userService';
 import { authService } from '@/services/authService';
 import { RequestWithTokens } from '@/middlewares/isAuth';
-
-interface GoogleUser {
-  id: string;
-  email: string;
-  verified_email: boolean;
-  name: string;
-  given_name: string;
-  family_name: string;
-  picture: string;
-  locale: string;
-}
-
-interface GoogleTokens {
-  access_token: string;
-  expires_in: Number;
-  refresh_token: string;
-  scope: string;
-  id_token: string;
-}
+import { GoogleTokens, GoogleUser } from '@/interfaces';
 
 class AuthController {
   async ouathGoogle(req: Request, res: Response, next: NextFunction): Promise<void> {

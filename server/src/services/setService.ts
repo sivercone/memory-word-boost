@@ -1,7 +1,7 @@
 import { SetInterface, UserInterface } from '@/interfaces';
 import SetEntity from '@/entity/SetEntity';
 import { HttpException } from '@/utils/HttpException';
-import { isEmpty } from '@utils/util';
+import { isEmpty } from '@/utils/isEmpty';
 import { getRepository } from 'typeorm';
 
 class SetService {

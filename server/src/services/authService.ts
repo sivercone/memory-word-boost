@@ -1,6 +1,6 @@
 import UserEntity from '@/entity/UserEntity';
 import { HttpException } from '@utils/HttpException';
-import { isEmpty } from '@utils/util';
+import { isEmpty } from '@/utils/isEmpty';
 import { getRepository } from 'typeorm';
 import { createAccessToken, createRefreshToken } from '@utils/createToken';
 import jwt from 'jsonwebtoken';

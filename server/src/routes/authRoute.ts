@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { Routes } from '@interfaces/routes.interface';
 import { authController } from '@/controllers/authController';
 import { isAuth } from '@/middlewares/isAuth';
 import { userController } from '@/controllers/userController';
+import { Routes } from '@/interfaces';
 
 class AuthRoute implements Routes {
   public path = '/auth';
