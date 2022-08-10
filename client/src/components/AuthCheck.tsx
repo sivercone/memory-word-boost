@@ -10,7 +10,6 @@ export const AuthCheck: React.FC = () => {
 
   React.useEffect(() => {
     if (!sessionMemory.get('logged') || sessionMemory.get('logged') === 'yes') refetch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   React.useEffect(() => {

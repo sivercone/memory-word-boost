@@ -48,7 +48,7 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     if (set.data) setIncludedFolders(set.data.folders);
   }, [set.data]);
   const toggleIncludeFolder = (payload: FolderInterface) => {
-    if (!!includedFolders.find((el) => el.id === payload.id)) setIncludedFolders(includedFolders.filter((el) => el.id !== payload.id));
+    if (includedFolders.find((el) => el.id === payload.id)) setIncludedFolders(includedFolders.filter((el) => el.id !== payload.id));
     else setIncludedFolders([...includedFolders, payload]);
   };
   const queryClient = useQueryClient();
@@ -171,7 +171,8 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                 height="24"
                 viewBox="0 0 24 24"
                 width="24"
-                fill="#181818">
+                fill="#181818"
+              >
                 <g>
                   <rect fill="none" height="24" width="24" />
                 </g>

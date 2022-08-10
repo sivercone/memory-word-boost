@@ -1,4 +1,3 @@
-import React from 'react';
 import { NextPage } from 'next';
 import { useSetStore } from 'storage/useSetStore';
 import { useQuery } from 'react-query';

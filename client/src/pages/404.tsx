@@ -1,5 +1,3 @@
-import React from 'react';
-
 const Custom404 = () => {
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '80vh' }}>

@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -39,7 +38,8 @@ export const Header: React.FC = () => {
           onBlur={(event) => {
             if (!event.currentTarget.contains(event.relatedTarget)) closeDropdown();
           }}
-          className={style.plus}>
+          className={style.plus}
+        >
           <button className={style.plus__button}>
             <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="#cccccc">
               <path d="M0 0h24v24H0V0z" fill="none" />
@@ -73,7 +73,8 @@ export const Header: React.FC = () => {
               onBlur={(event) => {
                 if (!event.currentTarget.contains(event.relatedTarget)) closeDropdown();
               }}
-              className={style.plus}>
+              className={style.plus}
+            >
               <button>
                 <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="#cccccc">
                   <path d="M0 0h24v24H0V0z" fill="none" />

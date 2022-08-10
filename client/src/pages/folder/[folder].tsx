@@ -47,7 +47,7 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     if (folder.data) setIncludedSets(folder.data.sets);
   }, [folder.data, folder.dataUpdatedAt]);
   const toggleIncludeFolder = (payload: SetInterface) => {
-    if (!!includedSets.find((set) => set.id === payload.id)) setIncludedSets(includedSets.filter((el) => el.id !== payload.id));
+    if (includedSets.find((set) => set.id === payload.id)) setIncludedSets(includedSets.filter((el) => el.id !== payload.id));
     else setIncludedSets([...includedSets, payload]);
   };
   const fetchUpdate = useMutation(folderApi.update, { onSuccess: () => queryClient.invalidateQueries(['folder', pagekey]) });
@@ -94,7 +94,8 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                   height="24"
                   viewBox="0 0 24 24"
                   width="24"
-                  fill="#181818">
+                  fill="#181818"
+                >
                   <g>
                     <rect fill="none" height="24" width="24" />
                   </g>
@@ -131,7 +132,8 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
               height="24"
               viewBox="0 0 24 24"
               width="24"
-              fill="#181818">
+              fill="#181818"
+            >
               <g>
                 <rect fill="none" height="24" width="24" />
               </g>

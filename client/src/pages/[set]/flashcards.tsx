@@ -144,14 +144,16 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
               <button
                 onClick={toRepeat}
                 style={toRepeated || learned ? { visibility: 'hidden' } : { visibility: 'visible' }}
-                className={`${style.flashcards__arrow} ${style.flashcards__arrowleft}`}>
+                className={`${style.flashcards__arrow} ${style.flashcards__arrowleft}`}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   enableBackground="new 0 0 24 24"
                   height="1em"
                   viewBox="0 0 24 24"
                   width="1em"
-                  fill="currentColor">
+                  fill="currentColor"
+                >
                   <rect fill="none" height="24" width="24" />
                   <path d="M9,19l1.41-1.41L5.83,13H22V11H5.83l4.59-4.59L9,5l-7,7L9,19z" />
                 </svg>
@@ -161,14 +163,16 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                 <motion.button
                   animate={toggled ? rotateX.anim : rotateX.init}
                   onClick={onToggle}
-                  className={style.flashcards__mainblock}>
+                  className={style.flashcards__mainblock}
+                >
                   <motion.span
                     animate={toggled ? rotateX.anim : rotateX.init}
                     style={
                       (toggled && cards[currentIndex].definition.length > 200) || (!toggled && cards[currentIndex].term.length > 200)
                         ? { fontSize: '1.5rem' }
                         : undefined
-                    }>
+                    }
+                  >
                     {toggled ? cards[currentIndex].definition : cards[currentIndex].term}
                   </motion.span>
                 </motion.button>
@@ -176,14 +180,16 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
               <button
                 onClick={onLearned}
                 style={learned || toRepeated ? { visibility: 'hidden' } : { visibility: 'visible' }}
-                className={`${style.flashcards__arrow} ${style.flashcards__arrowright}`}>
+                className={`${style.flashcards__arrow} ${style.flashcards__arrowright}`}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   enableBackground="new 0 0 24 24"
                   height="1em"
                   viewBox="0 0 24 24"
                   width="1em"
-                  fill="currentColor">
+                  fill="currentColor"
+                >
                   <rect fill="none" height="24" width="24" />
                   <path d="M15,5l-1.41,1.41L18.17,11H2V13h16.17l-4.59,4.59L15,19l7-7L15,5z" />
                 </svg>
@@ -193,7 +199,8 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                 <motion.div
                   animate={toggled ? rotateX.anim : rotateX.init}
                   className={style.flashcards__hint}
-                  style={toRepeated || learned ? { visibility: 'hidden' } : { visibility: 'visible' }}>
+                  style={toRepeated || learned ? { visibility: 'hidden' } : { visibility: 'visible' }}
+                >
                   <motion.span animate={toggled ? rotateX.anim : rotateX.init}>
                     {toggled ? 'Click card to see term 👆' : 'Click card to see definition 👆'}
                   </motion.span>

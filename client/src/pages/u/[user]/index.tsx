@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import React from 'react';
 import { NextPage } from 'next';
 import Link from 'next/link';
@@ -20,7 +19,6 @@ const UserPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   React.useEffect(() => {
     if (router.query?.entries) return;
     router.replace(`/u/${pagekey}?entries=sets`);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagekey]);
 
   const sets = useQuery(['sets', pagekey], () => setApi.getByUser(user.data!), {
