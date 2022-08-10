@@ -1,4 +1,4 @@
-import UserEntity from '@/entity/UserEntity';
+import UserEntity from '@/entities/UserEntity';
 import { HttpException } from '@utils/HttpException';
 import { isEmpty } from '@/utils/isEmpty';
 import { getRepository } from 'typeorm';

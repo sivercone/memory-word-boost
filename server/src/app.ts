@@ -8,7 +8,7 @@ import express from 'express';
 import helmet from 'helmet';
 import hpp from 'hpp';
 import morgan from 'morgan';
-import { dbConnection } from '@databases';
+import { dbConnection } from '@/core/db';
 import errorMiddleware from '@/middlewares/errorMiddleware';
 import { logger, stream } from '@utils/logger';
 import { createConnection } from 'typeorm';
@@ -33,7 +33,7 @@ class App {
   public listen() {
     this.app.listen(this.port, () => {
       logger.info(`=================================`);
-      logger.info(`======= ENV: ${this.env} =======`);
+      logger.info(`======== ENV: ${this.env} =======`);
       logger.info(`App listening on the port ${this.port}`);
       logger.info(`=================================`);
     });

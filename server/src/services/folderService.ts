@@ -1,5 +1,5 @@
 import { FolderInterface, UserInterface } from '@/interfaces';
-import FolderEntity from '@/entity/FolderEntity';
+import FolderEntity from '@/entities/FolderEntity';
 import { HttpException } from '@/utils/HttpException';
 import { isEmpty } from '@/utils/isEmpty';
 import { getRepository } from 'typeorm';
