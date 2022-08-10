@@ -6,8 +6,9 @@ import { authApi } from 'api/authApi';
 import { UserInterface } from 'interfaces';
 import Custom404 from 'pages/404';
 import style from 'styles/pages/user.module.scss';
+import { notify } from 'utils/notify';
 
-const SettingsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
+const SettingsPage: NextPage = () => {
   const user = useQuery('user', () => authApi.me());
   const { register, handleSubmit, reset } = useForm<UserInterface>({ defaultValues: { ...user.data } });
   React.useEffect(() => {
@@ -18,7 +19,10 @@ const SettingsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const onSubmit = async (payload: UserInterface) => {
     try {
       await callUpdate.mutateAsync(payload);
-    } catch (error) {}
+      notify('Account settings saved');
+    } catch (error) {
+      notify('Failed to save account settings');
+    }
   };
 
   if (!user.data) return <Custom404 />;
