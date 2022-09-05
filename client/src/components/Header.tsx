@@ -67,13 +67,7 @@ export const Header: React.FC = () => {
             <Link href={`/u/${user.id}`}>
               <a className={style.avatarpic}>
                 {/* <img className={style.avatarpic} src={user.avatar} alt="" /> */}
-                <Avatar
-                  size={40}
-                  // name="Maria Mitchell"
-                  variant="ring"
-                  colors={['#92A1C6', '#146A7C', '#F0AB3D', '#C271B4', '#C20D90']}
-                />
-                ;
+                <Avatar size={40} variant="ring" colors={['#92A1C6', '#146A7C', '#F0AB3D', '#C271B4', '#C20D90']} />
               </a>
             </Link>
             <div
