@@ -1,7 +1,8 @@
-import { motion } from 'framer-motion';
+import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React from 'react';
+import { motion } from 'framer-motion';
+import Avatar from 'boring-avatars';
 import { useUserStore } from 'storage/useUserStore';
 import style from 'styles/components/header.module.scss';
 import { FolderEditing } from './FolderEditing';
@@ -65,7 +66,14 @@ export const Header: React.FC = () => {
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <Link href={`/u/${user.id}`}>
               <a className={style.avatarpic}>
-                <img className={style.avatarpic} src={user.avatar} alt="" />
+                {/* <img className={style.avatarpic} src={user.avatar} alt="" /> */}
+                <Avatar
+                  size={40}
+                  // name="Maria Mitchell"
+                  variant="ring"
+                  colors={['#92A1C6', '#146A7C', '#F0AB3D', '#C271B4', '#C20D90']}
+                />
+                ;
               </a>
             </Link>
             <div

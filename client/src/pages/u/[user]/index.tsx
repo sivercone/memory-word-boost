@@ -1,13 +1,14 @@
 import React from 'react';
 import { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
+import Avatar from 'boring-avatars';
 import { setApi } from 'api/setApi';
 import style from 'styles/pages/user.module.scss';
 import { authApi } from 'api/authApi';
 import Custom404 from 'pages/404';
 import { formatDate } from 'utils/formatDate';
-import { useRouter } from 'next/router';
 import { folderApi } from 'api/folderApi';
 import { CardBoxFolder, CardBoxSet } from 'components/CardBox';
 import { useUserStore } from 'storage/useUserStore';
@@ -33,7 +34,8 @@ const UserPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     <div className="container">
       <section className={style.header}>
         <div className={style.header__avatar}>
-          <img src={user.data.avatar} alt="" />
+          {/* <img src={user.data.avatar} alt="" /> */}
+          <Avatar size={'100%'} variant="ring" colors={['#92A1C6', '#146A7C', '#F0AB3D', '#C271B4', '#C20D90']} />
         </div>
         <div className={style.header__title}>
           <span>{user.data.name}</span>
