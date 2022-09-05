@@ -1,0 +1,38 @@
+.toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+
+  input {
+    position: relative;
+    -webkit-appearance: none;
+    width: 50px;
+    height: 30px;
+    background-color: #fff;
+    border: 1px solid #d9dadc;
+    border-radius: 50px;
+    box-shadow: inset -20px 0 0 0 var(--white);
+    transition: all 0.3s;
+  }
+
+  input:after {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    background: transparent;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+  }
+
+  input:checked {
+    box-shadow: inset 20px 0 0 0 var(--yellow);
+    border-color: var(--yellow);
+  }
+
+  input:checked:after {
+    left: 20px;
+  }
+}

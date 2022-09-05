@@ -13,6 +13,7 @@ import { folderApi } from 'api/folderApi';
 import { FolderInterface } from 'interfaces';
 import { useUserStore } from 'storage/useUserStore';
 import { formatDate } from 'utils/formatDate';
+import { Toggle } from 'ui/Toggle';
 
 type ModalVariants = 'del' | 'info' | 'folder';
 
@@ -231,14 +232,11 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
             <ModalList>
               {folder.data.map((content) => (
                 <li key={content.id}>
-                  <label className="checkbox">
-                    <span>{content.name}</span>
-                    <input
-                      onClick={() => toggleIncludeFolder(content)}
-                      type="checkbox"
-                      defaultChecked={!!set.data.folders.find((el) => el.id === content.id)}
-                    />
-                  </label>
+                  <Toggle
+                    label={content.name}
+                    onClick={() => toggleIncludeFolder(content)}
+                    defaultChecked={!!set.data.folders.find((el) => el.id === content.id)}
+                  />
                 </li>
               ))}
             </ModalList>

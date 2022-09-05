@@ -14,6 +14,7 @@ import { setApi } from 'api/setApi';
 import { SetInterface } from 'interfaces';
 import { useUserStore } from 'storage/useUserStore';
 import { CardBoxSet } from 'components/CardBox';
+import { Toggle } from 'ui/Toggle';
 
 type ModalVariants = 'edit' | 'del' | 'sets';
 
@@ -172,14 +173,11 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
           <ModalList>
             {sets.data.map((content) => (
               <li key={content.id}>
-                <label className="checkbox">
-                  <span>{content.title}</span>
-                  <input
-                    onClick={() => toggleIncludeFolder(content)}
-                    type="checkbox"
-                    defaultChecked={!!includedSets.find((el) => el.id === content.id)}
-                  />
-                </label>
+                <Toggle
+                  label={content.title}
+                  onClick={() => toggleIncludeFolder(content)}
+                  defaultChecked={!!includedSets.find((el) => el.id === content.id)}
+                />
               </li>
             ))}
           </ModalList>
