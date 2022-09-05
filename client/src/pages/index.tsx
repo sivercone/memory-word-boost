@@ -19,11 +19,11 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="container">
-        <h1 style={{ marginBottom: '1rem' }}>Study sets</h1>
+        <h1 style={{ margin: '1rem 0' }}>Study sets</h1>
         <div className={style.cardlist}>
           {set.data ? set.data.map((content) => <CardBoxSet key={content.id} content={content} />) : undefined}
         </div>
-        <h1 style={{ marginBottom: '1rem' }}>Folders</h1>
+        <h1 style={{ margin: '1rem 0' }}>Folders</h1>
         <div className={style.cardlist}>
           {folder.data ? folder.data.map((content) => <CardBoxFolder key={content.id} content={content} />) : undefined}
         </div>
