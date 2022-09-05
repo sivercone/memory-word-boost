@@ -8,6 +8,7 @@ import { setApi } from 'api/setApi';
 import { SetInterface, UserInterface } from 'interfaces';
 import { useUserStore } from 'storage/useUserStore';
 import { Modal, ModalActions, ModalBody } from './Modal';
+import { Input } from 'ui/Input';
 
 interface SetFigure {
   id?: string;
@@ -54,20 +55,11 @@ const SetEditing: NextPage<{ setFigure?: SetFigure }> = ({ setFigure }) => {
       <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
         <div className={style.class__general}>
           <div style={{ display: 'flex', gap: '1rem' }}>
-            <label className="input">
-              <span>Title</span>
-              <input {...register('title')} required />
-            </label>
-            <label className="input">
-              <span>Description</span>
-              <input {...register('description')} />
-            </label>
+            <Input label="Title" {...register('title')} required />
+            <Input label="Description" {...register('description')} />
           </div>
           <div style={{ display: 'flex', gap: '1rem' }}>
-            <label className="input">
-              <span>Tags (through comma)</span>
-              <input {...register('tags')} />
-            </label>
+            <Input label="Tags (through comma)" {...register('tags')} />
             <button className="button button_dark" type="submit">
               <span>{setFigure && setFigure.id ? 'update' : 'create'}</span>
             </button>

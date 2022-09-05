@@ -6,6 +6,7 @@ import { folderApi } from 'api/folderApi';
 import { FolderInterface, UserInterface } from 'interfaces';
 import { useUserStore } from 'storage/useUserStore';
 import { Modal, ModalBody, ModalInputs, ModalActions } from './Modal';
+import { Input } from 'ui/Input';
 
 interface Props {
   isOpen: boolean;
@@ -49,14 +50,8 @@ export const FolderEditing: React.FC<Props> = ({ isOpen, onClose, folderFigure }
         <ModalBody>
           <h3>{folderFigure && folderFigure.id ? 'Update folder' : 'Create a new folder'}</h3>
           <ModalInputs>
-            <label className="input">
-              <span>Name</span>
-              <input {...register('name')} autoFocus />
-            </label>
-            <label className="input">
-              <span>Description (optional)</span>
-              <input {...register('description')} />
-            </label>
+            <Input label="Name" {...register('name')} autoFocus />
+            <Input label="Description (optional)" {...register('description')} />
           </ModalInputs>
         </ModalBody>
         <ModalActions>
