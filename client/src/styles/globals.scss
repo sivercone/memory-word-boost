@@ -1,9 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
 
 :root {
-  --color-black: #181818;
-  --color-yellow: #e5e747;
-  --color-white: #cccccc;
+  --color-text-primary: #a3ffb1;
+  --color-text-secondary: #58e458;
+  --color-text-tertiary: #f5f5f5;
+  --color-bg-primary: #252525;
+  --color-bg-secondary: #161616;
+  --color-bg-tertiary: #000000;
 }
 
 * {
@@ -21,8 +24,8 @@ body,
   margin: 0;
   font-size: 16px;
   font-family: 'Roboto', sans-serif;
-  background-color: var(--color-yellow);
-  color: var(--color-black);
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
 }
 
 a {
@@ -96,20 +99,26 @@ input {
 }
 
 .button_dark {
-  color: var(--color-white);
-  background-color: var(--color-black);
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-secondary);
+  border: 1px solid transparent;
+  outline: none;
 
   &:focus {
-    outline: 0.5rem double var(--color-black);
+    border-color: var(--color-text-primary);
+  }
+
+  &:hover {
+    background-color: var(--color-bg-tertiary);
   }
 }
 
 .button_light {
-  color: var(--color-black);
-  background-color: var(--color-white);
+  color: var(--color-bg-secondary);
+  background-color: var(--color-text-primary);
 
   &:focus {
-    outline: 0.5rem double var(--color-white);
+    outline: 0.5rem double var(--color-text-primary);
   }
 }
 

@@ -29,82 +29,84 @@ export const Header: React.FC = () => {
 
   if (['/login', '/[set]/flashcards'].includes(pathname)) return <></>;
   return (
-    <header className={style.header}>
-      <Link href="/">
-        <a>Project MWB</a>
-      </Link>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-        <div
-          onFocus={() => setShownDropdown('create')}
-          onBlur={(event) => {
-            if (!event.currentTarget.contains(event.relatedTarget)) closeDropdown();
-          }}
-          className={style.plus}
-        >
-          <button className={style.plus__button}>
-            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="#cccccc">
-              <path d="M0 0h24v24H0V0z" fill="none" />
-              <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
-            </svg>
-            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="#cccccc">
-              <path d="M0 0h24v24H0V0z" fill="none" />
-              <path d="M7 10l5 5 5-5H7z" />
-            </svg>
-          </button>
-          <motion.ul animate={shownDropdown === 'create' ? fade.anim : fade.init} className={style.plus__menu} role="menu">
-            <li onClick={closeDropdown}>
-              <Link href="/create-set">
-                <a>New study set</a>
+    <>
+      <div style={{ height: '50px', width: '100%', marginBottom: '1.5rem' }}></div>
+      <header className={style.header}>
+        <Link href="/">
+          <a>Project MWB</a>
+        </Link>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <div
+            onFocus={() => setShownDropdown('create')}
+            onBlur={(event) => {
+              if (!event.currentTarget.contains(event.relatedTarget)) closeDropdown();
+            }}
+            className={style.plus}
+          >
+            <button className={style.plus__button}>
+              <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
+                <path d="M0 0h24v24H0V0z" fill="none" />
+                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
+                <path d="M0 0h24v24H0V0z" fill="none" />
+                <path d="M7 10l5 5 5-5H7z" />
+              </svg>
+            </button>
+            <motion.ul animate={shownDropdown === 'create' ? fade.anim : fade.init} className={style.plus__menu} role="menu">
+              <li onClick={closeDropdown}>
+                <Link href="/create-set">
+                  <a>New study set</a>
+                </Link>
+              </li>
+              <li onClick={closeDropdown}>
+                <button onClick={toggleShownFolder}>New folder</button>
+              </li>
+            </motion.ul>
+          </div>
+          {user ? (
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <Link href={`/u/${user.id}`}>
+                <a className={style.avatarpic}>
+                  <Avatar size={40} variant="ring" colors={['#92A1C6', '#146A7C', '#F0AB3D', '#C271B4', '#C20D90']} />
+                </a>
               </Link>
-            </li>
-            <li onClick={closeDropdown}>
-              <button onClick={toggleShownFolder}>New folder</button>
-            </li>
-          </motion.ul>
-        </div>
-        {user ? (
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Link href={`/u/${user.id}`}>
-              <a className={style.avatarpic}>
-                {/* <img className={style.avatarpic} src={user.avatar} alt="" /> */}
-                <Avatar size={40} variant="ring" colors={['#92A1C6', '#146A7C', '#F0AB3D', '#C271B4', '#C20D90']} />
+              <div
+                onFocus={() => setShownDropdown('profile')}
+                onBlur={(event) => {
+                  if (!event.currentTarget.contains(event.relatedTarget)) closeDropdown();
+                }}
+                className={style.plus}
+              >
+                <button>
+                  <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
+                    <path d="M0 0h24v24H0V0z" fill="none" />
+                    <path d="M7 10l5 5 5-5H7z" />
+                  </svg>
+                </button>
+                <motion.ul animate={shownDropdown === 'profile' ? fade.anim : fade.init} className={style.plus__menu} role="menu">
+                  <li onClick={closeDropdown}>
+                    <Link href={`/u/${user.id}/settings`}>
+                      <a>Settings</a>
+                    </Link>
+                  </li>
+                  <li onClick={closeDropdown}>
+                    <button>Log out</button>
+                  </li>
+                </motion.ul>
+              </div>
+            </div>
+          ) : (
+            <Link href="/login">
+              <a className={style.avatarbutton}>
+                <img className={style.avatarpic} src={'/assets/avatar.svg'} alt="" />
+                <span>Login</span>
               </a>
             </Link>
-            <div
-              onFocus={() => setShownDropdown('profile')}
-              onBlur={(event) => {
-                if (!event.currentTarget.contains(event.relatedTarget)) closeDropdown();
-              }}
-              className={style.plus}
-            >
-              <button>
-                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="#cccccc">
-                  <path d="M0 0h24v24H0V0z" fill="none" />
-                  <path d="M7 10l5 5 5-5H7z" />
-                </svg>
-              </button>
-              <motion.ul animate={shownDropdown === 'profile' ? fade.anim : fade.init} className={style.plus__menu} role="menu">
-                <li onClick={closeDropdown}>
-                  <Link href={`/u/${user.id}/settings`}>
-                    <a>Settings</a>
-                  </Link>
-                </li>
-                <li onClick={closeDropdown}>
-                  <button>Log out</button>
-                </li>
-              </motion.ul>
-            </div>
-          </div>
-        ) : (
-          <Link href="/login">
-            <a className={style.avatarbutton}>
-              <img className={style.avatarpic} src={'/assets/avatar.svg'} alt="" />
-              <span>Login</span>
-            </a>
-          </Link>
-        )}
-      </div>
-      <FolderEditing isOpen={shownFolder} onClose={toggleShownFolder} />
-    </header>
+          )}
+        </div>
+        <FolderEditing isOpen={shownFolder} onClose={toggleShownFolder} />
+      </header>
+    </>
   );
 };

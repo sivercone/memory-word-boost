@@ -26,7 +26,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
           </PageTransition>
         </AnimatePresence>
         <ToastContainer
-          progressStyle={{ background: 'var(--color-yellow)' }}
+          progressStyle={{ background: 'var(--color-text-primary)' }}
           position="bottom-right"
           autoClose={6000}
           draggable={false}

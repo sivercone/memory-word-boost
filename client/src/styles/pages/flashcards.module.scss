@@ -4,8 +4,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 1rem;
-  background-color: var(--color-black);
-  color: var(--color-white);
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
 
   &__logo {
     position: absolute;
@@ -32,7 +32,7 @@
     margin: 1rem;
     border-radius: 5px;
     overflow: hidden;
-    color: var(--color-yellow);
+    color: var(--color-text-primary);
     background-color: #000000;
 
     span {
@@ -44,7 +44,7 @@
 
     div {
       transition: all 0.3s ease 0s;
-      background-color: var(--color-white);
+      background-color: var(--color-text-primary);
     }
   }
 
@@ -60,9 +60,9 @@
     width: 100%;
     height: 100%;
     padding: 1rem;
-    background-color: var(--color-black);
+    background-color: var(--color-bg-secondary);
     border-radius: 5px;
-    color: var(--color-white);
+    color: var(--color-text-primary);
 
     span {
       display: block;
@@ -83,7 +83,7 @@
     justify-content: center;
     align-items: center;
     padding: 2rem;
-    color: var(--color-white);
+    color: var(--color-text-primary);
     background-color: #000000;
     transition: all 0.3s ease;
   }
@@ -105,7 +105,7 @@
     transform: translate(-50%, 0);
     width: 100%;
     background-color: #000;
-    color: var(--color-white);
+    color: var(--color-text-primary);
 
     text-align: center;
 

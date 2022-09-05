@@ -73,7 +73,7 @@ const UserPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
           ) : undefined}
         </ul>
       </section>
-      <section style={{ marginTop: '1rem' }}>
+      <section style={{ margin: '1rem 0', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         {
           {
             sets: {
