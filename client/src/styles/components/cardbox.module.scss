@@ -4,11 +4,11 @@
   padding: 1rem;
   margin-bottom: 1rem;
   border-radius: 5px;
-  background-color: #181818;
-  color: #cccccc;
+  background-color: var(--color-black);
+  color: var(--color-white);
 
   &:hover {
-    background-color: lighten($color: #181818, $amount: 5);
+    transform: scale(1.01);
   }
 
   &__text {
@@ -26,8 +26,8 @@
     li {
       padding: 0 0.5rem;
       border-radius: 25px;
-      background-color: #cccccc;
-      color: #000000;
+      background-color: var(--color-white);
+      color: var(--color-black);
     }
   }
 }

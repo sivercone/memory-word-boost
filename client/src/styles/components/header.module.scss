@@ -4,8 +4,8 @@
   justify-content: space-between;
   padding: 1rem;
   margin-bottom: 1rem;
-  color: #cccccc;
-  background-color: #181818;
+  color: var(--color-white);
+  background-color: var(--color-black);
 
   > a {
     text-transform: uppercase;
@@ -38,7 +38,7 @@
     margin-top: 2px;
     border: 1px solid #666;
     border-radius: 10px;
-    color: var(--black);
+    color: var(--color-black);
     background-color: #ccccccb0;
     backdrop-filter: blur(10px);
 
@@ -62,7 +62,7 @@
     //   right: 19px;
     //   left: auto;
     //   border: 8px solid transparent;
-    //   border-bottom-color: var(--white);
+    //   border-bottom-color: var(--color-white);
     // }
 
     li {
@@ -79,7 +79,7 @@
         text-align: left;
 
         &:hover {
-          background-color: var(--yellow);
+          background-color: var(--color-yellow);
           border: 1px solid #666;
         }
       }
@@ -93,8 +93,8 @@
   justify-content: center;
   gap: 0.5rem;
   padding: 0.5rem;
-  background-color: var(--yellow);
-  color: var(--black);
+  background-color: var(--color-yellow);
+  color: var(--color-black);
   border-radius: 10px;
 
   &:hover {
@@ -109,5 +109,5 @@
   width: 100%;
   object-fit: cover;
   border-radius: 100%;
-  background-color: var(--yellow);
+  background-color: var(--color-yellow);
 }

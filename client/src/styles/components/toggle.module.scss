@@ -12,7 +12,7 @@
     background-color: #fff;
     border: 1px solid #d9dadc;
     border-radius: 50px;
-    box-shadow: inset -20px 0 0 0 var(--white);
+    box-shadow: inset -20px 0 0 0 var(--color-white);
     transition: all 0.3s;
   }
 
@@ -28,8 +28,8 @@
   }
 
   input:checked {
-    box-shadow: inset 20px 0 0 0 var(--yellow);
-    border-color: var(--yellow);
+    box-shadow: inset 20px 0 0 0 var(--color-yellow);
+    border-color: var(--color-yellow);
   }
 
   input:checked:after {

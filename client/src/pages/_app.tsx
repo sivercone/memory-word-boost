@@ -25,7 +25,12 @@ function MyApp({ Component, pageProps, router }: AppProps) {
             <AuthCheck />
           </PageTransition>
         </AnimatePresence>
-        <ToastContainer progressStyle={{ background: 'var(--yellow)' }} position="bottom-right" autoClose={6000} draggable={false} />
+        <ToastContainer
+          progressStyle={{ background: 'var(--color-yellow)' }}
+          position="bottom-right"
+          autoClose={6000}
+          draggable={false}
+        />
       </Hydrate>
     </QueryClientProvider>
   );
