@@ -8,7 +8,7 @@ import style from 'styles/pages/set.module.scss';
 import style2 from 'styles/pages/home.module.scss'; // todo - fix that
 import { FolderEditing } from 'components/FolderEditing';
 import { useRouter } from 'next/dist/client/router';
-import { Modal, ModalActions, ModalBody, ModalList } from 'components/Modal';
+import { Modal, ModalActions, ModalBody, ModalList } from 'ui/Modal';
 import { notify } from 'utils/notify';
 import { setApi } from 'api/setApi';
 import { SetInterface } from 'interfaces';

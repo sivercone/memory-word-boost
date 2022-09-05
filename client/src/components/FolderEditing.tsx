@@ -5,7 +5,7 @@ import { useMutation, useQueryClient } from 'react-query';
 import { folderApi } from 'api/folderApi';
 import { FolderInterface, UserInterface } from 'interfaces';
 import { useUserStore } from 'storage/useUserStore';
-import { Modal, ModalBody, ModalInputs, ModalActions } from './Modal';
+import { Modal, ModalBody, ModalInputs, ModalActions } from 'ui/Modal';
 import { Input } from 'ui/Input';
 
 interface Props {

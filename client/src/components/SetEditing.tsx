@@ -7,7 +7,7 @@ import style from 'styles/pages/createset.module.scss';
 import { setApi } from 'api/setApi';
 import { SetInterface, UserInterface } from 'interfaces';
 import { useUserStore } from 'storage/useUserStore';
-import { Modal, ModalActions, ModalBody } from './Modal';
+import { Modal, ModalActions, ModalBody } from 'ui/Modal';
 import { Input } from 'ui/Input';
 
 interface SetFigure {

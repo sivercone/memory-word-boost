@@ -6,7 +6,7 @@ import { QueryClient, useQuery, dehydrate, useMutation, useQueryClient } from 'r
 import { setApi } from 'api/setApi';
 import { useRouter } from 'next/dist/client/router';
 import { notify } from 'utils/notify';
-import { Modal, ModalBody, ModalActions, ModalList } from 'components/Modal';
+import { Modal, ModalBody, ModalActions, ModalList } from 'ui/Modal';
 import Custom404 from 'pages/404';
 import { useSetStore } from 'storage/useSetStore';
 import { folderApi } from 'api/folderApi';
