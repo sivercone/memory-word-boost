@@ -23,14 +23,33 @@
   &__block {
     display: flex;
     justify-content: space-between;
-    gap: 1rem;
-    padding: 0.5rem;
+    // gap: 1rem;
     border-radius: 10px;
     background-color: var(--color-black);
     color: var(--color-white);
+    overflow: hidden;
 
     input {
+      padding: 1rem;
       width: 100%;
+
+      &:hover,
+      &:focus-within {
+        color: #fff;
+        background-color: #3b3b3b;
+        outline: none;
+      }
+    }
+
+    button {
+      padding: 1rem;
+
+      &:hover,
+      &:focus {
+        color: #dc143c;
+        background-color: #3b3b3b;
+        outline: none;
+      }
     }
   }
 }

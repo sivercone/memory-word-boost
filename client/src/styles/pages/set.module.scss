@@ -2,6 +2,7 @@
   &__h1 {
     color: black;
     font-size: 2.5rem;
+    text-transform: uppercase;
 
     span {
       -webkit-text-stroke-width: 1px;
@@ -75,7 +76,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.5rem;
+      padding: 1.3rem;
       margin-bottom: 1rem;
       border-radius: 10px;
       background-color: var(--color-black);
