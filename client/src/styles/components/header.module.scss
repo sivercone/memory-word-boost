@@ -9,10 +9,9 @@
   justify-content: space-between;
   padding: 1rem;
 
-  color: var(--color-text-primary);
-  background-color: #00000080;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid;
+  color: var(--color-text-secondary);
+  background-color: var(--color-bg-secondary);
 
   > a {
     text-transform: uppercase;

@@ -33,7 +33,7 @@
     border-radius: 5px;
     overflow: hidden;
     color: var(--color-text-primary);
-    background-color: #000000;
+    background-color: var(--color-bg-secondary);
 
     span {
       position: absolute;
@@ -44,7 +44,7 @@
 
     div {
       transition: all 0.3s ease 0s;
-      background-color: var(--color-text-primary);
+      background-color: var(--color-bg-tertiary);
     }
   }
 
@@ -84,7 +84,7 @@
     align-items: center;
     padding: 2rem;
     color: var(--color-text-primary);
-    background-color: #000000;
+    background-color: var(--color-bg-tertiary);
     transition: all 0.3s ease;
   }
 
@@ -104,7 +104,7 @@
     // left: 50%;
     transform: translate(-50%, 0);
     width: 100%;
-    background-color: #000;
+    background-color: var(--color-bg-tertiary);
     color: var(--color-text-primary);
 
     text-align: center;

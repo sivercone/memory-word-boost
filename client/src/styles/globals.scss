@@ -1,12 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&display=swap');
 
 :root {
-  --color-text-primary: #a3ffb1;
-  --color-text-secondary: #8eff8e;
-  --color-text-tertiary: #f5f5f5;
-  --color-bg-primary: #1d4f3c;
-  --color-bg-secondary: #133033;
-  --color-bg-tertiary: #0c282b;
+  // --color-text-primary: #a3ffb1;
+  // --color-text-secondary: #8eff8e;
+  // --color-text-tertiary: #f5f5f5;
+  // --color-bg-primary: #1d4f3c;
+  // --color-bg-secondary: #133033;
+  // --color-bg-tertiary: #0c282b;
+
+  --color-text-primary: #000000;
+  --color-text-secondary: #4d85ff;
+
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #dbe7ff;
 }
 
 * {
@@ -23,7 +30,8 @@ body,
   padding: 0;
   margin: 0;
   font-size: 16px;
-  font-family: 'Roboto', sans-serif;
+  // font-family: 'Roboto', sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   background-color: var(--color-bg-primary);
   color: var(--color-text-primary);
 }
@@ -68,13 +76,20 @@ input {
   background: inherit;
   color: inherit;
   border: 0;
+
+  &::placeholder {
+    color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+  }
 }
 
 .container {
-  max-width: 900px;
+  max-width: 1440px;
   margin-left: auto;
   margin-right: auto;
-  padding: 0rem 1rem;
+  padding: 1rem 5rem;
 }
 
 .button {
@@ -84,10 +99,6 @@ input {
   min-height: 3.5rem;
   padding: 0 2rem;
   border-radius: 50px;
-
-  &:hover {
-    transform: scale(1.03);
-  }
 
   &:active {
     transform: scale(1);
@@ -103,13 +114,16 @@ input {
   background-color: var(--color-bg-secondary);
   border: 1px solid transparent;
   outline: none;
-
-  &:focus {
-    border-color: var(--color-text-primary);
-  }
+  transition: all 140ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
   &:hover {
-    background-color: var(--color-bg-tertiary);
+    box-shadow: 3px 3px 0 0 var(--color-text-primary);
+    transform: translate(-0.25rem, -0.25rem);
+  }
+
+  &:active {
+    box-shadow: none;
+    transform: none;
   }
 }
 

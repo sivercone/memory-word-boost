@@ -33,7 +33,7 @@ export const Header: React.FC = () => {
       <div style={{ height: '50px', width: '100%', marginBottom: '1.5rem' }}></div>
       <header className={style.header}>
         <Link href="/">
-          <a>Project MWB</a>
+          <a>MWB</a>
         </Link>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <div
@@ -85,6 +85,11 @@ export const Header: React.FC = () => {
                   </svg>
                 </button>
                 <motion.ul animate={shownDropdown === 'profile' ? fade.anim : fade.init} className={style.plus__menu} role="menu">
+                  <li onClick={closeDropdown}>
+                    <Link href={`/u/${user.id}`}>
+                      <a>Profile</a>
+                    </Link>
+                  </li>
                   <li onClick={closeDropdown}>
                     <Link href={`/u/${user.id}/settings`}>
                       <a>Settings</a>

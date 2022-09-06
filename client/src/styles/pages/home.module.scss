@@ -3,3 +3,24 @@
   flex-wrap: wrap;
   gap: 1rem;
 }
+
+.banner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  padding: 4rem 5rem;
+  margin-bottom: 2rem;
+  border-radius: 20px;
+  background: linear-gradient(45deg, var(--color-bg-secondary), #16a1a1, #6b4894);
+  color: var(--color-bg-secondary);
+
+  h2 {
+    font-size: 5rem;
+  }
+
+  > div {
+    display: flex;
+    gap: 0.5rem;
+  }
+}
