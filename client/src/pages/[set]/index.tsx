@@ -67,9 +67,7 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     <>
       <div className="container">
         <div className={style.card}>
-          <h1>
-            <span>{set.data.title}</span>
-          </h1>
+          <h1>{set.data.title}</h1>
           <p>{set.data.description}</p>
           <ul className={style.card__tags}>
             {set.data.tags.map((tag, i) => (
