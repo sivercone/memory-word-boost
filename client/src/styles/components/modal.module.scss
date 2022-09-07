@@ -22,8 +22,8 @@
   overflow: hidden;
   overflow-y: auto;
   border-radius: 8px;
-  background-color: #cccccc;
-  color: #000;
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
 
   &__body {
     padding: 1rem;
@@ -45,7 +45,7 @@
     overflow: hidden;
     border-bottom-right-radius: 8px;
     border-bottom-left-radius: 8px;
-    border-top: 1px solid #000;
+    border-top: 1px solid var(--color-text-primary);
 
     button {
       flex: 1 1 100%;
@@ -54,17 +54,17 @@
       justify-content: center;
       padding: 1rem 0;
       text-transform: uppercase;
-      color: #000;
-      background: #cccccc;
+      color: var(--color-text-primary);
+      background: var(--color-bg-primary);
       transition: all 0.2s ease-in-out;
     }
 
     button:not(:only-child):not(:last-child) {
-      border-right: 1px solid #000;
+      border-right: 1px solid var(--color-text-primary);
     }
 
     button:hover {
-      background-color: darken($color: #cccccc, $amount: 5);
+      background-color: darken($color: #fff, $amount: 5);
     }
   }
 
@@ -74,7 +74,7 @@
     gap: 0.5rem;
 
     label {
-      border: 1px solid #000;
+      border: 1px solid var(--color-text-primary);
     }
   }
 
@@ -92,11 +92,11 @@
 
     li {
       padding: 0.5rem 1rem;
-      background-color: #ffffff73;
+      background-color: #f2f2f2;
     }
 
     li:not(:last-child) {
-      border-bottom: 1px solid #cccccc;
+      border-bottom: 1px solid var(--color-bg-primary);
     }
 
     li:first-child {

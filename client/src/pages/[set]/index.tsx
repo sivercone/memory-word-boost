@@ -67,7 +67,7 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     <>
       <div className="container">
         <div className={style.card}>
-          <h1 className={style.card__h1}>
+          <h1>
             <span>{set.data.title}</span>
           </h1>
           <p>{set.data.description}</p>

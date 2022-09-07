@@ -59,11 +59,6 @@ const UserPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
               <a>Folders</a>
             </Link>
           </li>
-          <li className={router.query.entries === 'activity' ? style.header__tabsActive : undefined}>
-            <Link href={`/u/${pagekey}?entries=activity`}>
-              <a>Learning activity</a>
-            </Link>
-          </li>
           {user.data.id === userState?.id ? (
             <li>
               <Link href={`/u/${pagekey}/settings`}>
