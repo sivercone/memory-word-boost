@@ -4,8 +4,10 @@
   align-items: center;
   justify-content: space-between;
   padding: 1rem;
-  background-color: var(--color-bg-secondary);
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-bg-secondary);
   color: var(--color-text-primary);
+  height: 50px;
 
   &__logo {
     position: absolute;
@@ -33,7 +35,9 @@
     border-radius: 5px;
     overflow: hidden;
     color: var(--color-text-primary);
-    background-color: var(--color-bg-secondary);
+    background-color: var(--color-bg-primary);
+    border: 1px solid var(--color-bg-secondary);
+    box-shadow: var(--box-shadow);
 
     span {
       position: absolute;
@@ -44,7 +48,7 @@
 
     div {
       transition: all 0.3s ease 0s;
-      background-color: var(--color-bg-tertiary);
+      background-color: var(--color-bg-secondary);
     }
   }
 
@@ -54,6 +58,8 @@
     margin: 1rem;
     border-radius: 10px;
     overflow: hidden;
+    border: 1px solid var(--color-bg-secondary);
+    box-shadow: var(--box-shadow);
   }
 
   &__mainblock {
@@ -84,7 +90,7 @@
     align-items: center;
     padding: 2rem;
     color: var(--color-text-primary);
-    background-color: var(--color-bg-tertiary);
+    background-color: var(--color-bg-primary);
     transition: all 0.3s ease;
   }
 
@@ -104,7 +110,9 @@
     // left: 50%;
     transform: translate(-50%, 0);
     width: 100%;
-    background-color: var(--color-bg-tertiary);
+    border: 1px solid var(--color-bg-secondary);
+    border-bottom: 0;
+    background-color: var(--color-bg-primary);
     color: var(--color-text-primary);
 
     text-align: center;

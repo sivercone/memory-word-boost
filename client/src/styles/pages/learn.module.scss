@@ -19,8 +19,8 @@
     color: var(--color-text-primary);
     border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0px 0px 3px 1px #00000094;
-    // box-shadow: 0px 2px 1px -1px #00000033, 0px 1px 1px 0px #00000024, 0px 1px 3px 0px #0000001f;
+    box-shadow: 0px 0px 3px 1px #4d85ff94;
+    // box-shadow: var(--box-shadow);
     transition: all 0.3s ease;
   }
 
