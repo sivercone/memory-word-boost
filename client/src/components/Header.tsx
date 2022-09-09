@@ -33,7 +33,7 @@ export const Header: React.FC = () => {
       <div style={{ height: '50px', width: '100%', marginBottom: '1.5rem' }}></div>
       <header className={style.header}>
         <Link href="/">
-          <a>MWB</a>
+          <a>PROJECT MWB</a>
         </Link>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <div

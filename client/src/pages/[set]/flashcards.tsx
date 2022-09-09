@@ -7,6 +7,7 @@ import { setApi } from 'api/setApi';
 import Custom404 from 'pages/404';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { Button } from 'ui/Button';
 
 // drag - https://codesandbox.io/s/5trtt
 
@@ -129,13 +130,13 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                   : `You just studied ${set.data.cards.length} terms!`}
               </h2>
               <div className={style.results__actions}>
-                <button onClick={onRestart} className="button button_light">
+                <Button onClick={onRestart} variant="outlined">
                   Restart
-                </button>
+                </Button>
                 {repeatCards.length ? (
-                  <button onClick={onStudyAgain} className="button button_light">
+                  <Button onClick={onStudyAgain} variant="outlined">
                     Continue
-                  </button>
+                  </Button>
                 ) : undefined}
               </div>
             </div>

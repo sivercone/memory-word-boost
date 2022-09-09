@@ -11,26 +11,24 @@
   &__block {
     display: flex;
     flex-direction: column;
-    //   justify-content: center;
     width: 800px;
     height: 500px;
-    //   min-height: 600px;
-    background-color: var(--color-bg-secondary);
-    color: var(--color-text-primary);
+    background-color: var(--color-surface);
+    color: var(--color-on-surface);
     border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0px 0px 3px 1px #4d85ff94;
-    // box-shadow: var(--box-shadow);
+    box-shadow: var(--box-shadow);
     transition: all 0.3s ease;
   }
 
   &__progressbar {
     display: flex;
     height: 5px;
+    background-color: var(--color-on-primary);
 
     div {
       transition: all 0.3s ease 0s;
-      background-color: var(--color-text-primary);
+      background-color: var(--color-primary);
     }
   }
 
@@ -68,7 +66,7 @@
 
     input {
       width: 100%;
-      border-bottom: 2px solid var(--color-text-primary);
+      border-bottom: 2px solid var(--color-on-surface);
       font-size: 2rem;
       outline: none;
     }
@@ -80,17 +78,10 @@
       button {
         padding: 0.5rem 1rem;
         border-radius: 25px;
-        background-color: var(--color-text-primary);
-        color: var(--color-bg-secondary);
+        background-color: var(--color-primary);
+        color: var(--color-on-primary);
         font-size: 1.5rem;
-        border: 2px solid var(--color-text-primary);
-
-        &:hover,
-        &:focus {
-          background-color: var(--color-bg-primary);
-          color: var(--color-text-primary);
-          outline: 0;
-        }
+        text-transform: uppercase;
       }
     }
   }

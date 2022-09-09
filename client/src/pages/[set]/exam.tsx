@@ -7,6 +7,7 @@ import Custom404 from 'pages/404';
 import style from 'styles/pages/learn.module.scss';
 // import { Modal, ModalActions, ModalBody } from 'components/Modal';
 import { useRouter } from 'next/router';
+import { Button } from 'ui/Button';
 
 const ExamPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const set = useQuery(['set', pagekey], () => setApi.getById(pagekey));
@@ -82,12 +83,12 @@ const ExamPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
               </p>
             </div>
             <div className={style.results__actions}>
-              <button onClick={() => push(`/${pagekey}`)} autoFocus={formState.isSubmitted} className="button button_light">
+              <Button onClick={() => push(`/${pagekey}`)} autoFocus={formState.isSubmitted} variant="outlined">
                 Return to set page
-              </button>
-              <button onClick={onRestart} className="button button_light">
+              </Button>
+              <Button onClick={onRestart} variant="outlined">
                 Restart exam
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -126,9 +127,9 @@ const ExamPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
           </div>
         ))}
         {!formState.isSubmitted ? (
-          <button onClick={handleSubmit(onSubmit)} type="button" style={{ width: '50%' }} className="button button_light">
+          <Button onClick={handleSubmit(onSubmit)} type="button" variant="outlined">
             Check answers
-          </button>
+          </Button>
         ) : undefined}
       </form>
       {/* <Modal isOpen={shownModal} onClose={toggleModal}>

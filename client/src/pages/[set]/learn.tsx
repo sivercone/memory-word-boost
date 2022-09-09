@@ -6,6 +6,7 @@ import { setApi } from 'api/setApi';
 import Custom404 from 'pages/404';
 import style from 'styles/pages/learn.module.scss';
 import { useRouter } from 'next/router';
+import { Button } from 'ui/Button';
 
 type Results = {
   round: number;
@@ -85,8 +86,7 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
               <div className={`${style.class__main} ${style.results}`}>
                 <header className={style.results__header}>
                   <span>Results of Round {round}</span>
-                  <p>Good, you&#39;re in progress 🤩</p>
-                  <p>Don&#39;t give up 😡 you can pull it up 💪</p>
+                  <p>Good, you&#39;re in progress</p>
                 </header>
                 <div className={style.results__content}>
                   <p style={{ color: 'green' }}>
@@ -103,12 +103,12 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                   </p>
                 </div>
                 <div className={style.results__actions}>
-                  <button onClick={() => push(`/${pagekey}`)} className="button button_light">
+                  <Button onClick={() => push(`/${pagekey}`)} variant="outlined">
                     Return to set page
-                  </button>
-                  <button onClick={nextRound} className="button button_light">
+                  </Button>
+                  <Button onClick={nextRound} variant="outlined">
                     Continue
-                  </button>
+                  </Button>
                 </div>
               </div>
             ) : (
@@ -122,12 +122,12 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                     <div style={{ fontSize: '5rem' }}>🎯</div>
                   </div>
                   <div className={style.results__actions}>
-                    <button onClick={() => push(`/${pagekey}`)} className="button button_light">
+                    <Button onClick={() => push(`/${pagekey}`)} variant="outlined">
                       Return to set page
-                    </button>
-                    <button onClick={restartRound} className="button button_light">
+                    </Button>
+                    <Button onClick={restartRound} variant="outlined">
                       Study again
-                    </button>
+                    </Button>
                   </div>
                 </div>
               </>

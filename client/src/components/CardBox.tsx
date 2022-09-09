@@ -28,7 +28,7 @@ export const CardBoxSet: React.FC<SetProps> = ({ content, fullsize }) => {
         <div className={style.cardbox__content}>
           <div className={style.cardbox__text}>
             <h2>{content.title}</h2>
-            <p>{content.description}</p>
+            {/* <p>{content.description}</p> */}
           </div>
           <ul className={style.cardbox__tags}>
             {content.tags.map((tag, i) => (
@@ -58,7 +58,7 @@ export const CardBoxFolder: React.FC<FolderProps> = ({ content, fullsize }) => {
         <div className={style.cardbox__content}>
           <div className={style.cardbox__text}>
             <h2>{content.name}</h2>
-            <p>{content.description}</p>
+            {/* <p>{content.description}</p> */}
           </div>
         </div>
       </a>

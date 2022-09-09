@@ -1,0 +1,31 @@
+.button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 3.5rem;
+  padding: 0 2rem;
+  border-radius: 50px;
+}
+
+.button--contained {
+  color: var(--color-on-primary);
+  background-color: var(--color-primary);
+  border: 1px solid transparent;
+  transition: all 140ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.button--outlined {
+  color: var(--color-on-background);
+  // background-color: var(--color-bg-background);
+  border: 1px solid var(--color-on-background);
+  transition: all 140ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+// .button_light {
+//   color: var(--color-bg-secondary);
+//   background-color: var(--color-text-primary);
+
+//   &:focus {
+//     outline: 0.5rem double var(--color-text-primary);
+//   }
+// }

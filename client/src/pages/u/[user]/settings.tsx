@@ -8,6 +8,7 @@ import Custom404 from 'pages/404';
 import style from 'styles/pages/user.module.scss';
 import { notify } from 'utils/notify';
 import { Input } from 'ui/Input';
+import { Button } from 'ui/Button';
 
 const SettingsPage: NextPage = () => {
   const user = useQuery('user', () => authApi.me());
@@ -37,9 +38,11 @@ const SettingsPage: NextPage = () => {
           <Input label="Email" {...register('email')} required />
           <Input label="Name" {...register('name')} required />
           <Input label="Bio" {...register('bio')} required />
-          <button type="submit" className="button button_dark">
-            Save
-          </button>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <Button type="submit" variant="outlined">
+              Save
+            </Button>
+          </div>
         </form>
       </div>
     </div>

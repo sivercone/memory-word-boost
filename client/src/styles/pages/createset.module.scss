@@ -24,44 +24,31 @@
     display: flex;
     justify-content: space-between;
     border-radius: 10px;
-    background-color: var(--color-bg-secondary);
+    background-color: var(--color-surface);
+    color: var(--color-on-surface);
     overflow: hidden;
 
     input {
       padding: 1rem;
       width: 100%;
-      background-color: var(--color-bg-primary);
-      border: 1px solid var(--color-text-primary);
-      outline: none;
+      background-color: var(--color-surface);
+      color: var(--color-on-surface);
+      border: 1px solid;
 
       &:first-child {
         border-radius: 10px 0 0 10px;
         border-right: 0;
-      }
-
-      &:focus-within {
-        color: var(--color-text-primary);
-        border-color: var(--color-text-secondary);
       }
     }
 
     button {
       padding: 1rem;
       border-radius: 0 10px 10px 0;
-      border: 1px solid var(--color-text-primary);
-      background-color: var(--color-bg-primary);
+      border: 1px solid var(--color-on-surface);
+      background-color: var(--color-surface);
+      color: var(--color-on-surface);
       border-left: 0;
       outline: none;
-
-      &:hover {
-        color: #dc143c;
-        border-color: var(--color-text-primary);
-      }
-
-      &:focus {
-        color: #dc143c;
-        border-color: var(--color-bg-tertiary);
-      }
     }
   }
 }

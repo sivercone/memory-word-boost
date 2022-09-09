@@ -2,27 +2,20 @@
   display: block;
   width: calc(50% - 1rem);
   border-radius: 20px;
-  background-color: var(--color-bg-primary);
-  color: var(--color-text-primary);
-  border: 1px solid var(--color-bg-secondary);
-  outline: none;
+  color: var(--color-on-surface);
+  background-color: var(--color-surface);
+  // border: 1px solid var(--color-bg-secondary);
+  // outline: none;
   box-shadow: var(--box-shadow);
+  transition: all 0.1s ease-in-out;
 
-  &:hover,
-  &:focus {
-    background-color: var(--color-bg-secondary);
-    border: 1px solid var(--color-text-secondary);
+  // &:hover {
+  //   border: 1px solid var(--color-text-secondary);
+  // }
 
-    .cardbox__icon > div {
-      color: var(--color-bg-primary);
-      background: var(--color-text-secondary);
-    }
-
-    .cardbox__tags li {
-      color: var(--color-bg-primary);
-      background: var(--color-text-secondary);
-    }
-  }
+  // &:focus {
+  //   border: 1px solid var(--color-text-secondary);
+  // }
 
   &__icon {
     display: flex;
@@ -30,9 +23,10 @@
 
     > div {
       padding: 1rem;
-      color: var(--color-text-primary);
-      background: var(--color-bg-secondary);
+      color: var(--color-on-primary);
+      background-color: var(--color-primary);
       border-radius: 25px;
+      border: 1px solid var(--color-outline);
     }
   }
 
@@ -59,8 +53,9 @@
     li {
       padding: 0.1rem 0.5rem;
       border-radius: 25px;
-      background-color: var(--color-bg-secondary);
-      color: var(--color-text-primary);
+      color: var(--color-on-primary);
+      background-color: var(--color-primary);
+      border: 1px solid var(--color-outline);
     }
   }
 }

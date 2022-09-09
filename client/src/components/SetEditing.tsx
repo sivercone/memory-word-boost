@@ -9,6 +9,7 @@ import { SetInterface, UserInterface } from 'interfaces';
 import { useUserStore } from 'storage/useUserStore';
 import { Modal, ModalActions, ModalBody } from 'ui/Modal';
 import { Input } from 'ui/Input';
+import { Button } from 'ui/Button';
 
 interface SetFigure {
   id?: string;
@@ -60,9 +61,7 @@ const SetEditing: NextPage<{ setFigure?: SetFigure }> = ({ setFigure }) => {
           </div>
           <div style={{ display: 'flex', gap: '1rem' }}>
             <Input label="Tags (through comma)" {...register('tags')} />
-            <button className="button button_dark" type="submit">
-              <span>{setFigure && setFigure.id ? 'update' : 'create'}</span>
-            </button>
+            <Button>{setFigure && setFigure.id ? 'update' : 'create'}</Button>
           </div>
         </div>
 
@@ -80,9 +79,9 @@ const SetEditing: NextPage<{ setFigure?: SetFigure }> = ({ setFigure }) => {
             </li>
           ))}
           <li style={{ textAlign: 'center' }}>
-            <button onClick={() => append({ term: '', definition: '' })} className="button button_dark" type="button">
-              <span>add card</span>
-            </button>
+            <Button onClick={() => append({ term: '', definition: '' })} type="button">
+              add card
+            </Button>
           </li>
         </ul>
       </form>

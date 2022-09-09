@@ -3,9 +3,10 @@
   flex-direction: column;
   padding: 1rem;
   color: var(--color-text-primary);
-  background-image: linear-gradient(to top, var(--color-bg-secondary) 65%, #9dabff 50%);
+  background-image: linear-gradient(to top, var(--color-surface) 65%, var(--color-primary) 50%);
   border-radius: 10px;
   overflow: hidden;
+  box-shadow: var(--box-shadow);
 
   &__avatar {
     width: 150px;
@@ -48,15 +49,19 @@
         display: block;
         padding: 0.25rem 0.5rem;
         border-radius: 10px;
+
+        // &:hover {
+        //   color: var(--color-on-primary) !important;
+        // }
       }
     }
   }
 
   &__tabsActive {
-    color: var(--color-bg-secondary) !important;
-    background-color: var(--color-text-primary);
+    color: var(--color-on-primary) !important;
+    background-color: var(--color-primary);
     border-radius: 10px;
-    border: 1px solid var(--color-bg-secondary);
+    border: 1px solid var(--color-outline) !important;
   }
 }
 

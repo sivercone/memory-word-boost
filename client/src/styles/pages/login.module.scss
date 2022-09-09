@@ -1,11 +1,11 @@
-.header {
-  text-align: center;
-  padding: 1rem;
-  background-color: var(--color-bg-secondary);
-  color: var(--color-text-primary);
-  font-size: 2rem;
-  font-weight: 700;
-}
+// .header {
+//   text-align: center;
+//   padding: 1rem;
+//   background-color: var(--color-surface);
+//   color: var(--color-on-surface);
+//   font-size: 2rem;
+//   font-weight: 700;
+// }
 
 .auth {
   min-height: calc(100vh - 170px);
@@ -16,8 +16,9 @@
   &__wrapper {
     padding: 2rem 4rem;
     border-radius: 10px;
-    background-color: var(--color-bg-secondary);
-    color: var(--color-text-primary);
+    background-color: var(--color-surface);
+    color: var(--color-on-surface);
+    box-shadow: var(--box-shadow);
   }
 
   &__title {
@@ -36,7 +37,7 @@
     margin-bottom: 2rem;
 
     a {
-      color: var(--color-text-primary);
+      text-decoration: underline;
     }
   }
 
@@ -53,13 +54,9 @@
       gap: 1rem;
       font-size: 1.2rem;
       padding: 1rem;
-      background-color: var(--color-text-primary);
-      color: var(--color-bg-secondary);
+      background-color: var(--color-primary);
+      color: var(--color-on-primary);
       border-radius: 10px;
-
-      &:hover {
-        background-color: var(--color-text-primary);
-      }
     }
   }
 }
