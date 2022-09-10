@@ -1,8 +1,8 @@
 .container {
-  max-width: 1440px;
+  max-width: var(--container-width);
   margin-left: auto;
   margin-right: auto;
-  padding: 1rem 5rem;
+  padding: 1rem;
 
   display: flex;
   flex-direction: column;
@@ -20,6 +20,14 @@
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
+
+  > a {
+    width: 50%;
+  }
+
+  > a:nth-child(even) {
+    width: calc(50% - 1rem);
+  }
 }
 
 .banner {
@@ -30,7 +38,7 @@
 
   &__inner {
     width: 100%;
-    max-width: 1440px;
+    max-width: var(--container-width);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -50,6 +58,18 @@
     > div {
       display: flex;
       gap: 0.5rem;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+    gap: 3rem;
+
+    section {
+      > h2 {
+        font-size: 2rem;
+      }
     }
   }
 }

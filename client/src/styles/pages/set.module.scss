@@ -78,14 +78,13 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 1rem;
       padding: 1.3rem;
       margin-bottom: 1rem;
       border-radius: 10px;
-      // background: linear-gradient(90deg, var(--color-on-primary), var(--color-surface) 60%);
       background-color: var(--color-surface);
       color: var(--color-on-surface);
       border: 1px solid var(--color-outline);
-      // box-shadow: var(--box-shadow);
 
       span {
         flex-basis: 100%;
@@ -98,13 +97,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1.5rem;
   padding: 1rem;
   margin: 1rem 0;
   border-radius: 10px;
   border: 1px solid var(--color-outline);
   background-color: var(--color-surface);
   color: var(--color-on-surface);
-  // box-shadow: var(--box-shadow);
 
   &__author {
     display: block;
@@ -121,5 +120,27 @@
     // button:hover {
     //   color: #6bdeaf;
     // }
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .card {
+    &__studies {
+      flex-direction: column;
+
+      li,
+      li:nth-child(even) {
+        width: 100%;
+      }
+    }
+  }
+
+  .createdby {
+    flex-direction: column;
+    gap: 1rem;
+
+    &__author {
+      text-align: center;
+    }
   }
 }

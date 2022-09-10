@@ -4,18 +4,25 @@
   width: 100%;
   height: 50px;
 
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem;
   color: var(--color-on-surface);
   background-color: var(--color-surface);
   box-shadow: var(--box-shadow);
 
-  > a {
-    text-transform: uppercase;
-    font-weight: 700;
-    font-size: 1rem;
+  &__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: var(--container-width);
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1rem;
+
+    > a {
+      text-transform: uppercase;
+      font-weight: 700;
+      font-size: 1rem;
+    }
   }
 }
 

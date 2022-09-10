@@ -4,17 +4,15 @@ import style from 'styles/components/cardbox.module.scss';
 
 interface SetProps {
   content: SetInterface;
-  fullsize?: boolean;
 }
 interface FolderProps {
   content: FolderInterface;
-  fullsize?: boolean;
 }
 
-export const CardBoxSet: React.FC<SetProps> = ({ content, fullsize }) => {
+export const CardBoxSet: React.FC<SetProps> = ({ content }) => {
   return (
     <Link href={`/${content.id}`}>
-      <a style={fullsize ? { width: '100%' } : undefined} className={style.cardbox}>
+      <a className={style.cardbox}>
         <div className={style.cardbox__icon}>
           <div>
             <svg xmlns="http://www.w3.org/2000/svg" height="48" width="48">
@@ -41,10 +39,10 @@ export const CardBoxSet: React.FC<SetProps> = ({ content, fullsize }) => {
   );
 };
 
-export const CardBoxFolder: React.FC<FolderProps> = ({ content, fullsize }) => {
+export const CardBoxFolder: React.FC<FolderProps> = ({ content }) => {
   return (
     <Link href={`/folder/${content.id}`}>
-      <a style={fullsize ? { width: '100%' } : undefined} className={style.cardbox}>
+      <a className={style.cardbox}>
         <div className={style.cardbox__icon}>
           <div>
             <svg xmlns="http://www.w3.org/2000/svg" height="48" width="48">

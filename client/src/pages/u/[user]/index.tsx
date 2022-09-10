@@ -82,13 +82,13 @@ const UserPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
               idle: undefined,
               error: 'error',
               loading: 'loading',
-              success: sets.data?.map((content) => <CardBoxSet key={content.id} content={content} fullsize />),
+              success: sets.data?.map((content) => <CardBoxSet key={content.id} content={content} />),
             }[sets.status],
             folders: {
               idle: undefined,
               error: 'error',
               loading: 'loading',
-              success: folders.data?.map((content) => <CardBoxFolder key={content.id} content={content} fullsize />),
+              success: folders.data?.map((content) => <CardBoxFolder key={content.id} content={content} />),
             }[folders.status],
           }[router.query.entries as 'sets' | 'folders']
         }

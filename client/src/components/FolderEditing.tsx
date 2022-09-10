@@ -50,7 +50,7 @@ export const FolderEditing: React.FC<Props> = ({ isOpen, onClose, folderFigure }
         <ModalBody>
           <h3>{folderFigure && folderFigure.id ? 'Update folder' : 'Create a new folder'}</h3>
           <ModalInputs>
-            <Input label="Name" {...register('name')} autoFocus />
+            <Input label="Name" {...register('name')} autoFocus required />
             <Input label="Description (optional)" {...register('description')} />
           </ModalInputs>
         </ModalBody>
