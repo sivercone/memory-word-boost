@@ -12,14 +12,14 @@ import { Input } from 'ui/Input';
 import { Button } from 'ui/Button';
 
 interface SetFigure {
-  id?: string;
-  title?: string;
-  description?: string;
-  tags?: string[];
-  cards?: { term?: string; definition?: string }[];
+  id: string;
+  title: string;
+  description: string;
+  tags: string[];
+  cards: { term: string; definition: string }[];
   user: UserInterface;
-  createdAt?: string;
-  updateddAt?: string;
+  createdAt: string;
+  updateddAt: string;
 }
 
 const SetEditing: NextPage<{ setFigure?: SetFigure }> = ({ setFigure }) => {
@@ -32,7 +32,6 @@ const SetEditing: NextPage<{ setFigure?: SetFigure }> = ({ setFigure }) => {
   const create = useMutation(setApi.create);
   const update = useMutation(setApi.update, { onSuccess: () => queryClient.invalidateQueries('sets') });
   const onSubmit = async (payload: SetInterface) => {
-    console.log('s', payload);
     if (payload.cards.length < 2) return toggleModalShown();
     try {
       if (setFigure && setFigure.id) await update.mutateAsync(payload);

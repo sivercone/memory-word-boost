@@ -1,10 +1,15 @@
+export interface CardInterface {
+  term: string;
+  definition: string;
+}
+
 export interface SetInterface {
   id: string;
   title: string;
   description: string;
   tags: string[];
-  cards: { term: string; definition: string }[]; // todo: here is no ID
-  folders: FolderInterface[];
+  cards: CardInterface[];
+  folders?: FolderInterface[];
   user: UserInterface;
   createdAt: string;
   updateddAt: string;
@@ -14,7 +19,7 @@ export interface FolderInterface {
   id: string;
   name: string;
   description: string;
-  sets: SetInterface[];
+  sets?: SetInterface[];
   user: UserInterface;
   createdAt?: string;
   updatedAt?: string;

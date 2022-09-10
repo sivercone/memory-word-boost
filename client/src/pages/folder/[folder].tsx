@@ -45,7 +45,7 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const sets = useQuery('sets', setApi.get, { enabled: shownModal === 'sets' });
   const [includedSets, setIncludedSets] = React.useState<SetInterface[]>([]);
   React.useEffect(() => {
-    if (folder.data) setIncludedSets(folder.data.sets);
+    if (folder.data && folder.data.sets?.length) setIncludedSets(folder.data.sets);
   }, [folder.data, folder.dataUpdatedAt]);
   const toggleIncludeFolder = (payload: SetInterface) => {
     if (includedSets.find((set) => set.id === payload.id)) setIncludedSets(includedSets.filter((el) => el.id !== payload.id));
@@ -145,9 +145,9 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
           </button>
         </div>
       </div>
-      <h2 style={{ marginBottom: '1rem' }}>Study sets in this folder ({folder.data.sets.length})</h2>
+      <h2 style={{ marginBottom: '1rem' }}>Study sets in this folder ({folder.data.sets?.length})</h2>
       <div className={style2.cardlist}>
-        {folder.data.sets.map((content) => (
+        {folder.data.sets?.map((content) => (
           <CardBoxSet key={content.id} content={content} />
         ))}
       </div>

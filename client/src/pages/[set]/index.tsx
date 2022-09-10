@@ -46,7 +46,7 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const folder = useQuery('folders', folderApi.get, { enabled: shownModal === 'folder' });
   const [includedFolders, setIncludedFolders] = React.useState<FolderInterface[]>([]);
   React.useEffect(() => {
-    if (set.data) setIncludedFolders(set.data.folders);
+    if (set.data && set.data.folders?.length) setIncludedFolders(set.data.folders);
   }, [set.data]);
   const toggleIncludeFolder = (payload: FolderInterface) => {
     if (includedFolders.find((el) => el.id === payload.id)) setIncludedFolders(includedFolders.filter((el) => el.id !== payload.id));
@@ -233,7 +233,7 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                   <Toggle
                     label={content.name}
                     onClick={() => toggleIncludeFolder(content)}
-                    defaultChecked={!!set.data.folders.find((el) => el.id === content.id)}
+                    defaultChecked={!!set.data.folders?.find((el) => el.id === content.id)}
                   />
                 </li>
               ))}

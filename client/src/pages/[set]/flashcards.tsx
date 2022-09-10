@@ -8,6 +8,7 @@ import Custom404 from 'pages/404';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { Button } from 'ui/Button';
+import { CardInterface } from 'interfaces';
 
 // drag - https://codesandbox.io/s/5trtt
 
@@ -24,7 +25,7 @@ const translateRight = { translateX: '-100%', opacity: 0, transition: { duration
 const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const set = useQuery(['set', pagekey], () => setApi.getById(pagekey));
 
-  const [cards, setCards] = React.useState<any[]>([]);
+  const [cards, setCards] = React.useState<CardInterface[]>([]);
   React.useEffect(() => {
     if (set.data) setCards(set.data.cards);
   }, [set.data]);
@@ -48,7 +49,7 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     }, 300);
   };
 
-  const [repeatCards, setRepeatCards] = React.useState<{ terms: string; definiton: string }[]>([]);
+  const [repeatCards, setRepeatCards] = React.useState<CardInterface[]>([]);
   const toRepeat = () => {
     setToRepeated(true);
     setRepeatCards((prev) => [...prev, cards[currentIndex]]);

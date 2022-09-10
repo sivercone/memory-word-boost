@@ -5,13 +5,29 @@ import { useQuery } from 'react-query';
 import { setApi } from 'api/setApi';
 import { folderApi } from 'api/folderApi';
 import { CardBoxSet, CardBoxFolder } from 'components/CardBox';
-import { Button } from 'ui/Button';
+import { useUserStore } from 'storage/useUserStore';
+// import { Button } from 'ui/Button';
 
 // https://quizlet.com/upgrade?source=rich_text_formatting
 
 const Home: NextPage = () => {
   const set = useQuery('sets', setApi.get);
   const folder = useQuery('folders', folderApi.get);
+  const { user } = useUserStore();
+  const userSets = useQuery(
+    'userSets',
+    () => {
+      if (user) return setApi.getByUser(user);
+    },
+    { enabled: !!user },
+  );
+  const userFolders = useQuery(
+    'userFolders',
+    () => {
+      if (user) return folderApi.getByUser(user);
+    },
+    { enabled: !!user },
+  );
 
   return (
     <>
@@ -32,18 +48,19 @@ const Home: NextPage = () => {
         <section>
           <h2>Recent study sets</h2>
           <div className={style.cardlist}>
-            {set.data ? set.data.map((content) => <CardBoxSet key={content.id} content={content} />) : undefined}
+            {userSets.data ? userSets.data.map((content) => <CardBoxSet key={content.id} content={content} />) : undefined}
           </div>
         </section>
         <section>
           <h2>Recent folders</h2>
           <div className={style.cardlist}>
-            {folder.data ? folder.data.map((content) => <CardBoxFolder key={content.id} content={content} />) : undefined}
+            {userFolders.data ? userFolders.data.map((content) => <CardBoxFolder key={content.id} content={content} />) : undefined}
           </div>
         </section>
         <section>
           <h2>Discover solutions from other users</h2>
           <div className={style.cardlist}>
+            {set.data ? set.data.map((content) => <CardBoxSet key={content.id} content={content} />) : undefined}
             {folder.data ? folder.data.map((content) => <CardBoxFolder key={content.id} content={content} />) : undefined}
           </div>
         </section>

@@ -1,4 +1,4 @@
-import { FolderInterface, SetInterface, UserInterface } from 'interfaces';
+import { FolderInterface, UserInterface } from 'interfaces';
 
 const path = 'http://localhost:7001/folder';
 

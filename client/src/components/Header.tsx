@@ -30,7 +30,7 @@ export const Header: React.FC = () => {
   if (['/login', '/[set]/flashcards'].includes(pathname)) return <></>;
   return (
     <>
-      <div style={{ height: '50px', width: '100%', marginBottom: '1.5rem' }}></div>
+      <div style={{ height: '50px', width: '100%', marginBottom: '1rem' }}></div>
       <header className={style.header}>
         <Link href="/">
           <a>PROJECT MWB</a>

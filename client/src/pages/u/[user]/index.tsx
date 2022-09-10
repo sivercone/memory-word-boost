@@ -22,19 +22,26 @@ const UserPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     router.replace(`/u/${pagekey}?entries=sets`);
   }, [pagekey]);
 
-  const sets = useQuery(['sets', pagekey], () => setApi.getByUser(user.data!), {
-    enabled: !!pagekey && !!user.data && router.query.entries === 'sets',
-  });
-  const folders = useQuery(['folders', pagekey], () => folderApi.getByUser(user.data!), {
-    enabled: !!pagekey && !!user.data && router.query.entries === 'folders',
-  });
+  const sets = useQuery(
+    ['sets', pagekey],
+    () => {
+      if (user.data) return setApi.getByUser(user.data);
+    },
+    { enabled: !!pagekey && !!user.data && router.query.entries === 'sets' },
+  );
+  const folders = useQuery(
+    ['folders', pagekey],
+    () => {
+      if (user.data) return folderApi.getByUser(user.data);
+    },
+    { enabled: !!pagekey && !!user.data && router.query.entries === 'folders' },
+  );
 
   if (!user.data) return <Custom404 />;
   return (
     <div className="container">
       <section className={style.header}>
         <div className={style.header__avatar}>
-          {/* <img src={user.data.avatar} alt="" /> */}
           <Avatar size={'100%'} variant="ring" colors={['#92A1C6', '#146A7C', '#F0AB3D', '#C271B4', '#C20D90']} />
         </div>
         <div className={style.header__title}>

@@ -7,18 +7,20 @@ import Custom404 from 'pages/404';
 import style from 'styles/pages/learn.module.scss';
 import { useRouter } from 'next/router';
 import { Button } from 'ui/Button';
+import { CardInterface } from 'interfaces';
 
 type Results = {
   round: number;
-  incorrectCards: { term: string; definition: string }[];
-  correctCards: { term: string; definition: string }[];
+  incorrectCards: CardInterface[];
+  correctCards: CardInterface[];
 };
+type SubmitData = { answer: string };
 
 const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const { push } = useRouter();
   const set = useQuery(['set', pagekey], () => setApi.getById(pagekey));
 
-  const [cards, setCards] = React.useState<{ term: string; definition: string }[]>([]);
+  const [cards, setCards] = React.useState<CardInterface[]>([]);
   React.useEffect(() => {
     if (set.data) setCards(set.data.cards.sort(() => Math.random() - 0.5));
   }, [set.data]);
@@ -26,7 +28,7 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const scorePercent = Math.round(((currentIndex + 1) / cards.length) * 100);
   const [status, setStatus] = React.useState<'T' | 'F' | 'E'>('T');
   const [round, setRound] = React.useState<number>(1);
-  const [incorrect, setIncorrect] = React.useState<{ term: string; definition: string }[]>([]);
+  const [incorrect, setIncorrect] = React.useState<CardInterface[]>([]);
 
   const loseCard = () => {
     setStatus('F');
@@ -46,8 +48,8 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     reset();
   };
 
-  const { register, handleSubmit, reset } = useForm();
-  const onSubmit = (payload: { answer: string }) => {
+  const { register, handleSubmit, reset } = useForm<SubmitData>();
+  const onSubmit = (payload: SubmitData) => {
     if (payload.answer === cards[currentIndex].definition) nextCard();
     else loseCard();
   };

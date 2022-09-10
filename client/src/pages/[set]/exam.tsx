@@ -8,13 +8,16 @@ import style from 'styles/pages/learn.module.scss';
 // import { Modal, ModalActions, ModalBody } from 'components/Modal';
 import { useRouter } from 'next/router';
 import { Button } from 'ui/Button';
+import { CardInterface } from 'interfaces';
+
+type SubmitData = { form: { input: string }[] };
 
 const ExamPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const set = useQuery(['set', pagekey], () => setApi.getById(pagekey));
 
   const { push } = useRouter();
 
-  const [cards, setCards] = React.useState<{ term: string; definition: string }[]>([]);
+  const [cards, setCards] = React.useState<CardInterface[]>([]);
   React.useEffect(() => {
     if (set.data) setCards(set.data.cards.sort(() => Math.random() - 0.5));
   }, [set.data]);
@@ -22,9 +25,9 @@ const ExamPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   // const [shownModal, setShownModal] = React.useState(false);
   // const toggleModal = () => setShownModal(!shownModal);
 
-  const { register, handleSubmit, formState, reset } = useForm();
+  const { register, handleSubmit, formState, reset } = useForm<SubmitData>();
   const [incorrect, setIncorrect] = React.useState<{ correct: boolean; index: number; answer: string }[]>([]);
-  const onSubmit = (payload: { form: { input: string }[] }) => {
+  const onSubmit = (payload: SubmitData) => {
     // setShownModal(false);
     setIncorrect(
       payload.form.map((el, i) =>
