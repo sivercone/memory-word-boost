@@ -105,12 +105,12 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
               <path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z" />
             </svg>
           </button>
-          <button title="settings">
+          {/* <button title="settings">
             <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
               <path d="M0 0h24v24H0V0z" fill="none" />
               <path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z" />
             </svg>
-          </button>
+          </button> */}
         </div>
       </header>
       <div className={style.flashcards}>
@@ -120,96 +120,48 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
             <div style={{ width: `${scorePercent}%` }}></div>
           </div>
         ) : undefined}
-        <div className={style.flashcards__card}>
-          {currentIndex >= cards.length ? (
-            <div className={style.results}>
-              <p style={{ fontSize: '5rem' }}>🔥</p>
-              <h1>{repeatCards.length === set.data.cards.length ? 'You are doing progress' : 'Nice progress'}</h1>
-              <h2>
-                {repeatCards.length
-                  ? `Keep practicing to master the ${repeatCards.length} remaining`
-                  : `You just studied ${set.data.cards.length} terms!`}
-              </h2>
-              <div className={style.results__actions}>
-                <Button onClick={onRestart} variant="outlined">
-                  Restart
-                </Button>
-                {repeatCards.length ? (
-                  <Button onClick={onStudyAgain} variant="outlined">
-                    Continue
-                  </Button>
-                ) : undefined}
-              </div>
-            </div>
-          ) : (
-            <>
-              <button
-                onClick={toRepeat}
-                style={toRepeated || learned ? { visibility: 'hidden' } : { visibility: 'visible' }}
-                className={`${style.flashcards__arrow} ${style.flashcards__arrowleft}`}
+        <div className={style.flashcards__card} onClick={onToggle} role="button">
+          <div className={style.flashcards__content}>
+            <span>{toggled ? cards[currentIndex].definition : cards[currentIndex]?.term}</span>
+          </div>
+          <div className={style.flashcards__moves}>
+            <button
+              onClick={toRepeat}
+              style={toRepeated || learned ? { visibility: 'visible' } : { visibility: 'visible' }}
+              className={`${style.flashcards__arrow} ${style.flashcards__arrowleft}`}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                enableBackground="new 0 0 24 24"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                fill="currentColor"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  enableBackground="new 0 0 24 24"
-                  height="1em"
-                  viewBox="0 0 24 24"
-                  width="1em"
-                  fill="currentColor"
-                >
-                  <rect fill="none" height="24" width="24" />
-                  <path d="M9,19l1.41-1.41L5.83,13H22V11H5.83l4.59-4.59L9,5l-7,7L9,19z" />
-                </svg>
-                <span>Study again</span>
-              </button>
-              <motion.div animate={learned ? translateLeft : toRepeated ? translateRight : alignX} style={{ height: '100%' }}>
-                <motion.button
-                  animate={toggled ? rotateX.anim : rotateX.init}
-                  onClick={onToggle}
-                  className={style.flashcards__mainblock}
-                >
-                  <motion.span
-                    animate={toggled ? rotateX.anim : rotateX.init}
-                    style={
-                      (toggled && cards[currentIndex].definition.length > 200) || (!toggled && cards[currentIndex].term.length > 200)
-                        ? { fontSize: '1.5rem' }
-                        : undefined
-                    }
-                  >
-                    {toggled ? cards[currentIndex].definition : cards[currentIndex].term}
-                  </motion.span>
-                </motion.button>
-              </motion.div>
-              <button
-                onClick={onLearned}
-                style={learned || toRepeated ? { visibility: 'hidden' } : { visibility: 'visible' }}
-                className={`${style.flashcards__arrow} ${style.flashcards__arrowright}`}
+                <rect fill="none" height="24" width="24" />
+                <path d="M9,19l1.41-1.41L5.83,13H22V11H5.83l4.59-4.59L9,5l-7,7L9,19z" />
+              </svg>
+              <span>Study again</span>
+            </button>
+            <button
+              onClick={onLearned}
+              style={learned || toRepeated ? { visibility: 'visible' } : { visibility: 'visible' }}
+              className={`${style.flashcards__arrow} ${style.flashcards__arrowright}`}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                enableBackground="new 0 0 24 24"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                fill="currentColor"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  enableBackground="new 0 0 24 24"
-                  height="1em"
-                  viewBox="0 0 24 24"
-                  width="1em"
-                  fill="currentColor"
-                >
-                  <rect fill="none" height="24" width="24" />
-                  <path d="M15,5l-1.41,1.41L18.17,11H2V13h16.17l-4.59,4.59L15,19l7-7L15,5z" />
-                </svg>
-                <span>Got it</span>
-              </button>
-              {currentIndex === 0 ? (
-                <motion.div
-                  animate={toggled ? rotateX.anim : rotateX.init}
-                  className={style.flashcards__hint}
-                  style={toRepeated || learned ? { visibility: 'hidden' } : { visibility: 'visible' }}
-                >
-                  <motion.span animate={toggled ? rotateX.anim : rotateX.init}>
-                    {toggled ? 'Click card to see term 👆' : 'Click card to see definition 👆'}
-                  </motion.span>
-                </motion.div>
-              ) : undefined}
-            </>
-          )}
+                <rect fill="none" height="24" width="24" />
+                <path d="M15,5l-1.41,1.41L18.17,11H2V13h16.17l-4.59,4.59L15,19l7-7L15,5z" />
+              </svg>
+              <span>Got it</span>
+            </button>
+          </div>
         </div>
       </div>
     </>
