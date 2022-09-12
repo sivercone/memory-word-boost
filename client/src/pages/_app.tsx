@@ -19,7 +19,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
           <link rel="manifest" href="/manifest.json" />
         </Head>
         <Header />
-        <AnimatePresence exitBeforeEnter>
+        <AnimatePresence mode="wait">
           <PageTransition key={router.route}>
             <Component {...pageProps} />
             <AuthCheck />
