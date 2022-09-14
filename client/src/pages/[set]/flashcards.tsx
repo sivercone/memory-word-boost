@@ -7,20 +7,19 @@ import { setApi } from 'api/setApi';
 import Custom404 from 'pages/404';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { Button } from 'ui/Button';
+// import { Button } from 'ui/Button';
 import { CardInterface } from 'interfaces';
 
 // drag - https://codesandbox.io/s/5trtt
 
 // todo - describe how to learn with cards
 
-const rotateX = {
-  init: { rotateX: 0, transition: { duration: 0.3 } },
-  anim: { rotateX: -180, transition: { duration: 0.3 } },
+const motions = {
+  init: { rotateY: 0, translateX: '0%', opacity: 1, transition: { duration: 0.4 } },
+  rotate: { rotateY: 180, translateX: '0%', opacity: 1, transition: { duration: 0.4 } },
+  translateLeft: { rotateY: 0, translateX: '100%', opacity: 0, transition: { duration: 0.5 } },
+  translateRight: { rotateY: 0, translateX: '-100%', opacity: 0, transition: { duration: 0.5 } },
 };
-const alignX = { translateX: 0, opacity: 1, transition: { duration: 0.3 } };
-const translateLeft = { translateX: '100%', opacity: 0, transition: { duration: 0.5 } };
-const translateRight = { translateX: '-100%', opacity: 0, transition: { duration: 0.5 } };
 
 const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const set = useQuery(['set', pagekey], () => setApi.getById(pagekey));
@@ -33,10 +32,15 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const { push } = useRouter();
 
   const [toggled, setToggled] = React.useState(false);
-  const onToggle = () => setToggled(!toggled);
+  const [isToggling, setIsToggling] = React.useState(false);
+  const onToggle = () => {
+    setIsToggling(true);
+    setToggled(!toggled);
+    setTimeout(() => setIsToggling(false), 400);
+  };
 
   const [currentIndex, setCurrentIndex] = React.useState<number>(0);
-  const scorePercent = Math.round(((currentIndex + 1) / cards.length) * 100);
+  const scorePercent = React.useMemo(() => Math.round((currentIndex / cards.length) * 100), [currentIndex, cards.length]);
 
   const [learned, setLearned] = React.useState<boolean>(false);
   const [toRepeated, setToRepeated] = React.useState<boolean>(false);
@@ -44,9 +48,10 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const onLearned = () => {
     setLearned(true);
     setTimeout(() => {
+      setToggled(false);
       setLearned(false);
       setCurrentIndex(currentIndex + 1);
-    }, 300);
+    }, 500);
   };
 
   const [repeatCards, setRepeatCards] = React.useState<CardInterface[]>([]);
@@ -54,26 +59,28 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     setToRepeated(true);
     setRepeatCards((prev) => [...prev, cards[currentIndex]]);
     setTimeout(() => {
+      setToggled(false);
       setToRepeated(false);
       setCurrentIndex(currentIndex + 1);
-    }, 300);
+    }, 500);
   };
 
-  const onStudyAgain = () => {
-    setCards(repeatCards);
-    setRepeatCards([]);
-    setCurrentIndex(0);
-  };
+  // const onStudyAgain = () => {
+  //   setCards(repeatCards);
+  //   setRepeatCards([]);
+  //   setCurrentIndex(0);
+  // };
 
-  const onRestart = () => {
-    if (!set.data) return;
-    setRepeatCards([]);
-    setCards(set.data.cards);
-    setCurrentIndex(0);
-  };
+  // const onRestart = () => {
+  //   if (!set.data) return;
+  //   setRepeatCards([]);
+  //   setCards(set.data.cards);
+  //   setCurrentIndex(0);
+  // };
 
   const onUndo = () => {
     if (currentIndex >= 1) {
+      setToggled(false);
       setCurrentIndex(currentIndex - 1);
       // setLearned(true);
       // setTimeout(() => setLearned(false), 150);
@@ -114,54 +121,49 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
         </div>
       </header>
       <div className={style.flashcards}>
-        {currentIndex < cards.length ? (
-          <div className={style.flashcards__score}>
-            <span>{`${currentIndex + 1}/${cards.length}`}</span>
-            <div style={{ width: `${scorePercent}%` }}></div>
-          </div>
-        ) : undefined}
-        <div className={style.flashcards__card} onClick={onToggle} role="button">
-          <div className={style.flashcards__content}>
-            <span>{toggled ? cards[currentIndex].definition : cards[currentIndex]?.term}</span>
-          </div>
-          <div className={style.flashcards__moves}>
-            <button
-              onClick={toRepeat}
-              style={toRepeated || learned ? { visibility: 'visible' } : { visibility: 'visible' }}
-              className={`${style.flashcards__arrow} ${style.flashcards__arrowleft}`}
+        <div className={style.flashcards__score}>
+          <span>{`${currentIndex + 1}/${cards.length}`}</span>
+          <div style={{ width: `${scorePercent}%` }}></div>
+        </div>
+        <motion.div
+          className={style.flashcards__card}
+          animate={learned ? motions.translateLeft : toRepeated ? motions.translateRight : motions.init}
+        >
+          <motion.button onClick={onToggle} animate={toggled ? motions.rotate : motions.init}>
+            <motion.span animate={toggled ? motions.rotate : motions.init}>
+              {!isToggling ? (toggled ? cards[currentIndex]?.definition : cards[currentIndex]?.term) : '🗯'}
+            </motion.span>
+          </motion.button>
+        </motion.div>
+        <div className={style.flashcards__moves}>
+          <button onClick={toRepeat} className={`${style.flashcards__arrow} ${style.flashcards__arrowleft}`}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              enableBackground="new 0 0 24 24"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              fill="currentColor"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                enableBackground="new 0 0 24 24"
-                height="1em"
-                viewBox="0 0 24 24"
-                width="1em"
-                fill="currentColor"
-              >
-                <rect fill="none" height="24" width="24" />
-                <path d="M9,19l1.41-1.41L5.83,13H22V11H5.83l4.59-4.59L9,5l-7,7L9,19z" />
-              </svg>
-              <span>Study again</span>
-            </button>
-            <button
-              onClick={onLearned}
-              style={learned || toRepeated ? { visibility: 'visible' } : { visibility: 'visible' }}
-              className={`${style.flashcards__arrow} ${style.flashcards__arrowright}`}
+              <rect fill="none" height="24" width="24" />
+              <path d="M9,19l1.41-1.41L5.83,13H22V11H5.83l4.59-4.59L9,5l-7,7L9,19z" />
+            </svg>
+            <span>Study again</span>
+          </button>
+          <button onClick={onLearned} className={`${style.flashcards__arrow} ${style.flashcards__arrowright}`}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              enableBackground="new 0 0 24 24"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              fill="currentColor"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                enableBackground="new 0 0 24 24"
-                height="1em"
-                viewBox="0 0 24 24"
-                width="1em"
-                fill="currentColor"
-              >
-                <rect fill="none" height="24" width="24" />
-                <path d="M15,5l-1.41,1.41L18.17,11H2V13h16.17l-4.59,4.59L15,19l7-7L15,5z" />
-              </svg>
-              <span>Got it</span>
-            </button>
-          </div>
+              <rect fill="none" height="24" width="24" />
+              <path d="M15,5l-1.41,1.41L18.17,11H2V13h16.17l-4.59,4.59L15,19l7-7L15,5z" />
+            </svg>
+            <span>Got it</span>
+          </button>
         </div>
       </div>
     </>
