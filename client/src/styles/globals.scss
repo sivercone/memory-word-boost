@@ -79,6 +79,10 @@ button {
   color: inherit;
   border: 0;
   cursor: pointer;
+
+  &:disabled {
+    cursor: default;
+  }
 }
 
 input {
