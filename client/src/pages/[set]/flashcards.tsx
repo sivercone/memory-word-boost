@@ -34,6 +34,7 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const [toggled, setToggled] = React.useState(false);
   const [isToggling, setIsToggling] = React.useState(false);
   const onToggle = () => {
+    if (currentIndex >= cards.length) return;
     setIsToggling(true);
     setToggled(!toggled);
     setTimeout(() => setIsToggling(false), 400);
@@ -65,30 +66,26 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     }, 500);
   };
 
-  // const onStudyAgain = () => {
-  //   setCards(repeatCards);
-  //   setRepeatCards([]);
-  //   setCurrentIndex(0);
-  // };
+  const onStudyAgain = () => {
+    setCards(repeatCards);
+    setRepeatCards([]);
+    setCurrentIndex(0);
+  };
 
-  // const onRestart = () => {
-  //   if (!set.data) return;
-  //   setRepeatCards([]);
-  //   setCards(set.data.cards);
-  //   setCurrentIndex(0);
-  // };
+  const onRestart = () => {
+    if (!set.data) return;
+    setRepeatCards([]);
+    setCards(set.data.cards);
+    setCurrentIndex(0);
+  };
 
   const onUndo = () => {
     if (currentIndex >= 1) {
       setToggled(false);
       setCurrentIndex(currentIndex - 1);
-      // setLearned(true);
-      // setTimeout(() => setLearned(false), 150);
     }
     if (repeatCards.length && cards[currentIndex - 1] === repeatCards[repeatCards.length - 1]) {
       setRepeatCards(repeatCards.slice(0, -1));
-      // setToRepeated(true);
-      // setTimeout(() => setToRepeated(false), 150);
     }
   };
 
@@ -122,48 +119,113 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
       </header>
       <div className={style.flashcards}>
         <div className={style.flashcards__score}>
-          <span>{`${currentIndex + 1}/${cards.length}`}</span>
+          <span>{`${currentIndex >= cards.length ? currentIndex : currentIndex + 1}/${cards.length}`}</span>
           <div style={{ width: `${scorePercent}%` }}></div>
         </div>
         <motion.div
           className={style.flashcards__card}
           animate={learned ? motions.translateLeft : toRepeated ? motions.translateRight : motions.init}
         >
-          <motion.button onClick={onToggle} animate={toggled ? motions.rotate : motions.init}>
+          <motion.button onClick={onToggle} animate={toggled ? motions.rotate : motions.init} disabled={currentIndex >= cards.length}>
             <motion.span animate={toggled ? motions.rotate : motions.init}>
               {!isToggling ? (toggled ? cards[currentIndex]?.definition : cards[currentIndex]?.term) : '🗯'}
+              {currentIndex >= cards.length ? (
+                <>
+                  {repeatCards.length === set.data.cards.length ? (
+                    <>
+                      <p>💥</p>
+                      <p>You are doing progress</p>
+                    </>
+                  ) : (
+                    <>
+                      <p>⚡️</p>
+                      <p>Nice progress</p>
+                    </>
+                  )}
+                  <p>
+                    {repeatCards.length
+                      ? `Keep practicing to master the ${repeatCards.length} remaining`
+                      : `You just studied ${set.data.cards.length} terms!`}
+                  </p>
+                </>
+              ) : undefined}
             </motion.span>
           </motion.button>
         </motion.div>
         <div className={style.flashcards__moves}>
-          <button onClick={toRepeat} className={`${style.flashcards__arrow} ${style.flashcards__arrowleft}`}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              enableBackground="new 0 0 24 24"
-              height="1em"
-              viewBox="0 0 24 24"
-              width="1em"
-              fill="currentColor"
-            >
-              <rect fill="none" height="24" width="24" />
-              <path d="M9,19l1.41-1.41L5.83,13H22V11H5.83l4.59-4.59L9,5l-7,7L9,19z" />
-            </svg>
-            <span>Study again</span>
-          </button>
-          <button onClick={onLearned} className={`${style.flashcards__arrow} ${style.flashcards__arrowright}`}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              enableBackground="new 0 0 24 24"
-              height="1em"
-              viewBox="0 0 24 24"
-              width="1em"
-              fill="currentColor"
-            >
-              <rect fill="none" height="24" width="24" />
-              <path d="M15,5l-1.41,1.41L18.17,11H2V13h16.17l-4.59,4.59L15,19l7-7L15,5z" />
-            </svg>
-            <span>Got it</span>
-          </button>
+          {currentIndex >= cards.length ? (
+            <button onClick={onRestart} className={`${style.flashcards__arrow} ${style.flashcards__arrowleft}`}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z" />
+                <path
+                  fillRule="evenodd"
+                  d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"
+                />
+              </svg>
+              <span>Restart</span>
+            </button>
+          ) : (
+            <button onClick={toRepeat} className={`${style.flashcards__arrow} ${style.flashcards__arrowleft}`}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                enableBackground="new 0 0 24 24"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                fill="currentColor"
+              >
+                <rect fill="none" height="24" width="24" />
+                <path d="M9,19l1.41-1.41L5.83,13H22V11H5.83l4.59-4.59L9,5l-7,7L9,19z" />
+              </svg>
+              <span>Study again</span>
+            </button>
+          )}
+          {currentIndex >= cards.length && repeatCards.length ? (
+            <button onClick={onStudyAgain} className={`${style.flashcards__arrow} ${style.flashcards__arrowright}`}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                enableBackground="new 0 0 24 24"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                fill="currentColor"
+              >
+                <rect fill="none" height="24" width="24" />
+                <path d="M15,5l-1.41,1.41L18.17,11H2V13h16.17l-4.59,4.59L15,19l7-7L15,5z" />
+              </svg>
+              <span>Continue</span>
+            </button>
+          ) : currentIndex >= cards.length ? (
+            <button onClick={() => push(`/${pagekey}`)} className={`${style.flashcards__arrow} ${style.flashcards__arrowright}`}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                enableBackground="new 0 0 24 24"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                fill="currentColor"
+              >
+                <rect fill="none" height="24" width="24" />
+                <path d="M15,5l-1.41,1.41L18.17,11H2V13h16.17l-4.59,4.59L15,19l7-7L15,5z" />
+              </svg>
+              <span>Return to set page</span>
+            </button>
+          ) : (
+            <button onClick={onLearned} className={`${style.flashcards__arrow} ${style.flashcards__arrowright}`}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                enableBackground="new 0 0 24 24"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                fill="currentColor"
+              >
+                <rect fill="none" height="24" width="24" />
+                <path d="M15,5l-1.41,1.41L18.17,11H2V13h16.17l-4.59,4.59L15,19l7-7L15,5z" />
+              </svg>
+              <span>Got it</span>
+            </button>
+          )}
         </div>
       </div>
     </>

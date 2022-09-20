@@ -79,6 +79,10 @@
       max-width: 80%;
       margin: 0 auto;
       transition: all 0.1s ease-in-out;
+
+      p:not(:first-child) {
+        font-size: 1.5rem;
+      }
     }
   }
 
@@ -90,16 +94,14 @@
   }
 
   &__arrow {
-    width: 5rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 100%;
     padding: 2rem;
     color: var(--color-on-surface);
     background-color: var(--color-surface);
-    // border: 1px solid;
-    width: 100%;
     border-radius: 20px;
     box-shadow: var(--box-shadow);
 
@@ -107,24 +109,6 @@
       background-color: var(--color-background);
     }
   }
-
-  // &__hint {
-  //   position: absolute;
-  //   bottom: 0;
-  //   // left: 50%;
-  //   transform: translate(-50%, 0);
-  //   width: 100%;
-  //   border-bottom: 0;
-  //   color: var(--color-on-surface);
-  //   background-color: var(--color-su--color-on-surface);
-
-  //   text-align: center;
-
-  //   span {
-  //     display: block;
-  //     font-size: 0.8rem;
-  //   }
-  // }
 }
 
 .results {
