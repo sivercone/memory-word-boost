@@ -1,9 +1,12 @@
 .class {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 0.5rem;
   min-height: calc(100vh - 50px);
   width: 100%;
+  padding: 0.5rem;
 
   &__block {
     display: flex;
@@ -90,7 +93,7 @@
 
     span {
       display: block;
-      font-size: 3rem;
+      font-size: 2rem;
       font-weight: 700;
     }
 
