@@ -39,7 +39,7 @@ export const Modal: React.FC<Props> = ({ isOpen, onClose, children }) => {
   if (!nextdiv) return <></>;
 
   return ReactDOM.createPortal(
-    <AnimatePresence exitBeforeEnter>
+    <AnimatePresence mode="wait">
       {isOpen ? (
         <>
           <motion.div
