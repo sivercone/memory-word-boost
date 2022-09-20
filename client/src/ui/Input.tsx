@@ -14,10 +14,10 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       <div className={`${scss.input} ${className || ''}`} style={style}>
         <label>
           {isTextArea || customInput ? <span>{label}</span> : undefined}
-          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
           {customInput ? (
             customInput
           ) : isTextArea ? (
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             <textarea ref={ref as any} {...(props as any)} />
           ) : (
             <input ref={ref} {...props} placeholder={label} />
