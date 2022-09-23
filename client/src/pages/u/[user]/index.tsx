@@ -10,8 +10,8 @@ import { authApi } from 'api/authApi';
 import Custom404 from 'pages/404';
 import { formatDate } from 'utils/formatDate';
 import { folderApi } from 'api/folderApi';
-import { CardBoxFolder, CardBoxSet } from 'components/CardBox';
 import { useUserStore } from 'storage/useUserStore';
+import { CardBox } from 'ui/CardBox';
 
 const UserPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const { user: userState } = useUserStore();
@@ -40,28 +40,28 @@ const UserPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   if (!user.data) return <Custom404 />;
   return (
     <div className="container">
-      <section className={style.header}>
-        <div className={style.header__avatar}>
+      <section className={style.island}>
+        <div className={style.island__avatar}>
           <Avatar size={'100%'} variant="ring" colors={['#92A1C6', '#146A7C', '#F0AB3D', '#C271B4', '#C20D90']} />
         </div>
-        <div className={style.header__title}>
+        <div className={style.island__title}>
           <span>{user.data.name}</span>
         </div>
         {user.data.bio ? (
-          <div className={style.header__bio}>
+          <div className={style.island__bio}>
             <span>{user.data.bio}</span>
           </div>
         ) : undefined}
-        <div className={style.header__bio}>
+        <div className={style.island__bio}>
           <span>{`On project since ${formatDate({ createdAt: user.data.createdAt, pattern: 'dd MMM yyyy' })}`}</span>
         </div>
-        <ul className={style.header__tabs}>
-          <li className={router.query.entries === 'sets' ? style.header__tabsActive : undefined}>
+        <ul className={style.island__tabs}>
+          <li className={router.query.entries === 'sets' ? style.island__tabsActive : undefined}>
             <Link href={`/u/${pagekey}?entries=sets`}>
               <a>Sets</a>
             </Link>
           </li>
-          <li className={router.query.entries === 'folders' ? style.header__tabsActive : undefined}>
+          <li className={router.query.entries === 'folders' ? style.island__tabsActive : undefined}>
             <Link href={`/u/${pagekey}?entries=folders`}>
               <a>Folders</a>
             </Link>
@@ -82,13 +82,15 @@ const UserPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
               idle: undefined,
               error: 'error',
               loading: 'loading',
-              success: sets.data?.map((content) => <CardBoxSet key={content.id} content={content} />),
+              success: sets.data?.map((content) => <CardBox key={content.id} id={content.id} content={content.title} type="set" />),
             }[sets.status],
             folders: {
               idle: undefined,
               error: 'error',
               loading: 'loading',
-              success: folders.data?.map((content) => <CardBoxFolder key={content.id} content={content} />),
+              success: folders.data?.map((content) => (
+                <CardBox key={content.id} id={content.id} content={content.name} type="folder" />
+              )),
             }[folders.status],
           }[router.query.entries as 'sets' | 'folders']
         }

@@ -4,6 +4,7 @@ import style from 'styles/components/button.module.scss';
 const styleCommon = {
   contained: `${style.button} ${style['button--contained']}`,
   outlined: `${style.button} ${style['button--outlined']}`,
+  icon: `${style.button} ${style['button--icon']}`,
 };
 
 type ButtonProps = DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> & {

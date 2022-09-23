@@ -2,31 +2,27 @@
   max-width: var(--container-width);
   margin-left: auto;
   margin-right: auto;
-  padding: 1rem;
+  padding: 0.5rem;
 
   display: flex;
   flex-direction: column;
-  gap: 6rem;
+  gap: 3rem;
 
   section {
     > h2 {
-      margin-bottom: 1rem;
-      font-size: 3rem;
+      margin-bottom: 0.5rem;
+      font-size: 1.25rem;
     }
   }
 }
 
 .cardlist {
   display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
+  flex-direction: column;
+  gap: 0.5rem;
 
   > a {
-    width: 50%;
-  }
-
-  > a:nth-child(even) {
-    width: calc(50% - 1rem);
+    width: 100%;
   }
 }
 
@@ -58,18 +54,6 @@
     > div {
       display: flex;
       gap: 0.5rem;
-    }
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .container {
-    gap: 3rem;
-
-    section {
-      > h2 {
-        font-size: 2rem;
-      }
     }
   }
 }

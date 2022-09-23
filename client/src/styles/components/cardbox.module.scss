@@ -1,37 +1,22 @@
 .cardbox {
-  display: block;
   width: 100%;
+  padding: 1rem;
   border-radius: 20px;
   color: var(--color-on-surface);
   background-color: var(--color-surface);
   box-shadow: var(--box-shadow);
-  transition: all 0.1s ease-in-out;
 
   &__icon {
     display: flex;
-    padding: 2.5rem 1rem 1rem 1rem;
 
     > div {
-      padding: 1rem;
-      color: var(--color-on-primary);
-      background-color: var(--color-primary);
-      border-radius: 25px;
-      border: 1px solid var(--color-outline);
+      border-radius: 50px;
     }
   }
 
   &__content {
-    padding: 1rem 1rem 2.5rem 1rem;
-  }
-
-  &__text {
-    h2 {
-      text-transform: uppercase;
-    }
-
-    p {
-      margin-top: 0.5rem;
-    }
+    font-size: 1.2rem;
+    text-transform: uppercase;
   }
 
   &__tags {
@@ -43,27 +28,9 @@
     li {
       padding: 0.1rem 0.5rem;
       border-radius: 25px;
-      color: var(--color-on-primary);
-      background-color: var(--color-primary);
+      color: var(--color-on-background);
+      background-color: var(--color-background);
       border: 1px solid var(--color-outline);
-    }
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .cardbox {
-    &__icon {
-      padding: 1rem 1rem 0.5rem 1rem;
-    }
-
-    &__content {
-      padding: 0.5rem 1rem 1rem 1rem;
-    }
-
-    &__text {
-      > h2 {
-        font-size: 1.2rem;
-      }
     }
   }
 }

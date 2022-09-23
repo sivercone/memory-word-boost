@@ -93,28 +93,30 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   return (
     <>
       <header className={style.header}>
-        <button onClick={() => push(`/${pagekey}`)} title="close">
-          <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
-            <path d="M0 0h24v24H0V0z" fill="none" />
-            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
-          </svg>
-        </button>
-        <Link href="/">
-          <a className={style.header__logo}>Project MWB</a>
-        </Link>
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
-          <button onClick={onUndo} title="undo">
+        <div className={style.header__inner}>
+          <button onClick={() => push(`/${pagekey}`)} title="close">
             <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
               <path d="M0 0h24v24H0V0z" fill="none" />
-              <path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z" />
+              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
             </svg>
           </button>
-          {/* <button title="settings">
+          <Link href="/">
+            <a className={style.header__logo}>Project MWB</a>
+          </Link>
+          <div style={{ display: 'flex', gap: '0.5rem' }}>
+            <button onClick={onUndo} title="undo">
+              <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
+                <path d="M0 0h24v24H0V0z" fill="none" />
+                <path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z" />
+              </svg>
+            </button>
+            {/* <button title="settings">
             <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
               <path d="M0 0h24v24H0V0z" fill="none" />
               <path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z" />
             </svg>
           </button> */}
+          </div>
         </div>
       </header>
       <div className={style.flashcards}>
@@ -126,7 +128,11 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
           className={style.flashcards__card}
           animate={learned ? motions.translateLeft : toRepeated ? motions.translateRight : motions.init}
         >
-          <motion.button onClick={onToggle} animate={toggled ? motions.rotate : motions.init} disabled={currentIndex >= cards.length}>
+          <motion.button
+            onClick={onToggle}
+            animate={toggled ? motions.rotate : motions.init}
+            disabled={currentIndex >= cards.length || isToggling}
+          >
             <motion.span animate={toggled ? motions.rotate : motions.init}>
               {!isToggling ? (toggled ? cards[currentIndex]?.definition : cards[currentIndex]?.term) : '🗯'}
               {currentIndex >= cards.length ? (

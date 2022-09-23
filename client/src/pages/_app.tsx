@@ -5,10 +5,11 @@ import { QueryClientProvider, Hydrate } from 'react-query';
 import { AnimatePresence } from 'framer-motion';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
-import { Header } from 'components/Header';
 import { PageTransition } from 'components/PageTransition';
 import { queryClient } from 'utils/queryClient';
 import { AuthCheck } from 'components/AuthCheck';
+import BottomNavigation from 'ui/BottomNavigation';
+import Header from 'ui/Header';
 
 function MyApp({ Component, pageProps, router }: AppProps) {
   return (
@@ -25,8 +26,9 @@ function MyApp({ Component, pageProps, router }: AppProps) {
             <AuthCheck />
           </PageTransition>
         </AnimatePresence>
+        <BottomNavigation />
         <ToastContainer
-          progressStyle={{ background: 'var(--color-text-primary)' }}
+          progressStyle={{ background: 'var(--color-primary)' }}
           position="bottom-right"
           autoClose={6000}
           draggable={false}

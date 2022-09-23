@@ -11,24 +11,16 @@ interface InputProps extends React.ComponentPropsWithoutRef<'input'> {
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ label, isTextArea, error, customInput, style, className, ...props }, ref) => {
     return (
-      <div className={`${scss.input} ${className || ''}`} style={style}>
-        <label>
-          {isTextArea || customInput ? <span>{label}</span> : undefined}
-          {customInput ? (
-            customInput
-          ) : isTextArea ? (
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            <textarea ref={ref as any} {...(props as any)} />
-          ) : (
-            <input ref={ref} {...props} placeholder={label} />
-          )}
-        </label>
+      <label className={`${scss.input} ${className || ''}`} style={style}>
+        <span>{label}</span>
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+        {customInput ? customInput : isTextArea ? <textarea ref={ref as any} {...(props as any)} /> : <input ref={ref} {...props} />}
         {error ? (
           <div>
             <span>{error}</span>
           </div>
         ) : undefined}
-      </div>
+      </label>
     );
   },
 );

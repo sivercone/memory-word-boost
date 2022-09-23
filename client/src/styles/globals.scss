@@ -6,7 +6,7 @@
   --box-shadow: 0px 2px 1px -1px #00000033, 0px 1px 1px 0px #00000024, 0px 1px 3px 0px #0000001f;
 
   // theme
-  --color-primary: #aef0d5;
+  --color-primary: #cba1ff;
   --color-on-primary: #1f1f1f;
   // --color-primary-container: #f0f15e;
   // --color-on-primary-container: #616200;
@@ -85,7 +85,8 @@ button {
   }
 }
 
-input {
+input,
+textarea {
   font-family: inherit;
   font-size: inherit;
   font-weight: inherit;
@@ -101,11 +102,25 @@ input {
   }
 }
 
+textarea {
+  resize: vertical;
+  min-height: 50px;
+}
+
 .container {
   max-width: var(--container-width);
   margin-left: auto;
   margin-right: auto;
   padding: 1rem;
+}
+
+.Toastify__toast-container {
+  padding: 1rem !important;
+}
+
+.Toastify__toast {
+  margin-bottom: 0.5rem !important;
+  border-radius: 4px !important;
 }
 
 // @media (prefers-color-scheme: dark) {

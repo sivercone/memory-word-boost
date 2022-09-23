@@ -13,8 +13,8 @@ import { notify } from 'utils/notify';
 import { setApi } from 'api/setApi';
 import { SetInterface } from 'interfaces';
 import { useUserStore } from 'storage/useUserStore';
-import { CardBoxSet } from 'components/CardBox';
 import { Toggle } from 'ui/Toggle';
+import { CardBox } from 'ui/CardBox';
 
 type ModalVariants = 'edit' | 'del' | 'sets';
 
@@ -148,7 +148,7 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
       <h2 style={{ marginBottom: '1rem' }}>Study sets in this folder ({folder.data.sets?.length})</h2>
       <div className={style2.cardlist}>
         {folder.data.sets?.map((content) => (
-          <CardBoxSet key={content.id} content={content} />
+          <CardBox key={content.id} content={content.title} id={content.id} type="set" />
         ))}
       </div>
       <FolderEditing folderFigure={folder.data} isOpen={shownModal === 'edit'} onClose={closeModal} />

@@ -8,6 +8,7 @@ import style from 'styles/pages/learn.module.scss';
 import { useRouter } from 'next/router';
 import { Button } from 'ui/Button';
 import { CardInterface } from 'interfaces';
+import Link from 'next/link';
 
 type Results = {
   round: number;
@@ -80,112 +81,127 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
 
   if (!set.data) return <Custom404 />;
   return (
-    <div className={style.class}>
-      <div className={style.class__block}>
-        {status === 'E' ? (
-          <>
-            {incorrect.length ? (
-              <div className={`${style.class__main} ${style.results}`}>
-                <header className={style.results__header}>
-                  <span>Results of Round {round}</span>
-                  <p>Good, you&#39;re in progress</p>
-                </header>
-                <div className={style.results__content}>
-                  <p style={{ color: 'green' }}>
-                    <span>Correct</span>
-                    <span>{cards.length - incorrect.length}</span>
-                  </p>
-                  <p style={{ color: 'tomato' }}>
-                    <span>Incorrect</span>
-                    <span>{incorrect.length}</span>
-                  </p>
-                  <p>
-                    <span>Overall progress</span>
-                    <span>{`${set.data.cards.length - incorrect.length}/${set.data.cards.length}`}</span>
-                  </p>
-                </div>
-                <div className={style.results__actions}>
-                  <Button onClick={() => push(`/${pagekey}`)} variant="outlined">
-                    Return to set page
-                  </Button>
-                  <Button onClick={nextRound} variant="outlined">
-                    Continue
-                  </Button>
-                </div>
-              </div>
-            ) : (
-              <>
+    <>
+      <header className={style.header}>
+        <div className={style.header__inner}>
+          <button onClick={() => push(`/${pagekey}`)} title="close">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
+              <path d="M0 0h24v24H0V0z" fill="none" />
+              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
+            </svg>
+          </button>
+          <Link href="/">
+            <a className={style.header__logo}>Project MWB</a>
+          </Link>
+        </div>
+      </header>
+      <div className={style.class}>
+        <div className={style.class__block}>
+          {status === 'E' ? (
+            <>
+              {incorrect.length ? (
                 <div className={`${style.class__main} ${style.results}`}>
                   <header className={style.results__header}>
-                    <span>Congrats!</span>
-                    <span>{`You've studied ${set.data.cards.length} cards.`}</span>
+                    <span>Results of Round {round}</span>
+                    <p>Good, you&#39;re in progress</p>
                   </header>
-                  <div className={style.results__content} style={{ textAlign: 'center' }}>
-                    <div style={{ fontSize: '5rem' }}>🎯</div>
+                  <div className={style.results__content}>
+                    <p style={{ color: 'green' }}>
+                      <span>Correct</span>
+                      <span>{cards.length - incorrect.length}</span>
+                    </p>
+                    <p style={{ color: 'tomato' }}>
+                      <span>Incorrect</span>
+                      <span>{incorrect.length}</span>
+                    </p>
+                    <p>
+                      <span>Overall progress</span>
+                      <span>{`${set.data.cards.length - incorrect.length}/${set.data.cards.length}`}</span>
+                    </p>
                   </div>
                   <div className={style.results__actions}>
                     <Button onClick={() => push(`/${pagekey}`)} variant="outlined">
                       Return to set page
                     </Button>
-                    <Button onClick={restartRound} variant="outlined">
-                      Study again
+                    <Button onClick={nextRound} variant="outlined">
+                      Continue
                     </Button>
                   </div>
                 </div>
-              </>
-            )}
-          </>
-        ) : undefined}
-        {cards.length && status !== 'E' ? (
-          <>
-            <div className={style.class__progressbar}>
-              <div title={`${scorePercent}%`} style={{ width: `${scorePercent}%` }}></div>
-            </div>
-            <div className={style.class__main}>
-              <div className={style.class__learn}>
-                <span>{cards[currentIndex].term}</span>
-                {status === 'F' ? (
-                  <>
-                    <span>correct answer</span>
-                    <span>{cards[currentIndex].definition}</span>
-                  </>
-                ) : undefined}
+              ) : (
+                <>
+                  <div className={`${style.class__main} ${style.results}`}>
+                    <header className={style.results__header}>
+                      <span>Congrats!</span>
+                      <span>{`You've studied ${set.data.cards.length} cards.`}</span>
+                    </header>
+                    <div className={style.results__content} style={{ textAlign: 'center' }}>
+                      <div style={{ fontSize: '5rem' }}>🎯</div>
+                    </div>
+                    <div className={style.results__actions}>
+                      <Button onClick={() => push(`/${pagekey}`)} variant="outlined">
+                        Return to set page
+                      </Button>
+                      <Button onClick={restartRound} variant="outlined">
+                        Study again
+                      </Button>
+                    </div>
+                  </div>
+                </>
+              )}
+            </>
+          ) : undefined}
+          {cards.length && status !== 'E' ? (
+            <>
+              <div className={style.class__progressbar} title={`${scorePercent}%`}>
+                <div style={{ width: `${scorePercent}%` }}></div>
               </div>
-              <form onSubmit={handleSubmit(onSubmit)} className={style.class__form} autoComplete="off">
-                <input type="text" {...register('answer')} required autoFocus />
-                <div>
-                  <button type="submit">answer</button>
-                  <button onClick={loseCard} type="button" title="click if don't know">
-                    ?
-                  </button>
+              <div className={style.class__main}>
+                <div className={style.class__learn}>
+                  <span>{cards[currentIndex].term}</span>
+                  {status === 'F' ? (
+                    <>
+                      <span>correct answer</span>
+                      <span>{cards[currentIndex].definition}</span>
+                    </>
+                  ) : undefined}
                 </div>
-              </form>
-            </div>
-          </>
-        ) : undefined}
+                <form onSubmit={handleSubmit(onSubmit)} className={style.class__form} autoComplete="off">
+                  <input type="text" {...register('answer')} required autoFocus />
+                  <div>
+                    <button type="submit">answer</button>
+                    <button onClick={loseCard} type="button" title="click if don't know">
+                      ?
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </>
+          ) : undefined}
+        </div>
+        {status === 'E' && !incorrect.length
+          ? results.map((el, i) => (
+              <div key={i} className={style.class__block} style={{ height: 'auto' }}>
+                <div className={`${style.class__main} ${style.results}`}>
+                  <header className={style.results__header}>
+                    <span>{`Round ${el.round}`}</span>
+                  </header>
+                  <div className={style.results__content}>
+                    {el.correctCards.map((card, i) => (
+                      <p key={i} style={el.incorrectCards.includes(card) ? { color: 'tomato' } : { color: 'green' }}>
+                        <span>
+                          {el.incorrectCards.includes(card) ? '✕' : '✓'} {card.term}
+                        </span>
+                        <span>{card.definition}</span>
+                      </p>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))
+          : undefined}
       </div>
-      {status === 'E' && !incorrect.length
-        ? results.map((el, i) => (
-            <div key={i} className={style.class__block} style={{ height: 'auto' }}>
-              <div className={`${style.class__main} ${style.results}`}>
-                <header className={style.results__header}>
-                  <span>{`Round ${el.round}`}</span>
-                </header>
-                <div className={style.results__content}>
-                  {el.correctCards.map((card, i) => (
-                    <p key={i} style={el.incorrectCards.includes(card) ? { color: 'tomato' } : { color: 'green' }}>
-                      <span>
-                        {el.incorrectCards.includes(card) ? '✕' : '✓'} {card.term}
-                      </span>
-                      <span>{card.definition}</span>
-                    </p>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ))
-        : undefined}
-    </div>
+    </>
   );
 };
 

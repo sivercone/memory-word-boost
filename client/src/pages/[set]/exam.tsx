@@ -8,6 +8,7 @@ import style from 'styles/pages/exam.module.scss';
 import { useRouter } from 'next/router';
 import { Button } from 'ui/Button';
 import { CardInterface } from 'interfaces';
+import Link from 'next/link';
 
 type SubmitData = { form: { input: string }[] };
 
@@ -59,74 +60,90 @@ const ExamPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
 
   if (!set.data) return <Custom404 />;
   return (
-    <div className={style.container}>
-      {formState.isSubmitted ? (
-        <div className={style.results}>
-          <header className={style.results__header}>
-            <span>Your Results</span>
-          </header>
-          <div className={style.results__content}>
-            <p style={{ color: 'green' }}>
-              <span>Correct</span>
-              <span>{cards.length - incorrect.filter((el) => !el.correct).length}</span>
-            </p>
-            <p style={{ color: 'tomato' }}>
-              <span>Incorrect</span>
-              <span>{incorrect.filter((el) => !el.correct).length}</span>
-            </p>
-            <p>
-              <span>Overall progress</span>
-              <span>{`${cards.length - incorrect.filter((el) => !el.correct).length}/${cards.length}`}</span>
-            </p>
-          </div>
-          <div className={style.results__actions}>
-            <Button onClick={() => push(`/${pagekey}`)} autoFocus={formState.isSubmitted} variant="outlined">
-              Return to set page
-            </Button>
-            <Button onClick={onRestart} variant="outlined">
-              Restart exam
-            </Button>
-          </div>
+    <>
+      <div style={{ height: '50px' }}></div>
+      <header className={style.header}>
+        <div className={style.header__inner}>
+          <button onClick={() => push(`/${pagekey}`)} title="close">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
+              <path d="M0 0h24v24H0V0z" fill="none" />
+              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
+            </svg>
+          </button>
+          <Link href="/">
+            <a className={style.header__logo}>Project MWB</a>
+          </Link>
         </div>
-      ) : undefined}
-      <form onSubmit={handleSubmit(onSubmit)} autoComplete="off" className={style.list}>
-        {cards.map((el, i) => (
-          <div key={i} onFocus={() => setCurrIndex(i)} className={style.list__block}>
-            <div className={style.list__learn}>
-              <span>{el.term}</span>
-              {incorrect.length && !incorrect[i].correct ? (
-                <>
-                  <span>correct answer</span>
-                  <span>{cards[i].definition}</span>
-                </>
-              ) : undefined}
+      </header>
+      <div className={style.container}>
+        {formState.isSubmitted ? (
+          <div className={style.results}>
+            <header className={style.results__header}>
+              <span>Your Results</span>
+            </header>
+            <div className={style.results__content}>
+              <p style={{ color: 'green' }}>
+                <span>Correct</span>
+                <span>{cards.length - incorrect.filter((el) => !el.correct).length}</span>
+              </p>
+              <p style={{ color: 'tomato' }}>
+                <span>Incorrect</span>
+                <span>{incorrect.filter((el) => !el.correct).length}</span>
+              </p>
+              <p>
+                <span>Overall progress</span>
+                <span>{`${cards.length - incorrect.filter((el) => !el.correct).length}/${cards.length}`}</span>
+              </p>
             </div>
-            <div className={style.list__form}>
-              <input
-                {...register(`form.${i}.input`)}
-                autoFocus={i === 0}
-                onKeyPress={handleEnterPress}
-                id={`input-${i}`}
-                defaultValue={incorrect.length ? incorrect[i].answer : ''}
-                disabled={!!incorrect.length}
-              />
-              {cards.length - 1 !== i && !incorrect.length ? (
-                <div>
-                  <button onClick={setFocusToNextInput} type="button">
-                    next
-                  </button>
-                </div>
-              ) : undefined}
+            <div className={style.results__actions}>
+              <Button onClick={() => push(`/${pagekey}`)} autoFocus={formState.isSubmitted} variant="outlined">
+                Return to set page
+              </Button>
+              <Button onClick={onRestart} variant="outlined">
+                Restart exam
+              </Button>
             </div>
           </div>
-        ))}
-        {!formState.isSubmitted ? (
-          <Button onClick={handleSubmit(onSubmit)} type="button" variant="outlined">
-            Check answers
-          </Button>
         ) : undefined}
-      </form>
-    </div>
+        <form onSubmit={handleSubmit(onSubmit)} autoComplete="off" className={style.list}>
+          {cards.map((el, i) => (
+            <div key={i} onFocus={() => setCurrIndex(i)} className={style.list__block}>
+              <div className={style.list__learn}>
+                <span>{el.term}</span>
+                {incorrect.length && !incorrect[i].correct ? (
+                  <>
+                    <span>correct answer</span>
+                    <span>{cards[i].definition}</span>
+                  </>
+                ) : undefined}
+              </div>
+              <div className={style.list__form}>
+                <input
+                  {...register(`form.${i}.input`)}
+                  autoFocus={i === 0}
+                  onKeyPress={handleEnterPress}
+                  id={`input-${i}`}
+                  defaultValue={incorrect.length ? incorrect[i].answer : ''}
+                  disabled={!!incorrect.length}
+                />
+                {cards.length - 1 !== i && !incorrect.length ? (
+                  <div>
+                    <button onClick={setFocusToNextInput} type="button">
+                      next
+                    </button>
+                  </div>
+                ) : undefined}
+              </div>
+            </div>
+          ))}
+          {!formState.isSubmitted ? (
+            <Button onClick={handleSubmit(onSubmit)} type="button" variant="outlined">
+              Check answers
+            </Button>
+          ) : undefined}
+        </form>
+      </div>
+    </>
   );
 };
 

@@ -1,20 +1,12 @@
-// .header {
-//   text-align: center;
-//   padding: 1rem;
-//   background-color: var(--color-surface);
-//   color: var(--color-on-surface);
-//   font-size: 2rem;
-//   font-weight: 700;
-// }
-
 .auth {
   min-height: calc(100vh - 170px);
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0 1rem;
 
   &__wrapper {
-    padding: 2rem 4rem;
+    padding: 1rem;
     border-radius: 10px;
     background-color: var(--color-surface);
     color: var(--color-on-surface);
@@ -65,18 +57,11 @@
   height: 170px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 1rem;
   padding: 4rem;
 
-  > span {
-    font-size: 2rem;
-    font-weight: 700;
-    cursor: default;
-    user-select: none;
-  }
-
-  > div {
+  > a {
     display: flex;
     align-items: center;
     gap: 1rem;
