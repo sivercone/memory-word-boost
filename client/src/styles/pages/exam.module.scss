@@ -97,20 +97,6 @@
       font-size: 2rem;
       outline: none;
     }
-
-    div {
-      display: flex;
-      gap: 0.5rem;
-
-      button {
-        padding: 0.5rem 1rem;
-        border-radius: 25px;
-        background-color: var(--color-primary);
-        color: var(--color-on-primary);
-        font-size: 1.5rem;
-        text-transform: uppercase;
-      }
-    }
   }
 }
 
@@ -173,7 +159,7 @@
     &__form {
       height: auto;
       flex-direction: column;
-      padding-bottom: 3rem;
+      padding-bottom: 1.5rem;
       margin-top: auto;
     }
   }

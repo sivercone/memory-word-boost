@@ -114,19 +114,19 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
               <form onSubmit={handleSubmit(onSubmit)} className={style.form__fields} autoComplete="off">
                 <input type="text" {...register('answer')} required autoFocus />
                 <div>
-                  <button type="submit">answer</button>
-                  <button onClick={loseCard} type="button" title="click if don't know">
+                  <Button type="submit">ANSWER</Button>
+                  <Button onClick={loseCard} type="button" title="click if don't know">
                     ?
-                  </button>
+                  </Button>
                 </div>
               </form>
             </div>
           </div>
         </div>
       ) : undefined}
-      <div className={style.block}>
-        {status === 'E' ? (
-          incorrect.length ? (
+      {status === 'E' ? (
+        <div className={style.block}>
+          {incorrect.length ? (
             <div className={style.block__inner}>
               <header className={style.results__header}>
                 <p>Results of Round {round}</p>
@@ -173,28 +173,28 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                 </Button>
               </div>
             </div>
-          )
-        ) : undefined}
-        {status === 'E' && !incorrect.length
-          ? results.map((el, i) => (
-              <div key={i} className={style.block__inner}>
-                <header className={style.results__header}>
-                  <p>{`Round ${el.round}`}</p>
-                </header>
-                <div className={style.results__content}>
-                  {el.correctCards.map((card, i) => (
-                    <p key={i} style={el.incorrectCards.includes(card) ? { color: 'tomato' } : { color: 'green' }}>
-                      <span>
-                        {el.incorrectCards.includes(card) ? '✕' : '✓'} {card.term}
-                      </span>
-                      <span>{card.definition}</span>
-                    </p>
-                  ))}
+          )}
+          {!incorrect.length
+            ? results.map((el, i) => (
+                <div key={i} className={style.block__inner}>
+                  <header className={style.results__header}>
+                    <p>{`Round ${el.round}`}</p>
+                  </header>
+                  <div className={style.results__content}>
+                    {el.correctCards.map((card, i) => (
+                      <p key={i} style={el.incorrectCards.includes(card) ? { color: 'tomato' } : { color: 'green' }}>
+                        <span>
+                          {el.incorrectCards.includes(card) ? '✕' : '✓'} {card.term}
+                        </span>
+                        <span>{card.definition}</span>
+                      </p>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))
-          : undefined}
-      </div>
+              ))
+            : undefined}
+        </div>
+      ) : undefined}
     </>
   );
 };

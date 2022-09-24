@@ -127,20 +127,17 @@ const ExamPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                   disabled={!!incorrect.length}
                 />
                 {cards.length - 1 !== i && !incorrect.length ? (
-                  <div>
-                    <button onClick={setFocusToNextInput} type="button">
-                      next
-                    </button>
-                  </div>
+                  <Button onClick={setFocusToNextInput} type="button">
+                    NEXT
+                  </Button>
+                ) : !formState.isSubmitted ? (
+                  <Button onClick={handleSubmit(onSubmit)} type="button" variant="outlined">
+                    CHECK ANSWERS
+                  </Button>
                 ) : undefined}
               </div>
             </div>
           ))}
-          {!formState.isSubmitted ? (
-            <Button onClick={handleSubmit(onSubmit)} type="button" variant="outlined">
-              Check answers
-            </Button>
-          ) : undefined}
         </form>
       </div>
     </>

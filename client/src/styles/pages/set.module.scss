@@ -5,7 +5,7 @@
 
   > h1 {
     font-size: 1.5rem;
-    line-height: 38px; // 0.8
+    line-height: 25px;
     text-transform: uppercase;
   }
 
@@ -40,10 +40,6 @@
         background: linear-gradient(90deg, var(--color-background), var(--color-surface));
         color: var(--color-on-primary);
         box-shadow: var(--box-shadow);
-
-        // &:hover {
-        //   background: var(--color-background);
-        // }
       }
 
       span {

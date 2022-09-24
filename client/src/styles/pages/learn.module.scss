@@ -96,18 +96,9 @@
       outline: none;
     }
 
-    div {
+    > div {
       display: flex;
       gap: 0.5rem;
-
-      button {
-        padding: 0.5rem 1rem;
-        border-radius: 25px;
-        background-color: var(--color-primary);
-        color: var(--color-on-primary);
-        font-size: 1.5rem;
-        text-transform: uppercase;
-      }
     }
   }
 }

@@ -86,7 +86,7 @@ const SetEditing: NextPage<{ setFigure?: SetFigure }> = ({ setFigure }) => {
             ))}
             <li style={{ textAlign: 'center' }}>
               <Button onClick={() => append({ term: '', definition: '' })} type="button">
-                Add card
+                ADD CARD
               </Button>
             </li>
           </ul>

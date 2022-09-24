@@ -3,14 +3,20 @@
   bottom: 0;
   left: 0;
   right: 0;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
   width: 100%;
 
   border-top: 1px solid #0000001a;
   background-color: var(--color-background);
   color: var(--color-on-background);
+
+  &__inner {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    max-width: var(--container-width);
+    width: 100%;
+    margin: 0 auto;
+  }
 
   &__item {
     position: relative;
@@ -54,7 +60,10 @@
   left: 0;
   right: 0;
   width: 100%;
+  max-width: var(--container-width);
+  margin: 0 auto;
   height: 200px;
+  padding: 1rem;
   border-top-left-radius: 25px;
   border-top-right-radius: 25px;
   overflow: hidden;
@@ -65,8 +74,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    // margin-bottom: 0.5rem;
-    padding: 1rem;
+    margin-bottom: 2rem;
 
     span {
       font-size: 1.2rem;
@@ -79,24 +87,25 @@
     gap: 0.5rem;
 
     li {
+      color: var(--color-on-primary);
+      background-color: var(--color-surface);
+      border-radius: 10px;
+      border: 1px solid var(--color-outline);
+      border-color: var(--color-outline);
+
+      &:active,
+      &:hover {
+        background-color: var(--color-primary);
+      }
+
       button {
-        width: 100%;
         display: flex;
         align-items: center;
         gap: 1rem;
-        padding: 0.5rem 1rem;
-
-        &:active {
-          background-color: var(--color-outline);
-        }
-
-        span:first-child {
-          width: 40px;
-          height: 40px;
-          padding: 0.5rem;
-          border-radius: 50px;
-          background-color: var(--color-surface);
-        }
+        width: 100%;
+        padding: 0.5rem;
+        border-radius: 10px;
+        text-align: left;
       }
     }
   }
