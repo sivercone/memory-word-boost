@@ -32,9 +32,9 @@
   flex-direction: column;
   height: calc(100vh - 50px);
   max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 0 1rem;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 0.5rem;
   overflow: hidden;
 
   &__score {

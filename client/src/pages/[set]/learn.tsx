@@ -95,107 +95,101 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
           </Link>
         </div>
       </header>
-      <div className={style.class}>
-        <div className={style.class__block}>
-          {status === 'E' ? (
-            <>
-              {incorrect.length ? (
-                <div className={`${style.class__main} ${style.results}`}>
-                  <header className={style.results__header}>
-                    <span>Results of Round {round}</span>
-                    <p>Good, you&#39;re in progress</p>
-                  </header>
-                  <div className={style.results__content}>
-                    <p style={{ color: 'green' }}>
-                      <span>Correct</span>
-                      <span>{cards.length - incorrect.length}</span>
-                    </p>
-                    <p style={{ color: 'tomato' }}>
-                      <span>Incorrect</span>
-                      <span>{incorrect.length}</span>
-                    </p>
-                    <p>
-                      <span>Overall progress</span>
-                      <span>{`${set.data.cards.length - incorrect.length}/${set.data.cards.length}`}</span>
-                    </p>
-                  </div>
-                  <div className={style.results__actions}>
-                    <Button onClick={() => push(`/${pagekey}`)} variant="outlined">
-                      Return to set page
-                    </Button>
-                    <Button onClick={nextRound} variant="outlined">
-                      Continue
-                    </Button>
-                  </div>
-                </div>
-              ) : (
-                <>
-                  <div className={`${style.class__main} ${style.results}`}>
-                    <header className={style.results__header}>
-                      <span>Congrats!</span>
-                      <span>{`You've studied ${set.data.cards.length} cards.`}</span>
-                    </header>
-                    <div className={style.results__content} style={{ textAlign: 'center' }}>
-                      <div style={{ fontSize: '5rem' }}>🎯</div>
-                    </div>
-                    <div className={style.results__actions}>
-                      <Button onClick={() => push(`/${pagekey}`)} variant="outlined">
-                        Return to set page
-                      </Button>
-                      <Button onClick={restartRound} variant="outlined">
-                        Study again
-                      </Button>
-                    </div>
-                  </div>
-                </>
-              )}
-            </>
-          ) : undefined}
-          {cards.length && status !== 'E' ? (
-            <>
-              <div className={style.class__progressbar} title={`${scorePercent}%`}>
-                <div style={{ width: `${scorePercent}%` }}></div>
+      {cards.length && status !== 'E' ? (
+        <div className={style.form}>
+          <div className={style.form__inner}>
+            <div className={style.form__progressbar} title={`${scorePercent}%`}>
+              <div style={{ width: `${scorePercent}%` }}></div>
+            </div>
+            <div className={style.form__main}>
+              <div className={style.form__learn}>
+                <span>{cards[currentIndex].term}</span>
+                {status === 'F' ? (
+                  <>
+                    <span>correct answer</span>
+                    <span>{cards[currentIndex].definition}</span>
+                  </>
+                ) : undefined}
               </div>
-              <div className={style.class__main}>
-                <div className={style.class__learn}>
-                  <span>{cards[currentIndex].term}</span>
-                  {status === 'F' ? (
-                    <>
-                      <span>correct answer</span>
-                      <span>{cards[currentIndex].definition}</span>
-                    </>
-                  ) : undefined}
+              <form onSubmit={handleSubmit(onSubmit)} className={style.form__fields} autoComplete="off">
+                <input type="text" {...register('answer')} required autoFocus />
+                <div>
+                  <button type="submit">answer</button>
+                  <button onClick={loseCard} type="button" title="click if don't know">
+                    ?
+                  </button>
                 </div>
-                <form onSubmit={handleSubmit(onSubmit)} className={style.class__form} autoComplete="off">
-                  <input type="text" {...register('answer')} required autoFocus />
-                  <div>
-                    <button type="submit">answer</button>
-                    <button onClick={loseCard} type="button" title="click if don't know">
-                      ?
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </>
-          ) : undefined}
+              </form>
+            </div>
+          </div>
         </div>
+      ) : undefined}
+      <div className={style.block}>
+        {status === 'E' ? (
+          incorrect.length ? (
+            <div className={style.block__inner}>
+              <header className={style.results__header}>
+                <p>Results of Round {round}</p>
+                <p>Good, you&#39;re in progress</p>
+              </header>
+              <div className={style.results__content}>
+                <p style={{ color: 'green' }}>
+                  <span>Correct</span>
+                  <span>{cards.length - incorrect.length}</span>
+                </p>
+                <p style={{ color: 'tomato' }}>
+                  <span>Incorrect</span>
+                  <span>{incorrect.length}</span>
+                </p>
+                <p>
+                  <span>Overall progress</span>
+                  <span>{`${set.data.cards.length - incorrect.length}/${set.data.cards.length}`}</span>
+                </p>
+              </div>
+              <div className={style.results__actions}>
+                <Button onClick={() => push(`/${pagekey}`)} variant="outlined">
+                  Return to set page
+                </Button>
+                <Button onClick={nextRound} variant="outlined">
+                  Continue
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <div className={style.block__inner}>
+              <header className={style.results__header}>
+                <p>Congrats!</p>
+                <p>{`You've studied ${set.data.cards.length} cards.`}</p>
+              </header>
+              <div className={style.results__content} style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: '5rem' }}>🎯</div>
+              </div>
+              <div className={style.results__actions}>
+                <Button onClick={() => push(`/${pagekey}`)} variant="outlined">
+                  Return to set page
+                </Button>
+                <Button onClick={restartRound} variant="outlined">
+                  Study again
+                </Button>
+              </div>
+            </div>
+          )
+        ) : undefined}
         {status === 'E' && !incorrect.length
           ? results.map((el, i) => (
-              <div key={i} className={style.class__block} style={{ height: 'auto' }}>
-                <div className={`${style.class__main} ${style.results}`}>
-                  <header className={style.results__header}>
-                    <span>{`Round ${el.round}`}</span>
-                  </header>
-                  <div className={style.results__content}>
-                    {el.correctCards.map((card, i) => (
-                      <p key={i} style={el.incorrectCards.includes(card) ? { color: 'tomato' } : { color: 'green' }}>
-                        <span>
-                          {el.incorrectCards.includes(card) ? '✕' : '✓'} {card.term}
-                        </span>
-                        <span>{card.definition}</span>
-                      </p>
-                    ))}
-                  </div>
+              <div key={i} className={style.block__inner}>
+                <header className={style.results__header}>
+                  <p>{`Round ${el.round}`}</p>
+                </header>
+                <div className={style.results__content}>
+                  {el.correctCards.map((card, i) => (
+                    <p key={i} style={el.incorrectCards.includes(card) ? { color: 'tomato' } : { color: 'green' }}>
+                      <span>
+                        {el.incorrectCards.includes(card) ? '✕' : '✓'} {card.term}
+                      </span>
+                      <span>{card.definition}</span>
+                    </p>
+                  ))}
                 </div>
               </div>
             ))

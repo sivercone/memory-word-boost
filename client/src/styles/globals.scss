@@ -108,10 +108,10 @@ textarea {
 }
 
 .container {
+  width: 100%;
   max-width: var(--container-width);
-  margin-left: auto;
-  margin-right: auto;
-  padding: 1rem;
+  margin: 0 auto;
+  padding: 0.85rem 0.5rem;
 }
 
 .Toastify__toast-container {
