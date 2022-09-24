@@ -15,7 +15,6 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Hydrate state={pageProps.dehydratedState}>
         <Head>
           <title>MWB</title>
-          <link rel="manifest" href="/manifest.json" />
         </Head>
         <Header />
         <Component {...pageProps} />
