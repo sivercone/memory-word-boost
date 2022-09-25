@@ -9,7 +9,8 @@ export const AuthCheck: React.FC = () => {
   const { data, status, refetch } = useQuery('user', () => authApi.me(), { enabled: false });
 
   React.useEffect(() => {
-    if (!sessionMemory.get('logged') || sessionMemory.get('logged') === 'yes') refetch();
+    const loggedInfo = sessionMemory.get('logged');
+    if (!loggedInfo || loggedInfo === 'yes') refetch();
   }, []);
 
   React.useEffect(() => {
