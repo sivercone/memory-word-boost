@@ -1,10 +1,14 @@
+import React from 'react';
+import { useQuery } from 'react-query';
+import { authApi } from 'api/authApi';
 import SetEditing from 'components/SetEditing';
-import { useUserStore } from 'storage/useUserStore';
 
 const CreateSet = () => {
-  const { user } = useUserStore();
-  const data = { cards: [{ term: '', definition: '' }] };
-  return user ? <SetEditing setFigure={{ ...data, user }} /> : <></>;
+  const user = useQuery('user', () => authApi.me());
+  React.useEffect(() => {
+    if (!user.isFetching && !user.data && typeof window !== 'undefined') setTimeout(() => window.location.replace('/login'), 1);
+  }, [user]);
+  return <SetEditing />;
 };
 
 export default CreateSet;

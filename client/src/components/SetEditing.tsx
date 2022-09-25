@@ -3,46 +3,34 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { useMutation, useQueryClient } from 'react-query';
-import style from 'styles/pages/createset.module.scss';
 import { setApi } from 'api/setApi';
-import { SetInterface, UserInterface } from 'interfaces';
 import { useUserStore } from 'storage/useUserStore';
 import { Modal, ModalActions, ModalBody } from 'ui/Modal';
 import { Input } from 'ui/Input';
 import { Button } from 'ui/Button';
+import { SetInterfaceDraft } from 'interfaces';
+import style from 'styles/pages/createset.module.scss';
 
-interface SetFigure {
-  id: string;
-  title: string;
-  description: string;
-  tags: string[];
-  cards: { term: string; definition: string }[];
-  user: UserInterface;
-  createdAt: string;
-  updateddAt: string;
-}
-
-const SetEditing: NextPage<{ setFigure?: SetFigure }> = ({ setFigure }) => {
+const SetEditing: NextPage<{ setFigure?: SetInterfaceDraft }> = ({ setFigure }) => {
   const router = useRouter();
   const { user } = useUserStore();
-  const { register, handleSubmit, control } = useForm<SetFigure>({ defaultValues: { ...setFigure, user } });
+  const { register, handleSubmit, control } = useForm<SetInterfaceDraft>({
+    defaultValues: { ...setFigure, user, cards: [{ term: '', definition: '' }] },
+  });
   const { fields, append, remove } = useFieldArray({ name: 'cards', control });
 
   const queryClient = useQueryClient();
-  const create = useMutation(setApi.create);
-  const update = useMutation(setApi.update, { onSuccess: () => queryClient.invalidateQueries('sets') });
-  const onSubmit = async (payload: SetInterface) => {
+  const save = useMutation(setApi.save, { onSuccess: () => queryClient.invalidateQueries('sets') });
+  const onSubmit = async (payload: SetInterfaceDraft) => {
     if (payload.cards.length < 2) return toggleModalShown();
     try {
-      if (setFigure && setFigure.id) await update.mutateAsync(payload);
-      else await create.mutateAsync(payload);
+      await save.mutateAsync(payload);
     } catch (error) {}
   };
 
   React.useEffect(() => {
-    if (update.isSuccess) router.push(`/${update.data}`);
-    if (create.isSuccess) router.push(`/${create.data}`);
-  }, [update, create, router]);
+    if (save.isSuccess) router.push(`/${save.data}`);
+  }, [save, router]);
 
   const [isModalShown, setIsModalShown] = React.useState(false);
   const toggleModalShown = () => setIsModalShown(!isModalShown);

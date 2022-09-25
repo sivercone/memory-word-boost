@@ -9,11 +9,12 @@ export interface SetInterface {
   description: string;
   tags: string[];
   cards: CardInterface[];
-  folders?: FolderInterface[];
+  folders: FolderInterface[];
   user: UserInterface;
   createdAt: string;
-  updateddAt: string;
+  updatedAt: string;
 }
+export type SetInterfaceDraft = Omit<SetInterface, 'folders' | 'createdAt' | 'updatedAt'>;
 
 export interface FolderInterface {
   id: string;

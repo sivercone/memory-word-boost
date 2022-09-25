@@ -1,4 +1,4 @@
-import { SetInterface, UserInterface } from 'interfaces';
+import { SetInterface, SetInterfaceDraft, UserInterface } from 'interfaces';
 
 const path = 'http://localhost:7001/set';
 
@@ -25,19 +25,9 @@ export const setApi = {
     return response.json();
   },
 
-  async create(payload: SetInterface): Promise<string> {
+  async save(payload: SetInterfaceDraft): Promise<string> {
     const response = await fetch(path, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
-    if (!response.ok) throw new Error(response.statusText);
-    return response.json();
-  },
-
-  async update(payload: SetInterface): Promise<string> {
-    const response = await fetch(path, {
-      method: 'PUT',
+      method: payload.id ? 'PUT' : 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
