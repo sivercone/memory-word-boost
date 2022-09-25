@@ -14,7 +14,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <QueryClientProvider client={queryClient}>
       <Hydrate state={pageProps.dehydratedState}>
         <Head>
-          <title>MWB</title>
+          <title>PROJ MWB</title>
         </Head>
         <Header />
         <Component {...pageProps} />
