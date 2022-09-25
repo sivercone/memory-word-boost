@@ -7,7 +7,9 @@
   input {
     position: relative;
     -webkit-appearance: none;
+    min-width: 50px;
     width: 50px;
+    min-height: 30px;
     height: 30px;
     background-color: #fff;
     border: 1px solid var(--color-outline);
