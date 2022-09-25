@@ -15,7 +15,7 @@ const SetEditing: NextPage<{ setFigure?: SetInterfaceDraft }> = ({ setFigure }) 
   const router = useRouter();
   const { user } = useUserStore();
   const { register, handleSubmit, control } = useForm<SetInterfaceDraft>({
-    defaultValues: { ...setFigure, user, cards: [{ term: '', definition: '' }] },
+    defaultValues: { ...setFigure, user, cards: !setFigure?.id ? [{ term: '', definition: '' }] : setFigure.cards },
   });
   const { fields, append, remove } = useFieldArray({ name: 'cards', control });
 
