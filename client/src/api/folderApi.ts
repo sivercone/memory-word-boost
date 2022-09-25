@@ -1,4 +1,4 @@
-import { FolderInterface, UserInterface } from 'interfaces';
+import { FolderInterface, FolderInterfaceDraft, SetInterface, UserInterface } from 'interfaces';
 
 const path = 'http://localhost:7001/folder';
 
@@ -25,23 +25,14 @@ export const folderApi = {
     return response.json();
   },
 
-  async create(payload: FolderInterface): Promise<string> {
+  async save(payload: FolderInterfaceDraft & { sets?: SetInterface[] }): Promise<string> {
     const response = await fetch(path, {
-      method: 'POST',
+      method: payload.id ? 'PUT' : 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
     if (!response.ok) throw new Error(response.statusText);
     return response.json();
-  },
-
-  async update(payload: FolderInterface): Promise<void> {
-    const response = await fetch(path, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
-    if (!response.ok) throw new Error(response.statusText);
   },
 
   async delete(payload: string): Promise<void> {

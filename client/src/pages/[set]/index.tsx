@@ -53,7 +53,7 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     else setIncludedFolders([...includedFolders, payload]);
   };
   const queryClient = useQueryClient();
-  const fetchUpdate = useMutation(setApi.update, { onSuccess: () => queryClient.invalidateQueries(['set', pagekey]) });
+  const fetchUpdate = useMutation(setApi.save, { onSuccess: () => queryClient.invalidateQueries(['set', pagekey]) });
   const updateSetFolders = async () => {
     if (!set.data) return;
     try {

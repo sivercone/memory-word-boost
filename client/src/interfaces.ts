@@ -20,11 +20,12 @@ export interface FolderInterface {
   id: string;
   name: string;
   description: string;
-  sets?: SetInterface[];
+  sets: SetInterface[];
   user: UserInterface;
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt: string;
+  updatedAt: string;
 }
+export type FolderInterfaceDraft = Omit<FolderInterface, 'sets' | 'createdAt' | 'updatedAt'>;
 
 export interface UserInterface {
   id: string;

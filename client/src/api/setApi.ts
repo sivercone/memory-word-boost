@@ -1,4 +1,4 @@
-import { SetInterface, SetInterfaceDraft, UserInterface } from 'interfaces';
+import { FolderInterface, SetInterface, SetInterfaceDraft, UserInterface } from 'interfaces';
 
 const path = 'http://localhost:7001/set';
 
@@ -25,7 +25,7 @@ export const setApi = {
     return response.json();
   },
 
-  async save(payload: SetInterfaceDraft): Promise<string> {
+  async save(payload: SetInterfaceDraft & { folders?: FolderInterface[] }): Promise<string> {
     const response = await fetch(path, {
       method: payload.id ? 'PUT' : 'POST',
       headers: { 'Content-Type': 'application/json' },

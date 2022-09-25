@@ -51,7 +51,7 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     if (includedSets.find((set) => set.id === payload.id)) setIncludedSets(includedSets.filter((el) => el.id !== payload.id));
     else setIncludedSets([...includedSets, payload]);
   };
-  const fetchUpdate = useMutation(folderApi.update, { onSuccess: () => queryClient.invalidateQueries(['folder', pagekey]) });
+  const fetchUpdate = useMutation(folderApi.save, { onSuccess: () => queryClient.invalidateQueries(['folder', pagekey]) });
   const updateFolderSets = async () => {
     if (!folder.data) return;
     try {
