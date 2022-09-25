@@ -1,8 +1,8 @@
 import { NextPage } from 'next';
 import { useSetStore } from 'storage/useSetStore';
 import { useQuery } from 'react-query';
-import { setApi } from 'api/setApi';
-import SetEditing from 'components/SetEditing';
+import { setApi } from 'apis/setApi';
+import SetEditing from 'modules/SetEditing';
 import Custom404 from 'pages/404';
 
 const UpdateSet: NextPage<{ pagekey: string }> = ({ pagekey }) => {

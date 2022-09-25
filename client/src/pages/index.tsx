@@ -1,14 +1,14 @@
 import React from 'react';
 import type { NextPage } from 'next';
 import { useQuery } from 'react-query';
-import { setApi } from 'api/setApi';
-import { folderApi } from 'api/folderApi';
+import { setApi } from 'apis/setApi';
+import { folderApi } from 'apis/folderApi';
 import { useUserStore } from 'storage/useUserStore';
 import { CardBox } from 'ui/CardBox';
 import { Button } from 'ui/Button';
 import style from 'styles/pages/home.module.scss';
 import { useRouter } from 'next/router';
-import { FolderEditing } from 'components/FolderEditing';
+import { FolderEditing } from 'modules/FolderEditing';
 
 // https://quizlet.com/upgrade?source=rich_text_formatting
 

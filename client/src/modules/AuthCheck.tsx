@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery } from 'react-query';
-import { authApi } from 'api/authApi';
+import { authApi } from 'apis/authApi';
 import { useUserStore } from 'storage/useUserStore';
 import { sessionMemory } from 'utils/sessionMemory';
 

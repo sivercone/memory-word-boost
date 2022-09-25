@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import style from 'styles/components/bottomNavigation.module.scss';
 import { pathsForHidingLayout } from 'utils/staticData';
-import { FolderEditing } from 'components/FolderEditing';
+import { FolderEditing } from 'modules/FolderEditing';
 import { AnimatePresence, motion } from 'framer-motion';
 
 const transition = {

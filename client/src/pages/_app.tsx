@@ -5,7 +5,7 @@ import { QueryClientProvider, Hydrate } from 'react-query';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import { queryClient } from 'utils/queryClient';
-import { AuthCheck } from 'components/AuthCheck';
+import { AuthCheck } from 'modules/AuthCheck';
 import BottomNavigation from 'ui/BottomNavigation';
 import Header from 'ui/Header';
 

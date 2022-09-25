@@ -3,7 +3,7 @@ import style from 'styles/pages/flashcards.module.scss';
 import { motion } from 'framer-motion';
 import { NextPage } from 'next';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
-import { setApi } from 'api/setApi';
+import { setApi } from 'apis/setApi';
 import Custom404 from 'pages/404';
 import { useRouter } from 'next/router';
 import Link from 'next/link';

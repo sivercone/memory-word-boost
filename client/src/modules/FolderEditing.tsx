@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from 'react-query';
-import { folderApi } from 'api/folderApi';
+import { folderApi } from 'apis/folderApi';
 import { FolderInterfaceDraft } from 'interfaces';
 import { useUserStore } from 'storage/useUserStore';
 import { Modal, ModalBody, ModalInputs, ModalActions } from 'ui/Modal';

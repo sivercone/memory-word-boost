@@ -1,4 +1,4 @@
-import { folderApi } from 'api/folderApi';
+import { folderApi } from 'apis/folderApi';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import Custom404 from 'pages/404';
@@ -6,11 +6,11 @@ import React from 'react';
 import { dehydrate, QueryClient, useMutation, useQuery, useQueryClient } from 'react-query';
 import style from 'styles/pages/set.module.scss';
 import style2 from 'styles/pages/home.module.scss'; // todo - fix that
-import { FolderEditing } from 'components/FolderEditing';
+import { FolderEditing } from 'modules/FolderEditing';
 import { useRouter } from 'next/dist/client/router';
 import { Modal, ModalActions, ModalBody, ModalList } from 'ui/Modal';
 import { notify } from 'utils/notify';
-import { setApi } from 'api/setApi';
+import { setApi } from 'apis/setApi';
 import { SetInterface } from 'interfaces';
 import { useUserStore } from 'storage/useUserStore';
 import { Toggle } from 'ui/Toggle';

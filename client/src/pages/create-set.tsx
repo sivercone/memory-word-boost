@@ -1,7 +1,7 @@
 import React from 'react';
 import { useQuery } from 'react-query';
-import { authApi } from 'api/authApi';
-import SetEditing from 'components/SetEditing';
+import { authApi } from 'apis/authApi';
+import SetEditing from 'modules/SetEditing';
 
 const CreateSet = () => {
   const user = useQuery('user', () => authApi.me());

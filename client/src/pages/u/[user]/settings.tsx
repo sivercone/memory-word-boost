@@ -2,7 +2,7 @@ import React from 'react';
 import { NextPage } from 'next';
 import { useForm } from 'react-hook-form';
 import { dehydrate, QueryClient, useMutation, useQuery } from 'react-query';
-import { authApi } from 'api/authApi';
+import { authApi } from 'apis/authApi';
 import { UserInterface } from 'interfaces';
 import Custom404 from 'pages/404';
 import style from 'styles/pages/user.module.scss';

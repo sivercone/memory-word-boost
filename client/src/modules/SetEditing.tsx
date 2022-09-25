@@ -3,7 +3,7 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { useMutation, useQueryClient } from 'react-query';
-import { setApi } from 'api/setApi';
+import { setApi } from 'apis/setApi';
 import { useUserStore } from 'storage/useUserStore';
 import { Modal, ModalActions, ModalBody } from 'ui/Modal';
 import { Input } from 'ui/Input';

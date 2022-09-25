@@ -4,12 +4,12 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import Avatar from 'boring-avatars';
-import { setApi } from 'api/setApi';
+import { setApi } from 'apis/setApi';
 import style from 'styles/pages/user.module.scss';
-import { authApi } from 'api/authApi';
+import { authApi } from 'apis/authApi';
 import Custom404 from 'pages/404';
 import { formatDate } from 'utils/formatDate';
-import { folderApi } from 'api/folderApi';
+import { folderApi } from 'apis/folderApi';
 import { useUserStore } from 'storage/useUserStore';
 import { CardBox } from 'ui/CardBox';
 
