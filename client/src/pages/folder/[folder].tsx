@@ -41,8 +41,8 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     } catch (error) {}
   };
 
-  // include or exclude sets
-  const sets = useQuery('sets', setApi.get, { enabled: shownModal === 'sets' });
+  // prettier-ignore
+  const sets = useQuery('sets', () => { if(user) return setApi.getByUser(user); }, { enabled: shownModal === 'sets' });
   const [includedSets, setIncludedSets] = React.useState<SetInterface[]>([]);
   React.useEffect(() => {
     if (folder.data && folder.data.sets?.length) setIncludedSets(folder.data.sets);
@@ -167,7 +167,7 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
       <Modal isOpen={shownModal === 'sets'} onClose={closeModal}>
         <ModalBody>
           <h3>Sets Management</h3>
-          <p>Include or exclude sets to this folder</p>
+          <p>Organise all the sets you&#39;re studying for a particular subject</p>
         </ModalBody>
         {sets.data ? (
           <ModalList>

@@ -43,7 +43,8 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const openModal = (payload: ModalVariants) => setShownModal(payload);
   const closeModal = () => setShownModal(undefined);
 
-  const folder = useQuery('folders', folderApi.get, { enabled: shownModal === 'folder' });
+  // prettier-ignore
+  const folder = useQuery('userFolders', () => { if (user) return folderApi.getByUser(user); }, { enabled: shownModal === 'folder' });
   const [includedFolders, setIncludedFolders] = React.useState<FolderInterface[]>([]);
   React.useEffect(() => {
     if (set.data && set.data.folders?.length) setIncludedFolders(set.data.folders);
@@ -214,7 +215,7 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                 folder: folder.data?.length ? (
                   <>
                     <h3>Folder Management</h3>
-                    <p>Include or exclude this set from folders</p>
+                    <p>Organise set for a particular subject</p>
                   </>
                 ) : (
                   <>
