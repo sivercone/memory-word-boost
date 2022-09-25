@@ -47,12 +47,6 @@ const ExamPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     }
   };
 
-  // const onCheckAnswers = () => {
-  //   if (!formState.dirtyFields.form) return toggleModal();
-  //   if (formState.dirtyFields.form.length !== set.data.cards.length) toggleModal();
-  //   else handleSubmit(onSubmit)();
-  // };
-
   const onRestart = () => {
     setIncorrect([]);
     reset();
