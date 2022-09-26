@@ -4,6 +4,7 @@ import { userService } from '@/services/userService';
 import { authService } from '@/services/authService';
 import { RequestWithTokens } from '@/middlewares/isAuth';
 import { GoogleTokens, GoogleUser } from '@/interfaces';
+import { HttpException } from '@/utils/HttpException';
 
 class AuthController {
   async ouathGoogle(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -40,6 +41,18 @@ class AuthController {
       res.status(200).json(findUser);
     } catch (error) {
       next(error);
+    }
+  }
+
+  async logOut(req: RequestWithTokens, res: Response): Promise<void> {
+    try {
+      if (!req.userId) throw new HttpException(401, 'unauth');
+      await userService.logout(req.userId);
+
+      res.cookie('refresh_token', '', { maxAge: 0, httpOnly: true, sameSite: 'strict' });
+      res.status(200).json('success logout');
+    } catch (error) {
+      res.status(error.status).json({ status: error.satus, message: error.message });
     }
   }
 }

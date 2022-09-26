@@ -35,6 +35,18 @@ class UserService {
     if (!findUser) throw new HttpException(404, 'Not found');
     await userRepo.delete({ id: findUser.id });
   }
+
+  public async logout(userId: string): Promise<UserInterface> {
+    if (!userId) throw new HttpException(400, 'no data');
+    try {
+      const userRepo = getRepository(UserEntity);
+      const findUser = await userRepo.findOne({ where: { id: userId } });
+      if (!findUser) throw new HttpException(409, 'no data find');
+      return findUser;
+    } catch (error) {
+      throw new HttpException(error.status || 409, error.message || 'something went wrong');
+    }
+  }
 }
 
 export const userService = new UserService();

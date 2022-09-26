@@ -15,6 +15,7 @@ class AuthRoute implements Routes {
   private initializeRoutes() {
     this.router.get(`${this.path}/google`, authController.ouathGoogle);
     this.router.get(`${this.path}/me`, isAuth, authController.me);
+    this.router.get(`${this.path}/logout`, isAuth, authController.logOut);
     this.router.get(`${this.path}/users`, userController.getUsers);
     this.router.get(`${this.path}/user/:id`, userController.getUserById);
     this.router.put(`${this.path}/user/update`, userController.updateUser);
