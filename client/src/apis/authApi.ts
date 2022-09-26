@@ -26,4 +26,13 @@ export const authApi = {
     });
     if (!response.ok) throw new Error(response.statusText);
   },
+
+  async logout(token?: string): Promise<void> {
+    const response = await fetch(`${path}/logout`, {
+      headers: { Authorization: `Bearer ${token}` },
+      credentials: 'include',
+    });
+    if (!response.ok) throw new Error(response.statusText);
+    return response.json();
+  },
 };

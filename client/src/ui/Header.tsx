@@ -7,6 +7,9 @@ import { useUserStore } from 'storage/useUserStore';
 import style from 'styles/components/header.module.scss';
 import { pathsForHidingLayout } from 'utils/staticData';
 import { Button } from './Button';
+import { useQuery } from 'react-query';
+import { authApi } from 'apis/authApi';
+import { sessionMemory } from 'utils/sessionMemory';
 
 const transition = {
   init: { y: '100%', transition: { duration: 0.1 } },
@@ -14,9 +17,17 @@ const transition = {
 };
 
 const Header: React.FC = () => {
-  const { user } = useUserStore();
+  const { user, setUser } = useUserStore();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
+  const { refetch: callLogout } = useQuery('user', () => authApi.logout(), { enabled: false });
+  const onLogout = async () => {
+    await callLogout();
+    setUser(undefined);
+    sessionMemory.set('logged', 'no');
+    window.location.replace('/login');
+  };
 
   const { pathname } = useRouter();
   if (pathsForHidingLayout.includes(pathname)) return null;
@@ -96,7 +107,7 @@ const Header: React.FC = () => {
                   </a>
                 </li>
                 <li>
-                  <button onClick={toggleMenu}>
+                  <button onClick={onLogout}>
                     <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24">
                       <path d="M5 21q-.825 0-1.413-.587Q3 19.825 3 19V5q0-.825.587-1.413Q4.175 3 5 3h7v2H5v14h7v2Zm11-4-1.375-1.45 2.55-2.55H9v-2h8.175l-2.55-2.55L16 7l5 5Z" />
                     </svg>
