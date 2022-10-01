@@ -28,7 +28,8 @@ export const folderApi = {
   async save(payload: FolderInterfaceDraft & { sets?: SetInterface[] }): Promise<string> {
     const response = await fetch(path, {
       method: payload.id ? 'PUT' : 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${'token payload here'}` }, // @todo - update required
+      credentials: 'include',
       body: JSON.stringify(payload),
     });
     if (!response.ok) throw new Error(response.statusText);
@@ -36,7 +37,11 @@ export const folderApi = {
   },
 
   async delete(payload: string): Promise<void> {
-    const response = await fetch(`${path}/${payload}`, { method: 'DELETE' });
+    const response = await fetch(`${path}/${payload}`, {
+      method: 'DELETE',
+      credentials: 'include',
+      headers: { Authorization: `Bearer ${'token payload here'}` }, // @todo - update required
+    });
     if (!response.ok) throw new Error(response.statusText);
   },
 };

@@ -21,7 +21,8 @@ export const authApi = {
   async update(payload: UserInterface): Promise<void> {
     const response = await fetch(`${path}/user/update`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${'token payload here'}` }, // @todo - update required
       body: JSON.stringify(payload),
     });
     if (!response.ok) throw new Error(response.statusText);
