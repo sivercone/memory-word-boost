@@ -3,6 +3,7 @@ import SetEntity from '@/entities/SetEntity';
 import { HttpException } from '@/utils/HttpException';
 import { isEmpty } from '@/utils/isEmpty';
 import { getRepository } from 'typeorm';
+import { logger } from '@/utils/logger';
 
 class SetService {
   public async findAll(): Promise<SetInterface[]> {
@@ -34,21 +35,28 @@ class SetService {
     return saveSet;
   }
 
-  public async update(payload: SetInterface): Promise<SetInterface> {
-    if (isEmpty(payload)) throw new HttpException(400, 'No payload');
-    const setRepo = getRepository(SetEntity);
-    const findSet = await setRepo.findOne({ where: { id: payload.id } });
-    if (!findSet) throw new HttpException(409, 'Conflict');
-    if (!Array.isArray(payload.tags)) payload.tags = (payload.tags as string).replace(/\s+/g, '').split(',');
-    const saveSet = await setRepo.save(payload);
-    return saveSet;
+  public async update(payload: SetInterface, userId: string): Promise<SetInterface> {
+    try {
+      if (isEmpty(payload) || !userId) throw new HttpException(400, 'No payload');
+      const setRepo = getRepository(SetEntity);
+      const findSet = await setRepo.findOne({ where: { id: payload.id }, relations: ['user'] });
+      if (!findSet) throw new HttpException(409, 'Conflict');
+      if (findSet.user.id !== userId) throw new HttpException(403, 'Forbidden');
+      if (!Array.isArray(payload.tags)) payload.tags = (payload.tags as string).replace(/\s+/g, '').split(',');
+      const saveSet = await setRepo.save(payload);
+      return saveSet;
+    } catch (error) {
+      logger.error('SetService/update:', error);
+      throw new HttpException(error.status || 409, error.message || 'something went wrong');
+    }
   }
 
-  public async delete(payload: string): Promise<void> {
-    if (isEmpty(payload)) throw new HttpException(400, 'No payload');
+  public async delete(payload: string, userId: string): Promise<void> {
+    if (isEmpty(payload) || !userId) throw new HttpException(400, 'No payload');
     const setRepo = getRepository(SetEntity);
-    const data = await setRepo.findOne({ where: { id: payload } });
+    const data = await setRepo.findOne({ where: { id: payload }, relations: ['user'] });
     if (!data) throw new HttpException(409, 'Conflict');
+    if (data.user.id !== userId) throw new HttpException(403, 'Forbidden');
     await setRepo.delete({ id: payload });
   }
 }

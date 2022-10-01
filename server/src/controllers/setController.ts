@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { setService } from '@/services/setService';
+import { ReqWithSessionValues } from '@/interfaces';
 
 class SetController {
   public getSets = async (_: Request, res: Response, next: NextFunction) => {
@@ -31,7 +32,7 @@ class SetController {
     }
   };
 
-  public createSet = async (req: Request, res: Response, next: NextFunction) => {
+  public createSet = async (req: ReqWithSessionValues, res: Response, next: NextFunction) => {
     try {
       const payload = req.body;
       const data = await setService.create(payload);
@@ -41,20 +42,20 @@ class SetController {
     }
   };
 
-  public updateSet = async (req: Request, res: Response, next: NextFunction) => {
+  public updateSet = async (req: ReqWithSessionValues, res: Response, next: NextFunction) => {
     try {
       const payload = req.body;
-      const data = await setService.update(payload);
+      const data = await setService.update(payload, req.userId);
       res.status(200).json(data.id);
     } catch (error) {
       next(error);
     }
   };
 
-  public deleteSet = async (req: Request, res: Response, next: NextFunction) => {
+  public deleteSet = async (req: ReqWithSessionValues, res: Response, next: NextFunction) => {
     try {
       const payload = req.params.id;
-      await setService.delete(payload);
+      await setService.delete(payload, req.userId);
       res.status(200).json({ message: 'deleted' });
     } catch (error) {
       next(error);

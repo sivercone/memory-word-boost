@@ -33,19 +33,21 @@ class FolderService {
     return data;
   }
 
-  public async update(payload: FolderInterface): Promise<void> {
-    if (isEmpty(payload)) throw new HttpException(400, 'No payload');
+  public async update(payload: FolderInterface, userId: string): Promise<void> {
+    if (isEmpty(payload) || !userId) throw new HttpException(400, 'No payload');
     const folderRepo = getRepository(FolderEntity);
-    const folder = await folderRepo.findOne({ where: { id: payload.id } });
+    const folder = await folderRepo.findOne({ where: { id: payload.id }, relations: ['user'] });
     if (!folder) throw new HttpException(409, 'Conflict');
+    if (folder.user.id !== userId) throw new HttpException(403, 'Forbidden');
     await folderRepo.save(payload);
   }
 
-  public async delete(payload: string): Promise<void> {
-    if (isEmpty(payload)) throw new HttpException(400, 'No payload');
+  public async delete(payload: string, userId: string): Promise<void> {
+    if (isEmpty(payload) || !userId) throw new HttpException(400, 'No payload');
     const folderRepo = getRepository(FolderEntity);
-    const data = await folderRepo.findOne({ where: { id: payload } });
+    const data = await folderRepo.findOne({ where: { id: payload }, relations: ['user'] });
     if (!data) throw new HttpException(409, 'Conflict');
+    if (data.user.id !== userId) throw new HttpException(403, 'Forbidden');
     await folderRepo.delete({ id: payload });
   }
 }

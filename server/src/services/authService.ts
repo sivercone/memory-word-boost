@@ -29,7 +29,7 @@ class AuthService {
   }
 
   async findToken(refreshToken: string): Promise<{ [x: string]: string }> {
-    if (!refreshToken) throw new HttpException(401, 'No payload');
+    if (!refreshToken) throw new HttpException(401, 'Unauthorized. Your session has expired.');
     try {
       const userRepo = getRepository(UserEntity);
       // const findUser = await userRepo.findOne({ where: { refresh_token: refreshToken } });
@@ -38,13 +38,13 @@ class AuthService {
         .addSelect('user.refresh_token')
         .where('user.refresh_token = :refresh_token', { refresh_token: refreshToken })
         .getOne();
-      if (!findUser) throw new HttpException(401, 'No found session');
+      if (!findUser) throw new HttpException(401, 'Unauthorized. No found session.');
 
       const foundRefreshToken: string = findUser.refresh_token;
       let decodedUserId: string;
-      jwt.verify(foundRefreshToken, process.env.REFRESH_SECRET, (err, decoded: any) => {
-        if (err) throw new HttpException(401, 'Failed to authorize token');
-        decodedUserId = decoded.userId;
+      jwt.verify(foundRefreshToken, process.env.REFRESH_SECRET, (err, decoded: { userId: string }) => {
+        if (err || !decoded.userId) throw new HttpException(401, 'Unauthorized. Your session has expired.');
+        else decodedUserId = decoded.userId;
       });
       const access_token = createAccessToken(decodedUserId);
       const refresh_token = createRefreshToken(decodedUserId);

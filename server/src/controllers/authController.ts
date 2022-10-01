@@ -2,9 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import axios from 'axios';
 import { userService } from '@/services/userService';
 import { authService } from '@/services/authService';
-import { RequestWithTokens } from '@/middlewares/isAuth';
-import { GoogleTokens, GoogleUser } from '@/interfaces';
-import { HttpException } from '@/utils/HttpException';
+import { GoogleTokens, GoogleUser, ReqWithSessionValues } from '@/interfaces';
 
 class AuthController {
   async ouathGoogle(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -31,12 +29,8 @@ class AuthController {
     }
   }
 
-  async me(req: RequestWithTokens, res: Response, next: NextFunction): Promise<void> {
+  async me(req: ReqWithSessionValues, res: Response, next: NextFunction): Promise<void> {
     try {
-      if (!req.userId) res.status(403).json({ status: 403, message: 'Forbidden' });
-      if (req.refresh_token)
-        res.cookie('refresh_token', req.refresh_token, { maxAge: 24 * 60 * 3600000, httpOnly: true, sameSite: 'strict' });
-
       const findUser = await userService.findById(req.userId);
       res.status(200).json(findUser);
     } catch (error) {
@@ -44,11 +38,9 @@ class AuthController {
     }
   }
 
-  async logOut(req: RequestWithTokens, res: Response): Promise<void> {
+  async logOut(req: ReqWithSessionValues, res: Response): Promise<void> {
     try {
-      if (!req.userId) throw new HttpException(401, 'unauth');
       await userService.logout(req.userId);
-
       res.cookie('refresh_token', '', { maxAge: 0, httpOnly: true, sameSite: 'strict' });
       res.status(200).json('success logout');
     } catch (error) {
