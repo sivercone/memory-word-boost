@@ -30,7 +30,6 @@ export interface UserInterface {
   name: string;
   bio: string;
   avatar: string;
-  access_token: string;
   refresh_token: string;
   fingerprint: string;
   createdAt: string;

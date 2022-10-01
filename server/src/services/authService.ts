@@ -49,7 +49,7 @@ class AuthService {
       const access_token = createAccessToken(decodedUserId);
       const refresh_token = createRefreshToken(decodedUserId);
 
-      await userRepo.update(findUser.id, { access_token: access_token, refresh_token: refresh_token });
+      await userRepo.update(findUser.id, { refresh_token: refresh_token });
       return { access_token, refresh_token, decodedUserId };
     } catch (error) {
       logger.error('AuthService - findToken:', error);

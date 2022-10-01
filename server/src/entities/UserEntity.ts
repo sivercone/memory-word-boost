@@ -21,9 +21,6 @@ class UserEntity implements UserInterface {
   avatar: string;
 
   @Column({ nullable: true, select: false })
-  access_token: string;
-
-  @Column({ nullable: true, select: false })
   refresh_token: string;
 
   @Column({ nullable: true, select: false })

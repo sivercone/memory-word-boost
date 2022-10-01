@@ -24,9 +24,7 @@ export const isAuth = async (req: ReqWithSessionValues, res: express.Response, n
                 req.access_token = access_token;
                 req.refresh_token = refresh_token;
                 req.userId = decodedUserId;
-                if (refresh_token) {
-                  res.cookie('refresh_token', req.refresh_token, { maxAge: 24 * 60 * 3600000, httpOnly: true, sameSite: 'strict' });
-                }
+                res.cookie('refresh_token', req.refresh_token, { maxAge: 24 * 60 * 3600000, httpOnly: true, sameSite: 'strict' });
                 next();
               } catch (error) {
                 logger.error(error);
@@ -39,7 +37,7 @@ export const isAuth = async (req: ReqWithSessionValues, res: express.Response, n
           if (!decoded.userId) res.status(401).json({ status: 401, message: 'Unauthorized. Your session has expired.' });
           else {
             req.userId = decoded.userId;
-            // req.access_token = accessToken;
+            req.access_token = accessToken;
             next();
           }
         }

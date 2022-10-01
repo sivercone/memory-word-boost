@@ -32,7 +32,7 @@ class AuthController {
   async me(req: ReqWithSessionValues, res: Response, next: NextFunction): Promise<void> {
     try {
       const findUser = await userService.findById(req.userId);
-      res.status(200).json(findUser);
+      res.status(200).json({ ...findUser, signAccess: req.access_token });
     } catch (error) {
       next(error);
     }
