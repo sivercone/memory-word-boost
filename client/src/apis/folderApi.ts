@@ -25,22 +25,22 @@ export const folderApi = {
     return response.json();
   },
 
-  async save(payload: FolderInterfaceDraft & { sets?: SetInterface[] }): Promise<string> {
+  async save(payload: { data: FolderInterfaceDraft & { sets?: SetInterface[] }; token: string | undefined }): Promise<string> {
     const response = await fetch(path, {
-      method: payload.id ? 'PUT' : 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${'token payload here'}` }, // @todo - update required
+      method: payload.data.id ? 'PUT' : 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${payload.token}` },
       credentials: 'include',
-      body: JSON.stringify(payload),
+      body: JSON.stringify(payload.data),
     });
     if (!response.ok) throw new Error(response.statusText);
     return response.json();
   },
 
-  async delete(payload: string): Promise<void> {
-    const response = await fetch(`${path}/${payload}`, {
+  async delete(payload: { id: string; token: string | undefined }): Promise<void> {
+    const response = await fetch(`${path}/${payload.id}`, {
       method: 'DELETE',
       credentials: 'include',
-      headers: { Authorization: `Bearer ${'token payload here'}` }, // @todo - update required
+      headers: { Authorization: `Bearer ${payload.token}` },
     });
     if (!response.ok) throw new Error(response.statusText);
   },

@@ -5,8 +5,8 @@ import { useUserStore } from 'storage/useUserStore';
 import { sessionMemory } from 'utils/sessionMemory';
 
 export const AuthCheck: React.FC = () => {
-  const { setUser } = useUserStore();
-  const { data, status, refetch } = useQuery('user', () => authApi.me(), { enabled: false });
+  const { setUser, setSignAccess, signAccess } = useUserStore();
+  const { data, status, refetch } = useQuery('user', () => authApi.me(signAccess), { enabled: false });
 
   React.useEffect(() => {
     const loggedInfo = sessionMemory.get('logged');
@@ -16,7 +16,9 @@ export const AuthCheck: React.FC = () => {
   React.useEffect(() => {
     if (status === 'error') sessionMemory.set('logged', 'no');
     if (status === 'success' && data) {
-      setUser(data);
+      const { signAccess, ...user } = data;
+      setUser(user);
+      setSignAccess(signAccess);
       sessionMemory.set('logged', 'yes');
     }
   }, [status, data, setUser]);

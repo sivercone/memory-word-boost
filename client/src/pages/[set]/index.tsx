@@ -21,7 +21,7 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const set = useQuery(['set', pagekey], () => setApi.getById(pagekey), { enabled: !!pagekey });
 
   const router = useRouter();
-  const { user } = useUserStore();
+  const { user, signAccess } = useUserStore();
 
   const { setSetFigure } = useSetStore();
   const onEdit = () => {
@@ -33,7 +33,7 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const onDeleteSet = async () => {
     if (!set.data) return;
     try {
-      await fetchDelete.mutateAsync(set.data.id);
+      await fetchDelete.mutateAsync({ id: set.data.id, token: signAccess });
       router.push('/');
       notify(`Successfully deleted study set: ${set.data.title}`);
     } catch (error) {}
@@ -58,7 +58,7 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const updateSetFolders = async () => {
     if (!set.data) return;
     try {
-      await fetchUpdate.mutateAsync({ ...set.data, folders: includedFolders });
+      await fetchUpdate.mutateAsync({ data: { ...set.data, folders: includedFolders }, token: signAccess });
       closeModal();
     } catch (error) {}
   };

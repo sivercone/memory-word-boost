@@ -1,7 +1,7 @@
 import React from 'react';
 import { NextPage } from 'next';
 import { useForm } from 'react-hook-form';
-import { dehydrate, QueryClient, useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { authApi } from 'apis/authApi';
 import { UserInterface } from 'interfaces';
 import Custom404 from 'pages/404';
@@ -10,19 +10,25 @@ import { notify } from 'utils/notify';
 import { Input } from 'ui/Input';
 import { Button } from 'ui/Button';
 import { useRouter } from 'next/router';
+import { useUserStore } from 'storage/useUserStore';
 
 const SettingsPage: NextPage = () => {
   const router = useRouter();
-  const user = useQuery('user', () => authApi.me());
+  const { signAccess } = useUserStore();
+  const user = useQuery('user', () => authApi.me(signAccess));
   const { register, handleSubmit, reset } = useForm<UserInterface>({ defaultValues: { ...user.data } });
   React.useEffect(() => {
-    if (user.data) reset(user.data);
-  }, [user.data, reset]);
+    if (user.data) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { signAccess, ...data } = user.data;
+      reset(data);
+    }
+  }, [user.data]);
 
   const callUpdate = useMutation(authApi.update);
   const onSubmit = async (payload: UserInterface) => {
     try {
-      await callUpdate.mutateAsync(payload);
+      await callUpdate.mutateAsync({ data: payload, token: signAccess });
       notify('Account settings saved');
     } catch (error) {
       notify('Failed to save account settings');
@@ -57,11 +63,11 @@ const SettingsPage: NextPage = () => {
   );
 };
 
-SettingsPage.getInitialProps = async ({ query }) => {
-  const pagekey = typeof query.user === 'string' ? query.user : '';
-  const queryClient = new QueryClient();
-  if (pagekey) await queryClient.prefetchQuery('user', () => authApi.me());
-  return { pagekey, dehydratedState: dehydrate(queryClient) };
-};
+// SettingsPage.getInitialProps = async ({ query }) => {
+//   const pagekey = typeof query.user === 'string' ? query.user : '';
+//   const queryClient = new QueryClient();
+//   if (pagekey) await queryClient.prefetchQuery('user', () => authApi.me());
+//   return { pagekey, dehydratedState: dehydrate(queryClient) };
+// };
 
 export default SettingsPage;

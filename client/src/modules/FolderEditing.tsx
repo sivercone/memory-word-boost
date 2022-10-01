@@ -17,13 +17,13 @@ interface Props {
 export const FolderEditing: React.FC<Props> = ({ isOpen, onClose, folderFigure }) => {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { user } = useUserStore();
+  const { user, signAccess } = useUserStore();
   const { register, handleSubmit, reset } = useForm<FolderInterfaceDraft>({ defaultValues: { ...folderFigure, user } }); // https://stackoverflow.com/a/64307087
   const save = useMutation(folderApi.save, { onSuccess: () => queryClient.invalidateQueries(['folder', folderFigure?.id]) });
   const onSubmit = async (data: FolderInterfaceDraft) => {
     if (user) data.user = user;
     try {
-      await save.mutateAsync(data);
+      await save.mutateAsync({ data, token: signAccess });
       onClose();
       reset();
     } catch (error) {}

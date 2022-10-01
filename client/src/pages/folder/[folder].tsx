@@ -22,7 +22,7 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const folder = useQuery(['folder', pagekey], () => folderApi.getById(pagekey), { enabled: !!pagekey });
 
   const router = useRouter();
-  const { user } = useUserStore();
+  const { user, signAccess } = useUserStore();
 
   // update folder
   const [shownModal, setShownModal] = React.useState<ModalVariants>();
@@ -35,7 +35,7 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const onDelete = async () => {
     if (!folder.data) return;
     try {
-      await fetchDelete.mutateAsync(folder.data.id);
+      await fetchDelete.mutateAsync({ id: folder.data.id, token: signAccess });
       router.push('/');
       notify(`Successfully deleted folder: ${folder.data.name}`);
     } catch (error) {}
@@ -55,7 +55,7 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const updateFolderSets = async () => {
     if (!folder.data) return;
     try {
-      await fetchUpdate.mutateAsync({ ...folder.data, sets: includedSets });
+      await fetchUpdate.mutateAsync({ data: { ...folder.data, sets: includedSets }, token: signAccess });
       closeModal();
     } catch (error) {}
   };

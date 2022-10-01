@@ -13,7 +13,7 @@ import style from 'styles/pages/createset.module.scss';
 
 const SetEditing: NextPage<{ setFigure?: SetInterfaceDraft }> = ({ setFigure }) => {
   const router = useRouter();
-  const { user } = useUserStore();
+  const { user, signAccess } = useUserStore();
   const { register, handleSubmit, control } = useForm<SetInterfaceDraft>({
     defaultValues: { ...setFigure, user, cards: !setFigure?.id ? [{ term: '', definition: '' }] : setFigure.cards },
   });
@@ -24,7 +24,7 @@ const SetEditing: NextPage<{ setFigure?: SetInterfaceDraft }> = ({ setFigure }) 
   const onSubmit = async (payload: SetInterfaceDraft) => {
     if (payload.cards.length < 2) return toggleModalShown();
     try {
-      await save.mutateAsync(payload);
+      await save.mutateAsync({ data: payload, token: signAccess });
     } catch (error) {}
   };
 

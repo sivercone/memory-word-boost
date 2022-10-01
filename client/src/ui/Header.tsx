@@ -17,11 +17,11 @@ const transition = {
 };
 
 const Header: React.FC = () => {
-  const { user, setUser } = useUserStore();
+  const { user, setUser, signAccess } = useUserStore();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
-  const { refetch: callLogout } = useQuery('user', () => authApi.logout(), { enabled: false });
+  const { refetch: callLogout } = useQuery('user', () => authApi.logout(signAccess), { enabled: false });
   const onLogout = async () => {
     await callLogout();
     setUser(undefined);
