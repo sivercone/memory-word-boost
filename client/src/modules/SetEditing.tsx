@@ -30,7 +30,7 @@ const SetEditing: NextPage<{ setFigure?: SetInterfaceDraft }> = ({ setFigure }) 
 
   React.useEffect(() => {
     if (save.isSuccess) router.push(`/${save.data}`);
-  }, [save, router]);
+  }, [save]);
 
   const [isModalShown, setIsModalShown] = React.useState(false);
   const toggleModalShown = () => setIsModalShown(!isModalShown);
@@ -58,7 +58,6 @@ const SetEditing: NextPage<{ setFigure?: SetInterfaceDraft }> = ({ setFigure }) 
             <Input label="Tags (through comma)" {...register('tags')} />
             <Input label="Description (optional)" {...register('description')} />
           </div>
-
           <ul className={style.cards}>
             {fields.map((content, i) => (
               <li key={content.id} className={style.cards__block}>
