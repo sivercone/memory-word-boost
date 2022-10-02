@@ -1,11 +1,11 @@
+import { DataSourceOptions, DataSource } from 'typeorm';
 import { dbConfig } from '@/interfaces';
 import config from 'config';
 import path from 'path';
-import { ConnectionOptions } from 'typeorm';
 
 const { host, port, database, user, password }: dbConfig = config.get('dbConfig');
 
-export const dbConnection: ConnectionOptions = {
+const dbConnection: DataSourceOptions = {
   type: 'postgres',
   url: '',
   host: host,
@@ -18,8 +18,6 @@ export const dbConnection: ConnectionOptions = {
   cache: false,
   entities: ['src/entities/*{.ts,.js}'],
   migrations: [path.join(__dirname, '../**/*.migration{.ts,.js}')],
-  cli: {
-    entitiesDir: 'src/entity',
-    migrationsDir: 'src/migrations',
-  },
 };
+
+export const dataSource = new DataSource(dbConnection);

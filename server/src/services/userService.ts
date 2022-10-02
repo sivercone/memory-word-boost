@@ -1,46 +1,43 @@
+import { dataSource } from '@/core/db';
 import { HttpException } from '@/utils/HttpException';
 import { isEmpty } from '@/utils/isEmpty';
-import { UserInterface } from '@/interfaces';
-import { getRepository } from 'typeorm';
 import UserEntity from '@/entities/UserEntity';
+import { UserInterface } from '@/interfaces';
 
 class UserService {
+  private userRepository = dataSource.getRepository(UserEntity);
+
   public async findAll(): Promise<UserInterface[]> {
-    const userRepo = getRepository(UserEntity);
-    const users = await userRepo.find();
+    const users = await this.userRepository.find();
     return users;
   }
 
   public async findById(payload: string): Promise<UserInterface> {
     if (!payload) throw new HttpException(400, 'No payload');
-    const userRepo = getRepository(UserEntity);
-    const findUser = await userRepo.findOne({ id: payload });
+    const findUser = await this.userRepository.findOneBy({ id: payload });
     if (!findUser) throw new HttpException(404, 'Not found');
     return findUser;
   }
 
   public async update(payload: UserInterface): Promise<UserInterface> {
     if (isEmpty(payload)) throw new HttpException(400, 'No payload');
-    const userRepo = getRepository(UserEntity);
-    const findUser = await userRepo.findOne({ id: payload.id });
+    const findUser = await this.userRepository.findOneBy({ id: payload.id });
     if (!findUser) throw new HttpException(404, 'Not found');
-    const result = await userRepo.save(payload);
+    const result = await this.userRepository.save(payload);
     return result;
   }
 
   public async delete(payload: string): Promise<void> {
     if (!payload) throw new HttpException(400, 'No payload');
-    const userRepo = getRepository(UserEntity);
-    const findUser = await userRepo.findOne({ id: payload });
+    const findUser = await this.userRepository.findOneBy({ id: payload });
     if (!findUser) throw new HttpException(404, 'Not found');
-    await userRepo.delete({ id: findUser.id });
+    await this.userRepository.delete({ id: findUser.id });
   }
 
   public async logout(userId: string): Promise<UserInterface> {
     if (!userId) throw new HttpException(400, 'no data');
     try {
-      const userRepo = getRepository(UserEntity);
-      const findUser = await userRepo.findOne({ where: { id: userId } });
+      const findUser = await this.userRepository.findOneBy({ id: userId });
       if (!findUser) throw new HttpException(409, 'no data find');
       return findUser;
     } catch (error) {
