@@ -40,7 +40,7 @@ class AuthController {
 
   async logOut(req: ReqWithSessionValues, res: Response): Promise<void> {
     try {
-      await userService.logout(req.userId);
+      await authService.logout(req.userId);
       res.cookie('refresh_token', '', { maxAge: 0, httpOnly: true, sameSite: 'strict' });
       res.status(200).json('success logout');
     } catch (error) {

@@ -5,12 +5,13 @@ import { HttpException } from '@utils/HttpException';
 import { isEmpty } from '@/utils/isEmpty';
 import { createAccessToken, createRefreshToken } from '@utils/createToken';
 import { logger } from '@utils/logger';
+import { UserInterface } from '@/interfaces';
 
 class AuthService {
   private userRepository = dataSource.getRepository(UserEntity);
 
   public async logIn(payload: { email: string; name: string; avatar: string }): Promise<string> {
-    if (isEmpty(payload)) throw new HttpException(400, 'No payload');
+    if (isEmpty(payload)) throw new HttpException(400, 'Payload is missed. Do not repeat this request without modification.');
     try {
       const findUser = await this.userRepository.findOneBy({ email: payload.email });
       if (findUser) {
@@ -24,7 +25,7 @@ class AuthService {
         return refreshToken;
       }
     } catch (error) {
-      logger.error('AuthService - logIn:', error);
+      logger.error('[AuthService - logIn] >> Message:', error);
       throw new HttpException(error.status || 409, error.message || 'something went wrong');
     }
   }
@@ -52,7 +53,19 @@ class AuthService {
       await this.userRepository.update(findUser.id, { refresh_token: refresh_token });
       return { access_token, refresh_token, decodedUserId };
     } catch (error) {
-      logger.error('AuthService - findToken:', error);
+      logger.error('[AuthService - findToken] >> Message:', error);
+      throw new HttpException(error.status || 409, error.message || 'something went wrong');
+    }
+  }
+
+  public async logout(userId: string): Promise<UserInterface> {
+    if (!userId) throw new HttpException(400, 'Payload is missed. Do not repeat this request without modification.');
+    try {
+      const findUser = await this.userRepository.findOneBy({ id: userId });
+      if (!findUser) throw new HttpException(409, 'no data find');
+      return findUser;
+    } catch (error) {
+      logger.error('[AuthService - delete] >> Message:', error);
       throw new HttpException(error.status || 409, error.message || 'something went wrong');
     }
   }
