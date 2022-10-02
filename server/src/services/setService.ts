@@ -2,13 +2,17 @@ import { SetInterface, UserInterface } from '@/interfaces';
 import SetEntity from '@/entities/SetEntity';
 import { HttpException } from '@/utils/HttpException';
 import { isEmpty } from '@/utils/isEmpty';
-import { getRepository } from 'typeorm';
+import { getRepository, Not } from 'typeorm';
 import { logger } from '@/utils/logger';
 
 class SetService {
-  public async findAll(): Promise<SetInterface[]> {
+  public async findAll(excludeUserId: string | undefined): Promise<SetInterface[]> {
     const setRepo = getRepository(SetEntity);
-    const sets = await setRepo.find({ relations: ['folders'] });
+    const sets = await setRepo.find({
+      where: { user: { id: Not(excludeUserId) } },
+      relations: ['folders'],
+      order: { createdAt: 'ASC' },
+    });
     return sets;
   }
 
@@ -23,7 +27,7 @@ class SetService {
   async findByUser(payload: UserInterface): Promise<SetInterface[]> {
     if (isEmpty(payload)) throw new HttpException(400, 'No payload');
     const setRepo = getRepository(SetEntity);
-    const data = await setRepo.find({ where: { user: payload } });
+    const data = await setRepo.find({ where: { user: payload }, order: { createdAt: 'ASC' } });
     return data;
   }
 

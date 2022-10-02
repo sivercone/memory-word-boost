@@ -3,9 +3,10 @@ import { setService } from '@/services/setService';
 import { ReqWithSessionValues } from '@/interfaces';
 
 class SetController {
-  public getSets = async (_: Request, res: Response, next: NextFunction) => {
+  public getSets = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const data = await setService.findAll();
+      const { excludeUserId } = req.query;
+      const data = await setService.findAll(typeof excludeUserId === 'string' ? excludeUserId : undefined);
       res.status(200).json(data);
     } catch (error) {
       next(error);

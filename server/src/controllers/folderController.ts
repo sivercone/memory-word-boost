@@ -3,9 +3,10 @@ import { folderService } from '@/services/folderService';
 import { ReqWithSessionValues } from '@/interfaces';
 
 class FolderController {
-  public getFolders = async (_: Request, res: Response, next: NextFunction) => {
+  public getFolders = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const data = await folderService.findAll();
+      const { excludeUserId } = req.query;
+      const data = await folderService.findAll(typeof excludeUserId === 'string' ? excludeUserId : undefined);
       res.status(200).json(data);
     } catch (error) {
       next(error);
@@ -45,8 +46,8 @@ class FolderController {
   public updateFolder = async (req: ReqWithSessionValues, res: Response, next: NextFunction) => {
     try {
       const payload = req.body;
-      await folderService.update(payload, req.userId);
-      res.status(200).json('success');
+      const data = await folderService.update(payload, req.userId);
+      res.status(200).json(data.id);
     } catch (error) {
       next(error);
     }
