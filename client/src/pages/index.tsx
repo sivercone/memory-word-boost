@@ -10,27 +10,15 @@ import style from 'styles/pages/home.module.scss';
 import { useRouter } from 'next/router';
 import { FolderEditing } from 'modules/FolderEditing';
 
-// https://quizlet.com/upgrade?source=rich_text_formatting
-
 const Home: NextPage = () => {
   const router = useRouter();
-  const set = useQuery('sets', setApi.get);
-  const folder = useQuery('folders', folderApi.get);
   const { user } = useUserStore();
-  const userSets = useQuery(
-    'userSets',
-    () => {
-      if (user) return setApi.getByUser(user);
-    },
-    { enabled: !!user },
-  );
-  const userFolders = useQuery(
-    'userFolders',
-    () => {
-      if (user) return folderApi.getByUser(user);
-    },
-    { enabled: !!user },
-  );
+  // prettier-ignore
+  const userSets = useQuery('userSets', () => { if (user) return setApi.getByUser(user) }, { enabled: !!user });
+  // prettier-ignore
+  const userFolders = useQuery('userFolders', () => { if (user) return folderApi.getByUser(user) }, { enabled: !!user });
+  const set = useQuery('sets', () => setApi.get(user?.id), { enabled: userSets.isFetched });
+  const folder = useQuery('folders', () => folderApi.get(user?.id), { enabled: userFolders.isFetched });
   const [shownFolder, setShownFolder] = React.useState(false);
   const toggleShownFolder = () => setShownFolder(!shownFolder);
 

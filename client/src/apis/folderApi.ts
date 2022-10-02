@@ -3,8 +3,8 @@ import { FolderInterface, FolderInterfaceDraft, SetInterface, UserInterface } fr
 const path = 'http://localhost:7001/folder';
 
 export const folderApi = {
-  async get(): Promise<FolderInterface[]> {
-    const response = await fetch(`${path}s`);
+  async get(excludeUserId: string | undefined): Promise<FolderInterface[]> {
+    const response = await fetch(`${path}s?excludeUserId=${excludeUserId}`);
     if (!response.ok) throw new Error(response.statusText);
     return response.json();
   },

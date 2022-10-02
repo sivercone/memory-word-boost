@@ -3,8 +3,8 @@ import { FolderInterface, SetInterface, SetInterfaceDraft, UserInterface } from 
 const path = 'http://localhost:7001/set';
 
 export const setApi = {
-  async get(): Promise<SetInterface[]> {
-    const response = await fetch(`${path}s`);
+  async get(excludeUserId: string | undefined): Promise<SetInterface[]> {
+    const response = await fetch(`${path}s?excludeUserId=${excludeUserId}`);
     if (!response.ok) throw new Error(response.statusText);
     return response.json();
   },
