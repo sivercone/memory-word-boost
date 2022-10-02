@@ -30,8 +30,8 @@ export const FolderEditing: React.FC<Props> = ({ isOpen, onClose, folderFigure }
   };
 
   React.useEffect(() => {
-    if (save.isSuccess && folderFigure?.id) router.push(`/folder/${save.data}`);
-  }, [save, router]);
+    if (save.isSuccess && router.pathname !== `/folder/${save.data}`) router.push(`/folder/${save.data}`);
+  }, [save.isSuccess, router.pathname]);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
