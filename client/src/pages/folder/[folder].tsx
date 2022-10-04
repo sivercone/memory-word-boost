@@ -20,29 +20,31 @@ type ModalVariants = 'edit' | 'del' | 'sets';
 
 const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const folder = useQuery(['folder', pagekey], () => folderApi.getById(pagekey), { enabled: !!pagekey });
-
   const router = useRouter();
   const { user, signAccess } = useUserStore();
+  const queryClient = useQueryClient();
 
-  // update folder
   const [shownModal, setShownModal] = React.useState<ModalVariants>();
   const openModal = (payload: ModalVariants) => setShownModal(payload);
-  const closeModal = () => setShownModal(undefined);
+  const closeModal = () => {
+    if (folder.data && folder.data.sets?.length) setIncludedSets(folder.data.sets);
+    setShownModal(undefined);
+  };
+  // prettier-ignore
+  const sets = useQuery('userSets', () => { if(user) return setApi.getByUser(user); }, { enabled: shownModal === 'sets' });
 
-  // delete
-  const queryClient = useQueryClient();
-  const fetchDelete = useMutation(folderApi.delete, { onSuccess: () => queryClient.invalidateQueries('folders') });
+  const fetchDelete = useMutation(folderApi.delete, {
+    onSuccess: () => {
+      notify('Successfully deleted folder');
+      queryClient.invalidateQueries('userFolders');
+      return router.push('/');
+    },
+  });
   const onDelete = async () => {
     if (!folder.data) return;
-    try {
-      await fetchDelete.mutateAsync({ id: folder.data.id, token: signAccess });
-      router.push('/');
-      notify(`Successfully deleted folder: ${folder.data.name}`);
-    } catch (error) {}
+    await fetchDelete.mutateAsync({ id: folder.data.id, token: signAccess }).catch(() => null);
   };
 
-  // prettier-ignore
-  const sets = useQuery('sets', () => { if(user) return setApi.getByUser(user); }, { enabled: shownModal === 'sets' });
   const [includedSets, setIncludedSets] = React.useState<SetInterface[]>([]);
   React.useEffect(() => {
     if (folder.data && folder.data.sets?.length) setIncludedSets(folder.data.sets);
@@ -51,13 +53,14 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     if (includedSets.find((set) => set.id === payload.id)) setIncludedSets(includedSets.filter((el) => el.id !== payload.id));
     else setIncludedSets([...includedSets, payload]);
   };
+
   const fetchUpdate = useMutation(folderApi.save, { onSuccess: () => queryClient.invalidateQueries(['folder', pagekey]) });
   const updateFolderSets = async () => {
     if (!folder.data) return;
-    try {
-      await fetchUpdate.mutateAsync({ data: { ...folder.data, sets: includedSets }, token: signAccess });
-      closeModal();
-    } catch (error) {}
+    await fetchUpdate
+      .mutateAsync({ data: { ...folder.data, sets: includedSets }, token: signAccess })
+      .then(() => closeModal())
+      .catch(() => null);
   };
 
   if (!folder.data) return <Custom404 />;
