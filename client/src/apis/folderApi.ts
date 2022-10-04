@@ -4,7 +4,7 @@ const path = 'http://localhost:7001/folder';
 
 export const folderApi = {
   async get(excludeUserId: string | undefined): Promise<FolderInterface[]> {
-    const response = await fetch(`${path}s?excludeUserId=${excludeUserId}`);
+    const response = await fetch(`${path}s${excludeUserId ? `?excludeUserId=${excludeUserId}` : ''}`);
     if (!response.ok) throw await response.json();
     return response.json();
   },

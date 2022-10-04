@@ -4,7 +4,7 @@ const path = 'http://localhost:7001/set';
 
 export const setApi = {
   async get(excludeUserId: string | undefined): Promise<SetInterface[]> {
-    const response = await fetch(`${path}s?excludeUserId=${excludeUserId}`);
+    const response = await fetch(`${path}s${excludeUserId ? `?excludeUserId=${excludeUserId}` : ''}`);
     if (!response.ok) throw await response.json();
     return response.json();
   },
