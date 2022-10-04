@@ -14,7 +14,7 @@ class SetService {
       const sets = await this.setRepository.find({
         where: { user: { id: Not(excludeUserId) } },
         relations: { folders: true },
-        order: { createdAt: 'ASC' },
+        order: { createdAt: 'DESC' },
       });
       return sets;
     } catch (error) {
@@ -38,7 +38,7 @@ class SetService {
   async findByUser(payload: UserInterface): Promise<SetInterface[]> {
     if (isEmpty(payload)) throw new HttpException(400, 'Payload is missed. Do not repeat this request without modification.');
     try {
-      const data = await this.setRepository.find({ where: { user: { id: payload.id } }, order: { createdAt: 'ASC' } });
+      const data = await this.setRepository.find({ where: { user: { id: payload.id } }, order: { createdAt: 'DESC' } });
       return data;
     } catch (error) {
       logger.error('[SetService - findByUser] >> Message:', error);

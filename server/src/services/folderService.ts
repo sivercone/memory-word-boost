@@ -14,7 +14,7 @@ class FolderService {
       const folders = await this.folderRepository.find({
         where: { user: { id: Not(excludeUserId) } },
         relations: { sets: true },
-        order: { createdAt: 'ASC' },
+        order: { createdAt: 'DESC' },
         take: 50,
       });
       return folders;
