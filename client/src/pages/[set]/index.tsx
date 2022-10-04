@@ -29,14 +29,16 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     router.push(`${pagekey}/update`);
   };
 
-  const fetchDelete = useMutation(setApi.delete, { onSuccess: () => queryClient.invalidateQueries('sets') });
+  const fetchDelete = useMutation(setApi.delete, {
+    onSuccess: () => {
+      notify('Successfully deleted study set');
+      queryClient.invalidateQueries('sets');
+      return router.push('/');
+    },
+  });
   const onDeleteSet = async () => {
     if (!set.data) return;
-    try {
-      await fetchDelete.mutateAsync({ id: set.data.id, token: signAccess });
-      router.push('/');
-      notify(`Successfully deleted study set: ${set.data.title}`);
-    } catch (error) {}
+    await fetchDelete.mutateAsync({ id: set.data.id, token: signAccess }).catch(() => null);
   };
 
   const [shownModal, setShownModal] = React.useState<ModalVariants>();
