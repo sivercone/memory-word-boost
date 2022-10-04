@@ -8,13 +8,13 @@ export const authApi = {
       headers: { Authorization: `Bearer ${token}` },
       credentials: 'include',
     });
-    if (!response.ok) throw new Error(response.statusText);
+    if (!response.ok) throw await response.json();
     return response.json();
   },
 
   async getById(payload: string): Promise<UserInterface> {
     const response = await fetch(`${path}/user/${payload}`);
-    if (!response.ok) throw new Error(response.statusText);
+    if (!response.ok) throw await response.json();
     return response.json();
   },
 
@@ -25,7 +25,7 @@ export const authApi = {
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${payload.token}` },
       body: JSON.stringify(payload.data),
     });
-    if (!response.ok) throw new Error(response.statusText);
+    if (!response.ok) throw await response.json();
   },
 
   async logout(token: string | undefined): Promise<void> {
@@ -33,7 +33,7 @@ export const authApi = {
       headers: { Authorization: `Bearer ${token}` },
       credentials: 'include',
     });
-    if (!response.ok) throw new Error(response.statusText);
+    if (!response.ok) throw await response.json();
     return response.json();
   },
 };
