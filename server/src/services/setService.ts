@@ -9,10 +9,11 @@ import { SetInterface, UserInterface } from '@/interfaces';
 class SetService {
   private setRepository = dataSource.getRepository(SetEntity);
 
+  // @todo - this service can be removed and utilized by `findByUser`
   public async findAll(excludeUserId: string | undefined): Promise<SetInterface[]> {
     try {
       const sets = await this.setRepository.find({
-        where: { user: { id: Not(excludeUserId) } },
+        where: excludeUserId ? { user: { id: Not(excludeUserId) } } : undefined,
         relations: { folders: true },
         order: { createdAt: 'DESC' },
       });

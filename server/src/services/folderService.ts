@@ -9,10 +9,11 @@ import { logger } from '@/utils/logger';
 class FolderService {
   private folderRepository = dataSource.getRepository(FolderEntity);
 
+  // @todo - this service can be removed and utilized by `findByUser`
   public async findAll(excludeUserId: string | undefined): Promise<FolderInterface[]> {
     try {
       const folders = await this.folderRepository.find({
-        where: { user: { id: Not(excludeUserId) } },
+        where: excludeUserId ? { user: { id: Not(excludeUserId) } } : undefined,
         relations: { sets: true },
         order: { createdAt: 'DESC' },
         take: 50,
