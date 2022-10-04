@@ -165,11 +165,11 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                 <div style={{ fontSize: '5rem' }}>🎯</div>
               </div>
               <div className={style.results__actions}>
-                <Button onClick={() => push(`/${pagekey}`)} variant="outlined">
-                  Return to set page
-                </Button>
                 <Button onClick={restartRound} variant="outlined">
                   Study again
+                </Button>
+                <Button onClick={() => push(`/${pagekey}`)} variant="outlined">
+                  Return to set page
                 </Button>
               </div>
             </div>

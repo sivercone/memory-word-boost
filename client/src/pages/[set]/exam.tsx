@@ -90,11 +90,11 @@ const ExamPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
               </p>
             </div>
             <div className={style.results__actions}>
-              <Button onClick={() => push(`/${pagekey}`)} autoFocus={formState.isSubmitted} variant="outlined">
-                Return to set page
-              </Button>
               <Button onClick={onRestart} variant="outlined">
                 Restart exam
+              </Button>
+              <Button onClick={() => push(`/${pagekey}`)} autoFocus={formState.isSubmitted} variant="outlined">
+                Return to set page
               </Button>
             </div>
           </div>
