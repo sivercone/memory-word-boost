@@ -1,55 +1,93 @@
-import { SetInterface, UserInterface } from '@/interfaces';
-import SetEntity from '@/entity/SetEntity';
+import { Not } from 'typeorm';
+import { dataSource } from '@/core/db';
+import SetEntity from '@/entities/SetEntity';
 import { HttpException } from '@/utils/HttpException';
 import { isEmpty } from '@/utils/isEmpty';
-import { getRepository } from 'typeorm';
+import { logger } from '@/utils/logger';
+import { SetInterface, UserInterface } from '@/interfaces';
 
 class SetService {
-  public async findAll(): Promise<SetInterface[]> {
-    const setRepo = getRepository(SetEntity);
-    const sets = await setRepo.find({ relations: ['folders'] });
-    return sets;
+  private setRepository = dataSource.getRepository(SetEntity);
+
+  // @todo - this service can be removed and utilized by `findByUser`
+  public async findAll(excludeUserId: string | undefined): Promise<SetInterface[]> {
+    try {
+      const sets = await this.setRepository.find({
+        where: excludeUserId ? { user: { id: Not(excludeUserId) } } : undefined,
+        relations: { folders: true },
+        order: { createdAt: 'DESC' },
+      });
+      return sets;
+    } catch (error) {
+      logger.error('[SetService - findAll] >> Message:', error);
+      throw new HttpException(error.status || 409, error.message || 'something went wrong');
+    }
   }
 
   public async findById(payload: string): Promise<SetInterface> {
-    if (isEmpty(payload)) throw new HttpException(400, 'No payload');
-    const setRepo = getRepository(SetEntity);
-    const data = await setRepo.findOne({ where: { id: payload }, relations: ['folders', 'user'] });
-    if (!data) throw new HttpException(404, 'Not Found');
-    return data;
+    if (isEmpty(payload)) throw new HttpException(400, 'Payload is missed. Do not repeat this request without modification.');
+    try {
+      const data = await this.setRepository.findOne({ where: { id: payload }, relations: { folders: true, user: true } });
+      if (!data) throw new HttpException(404, 'Not Found');
+      return data;
+    } catch (error) {
+      logger.error('[SetService - findById] >> Message:', error);
+      throw new HttpException(error.status || 409, error.message || 'something went wrong');
+    }
   }
 
   async findByUser(payload: UserInterface): Promise<SetInterface[]> {
-    if (isEmpty(payload)) throw new HttpException(400, 'No payload');
-    const setRepo = getRepository(SetEntity);
-    const data = await setRepo.find({ where: { user: payload } });
-    return data;
+    if (isEmpty(payload)) throw new HttpException(400, 'Payload is missed. Do not repeat this request without modification.');
+    try {
+      const data = await this.setRepository.find({ where: { user: { id: payload.id } }, order: { createdAt: 'DESC' } });
+      return data;
+    } catch (error) {
+      logger.error('[SetService - findByUser] >> Message:', error);
+      throw new HttpException(error.status || 409, error.message || 'something went wrong');
+    }
   }
 
   public async create(payload: SetInterface): Promise<SetInterface> {
-    if (isEmpty(payload) || !payload.user) throw new HttpException(400, 'No payload');
-    if (!Array.isArray(payload.tags)) payload.tags = (payload.tags as string).replace(/\s+/g, '').split(',');
-    const setRepo = getRepository(SetEntity);
-    const saveSet = await setRepo.save(payload);
-    return saveSet;
+    if (isEmpty(payload) || !payload.user)
+      throw new HttpException(400, 'Payload is missed. Do not repeat this request without modification.');
+    try {
+      if (!Array.isArray(payload.tags)) payload.tags = (payload.tags as string).replace(/\s+/g, '').split(',');
+      const saveSet = await this.setRepository.save(payload);
+      return saveSet;
+    } catch (error) {
+      logger.error('[SetService - create] >> Message:', error);
+      throw new HttpException(error.status || 409, error.message || 'something went wrong');
+    }
   }
 
-  public async update(payload: SetInterface): Promise<SetInterface> {
-    if (isEmpty(payload)) throw new HttpException(400, 'No payload');
-    const setRepo = getRepository(SetEntity);
-    const findSet = await setRepo.findOne({ where: { id: payload.id } });
-    if (!findSet) throw new HttpException(409, 'Conflict');
-    if (!Array.isArray(payload.tags)) payload.tags = (payload.tags as string).replace(/\s+/g, '').split(',');
-    const saveSet = await setRepo.save(payload);
-    return saveSet;
+  public async update(payload: SetInterface, userId: string): Promise<SetInterface> {
+    if (isEmpty(payload) || !userId)
+      throw new HttpException(400, 'Payload is missed. Do not repeat this request without modification.');
+    try {
+      const findSet = await this.setRepository.findOne({ where: { id: payload.id }, relations: ['user'] });
+      if (!findSet) throw new HttpException(409, 'Conflict');
+      if (findSet.user.id !== userId) throw new HttpException(403, 'Forbidden');
+      if (!Array.isArray(payload.tags)) payload.tags = (payload.tags as string).replace(/\s+/g, '').split(',');
+      const saveSet = await this.setRepository.save(payload);
+      return saveSet;
+    } catch (error) {
+      logger.error('[SetService - update] >> Message:', error);
+      throw new HttpException(error.status || 409, error.message || 'something went wrong');
+    }
   }
 
-  public async delete(payload: string): Promise<void> {
-    if (isEmpty(payload)) throw new HttpException(400, 'No payload');
-    const setRepo = getRepository(SetEntity);
-    const data = await setRepo.findOne({ where: { id: payload } });
-    if (!data) throw new HttpException(409, 'Conflict');
-    await setRepo.delete({ id: payload });
+  public async delete(payload: string, userId: string): Promise<void> {
+    if (isEmpty(payload) || !userId)
+      throw new HttpException(400, 'Payload is missed. Do not repeat this request without modification.');
+    try {
+      const data = await this.setRepository.findOne({ where: { id: payload }, relations: ['user'] });
+      if (!data) throw new HttpException(409, 'Conflict');
+      if (data.user.id !== userId) throw new HttpException(403, 'Forbidden');
+      await this.setRepository.delete({ id: payload });
+    } catch (error) {
+      logger.error('[SetService - delete] >> Message:', error);
+      throw new HttpException(error.status || 409, error.message || 'something went wrong');
+    }
   }
 }
 

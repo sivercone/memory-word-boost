@@ -2,29 +2,29 @@ import { NextPage } from 'next';
 import React from 'react';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { useForm } from 'react-hook-form';
-import { setApi } from 'api/setApi';
+import { setApi } from 'apis/setApi';
 import Custom404 from 'pages/404';
-import style from 'styles/pages/learn.module.scss';
-// import { Modal, ModalActions, ModalBody } from 'components/Modal';
+import style from 'styles/pages/exam.module.scss';
 import { useRouter } from 'next/router';
+import { Button } from 'ui/Button';
+import { CardInterface } from 'interfaces';
+import Link from 'next/link';
+
+type SubmitData = { form: { input: string }[] };
 
 const ExamPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const set = useQuery(['set', pagekey], () => setApi.getById(pagekey));
 
   const { push } = useRouter();
 
-  const [cards, setCards] = React.useState<{ term: string; definition: string }[]>([]);
+  const [cards, setCards] = React.useState<CardInterface[]>([]);
   React.useEffect(() => {
     if (set.data) setCards(set.data.cards.sort(() => Math.random() - 0.5));
   }, [set.data]);
 
-  // const [shownModal, setShownModal] = React.useState(false);
-  // const toggleModal = () => setShownModal(!shownModal);
-
-  const { register, handleSubmit, formState, reset } = useForm();
+  const { register, handleSubmit, formState, reset } = useForm<SubmitData>();
   const [incorrect, setIncorrect] = React.useState<{ correct: boolean; index: number; answer: string }[]>([]);
-  const onSubmit = (payload: { form: { input: string }[] }) => {
-    // setShownModal(false);
+  const onSubmit = (payload: SubmitData) => {
     setIncorrect(
       payload.form.map((el, i) =>
         el.input !== cards[i].definition
@@ -47,12 +47,6 @@ const ExamPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     }
   };
 
-  // const onCheckAnswers = () => {
-  //   if (!formState.dirtyFields.form) return toggleModal();
-  //   if (formState.dirtyFields.form.length !== set.data.cards.length) toggleModal();
-  //   else handleSubmit(onSubmit)();
-  // };
-
   const onRestart = () => {
     setIncorrect([]);
     reset();
@@ -60,10 +54,24 @@ const ExamPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
 
   if (!set.data) return <Custom404 />;
   return (
-    <div className={style.class}>
-      {formState.isSubmitted ? (
-        <div className={style.class__block}>
-          <div className={`${style.class__main} ${style.results}`}>
+    <>
+      <div style={{ height: '50px' }}></div>
+      <header className={style.header}>
+        <div className={style.header__inner}>
+          <button onClick={() => push(`/${pagekey}`)} title="close">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
+              <path d="M0 0h24v24H0V0z" fill="none" />
+              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
+            </svg>
+          </button>
+          <Link href="/">
+            <a className={style.header__logo}>Project MWB</a>
+          </Link>
+        </div>
+      </header>
+      <div className={style.container}>
+        {formState.isSubmitted ? (
+          <div className={style.results}>
             <header className={style.results__header}>
               <span>Your Results</span>
             </header>
@@ -82,21 +90,19 @@ const ExamPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
               </p>
             </div>
             <div className={style.results__actions}>
-              <button onClick={() => push(`/${pagekey}`)} autoFocus={formState.isSubmitted} className="button button_light">
-                Return to set page
-              </button>
-              <button onClick={onRestart} className="button button_light">
+              <Button onClick={onRestart} variant="outlined">
                 Restart exam
-              </button>
+              </Button>
+              <Button onClick={() => push(`/${pagekey}`)} autoFocus={formState.isSubmitted} variant="outlined">
+                Return to set page
+              </Button>
             </div>
           </div>
-        </div>
-      ) : undefined}
-      <form onSubmit={handleSubmit(onSubmit)} autoComplete="off" className={style.class}>
-        {cards.map((el, i) => (
-          <div key={i} onFocus={() => setCurrIndex(i)} className={style.class__block}>
-            <div className={style.class__main}>
-              <div className={style.class__learn}>
+        ) : undefined}
+        <form onSubmit={handleSubmit(onSubmit)} autoComplete="off" className={style.list}>
+          {cards.map((el, i) => (
+            <div key={i} onFocus={() => setCurrIndex(i)} className={style.list__block}>
+              <div className={style.list__learn}>
                 <span>{el.term}</span>
                 {incorrect.length && !incorrect[i].correct ? (
                   <>
@@ -105,7 +111,7 @@ const ExamPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                   </>
                 ) : undefined}
               </div>
-              <div className={style.class__form}>
+              <div className={style.list__form}>
                 <input
                   {...register(`form.${i}.input`)}
                   autoFocus={i === 0}
@@ -115,33 +121,20 @@ const ExamPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                   disabled={!!incorrect.length}
                 />
                 {cards.length - 1 !== i && !incorrect.length ? (
-                  <div>
-                    <button onClick={setFocusToNextInput} type="button">
-                      next
-                    </button>
-                  </div>
+                  <Button onClick={setFocusToNextInput} type="button">
+                    NEXT
+                  </Button>
+                ) : !formState.isSubmitted ? (
+                  <Button onClick={handleSubmit(onSubmit)} type="button" variant="outlined">
+                    CHECK ANSWERS
+                  </Button>
                 ) : undefined}
               </div>
             </div>
-          </div>
-        ))}
-        {!formState.isSubmitted ? (
-          <button onClick={handleSubmit(onSubmit)} type="button" style={{ width: '50%' }} className="button button_light">
-            Check answers
-          </button>
-        ) : undefined}
-      </form>
-      {/* <Modal isOpen={shownModal} onClose={toggleModal}>
-        <ModalBody>
-          <h3>It seems you haven't answered all the questions.</h3>
-          <p>Do you want to check without them?</p>
-        </ModalBody>
-        <ModalActions>
-          <button onClick={toggleModal}>Cancel</button>
-          <button onClick={handleSubmit(onSubmit)}>Yes</button>
-        </ModalActions>
-      </Modal> */}
-    </div>
+          ))}
+        </form>
+      </div>
+    </>
   );
 };
 

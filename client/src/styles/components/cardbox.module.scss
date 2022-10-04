@@ -1,20 +1,22 @@
 .cardbox {
-  display: block;
-  width: calc(50% - 1rem);
+  width: 100%;
   padding: 1rem;
-  margin-bottom: 1rem;
-  border-radius: 5px;
-  background-color: #181818;
-  color: #cccccc;
+  border-radius: 20px;
+  color: var(--color-on-surface);
+  background-color: var(--color-surface);
+  box-shadow: var(--box-shadow);
 
-  &:hover {
-    background-color: lighten($color: #181818, $amount: 5);
+  &__icon {
+    display: flex;
+
+    > div {
+      border-radius: 50px;
+    }
   }
 
-  &__text {
-    p {
-      margin-top: 0.5rem;
-    }
+  &__content {
+    font-size: 1.2rem;
+    text-transform: uppercase;
   }
 
   &__tags {
@@ -24,10 +26,11 @@
     gap: 0.5rem;
 
     li {
-      padding: 0 0.5rem;
+      padding: 0.1rem 0.5rem;
       border-radius: 25px;
-      background-color: #cccccc;
-      color: #000000;
+      color: var(--color-on-background);
+      background-color: var(--color-background);
+      border: 1px solid var(--color-outline);
     }
   }
 }

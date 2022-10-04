@@ -2,8 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import axios from 'axios';
 import { userService } from '@/services/userService';
 import { authService } from '@/services/authService';
-import { RequestWithTokens } from '@/middlewares/isAuth';
-import { GoogleTokens, GoogleUser } from '@/interfaces';
+import { GoogleTokens, GoogleUser, ReqWithSessionValues } from '@/interfaces';
 
 class AuthController {
   async ouathGoogle(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -30,16 +29,22 @@ class AuthController {
     }
   }
 
-  async me(req: RequestWithTokens, res: Response, next: NextFunction): Promise<void> {
+  async me(req: ReqWithSessionValues, res: Response, next: NextFunction): Promise<void> {
     try {
-      if (!req.userId) res.status(403).json({ status: 403, message: 'Forbidden' });
-      if (req.refresh_token)
-        res.cookie('refresh_token', req.refresh_token, { maxAge: 24 * 60 * 3600000, httpOnly: true, sameSite: 'strict' });
-
       const findUser = await userService.findById(req.userId);
-      res.status(200).json(findUser);
+      res.status(200).json({ ...findUser, signAccess: req.access_token });
     } catch (error) {
       next(error);
+    }
+  }
+
+  async logOut(req: ReqWithSessionValues, res: Response): Promise<void> {
+    try {
+      await authService.logout(req.userId);
+      res.cookie('refresh_token', '', { maxAge: 0, httpOnly: true, sameSite: 'strict' });
+      res.status(200).json('success logout');
+    } catch (error) {
+      res.status(error.status).json({ status: error.satus, message: error.message });
     }
   }
 }

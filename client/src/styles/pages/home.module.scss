@@ -1,5 +1,42 @@
+.container {
+  width: 100%;
+  max-width: var(--container-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0.5rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+
+  section {
+    > h2 {
+      margin-bottom: 0.5rem;
+      font-size: 1.25rem;
+    }
+  }
+}
+
 .cardlist {
   display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  > a {
+    width: 100%;
+  }
+}
+
+.emptyCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  align-items: center;
+  border: 1px dashed var(--color-on-background);
+  border-radius: 20px;
+
+  p {
+    font-size: 1.25rem;
+  }
 }

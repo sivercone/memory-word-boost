@@ -1,17 +1,17 @@
-/* eslint-disable @next/next/no-img-element */
 import React from 'react';
 import { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
-import { setApi } from 'api/setApi';
+import Avatar from 'boring-avatars';
+import { setApi } from 'apis/setApi';
 import style from 'styles/pages/user.module.scss';
-import { authApi } from 'api/authApi';
+import { authApi } from 'apis/authApi';
 import Custom404 from 'pages/404';
 import { formatDate } from 'utils/formatDate';
-import { useRouter } from 'next/router';
-import { folderApi } from 'api/folderApi';
-import { CardBoxFolder, CardBoxSet } from 'components/CardBox';
+import { folderApi } from 'apis/folderApi';
 import { useUserStore } from 'storage/useUserStore';
+import { CardBox } from 'ui/CardBox';
 
 const UserPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const { user: userState } = useUserStore();
@@ -20,48 +20,50 @@ const UserPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   React.useEffect(() => {
     if (router.query?.entries) return;
     router.replace(`/u/${pagekey}?entries=sets`);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagekey]);
 
-  const sets = useQuery(['sets', pagekey], () => setApi.getByUser(user.data!), {
-    enabled: !!pagekey && !!user.data && router.query.entries === 'sets',
-  });
-  const folders = useQuery(['folders', pagekey], () => folderApi.getByUser(user.data!), {
-    enabled: !!pagekey && !!user.data && router.query.entries === 'folders',
-  });
+  const sets = useQuery(
+    ['sets', pagekey],
+    () => {
+      if (user.data) return setApi.getByUser(user.data);
+    },
+    { enabled: !!pagekey && !!user.data && router.query.entries === 'sets' },
+  );
+  const folders = useQuery(
+    ['folders', pagekey],
+    () => {
+      if (user.data) return folderApi.getByUser(user.data);
+    },
+    { enabled: !!pagekey && !!user.data && router.query.entries === 'folders' },
+  );
 
   if (!user.data) return <Custom404 />;
   return (
     <div className="container">
-      <section className={style.header}>
-        <div className={style.header__avatar}>
-          <img src={user.data.avatar} alt="" />
+      <section className={style.island}>
+        <div className={style.island__avatar}>
+          <Avatar size={'100%'} variant="ring" colors={['#92A1C6', '#146A7C', '#F0AB3D', '#C271B4', '#C20D90']} />
         </div>
-        <div className={style.header__title}>
+        <div className={style.island__title}>
           <span>{user.data.name}</span>
         </div>
         {user.data.bio ? (
-          <div className={style.header__bio}>
+          <div className={style.island__bio}>
             <span>{user.data.bio}</span>
           </div>
         ) : undefined}
-        <div className={style.header__bio}>
+        <div className={style.island__bio}>
           <span>{`On project since ${formatDate({ createdAt: user.data.createdAt, pattern: 'dd MMM yyyy' })}`}</span>
         </div>
-        <ul className={style.header__tabs}>
-          <li className={router.query.entries === 'sets' ? style.header__tabsActive : undefined}>
+        <ul className={style.island__tabs}>
+          <li className={router.query.entries === 'sets' ? style.island__tabsActive : undefined}>
             <Link href={`/u/${pagekey}?entries=sets`}>
               <a>Sets</a>
             </Link>
           </li>
-          <li className={router.query.entries === 'folders' ? style.header__tabsActive : undefined}>
+          <li className={router.query.entries === 'folders' ? style.island__tabsActive : undefined}>
             <Link href={`/u/${pagekey}?entries=folders`}>
               <a>Folders</a>
-            </Link>
-          </li>
-          <li className={router.query.entries === 'activity' ? style.header__tabsActive : undefined}>
-            <Link href={`/u/${pagekey}?entries=activity`}>
-              <a>Learning activity</a>
             </Link>
           </li>
           {user.data.id === userState?.id ? (
@@ -73,20 +75,22 @@ const UserPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
           ) : undefined}
         </ul>
       </section>
-      <section style={{ marginTop: '1rem' }}>
+      <section style={{ margin: '0.5rem 0', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
         {
           {
             sets: {
               idle: undefined,
               error: 'error',
               loading: 'loading',
-              success: sets.data?.map((content) => <CardBoxSet key={content.id} content={content} fullsize />),
+              success: sets.data?.map((content) => <CardBox key={content.id} id={content.id} content={content.title} type="set" />),
             }[sets.status],
             folders: {
               idle: undefined,
               error: 'error',
               loading: 'loading',
-              success: folders.data?.map((content) => <CardBoxFolder key={content.id} content={content} fullsize />),
+              success: folders.data?.map((content) => (
+                <CardBox key={content.id} id={content.id} content={content.name} type="folder" />
+              )),
             }[folders.status],
           }[router.query.entries as 'sets' | 'folders']
         }

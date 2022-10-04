@@ -22,9 +22,8 @@
   overflow: hidden;
   overflow-y: auto;
   border-radius: 8px;
-  background-color: var(--white);
-  color: var(--black);
-  //    transition: opacity 0.1s cubic-bezier(0.4, 0, 0.2, 1), transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
 
   &__body {
     padding: 1rem;
@@ -46,7 +45,7 @@
     overflow: hidden;
     border-bottom-right-radius: 8px;
     border-bottom-left-radius: 8px;
-    border-top: 1px solid var(--black);
+    border-top: 1px solid var(--color-on-surface);
 
     button {
       flex: 1 1 100%;
@@ -55,18 +54,18 @@
       justify-content: center;
       padding: 1rem 0;
       text-transform: uppercase;
-      color: var(--black);
-      background: var(--white);
+      color: var(--color-on-surface);
+      background: var(--color-surface);
       transition: all 0.2s ease-in-out;
     }
 
     button:not(:only-child):not(:last-child) {
-      border-right: 1px solid var(--black);
+      border-right: 1px solid var(--color-on-surface);
     }
 
-    button:hover {
-      background-color: darken($color: #cccccc, $amount: 5);
-    }
+    // button:hover {
+    //   background-color: darken($color: #fff, $amount: 5);
+    // }
   }
 
   &__inputs {
@@ -75,7 +74,18 @@
     gap: 0.5rem;
 
     label {
-      border: 1px solid var(--black);
+      border: 1px solid var(--color-on-surface);
+      border-radius: 10px;
+
+      span {
+        padding: 0.5rem;
+      }
+
+      input {
+        padding-top: 0;
+        border: 0;
+        outline: none;
+      }
     }
   }
 
@@ -93,11 +103,11 @@
 
     li {
       padding: 0.5rem 1rem;
-      background-color: #ffffff73;
+      background-color: var(--color-background);
     }
 
     li:not(:last-child) {
-      border-bottom: 1px solid var(--white);
+      border-bottom: 1px solid var(--color-outline);
     }
 
     li:first-child {

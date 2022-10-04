@@ -1,4 +1,6 @@
-/* entities */
+import express from 'express';
+
+/* -------------- entities -------------- */
 
 export interface SetInterface {
   id: string;
@@ -28,14 +30,13 @@ export interface UserInterface {
   name: string;
   bio: string;
   avatar: string;
-  access_token: string;
   refresh_token: string;
   fingerprint: string;
   createdAt: string;
   updatedAt: string;
 }
 
-/* other */
+/* -------------- other -------------- */
 
 export interface dbConfig {
   host: string;
@@ -69,4 +70,10 @@ export interface GoogleTokens {
   refresh_token: string;
   scope: string;
   id_token: string;
+}
+
+export interface ReqWithSessionValues extends express.Request {
+  access_token?: string;
+  refresh_token?: string;
+  userId?: string;
 }

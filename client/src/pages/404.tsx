@@ -1,10 +1,11 @@
-import React from 'react';
+import ErrorPage from 'modules/ErrorPage';
 
 const Custom404 = () => {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '80vh' }}>
-      <h1>404 - Page Not Found</h1>
-    </div>
+    <ErrorPage>
+      <p>Error 404</p>
+      <p>Unfortunately, the page you requested was not found, but there are others that are also good.</p>
+    </ErrorPage>
   );
 };
 

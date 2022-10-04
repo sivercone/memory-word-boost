@@ -1,4 +1,4 @@
-import { folderApi } from 'api/folderApi';
+import { folderApi } from 'apis/folderApi';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import Custom404 from 'pages/404';
@@ -6,57 +6,61 @@ import React from 'react';
 import { dehydrate, QueryClient, useMutation, useQuery, useQueryClient } from 'react-query';
 import style from 'styles/pages/set.module.scss';
 import style2 from 'styles/pages/home.module.scss'; // todo - fix that
-import { FolderEditing } from 'components/FolderEditing';
+import { FolderEditing } from 'modules/FolderEditing';
 import { useRouter } from 'next/dist/client/router';
-import { Modal, ModalActions, ModalBody, ModalList } from 'components/Modal';
+import { Modal, ModalActions, ModalBody, ModalList } from 'ui/Modal';
 import { notify } from 'utils/notify';
-import { setApi } from 'api/setApi';
+import { setApi } from 'apis/setApi';
 import { SetInterface } from 'interfaces';
 import { useUserStore } from 'storage/useUserStore';
-import { CardBoxSet } from 'components/CardBox';
+import { Toggle } from 'ui/Toggle';
+import { CardBox } from 'ui/CardBox';
 
 type ModalVariants = 'edit' | 'del' | 'sets';
 
 const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const folder = useQuery(['folder', pagekey], () => folderApi.getById(pagekey), { enabled: !!pagekey });
-
   const router = useRouter();
-  const { user } = useUserStore();
+  const { user, signAccess } = useUserStore();
+  const queryClient = useQueryClient();
 
-  // update folder
   const [shownModal, setShownModal] = React.useState<ModalVariants>();
   const openModal = (payload: ModalVariants) => setShownModal(payload);
-  const closeModal = () => setShownModal(undefined);
+  const closeModal = () => {
+    if (folder.data && folder.data.sets?.length) setIncludedSets(folder.data.sets);
+    setShownModal(undefined);
+  };
+  // prettier-ignore
+  const sets = useQuery('userSets', () => { if(user) return setApi.getByUser(user); }, { enabled: shownModal === 'sets' });
 
-  // delete
-  const queryClient = useQueryClient();
-  const fetchDelete = useMutation(folderApi.delete, { onSuccess: () => queryClient.invalidateQueries('folders') });
+  const fetchDelete = useMutation(folderApi.delete, {
+    onSuccess: () => {
+      notify('Successfully deleted folder');
+      queryClient.invalidateQueries('userFolders');
+      return router.push('/');
+    },
+  });
   const onDelete = async () => {
     if (!folder.data) return;
-    try {
-      await fetchDelete.mutateAsync(folder.data.id);
-      router.push('/');
-      notify(`Successfully deleted folder: ${folder.data.name}`);
-    } catch (error) {}
+    await fetchDelete.mutateAsync({ id: folder.data.id, token: signAccess }).catch(() => null);
   };
 
-  // include or exclude sets
-  const sets = useQuery('sets', setApi.get, { enabled: shownModal === 'sets' });
   const [includedSets, setIncludedSets] = React.useState<SetInterface[]>([]);
   React.useEffect(() => {
-    if (folder.data) setIncludedSets(folder.data.sets);
+    if (folder.data && folder.data.sets?.length) setIncludedSets(folder.data.sets);
   }, [folder.data, folder.dataUpdatedAt]);
   const toggleIncludeFolder = (payload: SetInterface) => {
-    if (!!includedSets.find((set) => set.id === payload.id)) setIncludedSets(includedSets.filter((el) => el.id !== payload.id));
+    if (includedSets.find((set) => set.id === payload.id)) setIncludedSets(includedSets.filter((el) => el.id !== payload.id));
     else setIncludedSets([...includedSets, payload]);
   };
-  const fetchUpdate = useMutation(folderApi.update, { onSuccess: () => queryClient.invalidateQueries(['folder', pagekey]) });
+
+  const fetchUpdate = useMutation(folderApi.save, { onSuccess: () => queryClient.invalidateQueries(['folder', pagekey]) });
   const updateFolderSets = async () => {
     if (!folder.data) return;
-    try {
-      await fetchUpdate.mutateAsync({ ...folder.data, sets: includedSets });
-      closeModal();
-    } catch (error) {}
+    await fetchUpdate
+      .mutateAsync({ data: { ...folder.data, sets: includedSets }, token: signAccess })
+      .then(() => closeModal())
+      .catch(() => null);
   };
 
   if (!folder.data) return <Custom404 />;
@@ -94,7 +98,8 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                   height="24"
                   viewBox="0 0 24 24"
                   width="24"
-                  fill="#181818">
+                  fill="#181818"
+                >
                   <g>
                     <rect fill="none" height="24" width="24" />
                   </g>
@@ -131,7 +136,8 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
               height="24"
               viewBox="0 0 24 24"
               width="24"
-              fill="#181818">
+              fill="#181818"
+            >
               <g>
                 <rect fill="none" height="24" width="24" />
               </g>
@@ -142,10 +148,10 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
           </button>
         </div>
       </div>
-      <h2 style={{ marginBottom: '1rem' }}>Study sets in this folder ({folder.data.sets.length})</h2>
+      <h2 style={{ marginBottom: '1rem' }}>Study sets in this folder ({folder.data.sets?.length})</h2>
       <div className={style2.cardlist}>
-        {folder.data.sets.map((content) => (
-          <CardBoxSet key={content.id} content={content} />
+        {folder.data.sets?.map((content) => (
+          <CardBox key={content.id} content={content.title} id={content.id} type="set" />
         ))}
       </div>
       <FolderEditing folderFigure={folder.data} isOpen={shownModal === 'edit'} onClose={closeModal} />
@@ -164,20 +170,17 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
       <Modal isOpen={shownModal === 'sets'} onClose={closeModal}>
         <ModalBody>
           <h3>Sets Management</h3>
-          <p>Include or exclude sets to this folder</p>
+          <p>Organise all the sets you&#39;re studying for a particular subject</p>
         </ModalBody>
         {sets.data ? (
           <ModalList>
             {sets.data.map((content) => (
               <li key={content.id}>
-                <label className="checkbox">
-                  <span>{content.title}</span>
-                  <input
-                    onClick={() => toggleIncludeFolder(content)}
-                    type="checkbox"
-                    defaultChecked={!!includedSets.find((el) => el.id === content.id)}
-                  />
-                </label>
+                <Toggle
+                  label={content.title}
+                  onClick={() => toggleIncludeFolder(content)}
+                  defaultChecked={!!includedSets.find((el) => el.id === content.id)}
+                />
               </li>
             ))}
           </ModalList>

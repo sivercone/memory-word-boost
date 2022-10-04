@@ -1,0 +1,40 @@
+.toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+
+  input {
+    position: relative;
+    -webkit-appearance: none;
+    min-width: 50px;
+    width: 50px;
+    min-height: 30px;
+    height: 30px;
+    background-color: #fff;
+    border: 1px solid var(--color-outline);
+    border-radius: 50px;
+    box-shadow: inset -20px 0 0 0 var(--color-outline);
+    transition: all 0.3s;
+  }
+
+  input:after {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    background: transparent;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+  }
+
+  input:checked {
+    box-shadow: inset 20px 0 0 0 var(--color-primary);
+    border-color: var(--color-primary);
+  }
+
+  input:checked:after {
+    left: 20px;
+  }
+}
