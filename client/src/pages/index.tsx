@@ -9,16 +9,18 @@ import { Button } from 'ui/Button';
 import style from 'styles/pages/home.module.scss';
 import { useRouter } from 'next/router';
 import { FolderEditing } from 'modules/FolderEditing';
+import { authApi } from 'apis/authApi';
 
 const Home: NextPage = () => {
   const router = useRouter();
-  const { user } = useUserStore();
+  const { signAccess } = useUserStore();
+  const user = useQuery('user', () => authApi.me(signAccess));
   // prettier-ignore
-  const userSets = useQuery('userSets', () => { if (user) return setApi.getByUser(user) }, { enabled: !!user });
+  const userSets = useQuery('userSets', () => { if (user.data) return setApi.getByUser(user.data) }, { enabled: !!user.data });
   // prettier-ignore
-  const userFolders = useQuery('userFolders', () => { if (user) return folderApi.getByUser(user) }, { enabled: !!user });
-  const set = useQuery('sets', () => setApi.get(user?.id));
-  const folder = useQuery('folders', () => folderApi.get(user?.id));
+  const userFolders = useQuery('userFolders', () => { if (user.data) return folderApi.getByUser(user.data) }, { enabled: !!user.data });
+  const set = useQuery('sets', () => setApi.get(user.data?.id), { enabled: !!user.data || user.isFetched });
+  const folder = useQuery('folders', () => folderApi.get(user.data?.id), { enabled: !!user.data || user.isFetched });
 
   const [shownFolder, setShownFolder] = React.useState(false);
   const toggleShownFolder = () => setShownFolder(!shownFolder);
@@ -54,17 +56,19 @@ const Home: NextPage = () => {
           )}
         </div>
       </section>
-      <section>
-        <h2>Discover solutions from other users</h2>
-        <div className={style.cardlist}>
-          {set.data
-            ? set.data.map((content) => <CardBox key={content.id} content={content.title} id={content.id} type="set" />)
-            : undefined}
-          {folder.data
-            ? folder.data.map((content) => <CardBox key={content.id} content={content.name} id={content.id} type="folder" />)
-            : undefined}
-        </div>
-      </section>
+      {set.data?.length || folder.data?.length ? (
+        <section>
+          <h2>Discover solutions from other users</h2>
+          <div className={style.cardlist}>
+            {set.data?.length
+              ? set.data.map((content) => <CardBox key={content.id} content={content.title} id={content.id} type="set" />)
+              : undefined}
+            {folder.data?.length
+              ? folder.data.map((content) => <CardBox key={content.id} content={content.name} id={content.id} type="folder" />)
+              : undefined}
+          </div>
+        </section>
+      ) : undefined}
     </div>
   );
 };
