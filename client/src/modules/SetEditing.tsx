@@ -1,20 +1,21 @@
 import React from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useForm, useFieldArray } from 'react-hook-form';
+import { useForm, useFieldArray, UseFieldArrayAppend } from 'react-hook-form';
 import { useMutation, useQueryClient } from 'react-query';
 import { setApi } from 'apis/setApi';
 import { useUserStore } from 'storage/useUserStore';
 import { Modal, ModalActions, ModalBody } from 'ui/Modal';
 import { Input } from 'ui/Input';
 import { Button } from 'ui/Button';
-import { SetInterfaceDraft } from 'interfaces';
+import { CardInterface, SetInterfaceDraft } from 'interfaces';
 import style from 'styles/pages/createset.module.scss';
+import { Toggle } from 'ui/Toggle';
 
 const SetEditing: NextPage<{ setFigure?: SetInterfaceDraft }> = ({ setFigure }) => {
   const router = useRouter();
   const { user, signAccess } = useUserStore();
-  const { register, handleSubmit, control } = useForm<SetInterfaceDraft>({
+  const { register, handleSubmit, control, setValue } = useForm<SetInterfaceDraft>({
     defaultValues: { ...setFigure, user, cards: !setFigure?.id ? [{ term: '', definition: '' }] : setFigure.cards },
   });
   const { fields, append, remove } = useFieldArray({ name: 'cards', control });
@@ -34,6 +35,13 @@ const SetEditing: NextPage<{ setFigure?: SetInterfaceDraft }> = ({ setFigure }) 
 
   const [isModalShown, setIsModalShown] = React.useState(false);
   const toggleModalShown = () => setIsModalShown(!isModalShown);
+
+  const [isImportShown, setIsImportShown] = React.useState(false);
+
+  const flipCardValues = () => {
+    const flippedFields = fields.map((obj) => ({ ...obj, term: obj.definition, definition: obj.term }));
+    setValue('cards', flippedFields);
+  };
 
   return (
     <>
@@ -57,6 +65,24 @@ const SetEditing: NextPage<{ setFigure?: SetInterfaceDraft }> = ({ setFigure }) 
             <Input label="Title" {...register('title')} required />
             <Input label="Tags (through comma)" {...register('tags')} />
             <Input label="Description (optional)" {...register('description')} />
+          </div>
+          <div className={style.class__actions}>
+            <button onClick={() => setIsImportShown(true)} type="button">
+              <span>
+                <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24">
+                  <path d="M4 20q-.825 0-1.412-.587Q2 18.825 2 18V6q0-.825.588-1.412Q3.175 4 4 4h5v2H4v12h16V6h-5V4h5q.825 0 1.413.588Q22 5.175 22 6v12q0 .825-.587 1.413Q20.825 20 20 20Zm8-4.6-5-5L8.4 9l2.6 2.6V4h2v7.6L15.6 9l1.4 1.4Z" />
+                </svg>
+              </span>
+              <p>Import cards</p>
+            </button>
+            <button onClick={flipCardValues} type="button">
+              <span>
+                <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="currentColor">
+                  <path d="M5.1 16.05q-.55-.95-.825-1.95Q4 13.1 4 12.05q0-3.35 2.325-5.7T12 4h.175l-1.6-1.6 1.4-1.4 4 4-4 4-1.4-1.4 1.6-1.6H12Q9.5 6 7.75 7.762 6 9.525 6 12.05q0 .65.15 1.275.15.625.45 1.225ZM12.025 23l-4-4 4-4 1.4 1.4-1.6 1.6H12q2.5 0 4.25-1.762Q18 14.475 18 11.95q0-.65-.15-1.275-.15-.625-.45-1.225l1.5-1.5q.55.95.825 1.95.275 1 .275 2.05 0 3.35-2.325 5.7T12 20h-.175l1.6 1.6Z" />
+                </svg>
+              </span>
+              <p>Flip terms and definitions</p>
+            </button>
           </div>
           <ul className={style.cards}>
             {fields.map((content, i) => (
@@ -88,8 +114,103 @@ const SetEditing: NextPage<{ setFigure?: SetInterfaceDraft }> = ({ setFigure }) 
           </ModalActions>
         </Modal>
       </div>
+      {isImportShown ? <Import setIsImportShown={setIsImportShown} insertImport={append} /> : undefined}
     </>
   );
 };
 
 export default SetEditing;
+
+interface ImportProps {
+  setIsImportShown: React.Dispatch<React.SetStateAction<boolean>>;
+  insertImport: UseFieldArrayAppend<SetInterfaceDraft, 'cards'>;
+}
+const Import: React.FC<ImportProps> = ({ setIsImportShown, insertImport }) => {
+  const [cards, setCards] = React.useState<CardInterface[]>([]);
+  const [formState, setFormState] = React.useState<{ input: string; betweenTermDef: string; betweenCard: string }>({
+    input: '',
+    betweenTermDef: '\t',
+    betweenCard: '\n',
+  });
+  const toggleBetweenTermDef = () => {
+    if (formState.betweenTermDef !== '\t') setFormState((prev) => ({ ...prev, betweenTermDef: '\t' }));
+    else setFormState((prev) => ({ ...prev, betweenTermDef: ',' }));
+  };
+  const toggleBetweenCard = () => {
+    if (formState.betweenCard !== '\n') setFormState((prev) => ({ ...prev, betweenCard: '\n' }));
+    else setFormState((prev) => ({ ...prev, betweenCard: ';' }));
+  };
+
+  const setImportValues = (payload: string) => {
+    setFormState((prev) => ({ ...prev, input: payload }));
+    const data = payload
+      .split(formState.betweenCard)
+      .map((t) => {
+        const card = t.split(formState.betweenTermDef);
+        if (card[0]?.length) return { term: card[0], definition: card[1] };
+      })
+      .filter((obj) => !!obj);
+    setCards(data as unknown as CardInterface[]);
+  };
+  React.useEffect(() => {
+    if (formState.input) setImportValues(formState.input);
+  }, [formState.betweenCard, formState.betweenTermDef]);
+
+  const onSave = () => {
+    insertImport(cards);
+    setIsImportShown(false);
+  };
+
+  return (
+    <div className={style.import}>
+      <header className={style.header}>
+        <div className={style.header__inner}>
+          <button onClick={() => setIsImportShown(false)}>Cancel</button>
+          <button onClick={onSave}>Import</button>
+        </div>
+      </header>
+      <div className={style.import__content}>
+        <Input
+          value={formState.input}
+          onChange={(event) => setImportValues(event.target.value)}
+          label="Copy and paste your data here (from Word, Excel, Google Docs, etc.)"
+          isTextArea
+          placeholder={`Term 1	Definition 1\nTerm 2	Definition 2\nTerm 3	Definition 3`}
+        />
+        <div className={style.import__structure}>
+          <div>
+            <p>Between term and definition</p>
+            <ul>
+              <li>
+                <Toggle onChange={toggleBetweenTermDef} checked={formState.betweenTermDef === '\t'} label="Tab" />
+              </li>
+              <li>
+                <Toggle onChange={toggleBetweenTermDef} checked={formState.betweenTermDef === ','} label="Comma" />
+              </li>
+            </ul>
+          </div>
+          <div>
+            <p>Between cards</p>
+            <ul>
+              <li>
+                <Toggle onChange={toggleBetweenCard} checked={formState.betweenCard === '\n'} label="New line" />
+              </li>
+              <li>
+                <Toggle onChange={toggleBetweenCard} checked={formState.betweenCard === ';'} label="Semicolon" />
+              </li>
+            </ul>
+          </div>
+        </div>
+        <p>{cards.length ? `Preview (${cards.length} card${cards.length > 1 ? 's' : ''})` : 'Nothing to preview yet.'}</p>
+        <ul className={style.cards}>
+          {cards.map((content) => (
+            <li key={content.term + content.definition} className={style.cards__block}>
+              <Input label="Term" defaultValue={content.term} disabled />
+              <Input label="Definition" defaultValue={content.definition} disabled />
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+};
