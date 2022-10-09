@@ -13,7 +13,6 @@ const transition = {
 
 const BottomNavigation = () => {
   const { pathname, push } = useRouter();
-  if (pathsForHidingLayout.includes(pathname)) return null;
 
   const [shownCreation, setShownCreation] = React.useState(false);
   const toggleCreationShown = (url?: string) => {
@@ -26,6 +25,7 @@ const BottomNavigation = () => {
     setShownFolder(!shownFolder);
   };
 
+  if (pathsForHidingLayout.includes(pathname)) return null;
   return (
     <>
       <div onClick={() => toggleCreationShown()} className={shownCreation ? style.overlayActive : style.overlay}></div>
