@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&display=swap');
 
 :root {
   --container-width: 1024px;
@@ -42,10 +41,8 @@ body,
   margin: 0;
   font-size: 16px;
   font-family: 'Roboto', sans-serif;
-  // font-family: 'Space Grotesk', sans-serif;
   background-color: var(--color-background);
   color: var(--color-on-background);
-  background-position: 400px 500px;
 }
 
 a {
@@ -96,7 +93,7 @@ textarea {
   padding: 0;
 
   &::placeholder {
-    color: inherit;
+    color: #666;
     font-family: inherit;
     font-size: inherit;
     font-weight: inherit;
@@ -105,7 +102,7 @@ textarea {
 
 textarea {
   resize: vertical;
-  min-height: 50px;
+  min-height: 100px;
 }
 
 .container {
