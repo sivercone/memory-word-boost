@@ -51,7 +51,13 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
 
   const { register, handleSubmit, reset } = useForm<SubmitData>();
   const onSubmit = (payload: SubmitData) => {
-    if (payload.answer === cards[currentIndex].definition) nextCard();
+    if (
+      payload.answer
+        .toLowerCase()
+        .replace(/^\s+|\s+$/g, '')
+        .replace(/\s+/g, ' ') === cards[currentIndex].definition.toLowerCase()
+    )
+      nextCard();
     else loseCard();
   };
 

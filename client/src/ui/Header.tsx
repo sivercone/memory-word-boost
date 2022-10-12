@@ -11,7 +11,7 @@ import { useQuery } from 'react-query';
 import { authApi } from 'apis/authApi';
 import { sessionMemory } from 'utils/sessionMemory';
 
-const transition = {
+export const transition = {
   init: { y: '100%', transition: { duration: 0.1 } },
   anim: { y: '0%', transition: { duration: 0.15 } },
 };

@@ -11,6 +11,8 @@ import { Button } from 'ui/Button';
 import { CardInterface, SetInterfaceDraft } from 'interfaces';
 import style from 'styles/pages/createset.module.scss';
 import { Toggle } from 'ui/Toggle';
+import { AnimatePresence, motion } from 'framer-motion';
+import { transition } from 'ui/Header'; // @todo - fix this
 
 const SetEditing: NextPage<{ setFigure?: SetInterfaceDraft }> = ({ setFigure }) => {
   const router = useRouter();
@@ -25,7 +27,14 @@ const SetEditing: NextPage<{ setFigure?: SetInterfaceDraft }> = ({ setFigure }) 
   const onSubmit = async (payload: SetInterfaceDraft) => {
     if (payload.cards.length < 2) return toggleModalShown();
     try {
-      await save.mutateAsync({ data: payload, token: signAccess });
+      const data = {
+        ...payload,
+        cards: payload.cards.map(({ term, definition }) => ({
+          term: term?.replace(/^\s+|\s+$/g, '').replace(/\s+/g, ' ') || '',
+          definition: definition?.replace(/^\s+|\s+$/g, '').replace(/\s+/g, ' ') || '',
+        })),
+      };
+      await save.mutateAsync({ data, token: signAccess });
     } catch (error) {}
   };
 
@@ -59,7 +68,10 @@ const SetEditing: NextPage<{ setFigure?: SetInterfaceDraft }> = ({ setFigure }) 
           <button onClick={handleSubmit(onSubmit)}>Save</button>
         </div>
       </header>
-      <div className={`container ${style.class}`}>
+      <div
+        className={`container ${style.class}`}
+        style={isImportShown ? { overflow: 'hidden', maxHeight: 'calc(100vh - 50px)' } : undefined}
+      >
         <form autoComplete="off">
           <div className={style.class__general}>
             <Input label="Title" {...register('title')} required />
@@ -114,7 +126,9 @@ const SetEditing: NextPage<{ setFigure?: SetInterfaceDraft }> = ({ setFigure }) 
           </ModalActions>
         </Modal>
       </div>
-      {isImportShown ? <Import setIsImportShown={setIsImportShown} insertImport={append} /> : undefined}
+      <AnimatePresence>
+        {isImportShown ? <Import setIsImportShown={setIsImportShown} insertImport={append} /> : undefined}
+      </AnimatePresence>
     </>
   );
 };
@@ -157,12 +171,17 @@ const Import: React.FC<ImportProps> = ({ setIsImportShown, insertImport }) => {
   }, [formState.betweenCard, formState.betweenTermDef]);
 
   const onSave = () => {
-    insertImport(cards);
+    insertImport(
+      cards.map(({ term, definition }) => ({
+        term: term?.replace(/^\s+|\s+$/g, '').replace(/\s+/g, ' ') || '',
+        definition: definition?.replace(/^\s+|\s+$/g, '').replace(/\s+/g, ' ') || '',
+      })),
+    );
     setIsImportShown(false);
   };
 
   return (
-    <div className={style.import}>
+    <motion.div className={style.import} variants={transition} initial="init" animate="anim" exit="init">
       <header className={style.header}>
         <div className={style.header__inner}>
           <button onClick={() => setIsImportShown(false)}>Cancel</button>
@@ -203,14 +222,14 @@ const Import: React.FC<ImportProps> = ({ setIsImportShown, insertImport }) => {
         </div>
         <p>{cards.length ? `Preview (${cards.length} card${cards.length > 1 ? 's' : ''})` : 'Nothing to preview yet.'}</p>
         <ul className={style.cards}>
-          {cards.map((content) => (
-            <li key={content.term + content.definition} className={style.cards__block}>
+          {cards.map((content, i) => (
+            <li key={content.term + content.definition + i} className={style.cards__block}>
               <Input label="Term" defaultValue={content.term} disabled />
               <Input label="Definition" defaultValue={content.definition} disabled />
             </li>
           ))}
         </ul>
       </div>
-    </div>
+    </motion.div>
   );
 };

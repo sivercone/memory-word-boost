@@ -127,6 +127,19 @@
   }
 }
 
+@media screen and (min-width: 425px) {
+  .import {
+    &__structure {
+      flex-direction: row;
+      align-items: flex-end;
+
+      > div {
+        flex-basis: 100%;
+      }
+    }
+  }
+}
+
 @media screen and (max-width: 768px) {
   .cards {
     &__block {
