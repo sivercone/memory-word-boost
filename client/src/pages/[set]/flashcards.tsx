@@ -15,10 +15,10 @@ import { CardInterface } from 'interfaces';
 // todo - describe how to learn with cards
 
 const motions = {
-  init: { rotateY: 0, translateX: '0%', opacity: 1, transition: { duration: 0.4 } },
-  rotate: { rotateY: 180, translateX: '0%', opacity: 1, transition: { duration: 0.4 } },
-  translateLeft: { rotateY: 0, translateX: '100%', opacity: 0, transition: { duration: 0.5 } },
-  translateRight: { rotateY: 0, translateX: '-100%', opacity: 0, transition: { duration: 0.5 } },
+  init: { rotateY: 0, translateX: '0%', opacity: 1, transition: { duration: 0.25 } },
+  rotate: { rotateY: 180, translateX: '0%', opacity: 1, transition: { duration: 0.25 } },
+  translateLeft: { rotateY: 0, translateX: '100%', opacity: 0, transition: { duration: 0.3 } },
+  translateRight: { rotateY: 0, translateX: '-100%', opacity: 0, transition: { duration: 0.3 } },
 };
 
 const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
@@ -37,7 +37,8 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     if (currentIndex >= cards.length) return;
     setIsToggling(true);
     setToggled(!toggled);
-    setTimeout(() => setIsToggling(false), 400);
+    // setIsToggling(false);
+    setTimeout(() => setIsToggling(false), 300);
   };
 
   const [currentIndex, setCurrentIndex] = React.useState<number>(0);
@@ -52,7 +53,7 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
       setToggled(false);
       setLearned(false);
       setCurrentIndex(currentIndex + 1);
-    }, 500);
+    }, 300);
   };
 
   const [repeatCards, setRepeatCards] = React.useState<CardInterface[]>([]);
@@ -63,7 +64,7 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
       setToggled(false);
       setToRepeated(false);
       setCurrentIndex(currentIndex + 1);
-    }, 500);
+    }, 300);
   };
 
   const onStudyAgain = () => {
@@ -134,7 +135,7 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
             disabled={currentIndex >= cards.length || isToggling}
           >
             <motion.span animate={toggled ? motions.rotate : motions.init}>
-              {!isToggling ? (toggled ? cards[currentIndex]?.definition : cards[currentIndex]?.term) : '🗯'}
+              {!isToggling ? (toggled ? cards[currentIndex]?.definition : cards[currentIndex]?.term) : ''}
               {currentIndex >= cards.length ? (
                 <>
                   {repeatCards.length === set.data.cards.length ? (
@@ -183,7 +184,7 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                 <rect fill="none" height="24" width="24" />
                 <path d="M9,19l1.41-1.41L5.83,13H22V11H5.83l4.59-4.59L9,5l-7,7L9,19z" />
               </svg>
-              <span>Study again</span>
+              <span>Keep learning</span>
             </button>
           )}
           {currentIndex >= cards.length && repeatCards.length ? (
