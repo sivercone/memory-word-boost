@@ -17,8 +17,13 @@ import { transition } from 'ui/Header'; // @todo - fix this
 const SetEditing: NextPage<{ setFigure?: SetInterfaceDraft }> = ({ setFigure }) => {
   const router = useRouter();
   const { user, signAccess } = useUserStore();
-  const { register, handleSubmit, control, setValue } = useForm<SetInterfaceDraft>({
-    defaultValues: { ...setFigure, user, cards: !setFigure?.id ? [{ term: '', definition: '' }] : setFigure.cards },
+  const { register, handleSubmit, control, setValue } = useForm<SetInterfaceDraft & { tags: string | string[] }>({
+    defaultValues: {
+      ...setFigure,
+      user,
+      tags: setFigure?.tags?.join(', '),
+      cards: !setFigure?.id ? [{ term: '', definition: '' }] : setFigure.cards,
+    },
   });
   const { fields, append, remove } = useFieldArray({ name: 'cards', control });
 
