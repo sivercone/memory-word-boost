@@ -45,6 +45,7 @@ export interface dbConfig {
   user: string;
   password: string;
   synchronize: boolean;
+  entities: string[];
 }
 
 import { Router } from 'express';
