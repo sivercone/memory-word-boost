@@ -54,7 +54,7 @@
     }
 
     li:nth-child(even) {
-      width: calc(50% - 1rem);
+      width: calc(50% - 0.5rem);
     }
   }
 }
