@@ -9,21 +9,31 @@ import style from 'styles/pages/learn.module.scss';
 import { motion } from 'framer-motion';
 import { motions } from './flashcards';
 import Custom404 from 'pages/404';
+import { isAnswerCorrect } from 'utils/isAnswerCorrect';
 
-type StudyCard = CardInterface & { flash: boolean; write: boolean; quiz: boolean };
+type StudyCard = CardInterface & { id: string; flash: boolean; write: boolean; quiz: boolean };
 
 const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const { push } = useRouter();
   const set = useQuery(['set', pagekey], () => setApi.getById(pagekey));
 
+  const [currCard, setCurrCard] = React.useState<StudyCard>();
   const [cards, setCards] = React.useState<StudyCard[]>([]);
   React.useEffect(() => {
     if (set.data) {
-      const studyCards = set.data.cards.map((card) => ({ ...card, flash: false, write: false, quiz: false }));
-      setCards(studyCards.sort(() => Math.random() - 0.5));
+      const studyCards = set.data.cards.map((card) => ({
+        ...card,
+        id: `${Math.random().toString(36).substring(2)}/${card.term}/${card.definition}`,
+        flash: false,
+        write: false,
+        quiz: false,
+      }));
+      setCards(studyCards);
+      setCurrCard(studyCards[0]);
     }
   }, [set.data]);
 
+  // @todo - remove currentIndex, update logic for proggress bar (check for bool values in cards).
   const [currentIndex, setCurrentIndex] = React.useState<number>(0);
   const [cardsLength, scorePercent] = React.useMemo(() => {
     const cardsLength = cards.length * 3;
@@ -34,41 +44,55 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const [toggled, setToggled] = React.useState(false);
   const [isToggling, setIsToggling] = React.useState(false);
   const onToggle = () => {
-    if (currentIndex >= cardsLength || cards[currentIndex].flash) return;
+    if (currentIndex >= cardsLength || currCard?.flash) return;
     setIsToggling(true);
     setToggled(!toggled);
     setTimeout(() => setIsToggling(false), 300);
   };
 
   const onFlash = () => {
-    const studyCards: StudyCard[] = JSON.parse(JSON.stringify(cards));
-    if (!studyCards[currentIndex].flash) studyCards[currentIndex].flash = true;
-    // else if (studyCards[currentIndex].flash && !studyCards[currentIndex].quiz) studyCards[currentIndex].quiz = true;
-    // else studyCards[currentIndex].write = true;
-    setCards(studyCards);
-    if (currentIndex + 1 >= cards.length) setCurrentIndex(0);
-    else setCurrentIndex((prev) => prev + 1);
+    const nextCards = cards.map((c) => (c.id === currCard?.id && !c.flash ? { ...c, flash: true } : c));
+    setCards(nextCards);
+    const findIndex = nextCards.findIndex((card) => !(card.flash && card.quiz && card.write));
+    const findCard = nextCards.find((card) => !(card.flash && card.quiz && card.write));
+    setCurrentIndex(findIndex);
+    setCurrCard(findCard);
     setToggled(false);
   };
 
   const onQuiz = (answer: string) => {
-    if (cards[currentIndex].definition === answer) {
-      const studyCards: StudyCard[] = JSON.parse(JSON.stringify(cards));
-      studyCards[currentIndex].quiz = true;
-      setCards(studyCards);
-      setCurrentIndex((prev) => prev + 1);
+    if (currCard?.definition === answer) {
+      const nextCards = cards.map((c) => (c.id === currCard?.id ? { ...c, quiz: true } : c));
+      setCards(nextCards);
+      const findIndex = nextCards.findIndex((card) => !(card.flash && card.quiz && card.write));
+      const findCard = nextCards.find((card) => !(card.flash && card.quiz && card.write));
+      setCurrentIndex(findIndex);
+      setCurrCard(findCard);
     }
   };
 
   const quizItems = React.useMemo(() => {
     const studyCards = cards
       .sort(() => Math.random() - 0.5)
-      .filter((c) => c.term + c.definition !== cards[currentIndex].term + cards[currentIndex].definition)
+      .filter((c) => c.id !== currCard?.id)
       .slice(0, 3);
-    return [...studyCards, cards[currentIndex]].sort(() => Math.random() - 0.5);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return [...studyCards, currCard!].sort(() => Math.random() - 0.5);
   }, [currentIndex, cardsLength]);
 
-  console.log(cards);
+  const [inputValue, setInputValue] = React.useState('');
+  const onWrite = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
+    if (currCard && isAnswerCorrect(currCard.definition, event.target.value)) {
+      setInputValue('');
+      const nextCards = cards.map((c) => (c.id === currCard?.id ? { ...c, write: true } : c));
+      setCards(nextCards);
+      const findIndex = nextCards.findIndex((card) => !(card.flash && card.quiz && card.write));
+      const findCard = nextCards.find((card) => !(card.flash && card.quiz && card.write));
+      setCurrentIndex(findIndex);
+      setCurrCard(findCard);
+    }
+  };
 
   if (!set.data) return <Custom404 />;
   return (
@@ -100,9 +124,10 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
             onClick={onToggle}
             animate={toggled ? motions.rotate : motions.init}
             disabled={currentIndex >= cardsLength || isToggling}
+            style={currCard?.flash ? { cursor: 'default' } : undefined}
           >
             <motion.span animate={toggled ? motions.rotate : motions.init}>
-              {!isToggling ? (toggled ? cards[currentIndex]?.definition : cards[currentIndex]?.term) : ''}
+              {!isToggling ? (toggled ? currCard?.definition : currCard?.term) : ''}
               {currentIndex >= cardsLength ? (
                 <>
                   <p>⚡️</p>
@@ -141,7 +166,7 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                 <span>Return to set page</span>
               </button>
             </>
-          ) : !cards[currentIndex].flash ? (
+          ) : !currCard?.flash ? (
             <>
               <button className={style.learn__arrow}>
                 <svg
@@ -172,16 +197,20 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                 <span>Got it</span>
               </button>
             </>
-          ) : !cards[currentIndex].quiz ? (
-            quizItems.map((card, i) => (
-              <button
-                onClick={() => onQuiz(card.definition)}
-                key={card.term + card.definition + i}
-                className={`${style.learn__arrow} ${style.learn__arrowright}`}
-              >
+          ) : !currCard?.quiz ? (
+            quizItems.map((card) => (
+              <button onClick={() => onQuiz(card.definition)} key={card.id} className={style.learn__arrow}>
                 <span>{card.definition}</span>
               </button>
             ))
+          ) : !currCard?.write ? (
+            <input
+              value={inputValue}
+              onChange={onWrite}
+              placeholder="Enter the answer"
+              className={style.learn__arrow}
+              style={{ textAlign: 'center' }}
+            />
           ) : undefined}
         </div>
       </div>

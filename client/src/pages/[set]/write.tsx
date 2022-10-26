@@ -9,6 +9,7 @@ import { useRouter } from 'next/router';
 import { Button } from 'ui/Button';
 import { CardInterface } from 'interfaces';
 import Link from 'next/link';
+import { isAnswerCorrect } from 'utils/isAnswerCorrect';
 
 type Results = {
   round: number;
@@ -51,13 +52,7 @@ const WritePage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
 
   const { register, handleSubmit, reset } = useForm<SubmitData>();
   const onSubmit = (payload: SubmitData) => {
-    if (
-      payload.answer
-        .toLowerCase()
-        .replace(/^\s+|\s+$/g, '')
-        .replace(/\s+/g, ' ') === cards[currentIndex].definition.toLowerCase()
-    )
-      nextCard();
+    if (isAnswerCorrect(cards[currentIndex].definition, payload.answer)) nextCard();
     else loseCard();
   };
 

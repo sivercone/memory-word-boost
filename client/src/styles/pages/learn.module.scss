@@ -91,7 +91,8 @@
     border-radius: 20px;
     box-shadow: var(--box-shadow);
 
-    &:hover {
+    &:hover,
+    &:focus-within {
       background-color: var(--color-background);
     }
   }
