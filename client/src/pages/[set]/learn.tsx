@@ -20,26 +20,13 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const [currCard, setCurrCard] = React.useState<StudyCard>();
   const [cards, setCards] = React.useState<StudyCard[]>([]);
   React.useEffect(() => {
-    if (set.data) {
-      const studyCards = set.data.cards.map((card) => ({ ...card, flash: false, write: false, quiz: false }));
-      setCards(studyCards);
-      setCurrCard(studyCards[0]);
-    }
+    if (set.data) onRestart();
   }, [set.data]);
 
-  // @todo - remove currentIndex, update logic for proggress bar (check for bool values in cards).
-  // const [currentIndex, setCurrentIndex] = React.useState<number>(0);
-  // const [cardsLength, scorePercent] = React.useMemo(() => {
-  //   const cardsLength = cards.length * 3;
-  //   const scorePercent = Math.round((currentIndex / cardsLength) * 100);
-  //   return [cardsLength, scorePercent];
-  // }, [currentIndex, cards.length]);
-
-  // const score = React.useMemo(() => {
-  //   const length = cards.filter((c) => !(c.flash && c.quiz && c.write)).length;
-  // console.log({ length, currCard });
-  //   return Math.round(((currCard?.order || 0) / length) * 100);
-  // }, [cards]);
+  const score = React.useMemo(() => {
+    const completion = cards.filter((c) => c.flash && c.quiz && c.write).length;
+    return Math.round((completion / cards.length) * 100);
+  }, [cards]);
 
   const isEnd = React.useMemo(() => cards.every((c) => c.flash && c.quiz && c.write), [cards]);
 
@@ -52,12 +39,16 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     setTimeout(() => setIsToggling(false), 300);
   };
 
-  const onFlash = () => {
-    if (!currCard) return;
-    const nextCards = cards.map((c) => (c.order === currCard?.order && !c.flash ? { ...c, flash: true } : c));
+  const onFlash = (alreadyKnow?: boolean) => {
+    const nextCards = cards.map((c) =>
+      c.order === currCard?.order && !c.flash
+        ? alreadyKnow
+          ? { ...c, flash: true, quiz: true, write: true }
+          : { ...c, flash: true }
+        : c,
+    );
     setCards(nextCards);
-    // const nextCurrCard = nextCards.find((c) => c.flash || (!c.quiz && c.flash));
-    const nextCurrCard = nextCards.find((c) => (!c.flash && !c.quiz && !c.write) || c.order !== currCard.order);
+    const nextCurrCard = nextCards.find((c) => !c.write || !c.quiz || !c.flash);
     setCurrCard(nextCurrCard);
     if (toggled) onToggle();
   };
@@ -66,12 +57,7 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     if (currCard?.definition === answer) {
       const nextCards = cards.map((c) => (c.order === currCard?.order ? { ...c, quiz: true } : c));
       setCards(nextCards);
-      // todo - this has bugs, need to fix, check with 3 cards
-      const nextCurrCard = nextCards.find((c) =>
-        nextCards.every((c) => c.order !== currCard.order && c.flash && c.quiz && c.write)
-          ? !c.flash || !c.quiz || !c.write
-          : c.order !== currCard.order,
-      );
+      const nextCurrCard = nextCards.sort(() => Math.random() - 0.5).find((c) => !c.flash || !c.quiz || !c.write);
       setCurrCard(nextCurrCard);
     }
   };
@@ -86,18 +72,26 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   }, [currCard, cards.length]);
 
   const [inputValue, setInputValue] = React.useState('');
-  const onWrite = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value);
-    if (currCard && isAnswerCorrect(currCard.definition, event.target.value)) {
+  const onWrite = (event?: React.ChangeEvent<HTMLInputElement>, idk?: boolean) => {
+    const value = event?.target.value || '';
+    setInputValue(value);
+    if (currCard && (idk || isAnswerCorrect(currCard.definition, value))) {
       setInputValue('');
-      const nextCards = cards.map((c) => (c.order === currCard?.order ? { ...c, write: true } : c));
+      const nextCards = cards.map((c) =>
+        c.order === currCard?.order ? (idk ? { ...c, quiz: false, write: false } : { ...c, write: true }) : c,
+      );
       setCards(nextCards);
       const nextCurrCard = nextCards.sort((a, b) => a.order - b.order).find((c) => !c.flash || !c.quiz || !c.write);
       setCurrCard(nextCurrCard);
     }
   };
 
-  console.log({ currCard, cards });
+  const onRestart = () => {
+    if (!set.data?.cards) return;
+    const studyCards = set.data.cards.map((card) => ({ ...card, flash: false, write: false, quiz: false }));
+    setCards(studyCards);
+    setCurrCard(studyCards[0]);
+  };
 
   if (!set.data) return <Custom404 />;
   return (
@@ -117,8 +111,8 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
       </header>
       <div className={style.learn}>
         <div className={style.progressbar}>
-          {/* <span>{score}%</span> */}
-          {/* <div style={{ width: `${score}%` }}></div> */}
+          <span>{score}%</span>
+          <div style={{ width: `${score}%` }}></div>
         </div>
         <motion.div
           className={style.learn__card}
@@ -146,7 +140,7 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
         <div className={style.learn__moves}>
           {isEnd ? (
             <>
-              <button className={style.learn__arrow}>
+              <button onClick={onRestart} className={style.learn__arrow}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">
                   <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z" />
                   <path
@@ -173,7 +167,7 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
             </>
           ) : !currCard?.flash ? (
             <>
-              <button className={style.learn__arrow}>
+              <button onClick={() => onFlash(true)} className={style.learn__arrow}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   enableBackground="new 0 0 24 24"
@@ -187,7 +181,7 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                 </svg>
                 <span>Already know</span>
               </button>
-              <button onClick={onFlash} className={style.learn__arrow}>
+              <button onClick={() => onFlash()} className={style.learn__arrow}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   enableBackground="new 0 0 24 24"
@@ -209,13 +203,19 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
               </button>
             ))
           ) : !currCard?.write ? (
-            <input
-              value={inputValue}
-              onChange={onWrite}
-              placeholder="Enter the answer"
-              className={style.learn__arrow}
-              style={{ textAlign: 'center' }}
-            />
+            <>
+              <input
+                value={inputValue}
+                onChange={onWrite}
+                placeholder="Enter the answer"
+                className={style.learn__arrow}
+                style={{ textAlign: 'center' }}
+                autoFocus
+              />
+              <button onClick={() => onWrite(undefined, true)} className={style.learn__arrow} style={{ width: '15%' }}>
+                <span>?</span>
+              </button>
+            </>
           ) : undefined}
         </div>
       </div>
