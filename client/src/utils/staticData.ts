@@ -4,6 +4,7 @@ export const pathsForHidingLayout = [
   '/[set]/flashcards',
   '/[set]/learn',
   '/[set]/exam',
-  '/create-set',
+  '/[set]/write',
   '/[set]/update',
+  '/create-set',
 ];

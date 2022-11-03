@@ -22,7 +22,7 @@ const SetEditing: NextPage<{ setFigure?: SetInterfaceDraft }> = ({ setFigure }) 
       ...setFigure,
       user,
       tags: setFigure?.tags?.join(', '),
-      cards: !setFigure?.id ? [{ term: '', definition: '' }] : setFigure.cards,
+      cards: !setFigure?.id ? [{ order: 0, term: '', definition: '' }] : setFigure.cards,
     },
   });
   const { fields, append, remove } = useFieldArray({ name: 'cards', control });
@@ -34,9 +34,10 @@ const SetEditing: NextPage<{ setFigure?: SetInterfaceDraft }> = ({ setFigure }) 
     try {
       const data = {
         ...payload,
-        cards: payload.cards.map(({ term, definition }) => ({
-          term: term?.replace(/^\s+|\s+$/g, '').replace(/\s+/g, ' ') || '',
-          definition: definition?.replace(/^\s+|\s+$/g, '').replace(/\s+/g, ' ') || '',
+        cards: payload.cards.map((c, i) => ({
+          order: c.order ? c.order : i,
+          term: c.term?.replace(/^\s+|\s+$/g, '').replace(/\s+/g, ' ') || '',
+          definition: c.definition?.replace(/^\s+|\s+$/g, '').replace(/\s+/g, ' ') || '',
         })),
       };
       await save.mutateAsync({ data, token: signAccess });
@@ -115,7 +116,7 @@ const SetEditing: NextPage<{ setFigure?: SetInterfaceDraft }> = ({ setFigure }) 
               </li>
             ))}
             <li style={{ textAlign: 'center' }}>
-              <Button onClick={() => append({ term: '', definition: '' })} type="button">
+              <Button onClick={() => append({ order: fields.length, term: '', definition: '' })} type="button">
                 ADD CARD
               </Button>
             </li>
@@ -177,7 +178,8 @@ const Import: React.FC<ImportProps> = ({ setIsImportShown, insertImport }) => {
 
   const onSave = () => {
     insertImport(
-      cards.map(({ term, definition }) => ({
+      cards.map(({ term, definition, ...rest }) => ({
+        ...rest,
         term: term?.replace(/^\s+|\s+$/g, '').replace(/\s+/g, ' ') || '',
         definition: definition?.replace(/^\s+|\s+$/g, '').replace(/\s+/g, ' ') || '',
       })),

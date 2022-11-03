@@ -14,7 +14,7 @@ import { CardInterface } from 'interfaces';
 
 // todo - describe how to learn with cards
 
-const motions = {
+export const motions = {
   init: { rotateY: 0, translateX: '0%', opacity: 1, transition: { duration: 0.25 } },
   rotate: { rotateY: 180, translateX: '0%', opacity: 1, transition: { duration: 0.25 } },
   translateLeft: { rotateY: 0, translateX: '100%', opacity: 0, transition: { duration: 0.3 } },

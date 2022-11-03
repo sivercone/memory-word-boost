@@ -1,4 +1,5 @@
 export interface CardInterface {
+  order: number;
   term: string;
   definition: string;
 }
