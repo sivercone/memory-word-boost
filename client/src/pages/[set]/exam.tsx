@@ -1,14 +1,15 @@
-import { NextPage } from 'next';
 import React from 'react';
+import { NextPage } from 'next';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { useForm } from 'react-hook-form';
 import { setApi } from 'apis/setApi';
 import Custom404 from 'pages/404';
-import style from 'styles/pages/exam.module.scss';
-import { useRouter } from 'next/router';
 import { Button } from 'ui/Button';
 import { CardInterface } from 'interfaces';
-import Link from 'next/link';
+import { isAnswerCorrect } from 'utils/isAnswerCorrect';
+import style from 'styles/pages/exam.module.scss';
 
 type SubmitData = { form: { input: string }[] };
 
@@ -27,7 +28,7 @@ const ExamPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const onSubmit = (payload: SubmitData) => {
     setIncorrect(
       payload.form.map((el, i) =>
-        el.input !== cards[i].definition
+        isAnswerCorrect(el.input, cards[i].definition)
           ? { correct: false, index: i, answer: el.input }
           : { correct: true, index: i, answer: el.input },
       ),
@@ -93,7 +94,7 @@ const ExamPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
               <Button onClick={onRestart} variant="outlined">
                 Restart exam
               </Button>
-              <Button onClick={() => push(`/${pagekey}`)} autoFocus={formState.isSubmitted} variant="outlined">
+              <Button onClick={() => push(`/${pagekey}`)} variant="outlined">
                 Return to set page
               </Button>
             </div>
