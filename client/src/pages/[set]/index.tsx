@@ -10,22 +10,30 @@ import { Modal, ModalBody, ModalActions, ModalList } from 'ui/Modal';
 import Custom404 from 'pages/404';
 import { useSetStore } from 'storage/useSetStore';
 import { folderApi } from 'apis/folderApi';
-import { FolderInterface } from 'interfaces';
+import { FolderInterface, SetInterface } from 'interfaces';
 import { useUserStore } from 'storage/useUserStore';
 import { formatDate } from 'utils/formatDate';
 import { Toggle } from 'ui/Toggle';
+import { isBackendLess } from 'utils/staticData';
+import { useLocalStore } from 'storage/useLocalStore';
 
 type ModalVariants = 'del' | 'info' | 'folder';
 
 const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
-  const set = useQuery(['set', pagekey], () => setApi.getById(pagekey), { enabled: !!pagekey });
-
   const router = useRouter();
+  const { localSets, setLocalSets } = useLocalStore();
   const { user, signAccess } = useUserStore();
+
+  const set = useQuery(['set', pagekey], () => setApi.getById(pagekey), { enabled: !!pagekey && !isBackendLess });
+  const [currSet, setCurrSet] = React.useState<SetInterface>();
+  React.useEffect(() => {
+    if (isBackendLess) setCurrSet(localSets.find(({ id }) => id === pagekey));
+    else setCurrSet(set.data);
+  }, [set.data, localSets]);
 
   const { setSetFigure } = useSetStore();
   const onEdit = () => {
-    setSetFigure(set.data);
+    setSetFigure(currSet);
     router.push(`${pagekey}/update`);
   };
 
@@ -37,8 +45,11 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     },
   });
   const onDeleteSet = async () => {
-    if (!set.data) return;
-    await fetchDelete.mutateAsync({ id: set.data.id, token: signAccess }).catch(() => null);
+    if (!currSet) return;
+    if (isBackendLess) {
+      setLocalSets(localSets.filter(({ id }) => id !== currSet.id));
+      router.push('/');
+    } else await fetchDelete.mutateAsync({ id: currSet.id, token: signAccess }).catch(() => null);
   };
 
   const [shownModal, setShownModal] = React.useState<ModalVariants>();
@@ -65,18 +76,20 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     } catch (error) {}
   };
 
-  if (!set.data) return <Custom404 />;
+  if (!currSet) return <Custom404 />;
   return (
     <>
       <div className="container">
         <div className={style.card}>
-          <h1>{set.data.title}</h1>
-          {set.data.description ? <p>{set.data.description}</p> : undefined}
-          <ul className={style.card__tags}>
-            {set.data.tags.map((tag, i) => (
-              <li key={tag + i}>{tag}</li>
-            ))}
-          </ul>
+          <h1>{currSet.title}</h1>
+          {currSet.description ? <p>{currSet.description}</p> : undefined}
+          {currSet.tags.length ? (
+            <ul className={style.card__tags}>
+              {currSet.tags.map((tag, i) => (
+                <li key={tag + i}>{tag}</li>
+              ))}
+            </ul>
+          ) : undefined}
           <ul className={style.card__studies}>
             <li>
               <Link href={`${pagekey}/learn`}>
@@ -147,14 +160,14 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
           <div className={style.createdby__author}>
             <span>
               Created by{' '}
-              <Link href={`/u/${set.data.user.id}`}>
-                <a>{set.data.user.name}</a>
+              <Link href={`/u/${currSet.user.id}`}>
+                <a>{currSet.user.name}</a>
               </Link>{' '}
-              {set.data.user.id === user?.id ? '(you)' : undefined}
+              {currSet.user.id === user?.id ? '(you)' : undefined}
             </span>
           </div>
           <div className={style.createdby__movements}>
-            {set.data.user.id === user?.id ? (
+            {currSet.user.id === user?.id || isBackendLess ? (
               <>
                 <button onClick={onEdit} title="edit">
                   <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor">
@@ -202,9 +215,9 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
           </div>
         </div>
         <div className={style.listset}>
-          <h2>Terms in this set ({set.data.cards.length})</h2>
+          <h2>Terms in this set ({currSet.cards.length})</h2>
           <ul>
-            {set.data.cards.map((content, i) => (
+            {currSet.cards.map((content, i) => (
               <li key={i}>
                 <span>{content.term}</span>
                 <span>{content.definition}</span>
@@ -227,7 +240,7 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                 info: (
                   <>
                     <h3>Information</h3>
-                    <p>{`This set was created ${formatDate({ createdAt: set.data.createdAt, pattern: 'dd MMM yyyy' })}`}</p>
+                    <p>{`This set was created ${formatDate({ createdAt: currSet.createdAt, pattern: 'dd MMM yyyy' })}`}</p>
                   </>
                 ),
                 folder: folder.data?.length ? (
@@ -252,7 +265,7 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                   <Toggle
                     label={content.name}
                     onClick={() => toggleIncludeFolder(content)}
-                    defaultChecked={!!set.data.folders?.find((el) => el.id === content.id)}
+                    defaultChecked={!!currSet.folders?.find((el) => el.id === content.id)}
                   />
                 </li>
               ))}

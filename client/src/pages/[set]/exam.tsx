@@ -7,21 +7,29 @@ import { useForm } from 'react-hook-form';
 import { setApi } from 'apis/setApi';
 import Custom404 from 'pages/404';
 import { Button } from 'ui/Button';
-import { CardInterface } from 'interfaces';
+import { CardInterface, SetInterface } from 'interfaces';
 import { isAnswerCorrect } from 'utils/isAnswerCorrect';
 import style from 'styles/pages/exam.module.scss';
+import { useLocalStore } from 'storage/useLocalStore';
+import { isBackendLess } from 'utils/staticData';
 
 type SubmitData = { form: { input: string }[] };
 
 const ExamPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
-  const set = useQuery(['set', pagekey], () => setApi.getById(pagekey));
-
   const { push } = useRouter();
+  const { localSets } = useLocalStore();
+
+  const set = useQuery(['set', pagekey], () => setApi.getById(pagekey));
+  const [currSet, setCurrSet] = React.useState<SetInterface>();
+  React.useEffect(() => {
+    if (isBackendLess) setCurrSet(localSets.find(({ id }) => id === pagekey));
+    else setCurrSet(set.data);
+  }, [set.data, localSets]);
 
   const [cards, setCards] = React.useState<CardInterface[]>([]);
   React.useEffect(() => {
-    if (set.data) setCards(set.data.cards.sort(() => Math.random() - 0.5));
-  }, [set.data]);
+    if (currSet) setCards(currSet.cards.sort(() => Math.random() - 0.5));
+  }, [currSet]);
 
   const { register, handleSubmit, formState, reset } = useForm<SubmitData>();
   const [incorrect, setIncorrect] = React.useState<{ correct: boolean; index: number; answer: string }[]>([]);
@@ -53,7 +61,7 @@ const ExamPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     reset();
   };
 
-  if (!set.data) return <Custom404 />;
+  if (!currSet) return <Custom404 />;
   return (
     <>
       <div style={{ height: '50px' }}></div>

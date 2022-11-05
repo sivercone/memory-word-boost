@@ -8,15 +8,19 @@ import { useUserStore } from 'storage/useUserStore';
 import { Modal, ModalActions, ModalBody } from 'ui/Modal';
 import { Input } from 'ui/Input';
 import { Button } from 'ui/Button';
-import { CardInterface, SetInterfaceDraft } from 'interfaces';
+import { CardInterface, SetInterface, SetInterfaceDraft } from 'interfaces';
 import style from 'styles/pages/createset.module.scss';
 import { Toggle } from 'ui/Toggle';
 import { AnimatePresence, motion } from 'framer-motion';
 import { transition } from 'ui/Header'; // @todo - fix this
+import { isBackendLess } from 'utils/staticData';
+import { useLocalStore } from 'storage/useLocalStore';
 
 const SetEditing: NextPage<{ setFigure?: SetInterfaceDraft }> = ({ setFigure }) => {
   const router = useRouter();
   const { user, signAccess } = useUserStore();
+  const { setLocalSets, localSets } = useLocalStore();
+
   const { register, handleSubmit, control, setValue } = useForm<SetInterfaceDraft & { tags: string | string[] }>({
     defaultValues: {
       ...setFigure,
@@ -31,17 +35,24 @@ const SetEditing: NextPage<{ setFigure?: SetInterfaceDraft }> = ({ setFigure }) 
   const save = useMutation(setApi.save, { onSuccess: () => queryClient.invalidateQueries('sets') });
   const onSubmit = async (payload: SetInterfaceDraft) => {
     if (payload.cards.length < 2) return toggleModalShown();
-    try {
-      const data = {
-        ...payload,
-        cards: payload.cards.map((c, i) => ({
-          order: c.order ? c.order : i,
-          term: c.term?.replace(/^\s+|\s+$/g, '').replace(/\s+/g, ' ') || '',
-          definition: c.definition?.replace(/^\s+|\s+$/g, '').replace(/\s+/g, ' ') || '',
-        })),
-      };
-      await save.mutateAsync({ data, token: signAccess });
-    } catch (error) {}
+    const data = {
+      ...payload,
+      cards: payload.cards.map((c, i) => ({
+        order: c.order ? c.order : i,
+        term: c.term?.replace(/^\s+|\s+$/g, '').replace(/\s+/g, ' ') || '',
+        definition: c.definition?.replace(/^\s+|\s+$/g, '').replace(/\s+/g, ' ') || '',
+      })),
+    };
+    if (isBackendLess) {
+      const generatedSet = generateSet(data);
+
+      setLocalSets([...localSets.filter(({ id }) => id !== generatedSet.id), generatedSet]);
+      router.push(`/${generatedSet.id}`);
+    } else {
+      try {
+        await save.mutateAsync({ data, token: signAccess });
+      } catch (error) {}
+    }
   };
 
   React.useEffect(() => {
@@ -140,6 +151,19 @@ const SetEditing: NextPage<{ setFigure?: SetInterfaceDraft }> = ({ setFigure }) 
 };
 
 export default SetEditing;
+
+const generateSet = (data: SetInterfaceDraft): SetInterface => {
+  const obj = {
+    ...data,
+    id: data.id || Date.now().toString(),
+    tags: (data.tags as unknown as string).replace(/\s+/g, '').split(','),
+    user: { id: 'unknown', name: 'SIVERCONE', email: 'sivercone@gmail.com', bio: '', avatar: '', createdAt: '', updatedAt: '' },
+    folders: [],
+    createdAt: new Date(Date.now()).toISOString(),
+    updatedAt: new Date(Date.now()).toISOString(),
+  };
+  return obj;
+};
 
 interface ImportProps {
   setIsImportShown: React.Dispatch<React.SetStateAction<boolean>>;
