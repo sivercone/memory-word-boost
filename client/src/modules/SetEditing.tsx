@@ -45,7 +45,6 @@ const SetEditing: NextPage<{ setFigure?: SetInterfaceDraft }> = ({ setFigure }) 
     };
     if (isBackendLess) {
       const generatedSet = generateSet(data);
-
       setLocalSets([...localSets.filter(({ id }) => id !== generatedSet.id), generatedSet]);
       router.push(`/${generatedSet.id}`);
     } else {
