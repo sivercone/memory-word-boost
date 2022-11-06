@@ -54,7 +54,7 @@
     }
 
     li:nth-child(even) {
-      width: calc(50% - 1rem);
+      width: calc(50% - 0.5rem);
     }
   }
 }
@@ -74,7 +74,7 @@
       justify-content: space-between;
       align-items: center;
       gap: 1rem;
-      padding: 1.5rem;
+      padding: 1rem;
       border-radius: 10px;
       background-color: var(--color-surface);
       color: var(--color-on-surface);

@@ -1,12 +1,13 @@
 {
   "env": "production",
   "dbConfig": {
-    "host": "localhost",
+    "host": "host.docker.internal",
     "database": "mwb",
     "port": 5432,
     "user": "sivercone",
     "password": "",
-    "synchronize": false
+    "synchronize": false,
+    "entities": ["dist/entities/*.js"]
   },
   "secretKey": "secretKey",
   "log": {
@@ -14,7 +15,7 @@
     "dir": "../logs"
   },
   "cors": {
-    "origin": "your.domain.com",
+    "origin": true,
     "credentials": true
   }
 }

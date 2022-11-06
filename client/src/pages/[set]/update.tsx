@@ -6,6 +6,7 @@ import SetEditing from 'modules/SetEditing';
 import Custom404 from 'pages/404';
 import { useUserStore } from 'storage/useUserStore';
 import ErrorPage from 'modules/ErrorPage';
+import { isBackendLess } from 'utils/staticData';
 
 const UpdateSet: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const { setFigure } = useSetStore();
@@ -16,7 +17,7 @@ const UpdateSet: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const data = setFigure || fetch.data;
 
   if (!data) return <Custom404 />;
-  if (user?.id !== data.user.id)
+  if (user?.id !== data.user.id && !isBackendLess)
     return (
       <ErrorPage>
         <p>Error 403</p>

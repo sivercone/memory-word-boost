@@ -2,9 +2,7 @@
 
 is a web application that helps fast learning and memorizing anything
 
-## Notice
-
-Project MWB is currently a work in progress
+> NOTE: Project MWB is currently a work in progress
 
 ## Background and motivation
 

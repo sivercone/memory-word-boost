@@ -8,28 +8,36 @@ import Custom404 from 'pages/404';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 // import { Button } from 'ui/Button';
-import { CardInterface } from 'interfaces';
+import { CardInterface, SetInterface } from 'interfaces';
+import { isBackendLess } from 'utils/staticData';
+import { useLocalStore } from 'storage/useLocalStore';
 
 // drag - https://codesandbox.io/s/5trtt
 
 // todo - describe how to learn with cards
 
-const motions = {
-  init: { rotateY: 0, translateX: '0%', opacity: 1, transition: { duration: 0.4 } },
-  rotate: { rotateY: 180, translateX: '0%', opacity: 1, transition: { duration: 0.4 } },
-  translateLeft: { rotateY: 0, translateX: '100%', opacity: 0, transition: { duration: 0.5 } },
-  translateRight: { rotateY: 0, translateX: '-100%', opacity: 0, transition: { duration: 0.5 } },
+export const motions = {
+  init: { rotateY: 0, translateX: '0%', opacity: 1, transition: { duration: 0.25 } },
+  rotate: { rotateY: 180, translateX: '0%', opacity: 1, transition: { duration: 0.25 } },
+  translateLeft: { rotateY: 0, translateX: '100%', opacity: 0, transition: { duration: 0.3 } },
+  translateRight: { rotateY: 0, translateX: '-100%', opacity: 0, transition: { duration: 0.3 } },
 };
 
 const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
+  const { push } = useRouter();
+  const { localSets } = useLocalStore();
+
   const set = useQuery(['set', pagekey], () => setApi.getById(pagekey));
+  const [currSet, setCurrSet] = React.useState<SetInterface>();
+  React.useEffect(() => {
+    if (isBackendLess) setCurrSet(localSets.find(({ id }) => id === pagekey));
+    else setCurrSet(set.data);
+  }, [set.data, localSets]);
 
   const [cards, setCards] = React.useState<CardInterface[]>([]);
   React.useEffect(() => {
-    if (set.data) setCards(set.data.cards);
-  }, [set.data]);
-
-  const { push } = useRouter();
+    if (currSet) setCards(currSet.cards);
+  }, [currSet]);
 
   const [toggled, setToggled] = React.useState(false);
   const [isToggling, setIsToggling] = React.useState(false);
@@ -37,7 +45,8 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     if (currentIndex >= cards.length) return;
     setIsToggling(true);
     setToggled(!toggled);
-    setTimeout(() => setIsToggling(false), 400);
+    // setIsToggling(false);
+    setTimeout(() => setIsToggling(false), 300);
   };
 
   const [currentIndex, setCurrentIndex] = React.useState<number>(0);
@@ -52,7 +61,7 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
       setToggled(false);
       setLearned(false);
       setCurrentIndex(currentIndex + 1);
-    }, 500);
+    }, 300);
   };
 
   const [repeatCards, setRepeatCards] = React.useState<CardInterface[]>([]);
@@ -63,7 +72,7 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
       setToggled(false);
       setToRepeated(false);
       setCurrentIndex(currentIndex + 1);
-    }, 500);
+    }, 300);
   };
 
   const onStudyAgain = () => {
@@ -73,9 +82,9 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   };
 
   const onRestart = () => {
-    if (!set.data) return;
+    if (!currSet) return;
     setRepeatCards([]);
-    setCards(set.data.cards);
+    setCards(currSet.cards);
     setCurrentIndex(0);
   };
 
@@ -89,7 +98,7 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     }
   };
 
-  if (!set.data) return <Custom404 />;
+  if (!currSet) return <Custom404 />;
   return (
     <>
       <header className={style.header}>
@@ -134,10 +143,10 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
             disabled={currentIndex >= cards.length || isToggling}
           >
             <motion.span animate={toggled ? motions.rotate : motions.init}>
-              {!isToggling ? (toggled ? cards[currentIndex]?.definition : cards[currentIndex]?.term) : '🗯'}
+              {!isToggling ? (toggled ? cards[currentIndex]?.definition : cards[currentIndex]?.term) : ''}
               {currentIndex >= cards.length ? (
                 <>
-                  {repeatCards.length === set.data.cards.length ? (
+                  {repeatCards.length === currSet.cards.length ? (
                     <>
                       <p>💥</p>
                       <p>You are doing progress</p>
@@ -151,7 +160,7 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                   <p>
                     {repeatCards.length
                       ? `Keep practicing to master the ${repeatCards.length} remaining`
-                      : `You just studied ${set.data.cards.length} terms!`}
+                      : `You just studied ${currSet.cards.length} terms!`}
                   </p>
                 </>
               ) : undefined}
@@ -183,7 +192,7 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                 <rect fill="none" height="24" width="24" />
                 <path d="M9,19l1.41-1.41L5.83,13H22V11H5.83l4.59-4.59L9,5l-7,7L9,19z" />
               </svg>
-              <span>Study again</span>
+              <span>Keep learning</span>
             </button>
           )}
           {currentIndex >= cards.length && repeatCards.length ? (

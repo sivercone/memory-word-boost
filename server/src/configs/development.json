@@ -6,7 +6,8 @@
     "port": 5432,
     "user": "sivercone",
     "password": "",
-    "synchronize": true
+    "synchronize": true,
+    "entities": ["src/entities/*{.ts,.js}"]
   },
   "secretKey": "secretKey",
   "log": {

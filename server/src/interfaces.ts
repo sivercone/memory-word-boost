@@ -7,7 +7,7 @@ export interface SetInterface {
   title: string;
   description: string;
   tags: string[];
-  cards: { term: string; definition: string }[];
+  cards: { order: number; term: string; definition: string }[];
   folders?: FolderInterface[];
   user: UserInterface;
   createdAt: string;
@@ -45,6 +45,7 @@ export interface dbConfig {
   user: string;
   password: string;
   synchronize: boolean;
+  entities: string[];
 }
 
 import { Router } from 'express';

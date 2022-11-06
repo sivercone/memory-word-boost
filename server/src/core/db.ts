@@ -1,9 +1,8 @@
 import { DataSourceOptions, DataSource } from 'typeorm';
 import { dbConfig } from '@/interfaces';
 import config from 'config';
-import path from 'path';
 
-const { host, port, database, user, password }: dbConfig = config.get('dbConfig');
+const { host, port, database, user, password, synchronize, entities }: dbConfig = config.get('dbConfig');
 
 const dbConnection: DataSourceOptions = {
   type: 'postgres',
@@ -13,11 +12,10 @@ const dbConnection: DataSourceOptions = {
   username: user,
   password: password,
   database: database,
-  synchronize: true,
+  synchronize: synchronize,
   logging: false,
   cache: false,
-  entities: ['src/entities/*{.ts,.js}'],
-  migrations: [path.join(__dirname, '../**/*.migration{.ts,.js}')],
+  entities: entities,
 };
 
 export const dataSource = new DataSource(dbConnection);

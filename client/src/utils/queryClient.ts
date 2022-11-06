@@ -1,5 +1,6 @@
 import { QueryClient } from 'react-query';
 import { notify } from './notify';
+import { isBackendLess } from './staticData';
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -9,6 +10,7 @@ export const queryClient = new QueryClient({
       },
     },
     queries: {
+      enabled: !isBackendLess,
       retry: false,
       staleTime: 60 * 1000 * 5,
       onError: (e) => {

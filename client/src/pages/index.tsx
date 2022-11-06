@@ -9,27 +9,41 @@ import { Button } from 'ui/Button';
 import style from 'styles/pages/home.module.scss';
 import { useRouter } from 'next/router';
 import { FolderEditing } from 'modules/FolderEditing';
+import { authApi } from 'apis/authApi';
+import { isBackendLess } from 'utils/staticData';
+import { useLocalStore } from 'storage/useLocalStore';
+import { FolderInterface, SetInterface } from 'interfaces';
+
+type StateType = { userSets: SetInterface[]; userFolders: FolderInterface[] };
 
 const Home: NextPage = () => {
+  const { localSets } = useLocalStore();
+  const { signAccess } = useUserStore();
   const router = useRouter();
-  const { user } = useUserStore();
-  // prettier-ignore
-  const userSets = useQuery('userSets', () => { if (user) return setApi.getByUser(user) }, { enabled: !!user });
-  // prettier-ignore
-  const userFolders = useQuery('userFolders', () => { if (user) return folderApi.getByUser(user) }, { enabled: !!user });
-  const set = useQuery('sets', () => setApi.get(user?.id));
-  const folder = useQuery('folders', () => folderApi.get(user?.id));
+
+  const user = useQuery('user', () => authApi.me(signAccess)); // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const userSets = useQuery('userSets', () => setApi.getByUser(user.data!), { enabled: !!user.data }); // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const userFolders = useQuery('userFolders', () => folderApi.getByUser(user.data!), { enabled: !!user.data });
+  const set = useQuery('sets', () => setApi.get(user.data?.id), { enabled: !!user.data || user.isFetched });
+  const folder = useQuery('folders', () => folderApi.get(user.data?.id), { enabled: !!user.data || user.isFetched });
 
   const [shownFolder, setShownFolder] = React.useState(false);
   const toggleShownFolder = () => setShownFolder(!shownFolder);
+
+  const [state, setState] = React.useState<StateType>({ userSets: [], userFolders: [] });
+  React.useEffect(() => {
+    if (isBackendLess) setState({ userSets: localSets, userFolders: [] });
+    else if (userSets.data) setState((prev) => ({ ...prev, userSets: userSets.data }));
+    else if (userFolders.data) setState((prev) => ({ ...prev, userFolders: userFolders.data }));
+  }, [isBackendLess, userSets.data, userFolders.data]);
 
   return (
     <div className={style.container}>
       <section>
         <h2>Recent study sets</h2>
         <div className={style.cardlist}>
-          {userSets.data?.length ? (
-            userSets.data.map((content) => <CardBox key={content.id} content={content.title} id={content.id} type="set" />)
+          {state.userSets.length ? (
+            state.userSets.map((content) => <CardBox key={content.id} content={content.title} id={content.id} type="set" />)
           ) : (
             <div className={style.emptyCard}>
               <p>You don&#39;t have any study sets yet</p>
@@ -41,8 +55,8 @@ const Home: NextPage = () => {
       <section>
         <h2>Recent folders</h2>
         <div className={style.cardlist}>
-          {userFolders.data?.length ? (
-            userFolders.data.map((content) => <CardBox key={content.id} content={content.name} id={content.id} type="folder" />)
+          {state.userFolders.length ? (
+            state.userFolders.map((content) => <CardBox key={content.id} content={content.name} id={content.id} type="folder" />)
           ) : (
             <>
               <div className={style.emptyCard}>
@@ -54,17 +68,19 @@ const Home: NextPage = () => {
           )}
         </div>
       </section>
-      <section>
-        <h2>Discover solutions from other users</h2>
-        <div className={style.cardlist}>
-          {set.data
-            ? set.data.map((content) => <CardBox key={content.id} content={content.title} id={content.id} type="set" />)
-            : undefined}
-          {folder.data
-            ? folder.data.map((content) => <CardBox key={content.id} content={content.name} id={content.id} type="folder" />)
-            : undefined}
-        </div>
-      </section>
+      {set.data?.length || folder.data?.length ? (
+        <section>
+          <h2>Discover solutions from other users</h2>
+          <div className={style.cardlist}>
+            {set.data?.length
+              ? set.data.map((content) => <CardBox key={content.id} content={content.title} id={content.id} type="set" />)
+              : undefined}
+            {folder.data?.length
+              ? folder.data.map((content) => <CardBox key={content.id} content={content.name} id={content.id} type="folder" />)
+              : undefined}
+          </div>
+        </section>
+      ) : undefined}
     </div>
   );
 };

@@ -4,6 +4,9 @@ export const pathsForHidingLayout = [
   '/[set]/flashcards',
   '/[set]/learn',
   '/[set]/exam',
-  '/create-set',
+  '/[set]/write',
   '/[set]/update',
+  '/create-set',
 ];
+
+export const isBackendLess = process.env.NEXT_PUBLIC_BACKENDLESS === 'TRUE';

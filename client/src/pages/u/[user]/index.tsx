@@ -22,20 +22,12 @@ const UserPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     router.replace(`/u/${pagekey}?entries=sets`);
   }, [pagekey]);
 
-  const sets = useQuery(
-    ['sets', pagekey],
-    () => {
-      if (user.data) return setApi.getByUser(user.data);
-    },
-    { enabled: !!pagekey && !!user.data && router.query.entries === 'sets' },
-  );
-  const folders = useQuery(
-    ['folders', pagekey],
-    () => {
-      if (user.data) return folderApi.getByUser(user.data);
-    },
-    { enabled: !!pagekey && !!user.data && router.query.entries === 'folders' },
-  );
+  // prettier-ignore
+  const sets = useQuery(['sets', pagekey], 
+    () => { if (user.data) return setApi.getByUser(user.data) }, { enabled: !!pagekey && !!user.data && router.query.entries === 'sets' });
+  // prettier-ignore
+  const folders = useQuery(['folders', pagekey],
+    () => { if (user.data) return folderApi.getByUser(user.data) }, { enabled: !!pagekey && !!user.data && router.query.entries === 'folders' });
 
   if (!user.data) return <Custom404 />;
   return (
@@ -80,17 +72,43 @@ const UserPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
           {
             sets: {
               idle: undefined,
-              error: 'error',
-              loading: 'loading',
-              success: sets.data?.map((content) => <CardBox key={content.id} id={content.id} content={content.title} type="set" />),
+              error: (
+                <div style={{ textAlign: 'center', margin: '1rem 0' }}>
+                  <i>Something went wrong. Failed to load content.</i>
+                </div>
+              ),
+              loading: (
+                <div style={{ textAlign: 'center', margin: '1rem 0' }}>
+                  <i>Loading..</i>
+                </div>
+              ),
+              success: sets.data?.length ? (
+                sets.data.map((content) => <CardBox key={content.id} id={content.id} content={content.title} type="set" />)
+              ) : (
+                <div style={{ textAlign: 'center', margin: '1rem 0' }}>
+                  <i>It looks like there is no study set here</i>
+                </div>
+              ),
             }[sets.status],
             folders: {
               idle: undefined,
-              error: 'error',
-              loading: 'loading',
-              success: folders.data?.map((content) => (
-                <CardBox key={content.id} id={content.id} content={content.name} type="folder" />
-              )),
+              error: (
+                <div style={{ textAlign: 'center', margin: '1rem 0' }}>
+                  <i>Something went wrong. Failed to load content.</i>
+                </div>
+              ),
+              loading: (
+                <div style={{ textAlign: 'center', margin: '1rem 0' }}>
+                  <i>Loading..</i>
+                </div>
+              ),
+              success: folders.data?.length ? (
+                folders.data.map((content) => <CardBox key={content.id} id={content.id} content={content.name} type="folder" />)
+              ) : (
+                <div style={{ textAlign: 'center', margin: '1rem 0' }}>
+                  <i>It looks like there is no folder here</i>
+                </div>
+              ),
             }[folders.status],
           }[router.query.entries as 'sets' | 'folders']
         }

@@ -10,22 +10,30 @@ import { Modal, ModalBody, ModalActions, ModalList } from 'ui/Modal';
 import Custom404 from 'pages/404';
 import { useSetStore } from 'storage/useSetStore';
 import { folderApi } from 'apis/folderApi';
-import { FolderInterface } from 'interfaces';
+import { FolderInterface, SetInterface } from 'interfaces';
 import { useUserStore } from 'storage/useUserStore';
 import { formatDate } from 'utils/formatDate';
 import { Toggle } from 'ui/Toggle';
+import { isBackendLess } from 'utils/staticData';
+import { useLocalStore } from 'storage/useLocalStore';
 
 type ModalVariants = 'del' | 'info' | 'folder';
 
 const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
-  const set = useQuery(['set', pagekey], () => setApi.getById(pagekey), { enabled: !!pagekey });
-
   const router = useRouter();
+  const { localSets, setLocalSets } = useLocalStore();
   const { user, signAccess } = useUserStore();
+
+  const set = useQuery(['set', pagekey], () => setApi.getById(pagekey), { enabled: !!pagekey && !isBackendLess });
+  const [currSet, setCurrSet] = React.useState<SetInterface>();
+  React.useEffect(() => {
+    if (isBackendLess) setCurrSet(localSets.find(({ id }) => id === pagekey));
+    else setCurrSet(set.data);
+  }, [set.data, localSets]);
 
   const { setSetFigure } = useSetStore();
   const onEdit = () => {
-    setSetFigure(set.data);
+    setSetFigure(currSet);
     router.push(`${pagekey}/update`);
   };
 
@@ -37,8 +45,11 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     },
   });
   const onDeleteSet = async () => {
-    if (!set.data) return;
-    await fetchDelete.mutateAsync({ id: set.data.id, token: signAccess }).catch(() => null);
+    if (!currSet) return;
+    if (isBackendLess) {
+      setLocalSets(localSets.filter(({ id }) => id !== currSet.id));
+      router.push('/');
+    } else await fetchDelete.mutateAsync({ id: currSet.id, token: signAccess }).catch(() => null);
   };
 
   const [shownModal, setShownModal] = React.useState<ModalVariants>();
@@ -65,18 +76,20 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     } catch (error) {}
   };
 
-  if (!set.data) return <Custom404 />;
+  if (!currSet) return <Custom404 />;
   return (
     <>
       <div className="container">
         <div className={style.card}>
-          <h1>{set.data.title}</h1>
-          {set.data.description ? <p>{set.data.description}</p> : undefined}
-          <ul className={style.card__tags}>
-            {set.data.tags.map((tag, i) => (
-              <li key={tag + i}>{tag}</li>
-            ))}
-          </ul>
+          <h1>{currSet.title}</h1>
+          {currSet.description ? <p>{currSet.description}</p> : undefined}
+          {currSet.tags.length ? (
+            <ul className={style.card__tags}>
+              {currSet.tags.map((tag, i) => (
+                <li key={tag + i}>{tag}</li>
+              ))}
+            </ul>
+          ) : undefined}
           <ul className={style.card__studies}>
             <li>
               <Link href={`${pagekey}/learn`}>
@@ -111,12 +124,28 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
               </Link>
             </li>
             <li>
-              <Link href={`${pagekey}/exam`}>
+              <Link href={`${pagekey}/write`}>
                 <a>
                   <span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="4rem" height="4rem" viewBox="0 0 512 512">
                       <path
                         d="M131.3 20.35c-14.6.1-28.1 10-31.93 24.82-2.33 9.13-.55 18.4 4.13 25.84-7.67 4.26-13.69 11.53-16.03 20.66-2.32 9.13-.56 18.33 4.1 25.83a32.687 32.687 0 0 0-15.96 20.6c-2.34 9.1-.54 18.4 4.18 25.8-7.72 4.3-13.75 11.5-16.09 20.7-2.33 9.1-.54 18.4 4.19 25.8-7.72 4.3-13.75 11.5-16.09 20.7-2.34 9.1-.54 18.4 4.18 25.8-7.72 4.3-13.75 11.5-16.08 20.7-2.34 9.1-.54 18.4 4.18 25.8-7.72 4.3-13.75 11.5-16.09 20.7-2.35 9.2-.51 18.5 4.3 26a32.915 32.915 0 0 0-16.28 20.8c-4.48 17.5 6.25 35.6 23.79 40.1l.1-.2 31.71 8.2-1.47 5.7 261.56 67L374 326.5l-22.4 21.2-87.8 26.5 15.5-42.5-151.7-38.8 4.4-17.4 153.5 39.3 9.7-26.7 15.3-14.4-167-42.8 4.4-17.4 178 45.6 39.6-37.4-206.1-52.8 4.4-17.4L380.7 207l-.1.4 31.5-29.8 18.3-71.4-261.6-67.04-4.8 18.66c2.2-16.32-8.1-32.27-24.5-36.44-2.7-.7-5.5-1.04-8.2-1.03zm.3 17.99c1.2 0 2.4.19 3.5.48 8.1 2.09 12.9 10.13 10.8 18.27l17.2 4.4-11 42.81c2.2-16.35-8.2-32.26-24.5-36.43l-.6-.15c-7.8-2.34-12.2-10.15-10.2-18.07 1.7-6.61 7.3-11 13.7-11.3h1.1zm-11.9 46.51c.9 0 1.9.14 2.9.36l.6.15c8.1 2.08 12.9 10.12 10.8 18.24l17.2 4.4-11 43c2.4-16.4-8-32.6-24.4-36.7-.7-.2-1.3-.4-1.9-.5-7-2.7-10.9-10.1-9-17.62 1.7-6.97 7.9-11.45 14.8-11.29zm59.9 4.59 217 55.66-4.4 17.4-217-55.6zm-72.9 41.86h1.3c.5 0 .9 0 1.4.1.6.2 1.2.3 1.8.5l.1-.2c8.1 2.1 12.9 10.1 10.8 18.3l17.2 4.4-11 43c2.3-16.3-8.1-32.4-24.4-36.6-8.18-2.1-12.94-10.1-10.85-18.3 1.69-6.6 7.25-10.9 13.65-11.2zM465.4 152l-10.2 9.6 31.6 33.5 10.2-9.6zm-23.3 22L315.7 293.5l31.5 33.5 126.5-119.5zm-347.23 3.7c1.48 0 3 .1 4.53.5 8.1 2.1 12.9 10.1 10.8 18.3l17.2 4.4-11 43c2.3-16.4-8.1-32.4-24.44-36.6-8.14-2.1-12.9-10.1-10.82-18.3 1.7-6.6 7.32-11 13.73-11.3zm-11.91 46.5c1.48 0 3 .1 4.53.5 8.14 2.1 12.91 10.1 10.81 18.3l17.2 4.4-11 42.9c2.3-16.3-8.1-32.3-24.45-36.5-8.14-2.1-12.89-10.1-10.81-18.3 1.69-6.6 7.31-11 13.72-11.3zm-11.9 46.5c1.48 0 3 .1 4.53.5 8.13 2.1 12.89 10.1 10.81 18.3l17.2 4.3-10.94 42.8c2.16-16.3-8.25-32.1-24.51-36.3-8.14-2.1-12.9-10.1-10.82-18.3 1.7-6.6 7.32-11 13.73-11.3zm235.34 39.2L293 346.6l37.4-11.3zm-247.25 7.3c1.48 0 3 .1 4.53.5 8.14 2.1 12.9 10.1 10.81 18.3l17.21 4.3-11 43c2.1-16.2-8.3-32-24.53-36.2l.1-.3c-8.16-2.1-12.92-10.1-10.84-18.3 1.69-6.6 7.31-11 13.72-11.3zm56.95 20.3L333.2 393l-4.4 17.4-217.1-55.5zM47.18 364c1.48 0 3 .1 4.52.5 8.14 2.1 12.9 10.1 10.82 18.3l17.2 4.3-3.69 14.4-31.92-8.2v.2c-8.01-2.2-12.67-10.1-10.61-18.2 1.7-6.6 7.32-11 13.73-11.3z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                  </span>
+                  <span>Write</span>
+                </a>
+              </Link>
+            </li>
+            <li>
+              <Link href={`${pagekey}/exam`}>
+                <a>
+                  <span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="4rem" height="4rem" viewBox="0 0 512 512">
+                      <path d="M0 0h512v512H0z" fill="transparent" />
+                      <path
+                        d="M256.156 21.625c-45.605 0-86.876 2.852-117.22 7.563-15.17 2.355-27.554 5.11-36.874 8.53-4.66 1.71-8.568 3.515-11.968 6.094-3.238 2.457-6.65 6.36-6.97 11.75h-.75c0 10.08.362 20.022 1.064 29.813H57.53c-.12-7.952.003-15.922.376-23.875l-26.812-6.28C22.55 161.892 64.1 265.716 140.564 339.655l15.655-29.594a250.817 250.817 0 0 1-12.157-10.75 143.483 143.483 0 0 1 19.28-16.843c13.468 13.172 28.182 23.565 43.813 30.655 22.114 17.744 8.053 29.368-23.5 36.25 58.863 10.6 38.948 62.267-14.125 92.313-2.14.27-4.256.523-6.28.812-12.047 1.718-21.876 3.71-29.406 6.25-3.765 1.27-6.958 2.6-9.906 4.656-2.95 2.055-6.626 5.705-6.626 11.406 0 5.702 3.677 9.32 6.626 11.375 2.948 2.055 6.14 3.387 9.906 4.657 7.53 2.54 17.36 4.532 29.406 6.25 24.094 3.436 56.784 5.53 92.906 5.53 36.123 0 68.812-2.094 92.906-5.53 12.048-1.718 21.877-3.71 29.407-6.25 3.764-1.27 6.957-2.602 9.905-4.656 2.948-2.055 6.625-5.674 6.625-11.375 0-5.702-3.677-9.352-6.625-11.407-2.948-2.055-6.14-3.387-9.906-4.656-7.53-2.54-17.36-4.532-29.408-6.25-2.013-.287-4.12-.544-6.25-.813-53.076-30.045-72.99-81.71-14.125-92.312-31.568-6.886-45.63-18.522-23.468-36.28 15.74-7.15 30.547-17.655 44.092-30.97 6.648 4.773 12.84 10.038 18.47 15.72a300.791 300.791 0 0 1-12.72 12.217l16.188 29.594c79.118-71.955 116.195-179.53 110.03-285l-27.342 7.97c.45 7.61.64 15.19.562 22.75h-25.594a416.913 416.913 0 0 0 1.063-29.814h-.75c-.323-5.39-3.763-9.293-7-11.75-3.402-2.58-7.31-4.383-11.97-6.093-9.32-3.422-21.704-6.177-36.875-8.532-30.342-4.71-71.613-7.563-117.22-7.563zm0 18.688c44.822 0 85.426 2.854 114.344 7.343 14.46 2.245 26.06 4.932 33.313 7.594 1.04.382 1.775.75 2.625 1.125-.85.375-1.58.742-2.625 1.125-7.252 2.662-18.854 5.38-33.313 7.625-28.918 4.49-69.522 7.344-114.344 7.344-44.82 0-85.425-2.855-114.344-7.345-14.46-2.245-26.06-4.963-33.312-7.625-1.05-.386-1.77-.748-2.625-1.125.853-.376 1.577-.74 2.625-1.125 7.252-2.662 18.853-5.35 33.313-7.594 28.918-4.49 69.522-7.343 114.343-7.343zm-197.25 71.874H86.25c8.057 57.878 28.23 108.83 56.188 146.25-6.974 5.74-13.407 11.968-19.188 18.688-38.648-46.456-59.042-104.647-64.344-164.938zm367.188 0h27C447.51 171.82 425.336 228.34 388.03 275a158.506 158.506 0 0 0-17.842-16.97c27.81-37.38 47.873-88.175 55.906-145.842z"
                         fill="currentColor"
                       />
                     </svg>
@@ -131,14 +160,14 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
           <div className={style.createdby__author}>
             <span>
               Created by{' '}
-              <Link href={`/u/${set.data.user.id}`}>
-                <a>{set.data.user.name}</a>
+              <Link href={`/u/${currSet.user.id}`}>
+                <a>{currSet.user.name}</a>
               </Link>{' '}
-              {set.data.user.id === user?.id ? '(you)' : undefined}
+              {currSet.user.id === user?.id ? '(you)' : undefined}
             </span>
           </div>
           <div className={style.createdby__movements}>
-            {set.data.user.id === user?.id ? (
+            {currSet.user.id === user?.id || isBackendLess ? (
               <>
                 <button onClick={onEdit} title="edit">
                   <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor">
@@ -186,9 +215,9 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
           </div>
         </div>
         <div className={style.listset}>
-          <h2>Terms in this set ({set.data.cards.length})</h2>
+          <h2>Terms in this set ({currSet.cards.length})</h2>
           <ul>
-            {set.data.cards.map((content, i) => (
+            {currSet.cards.map((content, i) => (
               <li key={i}>
                 <span>{content.term}</span>
                 <span>{content.definition}</span>
@@ -211,7 +240,7 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                 info: (
                   <>
                     <h3>Information</h3>
-                    <p>{`This set was created ${formatDate({ createdAt: set.data.createdAt, pattern: 'dd MMM yyyy' })}`}</p>
+                    <p>{`This set was created ${formatDate({ createdAt: currSet.createdAt, pattern: 'dd MMM yyyy' })}`}</p>
                   </>
                 ),
                 folder: folder.data?.length ? (
@@ -236,7 +265,7 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                   <Toggle
                     label={content.name}
                     onClick={() => toggleIncludeFolder(content)}
-                    defaultChecked={!!set.data.folders?.find((el) => el.id === content.id)}
+                    defaultChecked={!!currSet.folders?.find((el) => el.id === content.id)}
                   />
                 </li>
               ))}

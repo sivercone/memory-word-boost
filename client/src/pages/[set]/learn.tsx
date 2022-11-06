@@ -1,85 +1,109 @@
 import React from 'react';
 import { NextPage } from 'next';
-import { useForm } from 'react-hook-form';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { setApi } from 'apis/setApi';
-import Custom404 from 'pages/404';
+import { CardInterface, SetInterface } from 'interfaces';
 import style from 'styles/pages/learn.module.scss';
-import { useRouter } from 'next/router';
-import { Button } from 'ui/Button';
-import { CardInterface } from 'interfaces';
-import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { motions } from './flashcards';
+import Custom404 from 'pages/404';
+import { isAnswerCorrect } from 'utils/isAnswerCorrect';
+import { isBackendLess } from 'utils/staticData';
+import { useLocalStore } from 'storage/useLocalStore';
 
-type Results = {
-  round: number;
-  incorrectCards: CardInterface[];
-  correctCards: CardInterface[];
-};
-type SubmitData = { answer: string };
+type StudyCard = CardInterface & { flash: boolean; write: boolean; quiz: boolean };
 
 const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const { push } = useRouter();
+  const { localSets } = useLocalStore();
+
   const set = useQuery(['set', pagekey], () => setApi.getById(pagekey));
 
-  const [cards, setCards] = React.useState<CardInterface[]>([]);
+  const [currSet, setCurrSet] = React.useState<SetInterface>();
   React.useEffect(() => {
-    if (set.data) setCards(set.data.cards.sort(() => Math.random() - 0.5));
-  }, [set.data]);
-  const [currentIndex, setCurrentIndex] = React.useState<number>(0);
-  const scorePercent = Math.round((currentIndex / cards.length) * 100);
-  const [status, setStatus] = React.useState<'T' | 'F' | 'E'>('T');
-  const [round, setRound] = React.useState<number>(1);
-  const [incorrect, setIncorrect] = React.useState<CardInterface[]>([]);
+    if (isBackendLess) setCurrSet(localSets.find(({ id }) => id === pagekey));
+    else setCurrSet(set.data);
+  }, [set.data, localSets]);
 
-  const loseCard = () => {
-    setStatus('F');
-    if (!incorrect.find((el) => el === cards[currentIndex])) {
-      setIncorrect((prev) => [...prev, cards[currentIndex]]);
+  const [currCard, setCurrCard] = React.useState<StudyCard>();
+  const [cards, setCards] = React.useState<StudyCard[]>([]);
+  React.useEffect(() => {
+    if (currSet) onRestart();
+  }, [currSet]);
+
+  const score = React.useMemo(() => {
+    const completion = cards.filter((c) => c.flash && c.quiz && c.write).length;
+    return Math.round((completion / cards.length) * 100);
+  }, [cards]);
+
+  const isEnd = React.useMemo(() => cards.every((c) => c.flash && c.quiz && c.write), [cards]);
+
+  const [toggled, setToggled] = React.useState(false);
+  const [isToggling, setIsToggling] = React.useState(false);
+  const onToggle = () => {
+    if (currCard?.flash) return;
+    setIsToggling(true);
+    setToggled(!toggled);
+    setTimeout(() => setIsToggling(false), 300);
+  };
+
+  const onFlash = (alreadyKnow?: boolean) => {
+    const nextCards = cards.map((c) =>
+      c.order === currCard?.order && !c.flash
+        ? alreadyKnow
+          ? { ...c, flash: true, quiz: true, write: true }
+          : { ...c, flash: true }
+        : c,
+    );
+    setCards(nextCards);
+    const nextCurrCard = nextCards.find((c) => !c.write || !c.quiz || !c.flash);
+    setCurrCard(nextCurrCard);
+    if (toggled) onToggle();
+  };
+
+  const onQuiz = (answer: string) => {
+    if (currCard?.definition === answer) {
+      const nextCards = cards.map((c) => (c.order === currCard?.order ? { ...c, quiz: true } : c));
+      setCards(nextCards);
+      const nextCurrCard = nextCards.sort(() => Math.random() - 0.5).find((c) => !c.flash || !c.quiz || !c.write);
+      setCurrCard(nextCurrCard);
     }
   };
 
-  const nextCard = () => {
-    if (currentIndex + 1 >= cards.length) {
-      setStatus('E');
-      setResults((prev) => [...prev, { round: round, incorrectCards: incorrect, correctCards: cards }]);
-    } else {
-      setStatus('T');
-      setCurrentIndex((prev) => prev + 1);
+  const quizItems = React.useMemo(() => {
+    const studyCards = cards
+      .sort(() => Math.random() - 0.5)
+      .filter((c) => c.order !== currCard?.order)
+      .slice(0, 3);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return [...studyCards, currCard!].sort(() => Math.random() - 0.5);
+  }, [currCard, cards.length]);
+
+  const [inputValue, setInputValue] = React.useState('');
+  const onWrite = (event?: React.ChangeEvent<HTMLInputElement>, idk?: boolean) => {
+    const value = event?.target.value || '';
+    setInputValue(value);
+    if (currCard && (idk || isAnswerCorrect(currCard.definition, value))) {
+      setInputValue('');
+      const nextCards = cards.map((c) =>
+        c.order === currCard?.order ? (idk ? { ...c, quiz: false, write: false } : { ...c, write: true }) : c,
+      );
+      setCards(nextCards);
+      const nextCurrCard = nextCards.sort((a, b) => a.order - b.order).find((c) => !c.flash || !c.quiz || !c.write);
+      setCurrCard(nextCurrCard);
     }
-    reset();
   };
 
-  const { register, handleSubmit, reset } = useForm<SubmitData>();
-  const onSubmit = (payload: SubmitData) => {
-    if (payload.answer === cards[currentIndex].definition) nextCard();
-    else loseCard();
+  const onRestart = () => {
+    if (!currSet?.cards) return;
+    const studyCards = currSet.cards.map((card) => ({ ...card, flash: false, write: false, quiz: false }));
+    setCards(studyCards);
+    setCurrCard(studyCards[0]);
   };
 
-  const [results, setResults] = React.useState<Results[]>([]);
-
-  const nextRound = () => {
-    setCurrentIndex(0);
-    setCards(incorrect);
-    setIncorrect([]);
-    setRound((prev) => prev + 1);
-    setStatus('T');
-  };
-
-  const restartRound = () => {
-    if (!set.data) return;
-    setIncorrect([]);
-    setCards(set.data.cards.sort(() => Math.random() - 0.5));
-    setCurrentIndex(0);
-    setRound(1);
-    setResults([]);
-    setStatus('T');
-  };
-
-  // TODO
-  // 1. add fade animations for changing text in blocks
-  // 2. add diffrent emojis, dependent on completing, for result header
-
-  if (!set.data) return <Custom404 />;
+  if (!currSet) return <Custom404 />;
   return (
     <>
       <header className={style.header}>
@@ -95,106 +119,116 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
           </Link>
         </div>
       </header>
-      {cards.length && status !== 'E' ? (
-        <div className={style.form}>
-          <div className={style.form__inner}>
-            <div className={style.form__progressbar} title={`${scorePercent}%`}>
-              <div style={{ width: `${scorePercent}%` }}></div>
-            </div>
-            <div className={style.form__main}>
-              <div className={style.form__learn}>
-                <span>{cards[currentIndex].term}</span>
-                {status === 'F' ? (
-                  <>
-                    <span>correct answer</span>
-                    <span>{cards[currentIndex].definition}</span>
-                  </>
-                ) : undefined}
-              </div>
-              <form onSubmit={handleSubmit(onSubmit)} className={style.form__fields} autoComplete="off">
-                <input type="text" {...register('answer')} required autoFocus />
-                <div>
-                  <Button type="submit">ANSWER</Button>
-                  <Button onClick={loseCard} type="button" title="click if don't know">
-                    ?
-                  </Button>
-                </div>
-              </form>
-            </div>
-          </div>
+      <div className={style.learn}>
+        <div className={style.progressbar}>
+          <span>{score}%</span>
+          <div style={{ width: `${score}%` }}></div>
         </div>
-      ) : undefined}
-      {status === 'E' ? (
-        <div className={style.block}>
-          {incorrect.length ? (
-            <div className={style.block__inner}>
-              <header className={style.results__header}>
-                <p>Results of Round {round}</p>
-                <p>Good, you&#39;re in progress</p>
-              </header>
-              <div className={style.results__content}>
-                <p style={{ color: 'green' }}>
-                  <span>Correct</span>
-                  <span>{cards.length - incorrect.length}</span>
-                </p>
-                <p style={{ color: 'tomato' }}>
-                  <span>Incorrect</span>
-                  <span>{incorrect.length}</span>
-                </p>
-                <p>
-                  <span>Overall progress</span>
-                  <span>{`${set.data.cards.length - incorrect.length}/${set.data.cards.length}`}</span>
-                </p>
-              </div>
-              <div className={style.results__actions}>
-                <Button onClick={() => push(`/${pagekey}`)} variant="outlined">
-                  Return to set page
-                </Button>
-                <Button onClick={nextRound} variant="outlined">
-                  Continue
-                </Button>
-              </div>
-            </div>
-          ) : (
-            <div className={style.block__inner}>
-              <header className={style.results__header}>
-                <p>Congrats!</p>
-                <p>{`You've studied ${set.data.cards.length} cards.`}</p>
-              </header>
-              <div className={style.results__content} style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: '5rem' }}>🎯</div>
-              </div>
-              <div className={style.results__actions}>
-                <Button onClick={restartRound} variant="outlined">
-                  Study again
-                </Button>
-                <Button onClick={() => push(`/${pagekey}`)} variant="outlined">
-                  Return to set page
-                </Button>
-              </div>
-            </div>
-          )}
-          {!incorrect.length
-            ? results.map((el, i) => (
-                <div key={i} className={style.block__inner}>
-                  <header className={style.results__header}>
-                    <p>{`Round ${el.round}`}</p>
-                  </header>
-                  <div className={style.results__content}>
-                    {el.correctCards.map((card, i) => (
-                      <p key={i} style={el.incorrectCards.includes(card) ? { color: 'tomato' } : { color: 'green' }}>
-                        <span>
-                          {el.incorrectCards.includes(card) ? '✕' : '✓'} {card.term}
-                        </span>
-                        <span>{card.definition}</span>
-                      </p>
-                    ))}
-                  </div>
-                </div>
-              ))
-            : undefined}
+        <motion.div
+          className={style.learn__card}
+          // eslint-disable-next-line no-constant-condition
+          // animate={!'learned' ? motions.translateLeft : !'toRepeated' ? motions.translateRight : motions.init}
+        >
+          <motion.button
+            onClick={onToggle}
+            animate={toggled ? motions.rotate : motions.init}
+            disabled={currCard?.flash || isToggling}
+            style={currCard?.flash ? { cursor: 'default' } : undefined}
+          >
+            <motion.span animate={toggled ? motions.rotate : motions.init}>
+              {!isToggling ? (toggled ? currCard?.definition : currCard?.term) : ''}
+              {isEnd ? (
+                <>
+                  <p>⚡️</p>
+                  <p>Nice progress</p>
+                  <p>{`You just studied ${cards.length} terms!`}</p>
+                </>
+              ) : undefined}
+            </motion.span>
+          </motion.button>
+        </motion.div>
+        <div className={style.learn__moves}>
+          {isEnd ? (
+            <>
+              <button onClick={onRestart} className={style.learn__arrow}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z" />
+                  <path
+                    fillRule="evenodd"
+                    d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"
+                  />
+                </svg>
+                <span>Restart</span>
+              </button>
+              <button onClick={() => push(`/${pagekey}`)} className={style.learn__arrow}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  enableBackground="new 0 0 24 24"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  fill="currentColor"
+                >
+                  <rect fill="none" height="24" width="24" />
+                  <path d="M15,5l-1.41,1.41L18.17,11H2V13h16.17l-4.59,4.59L15,19l7-7L15,5z" />
+                </svg>
+                <span>Return to set page</span>
+              </button>
+            </>
+          ) : !currCard?.flash ? (
+            <>
+              <button onClick={() => onFlash(true)} className={style.learn__arrow}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  enableBackground="new 0 0 24 24"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  fill="currentColor"
+                >
+                  <rect fill="none" height="24" width="24" />
+                  <path d="M9,19l1.41-1.41L5.83,13H22V11H5.83l4.59-4.59L9,5l-7,7L9,19z" />
+                </svg>
+                <span>Already know</span>
+              </button>
+              <button onClick={() => onFlash()} className={style.learn__arrow}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  enableBackground="new 0 0 24 24"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  fill="currentColor"
+                >
+                  <rect fill="none" height="24" width="24" />
+                  <path d="M15,5l-1.41,1.41L18.17,11H2V13h16.17l-4.59,4.59L15,19l7-7L15,5z" />
+                </svg>
+                <span>Got it</span>
+              </button>
+            </>
+          ) : !currCard?.quiz ? (
+            quizItems.map((card) => (
+              <button onClick={() => onQuiz(card.definition)} key={card.order} className={style.learn__arrow}>
+                <span>{card.definition}</span>
+              </button>
+            ))
+          ) : !currCard?.write ? (
+            <>
+              <input
+                value={inputValue}
+                onChange={onWrite}
+                placeholder="Enter the answer"
+                className={style.learn__arrow}
+                style={{ textAlign: 'center' }}
+                autoFocus
+              />
+              <button onClick={() => onWrite(undefined, true)} className={style.learn__arrow} style={{ width: '15%' }}>
+                <span>?</span>
+              </button>
+            </>
+          ) : undefined}
         </div>
-      ) : undefined}
+      </div>
     </>
   );
 };

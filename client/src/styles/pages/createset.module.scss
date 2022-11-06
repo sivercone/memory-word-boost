@@ -31,34 +31,121 @@
     flex-direction: column;
     gap: 1rem;
   }
+
+  &__actions {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 10px;
+    border: 1px solid var(--color-outline);
+    background-color: var(--color-surface);
+    color: var(--color-on-surface);
+  }
 }
 
 .cards {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  margin-top: 3rem;
 
   &__block {
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
     gap: 0.5rem;
 
     > label {
       transition: width 0.3s ease;
     }
 
-    > label:focus-within {
-      width: 350%;
-    }
-
     button {
-      padding: 0.6rem;
+      padding: 0.5rem;
       border-radius: 10px;
       border: 1px solid var(--color-on-surface);
       background-color: var(--color-surface);
       color: var(--color-on-surface);
+    }
+  }
+}
+
+.import {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-background);
+  color: var(--color-on-background);
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    height: 100%;
+    padding: 1rem;
+    overflow: auto;
+    max-width: var(--container-width);
+    width: 100%;
+    margin: 0 auto;
+    padding-bottom: 100px;
+  }
+
+  &__structure {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    p {
+      margin-bottom: 0.5rem;
+    }
+
+    ul {
+      li {
+        color: var(--color-on-surface);
+        background-color: var(--color-surface);
+
+        label {
+          padding: 0.5rem 1rem;
+        }
+      }
+
+      li:not(:last-child) {
+        border-bottom: 1px solid var(--color-outline);
+      }
+
+      li:first-child {
+        border-radius: 10px 10px 0 0;
+      }
+
+      li:last-child {
+        border-radius: 0 0 10px 10px;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 425px) {
+  .import {
+    &__structure {
+      flex-direction: row;
+      align-items: flex-end;
+
+      > div {
+        flex-basis: 100%;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .cards {
+    &__block {
+      > label:focus-within {
+        width: 350%;
+      }
     }
   }
 }

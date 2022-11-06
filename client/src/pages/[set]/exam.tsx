@@ -1,33 +1,42 @@
-import { NextPage } from 'next';
 import React from 'react';
+import { NextPage } from 'next';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { useForm } from 'react-hook-form';
 import { setApi } from 'apis/setApi';
 import Custom404 from 'pages/404';
-import style from 'styles/pages/exam.module.scss';
-import { useRouter } from 'next/router';
 import { Button } from 'ui/Button';
-import { CardInterface } from 'interfaces';
-import Link from 'next/link';
+import { CardInterface, SetInterface } from 'interfaces';
+import { isAnswerCorrect } from 'utils/isAnswerCorrect';
+import style from 'styles/pages/exam.module.scss';
+import { useLocalStore } from 'storage/useLocalStore';
+import { isBackendLess } from 'utils/staticData';
 
 type SubmitData = { form: { input: string }[] };
 
 const ExamPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
-  const set = useQuery(['set', pagekey], () => setApi.getById(pagekey));
-
   const { push } = useRouter();
+  const { localSets } = useLocalStore();
+
+  const set = useQuery(['set', pagekey], () => setApi.getById(pagekey));
+  const [currSet, setCurrSet] = React.useState<SetInterface>();
+  React.useEffect(() => {
+    if (isBackendLess) setCurrSet(localSets.find(({ id }) => id === pagekey));
+    else setCurrSet(set.data);
+  }, [set.data, localSets]);
 
   const [cards, setCards] = React.useState<CardInterface[]>([]);
   React.useEffect(() => {
-    if (set.data) setCards(set.data.cards.sort(() => Math.random() - 0.5));
-  }, [set.data]);
+    if (currSet) setCards(currSet.cards.sort(() => Math.random() - 0.5));
+  }, [currSet]);
 
   const { register, handleSubmit, formState, reset } = useForm<SubmitData>();
   const [incorrect, setIncorrect] = React.useState<{ correct: boolean; index: number; answer: string }[]>([]);
   const onSubmit = (payload: SubmitData) => {
     setIncorrect(
       payload.form.map((el, i) =>
-        el.input !== cards[i].definition
+        isAnswerCorrect(el.input, cards[i].definition)
           ? { correct: false, index: i, answer: el.input }
           : { correct: true, index: i, answer: el.input },
       ),
@@ -52,7 +61,7 @@ const ExamPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     reset();
   };
 
-  if (!set.data) return <Custom404 />;
+  if (!currSet) return <Custom404 />;
   return (
     <>
       <div style={{ height: '50px' }}></div>
@@ -93,7 +102,7 @@ const ExamPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
               <Button onClick={onRestart} variant="outlined">
                 Restart exam
               </Button>
-              <Button onClick={() => push(`/${pagekey}`)} autoFocus={formState.isSubmitted} variant="outlined">
+              <Button onClick={() => push(`/${pagekey}`)} variant="outlined">
                 Return to set page
               </Button>
             </div>

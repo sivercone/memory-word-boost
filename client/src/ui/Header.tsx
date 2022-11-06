@@ -9,9 +9,9 @@ import { pathsForHidingLayout } from 'utils/staticData';
 import { Button } from './Button';
 import { useQuery } from 'react-query';
 import { authApi } from 'apis/authApi';
-import { sessionMemory } from 'utils/sessionMemory';
+import { sessionMemory } from 'utils/browserMemory';
 
-const transition = {
+export const transition = {
   init: { y: '100%', transition: { duration: 0.1 } },
   anim: { y: '0%', transition: { duration: 0.15 } },
 };
