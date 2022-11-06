@@ -8,7 +8,7 @@ export const useSetStore = create(
       setFigure: undefined as SetInterface | undefined,
     },
     (set) => ({
-      setSetFigure: (payload: SetInterface | undefined) => set((state) => ({ ...state, status: payload })),
+      setSetFigure: (payload: SetInterface | undefined) => set((state) => ({ ...state, setFigure: payload })),
     }),
   ),
 );

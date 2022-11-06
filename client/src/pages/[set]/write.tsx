@@ -7,9 +7,11 @@ import Custom404 from 'pages/404';
 import style from 'styles/pages/write.module.scss';
 import { useRouter } from 'next/router';
 import { Button } from 'ui/Button';
-import { CardInterface } from 'interfaces';
+import { CardInterface, SetInterface } from 'interfaces';
 import Link from 'next/link';
 import { isAnswerCorrect } from 'utils/isAnswerCorrect';
+import { useLocalStore } from 'storage/useLocalStore';
+import { isBackendLess } from 'utils/staticData';
 
 type Results = {
   round: number;
@@ -20,12 +22,19 @@ type SubmitData = { answer: string };
 
 const WritePage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const { push } = useRouter();
+  const { localSets } = useLocalStore();
+
   const set = useQuery(['set', pagekey], () => setApi.getById(pagekey));
+  const [currSet, setCurrSet] = React.useState<SetInterface>();
+  React.useEffect(() => {
+    if (isBackendLess) setCurrSet(localSets.find(({ id }) => id === pagekey));
+    else setCurrSet(set.data);
+  }, [set.data, localSets]);
 
   const [cards, setCards] = React.useState<CardInterface[]>([]);
   React.useEffect(() => {
-    if (set.data) setCards(set.data.cards.sort(() => Math.random() - 0.5));
-  }, [set.data]);
+    if (currSet) setCards(currSet.cards.sort(() => Math.random() - 0.5));
+  }, [currSet]);
   const [currentIndex, setCurrentIndex] = React.useState<number>(0);
   const scorePercent = Math.round((currentIndex / cards.length) * 100);
   const [status, setStatus] = React.useState<'T' | 'F' | 'E'>('T');
@@ -67,9 +76,9 @@ const WritePage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   };
 
   const restartRound = () => {
-    if (!set.data) return;
+    if (!currSet) return;
     setIncorrect([]);
-    setCards(set.data.cards.sort(() => Math.random() - 0.5));
+    setCards(currSet.cards.sort(() => Math.random() - 0.5));
     setCurrentIndex(0);
     setRound(1);
     setResults([]);
@@ -80,7 +89,7 @@ const WritePage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   // 1. add fade animations for changing text in blocks
   // 2. add diffrent emojis, dependent on completing, for result header
 
-  if (!set.data) return <Custom404 />;
+  if (!currSet) return <Custom404 />;
   return (
     <>
       <header className={style.header}>
@@ -144,7 +153,7 @@ const WritePage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                 </p>
                 <p>
                   <span>Overall progress</span>
-                  <span>{`${set.data.cards.length - incorrect.length}/${set.data.cards.length}`}</span>
+                  <span>{`${currSet.cards.length - incorrect.length}/${currSet.cards.length}`}</span>
                 </p>
               </div>
               <div className={style.results__actions}>
@@ -160,7 +169,7 @@ const WritePage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
             <div className={style.block__inner}>
               <header className={style.results__header}>
                 <p>Congrats!</p>
-                <p>{`You've studied ${set.data.cards.length} cards.`}</p>
+                <p>{`You've studied ${currSet.cards.length} cards.`}</p>
               </header>
               <div className={style.results__content} style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: '5rem' }}>🎯</div>

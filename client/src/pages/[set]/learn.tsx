@@ -4,24 +4,34 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { setApi } from 'apis/setApi';
-import { CardInterface } from 'interfaces';
+import { CardInterface, SetInterface } from 'interfaces';
 import style from 'styles/pages/learn.module.scss';
 import { motion } from 'framer-motion';
 import { motions } from './flashcards';
 import Custom404 from 'pages/404';
 import { isAnswerCorrect } from 'utils/isAnswerCorrect';
+import { isBackendLess } from 'utils/staticData';
+import { useLocalStore } from 'storage/useLocalStore';
 
 type StudyCard = CardInterface & { flash: boolean; write: boolean; quiz: boolean };
 
 const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const { push } = useRouter();
+  const { localSets } = useLocalStore();
+
   const set = useQuery(['set', pagekey], () => setApi.getById(pagekey));
+
+  const [currSet, setCurrSet] = React.useState<SetInterface>();
+  React.useEffect(() => {
+    if (isBackendLess) setCurrSet(localSets.find(({ id }) => id === pagekey));
+    else setCurrSet(set.data);
+  }, [set.data, localSets]);
 
   const [currCard, setCurrCard] = React.useState<StudyCard>();
   const [cards, setCards] = React.useState<StudyCard[]>([]);
   React.useEffect(() => {
-    if (set.data) onRestart();
-  }, [set.data]);
+    if (currSet) onRestart();
+  }, [currSet]);
 
   const score = React.useMemo(() => {
     const completion = cards.filter((c) => c.flash && c.quiz && c.write).length;
@@ -87,13 +97,13 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   };
 
   const onRestart = () => {
-    if (!set.data?.cards) return;
-    const studyCards = set.data.cards.map((card) => ({ ...card, flash: false, write: false, quiz: false }));
+    if (!currSet?.cards) return;
+    const studyCards = currSet.cards.map((card) => ({ ...card, flash: false, write: false, quiz: false }));
     setCards(studyCards);
     setCurrCard(studyCards[0]);
   };
 
-  if (!set.data) return <Custom404 />;
+  if (!currSet) return <Custom404 />;
   return (
     <>
       <header className={style.header}>
