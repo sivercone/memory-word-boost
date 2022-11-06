@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import Avatar from 'boring-avatars';
 import { useUserStore } from 'storage/useUserStore';
 import style from 'styles/components/header.module.scss';
-import { pathsForHidingLayout } from 'utils/staticData';
+import { isBackendLess, pathsForHidingLayout } from 'utils/staticData';
 import { Button } from './Button';
 import { useQuery } from 'react-query';
 import { authApi } from 'apis/authApi';
@@ -35,24 +35,26 @@ const Header: React.FC = () => {
     <>
       <div style={{ height: '50px' }}></div>
       <header className={style.header}>
-        <div className={style.header__inner}>
+        <div className={style.header__inner} style={isBackendLess ? { justifyContent: 'center' } : undefined}>
           <Link href="/">
             <a>PROJECT MWB</a>
           </Link>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            {user ? (
-              <button onClick={toggleMenu} style={{ height: '40px', borderRadius: '50%' }}>
-                <Avatar size={40} variant="ring" colors={['#92A1C6', '#146A7C', '#F0AB3D', '#C271B4', '#C20D90']} />
-              </button>
-            ) : (
-              <Link href="/login">
-                <a className={style.avatarbutton}>
-                  <img className={style.avatarpic} src={'/assets/avatar.svg'} alt="" />
-                  <span>Login</span>
-                </a>
-              </Link>
-            )}
-          </div>
+          {isBackendLess ? undefined : (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              {user ? (
+                <button onClick={toggleMenu} style={{ height: '40px', borderRadius: '50%' }}>
+                  <Avatar size={40} variant="ring" colors={['#92A1C6', '#146A7C', '#F0AB3D', '#C271B4', '#C20D90']} />
+                </button>
+              ) : (
+                <Link href="/login">
+                  <a className={style.avatarbutton}>
+                    <img className={style.avatarpic} src={'/assets/avatar.svg'} alt="" />
+                    <span>Login</span>
+                  </a>
+                </Link>
+              )}
+            </div>
+          )}
         </div>
       </header>
       <AnimatePresence>
