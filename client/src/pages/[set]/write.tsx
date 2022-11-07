@@ -124,7 +124,7 @@ const WritePage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
               <form onSubmit={handleSubmit(onSubmit)} className={style.form__fields} autoComplete="off">
                 <input type="text" {...register('answer')} required autoFocus />
                 <div>
-                  <Button type="submit">ANSWER</Button>
+                  <Button type="submit">{'>'}</Button>
                   <Button onClick={loseCard} type="button" title="click if don't know">
                     ?
                   </Button>

@@ -76,8 +76,7 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     const studyCards = cards
       .sort(() => Math.random() - 0.5)
       .filter((c) => c.order !== currCard?.order)
-      .slice(0, 3);
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      .slice(0, 3); // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return [...studyCards, currCard!].sort(() => Math.random() - 0.5);
   }, [currCard, cards.length]);
 
@@ -147,87 +146,87 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
             </motion.span>
           </motion.button>
         </motion.div>
-        <div className={style.learn__moves}>
-          {isEnd ? (
-            <>
-              <button onClick={onRestart} className={style.learn__arrow}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">
-                  <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z" />
-                  <path
-                    fillRule="evenodd"
-                    d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"
-                  />
-                </svg>
-                <span>Restart</span>
-              </button>
-              <button onClick={() => push(`/${pagekey}`)} className={style.learn__arrow}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  enableBackground="new 0 0 24 24"
-                  height="1em"
-                  viewBox="0 0 24 24"
-                  width="1em"
-                  fill="currentColor"
-                >
-                  <rect fill="none" height="24" width="24" />
-                  <path d="M15,5l-1.41,1.41L18.17,11H2V13h16.17l-4.59,4.59L15,19l7-7L15,5z" />
-                </svg>
-                <span>Return to set page</span>
-              </button>
-            </>
-          ) : !currCard?.flash ? (
-            <>
-              <button onClick={() => onFlash(true)} className={style.learn__arrow}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  enableBackground="new 0 0 24 24"
-                  height="1em"
-                  viewBox="0 0 24 24"
-                  width="1em"
-                  fill="currentColor"
-                >
-                  <rect fill="none" height="24" width="24" />
-                  <path d="M9,19l1.41-1.41L5.83,13H22V11H5.83l4.59-4.59L9,5l-7,7L9,19z" />
-                </svg>
-                <span>Already know</span>
-              </button>
-              <button onClick={() => onFlash()} className={style.learn__arrow}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  enableBackground="new 0 0 24 24"
-                  height="1em"
-                  viewBox="0 0 24 24"
-                  width="1em"
-                  fill="currentColor"
-                >
-                  <rect fill="none" height="24" width="24" />
-                  <path d="M15,5l-1.41,1.41L18.17,11H2V13h16.17l-4.59,4.59L15,19l7-7L15,5z" />
-                </svg>
-                <span>Got it</span>
-              </button>
-            </>
-          ) : !currCard?.quiz ? (
-            quizItems.map((card) => (
+        {isEnd ? (
+          <div className={style.learn__moves}>
+            <button onClick={onRestart} className={style.learn__arrow}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z" />
+                <path
+                  fillRule="evenodd"
+                  d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"
+                />
+              </svg>
+              <span>Restart</span>
+            </button>
+            <button onClick={() => push(`/${pagekey}`)} className={style.learn__arrow}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                enableBackground="new 0 0 24 24"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                fill="currentColor"
+              >
+                <rect fill="none" height="24" width="24" />
+                <path d="M15,5l-1.41,1.41L18.17,11H2V13h16.17l-4.59,4.59L15,19l7-7L15,5z" />
+              </svg>
+              <span>Return to set page</span>
+            </button>
+          </div>
+        ) : !currCard?.flash ? (
+          <div className={style.learn__moves}>
+            <button onClick={() => onFlash(true)} className={style.learn__arrow}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                enableBackground="new 0 0 24 24"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                fill="currentColor"
+              >
+                <rect fill="none" height="24" width="24" />
+                <path d="M9,19l1.41-1.41L5.83,13H22V11H5.83l4.59-4.59L9,5l-7,7L9,19z" />
+              </svg>
+              <span>Already know</span>
+            </button>
+            <button onClick={() => onFlash()} className={style.learn__arrow}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                enableBackground="new 0 0 24 24"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                fill="currentColor"
+              >
+                <rect fill="none" height="24" width="24" />
+                <path d="M15,5l-1.41,1.41L18.17,11H2V13h16.17l-4.59,4.59L15,19l7-7L15,5z" />
+              </svg>
+              <span>Got it</span>
+            </button>
+          </div>
+        ) : !currCard?.quiz ? (
+          <div className={style.learn__moves} style={{ flexWrap: 'wrap' }}>
+            {quizItems.map((card) => (
               <button onClick={() => onQuiz(card.definition)} key={card.order} className={style.learn__arrow}>
                 <span>{card.definition}</span>
               </button>
-            ))
-          ) : !currCard?.write ? (
-            <>
-              <input
-                value={inputValue}
-                onChange={onWrite}
-                placeholder="Enter the answer"
-                className={style.learn__arrow}
-                style={{ textAlign: 'center' }}
-                autoFocus
-              />
-              <button onClick={() => onWrite(undefined, true)} className={style.learn__arrow} style={{ width: '15%' }}>
-                <span>?</span>
-              </button>
-            </>
-          ) : undefined}
-        </div>
+            ))}
+          </div>
+        ) : !currCard?.write ? (
+          <div className={style.learn__moves}>
+            <input
+              value={inputValue}
+              onChange={onWrite}
+              placeholder="Enter the answer"
+              className={style.learn__arrow}
+              style={{ textAlign: 'center' }}
+              autoFocus
+            />
+            <button onClick={() => onWrite(undefined, true)} className={style.learn__arrow} style={{ width: '15%' }}>
+              <span>?</span>
+            </button>
+          </div>
+        ) : undefined}
       </div>
     </>
   );

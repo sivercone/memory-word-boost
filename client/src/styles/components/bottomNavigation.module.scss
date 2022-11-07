@@ -16,6 +16,7 @@
     max-width: var(--container-width);
     width: 100%;
     margin: 0 auto;
+    padding-bottom: 0.5rem;
   }
 
   &__item {
@@ -62,7 +63,7 @@
   width: 100%;
   max-width: var(--container-width);
   margin: 0 auto;
-  height: 200px;
+  height: 220px;
   padding: 1rem;
   border-top-left-radius: 25px;
   border-top-right-radius: 25px;
@@ -74,7 +75,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 
     span {
       font-size: 1.2rem;
@@ -112,7 +113,7 @@
 }
 
 .overlay {
-  height: 50px;
+  height: calc(50px + 0.5rem);
 }
 .overlayActive {
   z-index: 10;

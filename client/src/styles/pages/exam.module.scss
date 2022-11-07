@@ -73,7 +73,8 @@
     height: 100%;
 
     span {
-      font-size: 3rem;
+      font-size: clamp(1rem, 5vw, 5rem);
+      word-break: break-word;
     }
 
     span:nth-child(2) {
@@ -94,7 +95,7 @@
     input {
       width: 100%;
       border-bottom: 2px solid var(--color-on-surface);
-      font-size: 2rem;
+      font-size: clamp(1rem, 5vw, 5rem);
       outline: none;
     }
   }
