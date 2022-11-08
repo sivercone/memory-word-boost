@@ -216,6 +216,7 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
           </div>
         ) : !currCard?.write ? (
           <div className={style.learn__moves} style={{ height: '10%' }}>
+            <style>{'#learn__card {height: 20%}'}</style>
             <input
               value={inputValue}
               onChange={onWrite}
