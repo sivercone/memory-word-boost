@@ -125,6 +125,7 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
         </div>
         <motion.div
           className={style.learn__card}
+          id="learn__card"
           // eslint-disable-next-line no-constant-condition
           // animate={!'learned' ? motions.translateLeft : !'toRepeated' ? motions.translateRight : motions.init}
         >
@@ -174,8 +175,9 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
             </button>
           </div>
         ) : !currCard?.flash ? (
-          <div className={style.learn__moves}>
-            <button onClick={() => onFlash(true)} className={style.learn__arrow}>
+          <div className={style.learn__moves} style={{ height: 'auto' }}>
+            <style>{'#learn__card {height: 100%}'}</style>
+            <button onClick={() => onFlash(true)} className={style.learn__arrow} style={{ padding: '2rem' }}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 enableBackground="new 0 0 24 24"
@@ -213,7 +215,7 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
             ))}
           </div>
         ) : !currCard?.write ? (
-          <div className={style.learn__moves}>
+          <div className={style.learn__moves} style={{ height: '10%' }}>
             <input
               value={inputValue}
               onChange={onWrite}
