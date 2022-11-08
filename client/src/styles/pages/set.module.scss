@@ -48,6 +48,10 @@
         color: var(--color-on-primary);
       }
 
+      span:nth-child(1) {
+        font-size: 4rem;
+      }
+
       span:nth-child(2) {
         margin-top: 0.5rem;
         font-size: 1.3rem;
@@ -125,11 +129,24 @@
 @media screen and (max-width: 375px) {
   .card {
     &__studies {
-      flex-direction: column;
-
       li,
       li:nth-child(even) {
         width: 100%;
+
+        a {
+          flex-direction: row;
+          align-items: center;
+          gap: 1rem;
+          padding: 0.5rem;
+        }
+
+        span:nth-child(1) {
+          font-size: 2rem;
+        }
+
+        span:nth-child(2) {
+          margin-top: 0;
+        }
       }
     }
   }
