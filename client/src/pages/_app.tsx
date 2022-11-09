@@ -6,8 +6,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import { queryClient } from 'utils/queryClient';
 import { AuthCheck } from 'modules/AuthCheck';
-import BottomNavigation from 'ui/BottomNavigation';
-import Header from 'ui/Header';
+import Layout from 'ui/Layout';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -16,10 +15,10 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Head>
           <title>PROJ MWB</title>
         </Head>
-        <Header />
-        <Component {...pageProps} />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
         <AuthCheck />
-        <BottomNavigation />
         <ToastContainer
           progressStyle={{ background: 'var(--color-primary)' }}
           position="bottom-right"

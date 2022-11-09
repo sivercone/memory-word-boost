@@ -12,6 +12,7 @@ import { isAnswerCorrect } from 'utils/isAnswerCorrect';
 import style from 'styles/pages/exam.module.scss';
 import { useLocalStore } from 'storage/useLocalStore';
 import { isBackendLess } from 'utils/staticData';
+import Header from 'ui/Header';
 
 type SubmitData = { form: { input: string }[] };
 
@@ -64,20 +65,17 @@ const ExamPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   if (!currSet) return <Custom404 />;
   return (
     <>
-      <div style={{ height: '50px' }}></div>
-      <header className={style.header}>
-        <div className={style.header__inner}>
-          <button onClick={() => push(`/${pagekey}`)} title="close">
-            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
-              <path d="M0 0h24v24H0V0z" fill="none" />
-              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
-            </svg>
-          </button>
-          <Link href="/">
-            <a className={style.header__logo}>Project MWB</a>
-          </Link>
-        </div>
-      </header>
+      <Header>
+        <button onClick={() => push(`/${pagekey}`)} title="close">
+          <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
+            <path d="M0 0h24v24H0V0z" fill="none" />
+            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
+          </svg>
+        </button>
+        <Link href="/">
+          <a className={style.header__logo}>Project MWB</a>
+        </Link>
+      </Header>
       <div className={style.container}>
         {formState.isSubmitted ? (
           <div className={style.results}>

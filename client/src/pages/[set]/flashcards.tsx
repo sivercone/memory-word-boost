@@ -11,16 +11,17 @@ import Link from 'next/link';
 import { CardInterface, SetInterface } from 'interfaces';
 import { isBackendLess } from 'utils/staticData';
 import { useLocalStore } from 'storage/useLocalStore';
+import Header from 'ui/Header';
 
 // drag - https://codesandbox.io/s/5trtt
 
 // todo - describe how to learn with cards
 
 export const motions = {
-  init: { rotateY: 0, translateX: '0%', opacity: 1, transition: { duration: 0.25 } },
-  rotate: { rotateY: 180, translateX: '0%', opacity: 1, transition: { duration: 0.25 } },
-  translateLeft: { rotateY: 0, translateX: '100%', opacity: 0, transition: { duration: 0.3 } },
-  translateRight: { rotateY: 0, translateX: '-100%', opacity: 0, transition: { duration: 0.3 } },
+  init: { rotateY: 0, translateX: '0%', opacity: 1, transition: { type: 'spring', stiffness: 100, duration: 0.1 } },
+  rotate: { rotateY: 180, translateX: '0%', opacity: 1, transition: { type: 'spring', stiffness: 100, duration: 0.1 } },
+  translateLeft: { rotateY: 0, translateX: '100%', opacity: 0, transition: { type: 'spring', stiffness: 100, duration: 0.1 } },
+  translateRight: { rotateY: 0, translateX: '-100%', opacity: 0, transition: { type: 'spring', stiffness: 100, duration: 0.1 } },
 };
 
 const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
@@ -45,8 +46,8 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     if (currentIndex >= cards.length) return;
     setIsToggling(true);
     setToggled(!toggled);
-    // setIsToggling(false);
-    setTimeout(() => setIsToggling(false), 300);
+    setIsToggling(false);
+    // setTimeout(() => setIsToggling(false), 100);
   };
 
   const [currentIndex, setCurrentIndex] = React.useState<number>(0);
@@ -61,7 +62,7 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
       setToggled(false);
       setLearned(false);
       setCurrentIndex(currentIndex + 1);
-    }, 300);
+    }, 100);
   };
 
   const [repeatCards, setRepeatCards] = React.useState<CardInterface[]>([]);
@@ -72,7 +73,7 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
       setToggled(false);
       setToRepeated(false);
       setCurrentIndex(currentIndex + 1);
-    }, 300);
+    }, 100);
   };
 
   const onStudyAgain = () => {
@@ -101,33 +102,31 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   if (!currSet) return <Custom404 />;
   return (
     <>
-      <header className={style.header}>
-        <div className={style.header__inner}>
-          <button onClick={() => push(`/${pagekey}`)} title="close">
+      <Header>
+        <button onClick={() => push(`/${pagekey}`)} title="close">
+          <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
+            <path d="M0 0h24v24H0V0z" fill="none" />
+            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
+          </svg>
+        </button>
+        <Link href="/">
+          <a className={style.header__logo}>Project MWB</a>
+        </Link>
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <button onClick={onUndo} title="undo">
             <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
               <path d="M0 0h24v24H0V0z" fill="none" />
-              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
+              <path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z" />
             </svg>
           </button>
-          <Link href="/">
-            <a className={style.header__logo}>Project MWB</a>
-          </Link>
-          <div style={{ display: 'flex', gap: '0.5rem' }}>
-            <button onClick={onUndo} title="undo">
-              <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
-                <path d="M0 0h24v24H0V0z" fill="none" />
-                <path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z" />
-              </svg>
-            </button>
-            {/* <button title="settings">
+          {/* <button title="settings">
             <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
               <path d="M0 0h24v24H0V0z" fill="none" />
               <path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z" />
             </svg>
           </button> */}
-          </div>
         </div>
-      </header>
+      </Header>
       <div className={style.flashcards}>
         <div className={style.flashcards__score}>
           <span>{`${currentIndex >= cards.length ? currentIndex : currentIndex + 1}/${cards.length}`}</span>
