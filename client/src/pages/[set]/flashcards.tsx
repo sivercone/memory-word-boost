@@ -1,17 +1,16 @@
 import React from 'react';
-import style from 'styles/pages/flashcards.module.scss';
-import { motion } from 'framer-motion';
+import Link from 'next/link';
 import { NextPage } from 'next';
+import { useRouter } from 'next/router';
+import { motion } from 'framer-motion';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { setApi } from 'apis/setApi';
 import Custom404 from 'pages/404';
-import { useRouter } from 'next/router';
-import Link from 'next/link';
-// import { Button } from 'ui/Button';
 import { CardInterface, SetInterface } from 'interfaces';
 import { isBackendLess } from 'utils/staticData';
 import { useLocalStore } from 'storage/useLocalStore';
 import Header from 'ui/Header';
+import style from 'styles/pages/flashcards.module.scss';
 
 // drag - https://codesandbox.io/s/5trtt
 
@@ -58,8 +57,8 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
 
   const onLearned = () => {
     setLearned(true);
+    setToggled(false);
     setTimeout(() => {
-      setToggled(false);
       setLearned(false);
       setCurrentIndex(currentIndex + 1);
     }, 100);
@@ -69,8 +68,8 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const toRepeat = () => {
     setToRepeated(true);
     setRepeatCards((prev) => [...prev, cards[currentIndex]]);
+    setToggled(false);
     setTimeout(() => {
-      setToggled(false);
       setToRepeated(false);
       setCurrentIndex(currentIndex + 1);
     }, 100);
