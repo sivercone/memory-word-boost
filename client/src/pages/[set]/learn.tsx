@@ -3,16 +3,16 @@ import { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
+import { motion } from 'framer-motion';
 import { setApi } from 'apis/setApi';
 import { CardInterface, SetInterface } from 'interfaces';
-import style from 'styles/pages/learn.module.scss';
-import { motion } from 'framer-motion';
 import { motions } from './flashcards';
 import Custom404 from 'pages/404';
 import { isAnswerCorrect } from 'utils/isAnswerCorrect';
 import { isBackendLess } from 'utils/staticData';
 import { useLocalStore } from 'storage/useLocalStore';
 import Header from 'ui/Header';
+import style from 'styles/pages/learn.module.scss';
 
 type StudyCard = CardInterface & { flash: boolean; write: boolean; quiz: boolean };
 
@@ -30,6 +30,12 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
 
   const [currCard, setCurrCard] = React.useState<StudyCard>();
   const [cards, setCards] = React.useState<StudyCard[]>([]);
+  const onRestart = () => {
+    if (!currSet?.cards) return;
+    const studyCards = currSet.cards.map((card) => ({ ...card, flash: false, write: false, quiz: false }));
+    setCards(studyCards);
+    setCurrCard(studyCards[0]);
+  };
   React.useEffect(() => {
     if (currSet) onRestart();
   }, [currSet]);
@@ -47,7 +53,13 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     if (currCard?.flash) return;
     setIsToggling(true);
     setToggled(!toggled);
-    setTimeout(() => setIsToggling(false), 300);
+    setTimeout(() => setIsToggling(false), 100);
+  };
+
+  const [isProceedTransition, setIsProceedTransition] = React.useState(false);
+  const proceedTransition = () => {
+    setIsProceedTransition(true);
+    setTimeout(() => setIsProceedTransition(false), 100);
   };
 
   const onFlash = (alreadyKnow?: boolean) => {
@@ -61,7 +73,8 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     setCards(nextCards);
     const nextCurrCard = nextCards.find((c) => !c.write || !c.quiz || !c.flash);
     setCurrCard(nextCurrCard);
-    if (toggled) onToggle();
+    setToggled(false);
+    proceedTransition();
   };
 
   const onQuiz = (answer: string) => {
@@ -70,6 +83,7 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
       setCards(nextCards);
       const nextCurrCard = nextCards.sort(() => Math.random() - 0.5).find((c) => !c.flash || !c.quiz || !c.write);
       setCurrCard(nextCurrCard);
+      proceedTransition();
     }
   };
 
@@ -93,14 +107,8 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
       setCards(nextCards);
       const nextCurrCard = nextCards.sort((a, b) => a.order - b.order).find((c) => !c.flash || !c.quiz || !c.write);
       setCurrCard(nextCurrCard);
+      proceedTransition();
     }
-  };
-
-  const onRestart = () => {
-    if (!currSet?.cards) return;
-    const studyCards = currSet.cards.map((card) => ({ ...card, flash: false, write: false, quiz: false }));
-    setCards(studyCards);
-    setCurrCard(studyCards[0]);
   };
 
   if (!currSet) return <Custom404 />;
@@ -123,12 +131,7 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
           <span>{score}%</span>
           <div style={{ width: `${score}%` }}></div>
         </div>
-        <motion.div
-          className={style.learn__card}
-          id="learn__card"
-          // eslint-disable-next-line no-constant-condition
-          // animate={!'learned' ? motions.translateLeft : !'toRepeated' ? motions.translateRight : motions.init}
-        >
+        <motion.div className={style.learn__card} animate={isProceedTransition ? motions.scale : motions.init} id="learn__card">
           <motion.button
             onClick={onToggle}
             animate={toggled ? motions.rotate : motions.init}
@@ -209,9 +212,9 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
         ) : !currCard?.quiz ? (
           <div className={style.learn__moves} style={{ flexWrap: 'wrap' }}>
             {quizItems.map((card) => (
-              <button onClick={() => onQuiz(card.definition)} key={card.order} className={style.learn__arrow}>
+              <motion.button onClick={() => onQuiz(card.definition)} key={card.order} className={style.learn__arrow}>
                 <span>{card.definition}</span>
-              </button>
+              </motion.button>
             ))}
           </div>
         ) : !currCard?.write ? (

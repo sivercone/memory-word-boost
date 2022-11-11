@@ -34,7 +34,6 @@
       margin: 0 auto;
       font-size: clamp(1rem, 5vw, 5rem);
       word-break: break-word;
-      transition: all 0.1s ease-in-out;
 
       p:not(:first-child) {
         font-size: 1.5rem;

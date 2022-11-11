@@ -55,9 +55,10 @@
 
     span {
       display: block;
-      font-size: 6vw;
       max-width: 80%;
       margin: 0 auto;
+      font-size: clamp(1rem, 5vw, 5rem);
+      word-break: break-word;
 
       p:not(:first-child) {
         font-size: 1.5rem;

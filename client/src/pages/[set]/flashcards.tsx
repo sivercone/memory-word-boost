@@ -21,6 +21,7 @@ export const motions = {
   rotate: { rotateY: 180, translateX: '0%', opacity: 1, transition: { type: 'spring', stiffness: 100, duration: 0.1 } },
   translateLeft: { rotateY: 0, translateX: '100%', opacity: 0, transition: { type: 'spring', stiffness: 100, duration: 0.1 } },
   translateRight: { rotateY: 0, translateX: '-100%', opacity: 0, transition: { type: 'spring', stiffness: 100, duration: 0.1 } },
+  scale: { scale: 0.9, transition: { type: 'spring', stiffness: 100, duration: 0.1 } },
 };
 
 const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
