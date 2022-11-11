@@ -6,10 +6,9 @@ import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { motion } from 'framer-motion';
 import { setApi } from 'apis/setApi';
 import { CardInterface, SetInterface } from 'interfaces';
-import { motions } from './flashcards';
 import Custom404 from 'pages/404';
 import { isAnswerCorrect } from 'utils/isAnswerCorrect';
-import { isBackendLess } from 'utils/staticData';
+import { flashCardMotions, isBackendLess } from 'utils/staticData';
 import { useLocalStore } from 'storage/useLocalStore';
 import Header from 'ui/Header';
 import style from 'styles/pages/learn.module.scss';
@@ -131,14 +130,18 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
           <span>{score}%</span>
           <div style={{ width: `${score}%` }}></div>
         </div>
-        <motion.div className={style.learn__card} animate={isProceedTransition ? motions.scale : motions.init} id="learn__card">
+        <motion.div
+          className={style.learn__card}
+          animate={isProceedTransition ? flashCardMotions.scale : flashCardMotions.init}
+          id="learn__card"
+        >
           <motion.button
             onClick={onToggle}
-            animate={toggled ? motions.rotate : motions.init}
+            animate={toggled ? flashCardMotions.rotate : flashCardMotions.init}
             disabled={currCard?.flash || isToggling}
             style={currCard?.flash ? { cursor: 'default' } : undefined}
           >
-            <motion.span animate={toggled ? motions.rotate : motions.init}>
+            <motion.span animate={toggled ? flashCardMotions.rotate : flashCardMotions.init}>
               {!isToggling ? (toggled ? currCard?.definition : currCard?.term) : ''}
               {isEnd ? (
                 <>

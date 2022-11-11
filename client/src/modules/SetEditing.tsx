@@ -12,8 +12,7 @@ import { CardInterface, SetInterface, SetInterfaceDraft } from 'interfaces';
 import style from 'styles/pages/createset.module.scss';
 import { Toggle } from 'ui/Toggle';
 import { AnimatePresence, motion } from 'framer-motion';
-import { transition } from 'ui/Layout'; // @todo - fix this
-import { isBackendLess } from 'utils/staticData';
+import { growUpMotions, isBackendLess } from 'utils/staticData';
 import { useLocalStore } from 'storage/useLocalStore';
 import Header from 'ui/Header';
 
@@ -208,7 +207,7 @@ const Import: React.FC<ImportProps> = ({ setIsImportShown, insertImport }) => {
   };
 
   return (
-    <motion.div className={style.import} variants={transition} initial="init" animate="anim" exit="init">
+    <motion.div className={style.import} variants={growUpMotions} initial="init" animate="anim" exit="init">
       <Header>
         <button onClick={() => setIsImportShown(false)}>Cancel</button>
         <button onClick={onSave}>Import</button>

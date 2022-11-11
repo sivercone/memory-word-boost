@@ -7,7 +7,7 @@ import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { setApi } from 'apis/setApi';
 import Custom404 from 'pages/404';
 import { CardInterface, SetInterface } from 'interfaces';
-import { isBackendLess } from 'utils/staticData';
+import { flashCardMotions, isBackendLess } from 'utils/staticData';
 import { useLocalStore } from 'storage/useLocalStore';
 import Header from 'ui/Header';
 import style from 'styles/pages/flashcards.module.scss';
@@ -15,14 +15,6 @@ import style from 'styles/pages/flashcards.module.scss';
 // drag - https://codesandbox.io/s/5trtt
 
 // todo - describe how to learn with cards
-
-export const motions = {
-  init: { rotateY: 0, translateX: '0%', opacity: 1, transition: { type: 'spring', stiffness: 100, duration: 0.1 } },
-  rotate: { rotateY: 180, translateX: '0%', opacity: 1, transition: { type: 'spring', stiffness: 100, duration: 0.1 } },
-  translateLeft: { rotateY: 0, translateX: '100%', opacity: 0, transition: { type: 'spring', stiffness: 100, duration: 0.1 } },
-  translateRight: { rotateY: 0, translateX: '-100%', opacity: 0, transition: { type: 'spring', stiffness: 100, duration: 0.1 } },
-  scale: { scale: 0.9, transition: { type: 'spring', stiffness: 100, duration: 0.1 } },
-};
 
 const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const { push } = useRouter();
@@ -134,14 +126,14 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
         </div>
         <motion.div
           className={style.flashcards__card}
-          animate={learned ? motions.translateLeft : toRepeated ? motions.translateRight : motions.init}
+          animate={learned ? flashCardMotions.translateLeft : toRepeated ? flashCardMotions.translateRight : flashCardMotions.init}
         >
           <motion.button
             onClick={onToggle}
-            animate={toggled ? motions.rotate : motions.init}
+            animate={toggled ? flashCardMotions.rotate : flashCardMotions.init}
             disabled={currentIndex >= cards.length || isToggling}
           >
-            <motion.span animate={toggled ? motions.rotate : motions.init}>
+            <motion.span animate={toggled ? flashCardMotions.rotate : flashCardMotions.init}>
               {!isToggling ? (toggled ? cards[currentIndex]?.definition : cards[currentIndex]?.term) : ''}
               {currentIndex >= cards.length ? (
                 <>

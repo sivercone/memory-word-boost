@@ -10,3 +10,16 @@ export const pathsForHidingLayout = [
 ];
 
 export const isBackendLess = process.env.NEXT_PUBLIC_BACKENDLESS === 'TRUE';
+
+export const flashCardMotions = {
+  init: { rotateY: 0, translateX: '0%', opacity: 1, transition: { type: 'spring', stiffness: 100, duration: 0.1 } },
+  rotate: { rotateY: 180, translateX: '0%', opacity: 1, transition: { type: 'spring', stiffness: 100, duration: 0.1 } },
+  translateLeft: { rotateY: 0, translateX: '100%', opacity: 0, transition: { type: 'spring', stiffness: 100, duration: 0.1 } },
+  translateRight: { rotateY: 0, translateX: '-100%', opacity: 0, transition: { type: 'spring', stiffness: 100, duration: 0.1 } },
+  scale: { scale: 0.9, transition: { type: 'spring', stiffness: 100, duration: 0.1 } },
+};
+
+export const growUpMotions = {
+  init: { y: '100%', transition: { duration: 0.1 } },
+  anim: { y: '0%', transition: { duration: 0.15 } },
+};

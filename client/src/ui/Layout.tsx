@@ -7,7 +7,7 @@ import Avatar from 'boring-avatars';
 import { authApi } from 'apis/authApi';
 import { useUserStore } from 'storage/useUserStore';
 import { sessionMemory } from 'utils/browserMemory';
-import { isBackendLess, pathsForHidingLayout } from 'utils/staticData';
+import { growUpMotions, isBackendLess, pathsForHidingLayout } from 'utils/staticData';
 import { FolderEditing } from 'modules/FolderEditing';
 import { Button } from 'ui/Button';
 import Header from 'ui/Header';
@@ -16,11 +16,6 @@ import style from 'styles/components/layout.module.scss';
 interface Props {
   children: React.ReactNode;
 }
-
-export const transition = {
-  init: { y: '100%', transition: { duration: 0.1 } },
-  anim: { y: '0%', transition: { duration: 0.15 } },
-};
 
 const Layout: React.FC<Props> = ({ children }) => {
   return (
@@ -73,7 +68,7 @@ const TopBar = () => {
       </Header>
       <AnimatePresence>
         {isMenuOpen && user ? (
-          <motion.div className={style.menu} variants={transition} initial="init" animate="anim" exit="init">
+          <motion.div className={style.menu} variants={growUpMotions} initial="init" animate="anim" exit="init">
             <Header>
               <Button onClick={toggleMenu} title="close" variant="icon">
                 <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
@@ -191,7 +186,7 @@ const BottomBar = () => {
       </nav>
       <AnimatePresence>
         {shownCreation ? (
-          <motion.div className={style.creation} variants={transition} initial="init" animate="anim" exit="init">
+          <motion.div className={style.creation} variants={growUpMotions} initial="init" animate="anim" exit="init">
             <div className={style.creation__top}>
               <span>Create</span>
               <button onClick={() => toggleCreationShown()}>
