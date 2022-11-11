@@ -28,6 +28,7 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   }, [set.data, localSets]);
 
   const [currCard, setCurrCard] = React.useState<StudyCard>();
+  React.useEffect(() => window.scrollTo({ top: 0, behavior: 'smooth' }), [currCard]);
   const [cards, setCards] = React.useState<StudyCard[]>([]);
   const onRestart = () => {
     if (!currSet?.cards) return;
