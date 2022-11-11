@@ -42,7 +42,7 @@
     padding: 3rem 0;
 
     span {
-      font-size: clamp(1rem, 5vw, 5rem);
+      font-size: clamp(1rem, 1.1vw, 5rem);
       word-break: break-word;
     }
 
@@ -64,7 +64,7 @@
     input {
       width: 100%;
       border-bottom: 2px solid var(--color-on-surface);
-      font-size: clamp(1rem, 5vw, 5rem);
+      font-size: clamp(1rem, 4vw, 5rem);
       outline: none;
     }
 
@@ -73,7 +73,8 @@
       gap: 0.5rem;
 
       button {
-        font-size: clamp(1rem, 5vw, 5rem);
+        font-size: clamp(1rem, 4vw, 5rem);
+        border-radius: 15px;
       }
     }
   }
@@ -147,31 +148,11 @@
 
 @media screen and (min-width: 1024px) {
   .form {
+    margin-top: 2rem;
+
     &__inner {
       overflow: hidden;
       border-radius: 10px;
-    }
-  }
-}
-
-@media screen and (max-width: 1024px) {
-  // .form {
-  // &__inner {
-  // height: calc(100vh - 50px);
-  // }
-
-  // &__fields {
-  // height: auto;
-  // flex-direction: column;
-  // }
-  // }
-
-  .class {
-    padding: 0 0.5rem;
-
-    &__block {
-      width: 100%;
-      border-radius: 0;
     }
   }
 }
