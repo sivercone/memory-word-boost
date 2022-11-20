@@ -148,7 +148,7 @@ const BottomBar = () => {
   if (pathsForHidingLayout.includes(pathname)) return null;
   return (
     <>
-      <div onClick={() => toggleCreationShown()} className={shownCreation ? style.overlayActive : style.overlay}></div>
+      <div onClick={() => setShownCreation(false)} className={shownCreation ? style.overlayActive : style.overlay}></div>
       <nav className={style.navigation}>
         <div className={style.navigation__inner}>
           <Link href="/">
