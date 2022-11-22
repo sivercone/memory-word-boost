@@ -1,3 +1,5 @@
+@use 'styles/globals/utils.scss' as *;
+
 .card {
   display: flex;
   flex-direction: column;
@@ -62,6 +64,26 @@
       width: calc(50% - 0.5rem);
     }
   }
+
+  @include breakpoint-max(sm) {
+    &__studies {
+      li,
+      li:nth-child(even) {
+        width: 100%;
+
+        a {
+          flex-direction: row;
+          align-items: center;
+          gap: 1rem;
+          padding: 0.5rem;
+        }
+
+        span:nth-child(1) {
+          font-size: 2rem;
+        }
+      }
+    }
+  }
 }
 
 .listset {
@@ -88,6 +110,10 @@
       span {
         flex-basis: 100%;
       }
+
+      @include breakpoint-max(md) {
+        flex-direction: column;
+      }
     }
   }
 }
@@ -112,10 +138,8 @@
     display: flex;
     gap: 0.5rem;
   }
-}
 
-@media screen and (max-width: 425px) {
-  .createdby {
+  @include breakpoint-max(md) {
     flex-direction: column;
     gap: 1rem;
 
@@ -123,30 +147,8 @@
       text-align: center;
     }
   }
-}
 
-@media screen and (max-width: 375px) {
-  .card {
-    &__studies {
-      li,
-      li:nth-child(even) {
-        width: 100%;
-
-        a {
-          flex-direction: row;
-          align-items: center;
-          gap: 1rem;
-          padding: 0.5rem;
-        }
-
-        span:nth-child(1) {
-          font-size: 2rem;
-        }
-      }
-    }
-  }
-
-  .createdby {
+  @include breakpoint-max(sm) {
     flex-direction: column;
     gap: 1rem;
 

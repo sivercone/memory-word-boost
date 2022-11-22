@@ -1,4 +1,3 @@
-import 'styles/globals.scss';
 import Head from 'next/head';
 import type { AppProps } from 'next/app';
 import { QueryClientProvider, Hydrate } from 'react-query';
@@ -7,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import { queryClient } from 'utils/queryClient';
 import { AuthCheck } from 'modules/AuthCheck';
 import Layout from 'ui/Layout';
+import 'styles/style.scss';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (

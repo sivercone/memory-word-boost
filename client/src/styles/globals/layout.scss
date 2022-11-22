@@ -1,33 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
-
-:root {
-  --container-width: 1024px;
-  --box-shadow: 0px 2px 1px -1px #00000033, 0px 1px 1px 0px #00000024, 0px 1px 3px 0px #0000001f;
-
-  // theme
-  --color-primary: #cba1ff;
-  --color-on-primary: #1f1f1f;
-  // --color-primary-container: #f0f15e;
-  // --color-on-primary-container: #616200;
-
-  // --color-secondary: #f0eddd;
-  // --color-on-secondary: #1f1f1f;
-  // --color-secondary-container: #d9e7ca;
-  // --color-on-secondary-container: #141f0d;
-
-  --color-background: #fffcf3;
-  --color-on-background: #1a1c18;
-  --color-surface: #f1f1eb;
-  --color-on-surface: #1c1c16;
-  --color-outline: #c4c9bc; // 0000001a
-
-  // --color-error: #b3251e;
-  // --color-on-error: #ffffff;
-  // --color-error-container: #f9dedc;
-  // --color-on-error-container: #400f0c;
-}
-
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -122,19 +95,3 @@ textarea {
   margin-bottom: 0.5rem !important;
   border-radius: 4px !important;
 }
-
-// @media (prefers-color-scheme: dark) {
-//   :root {
-//     --color-text-primary: #fdfdfd;
-//     --color-text-secondary: #4d85ff;
-//     --color-bg-primary: #1f1f1f;
-//     --color-bg-secondary: #2c3f66;
-//     --color-bg-tertiary: #373737;
-//   }
-
-//   html,
-//   body,
-//   #__next {
-//     background-color: #000000;
-//   }
-// }
