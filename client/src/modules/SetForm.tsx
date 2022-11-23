@@ -16,7 +16,7 @@ import { growUpMotions, isBackendLess } from 'utils/staticData';
 import { useLocalStore } from 'storage/useLocalStore';
 import Header from 'ui/Header';
 
-const SetEditing: NextPage<{ setFigure?: SetInterfaceDraft }> = ({ setFigure }) => {
+const SetForm: NextPage<{ setFigure?: SetInterfaceDraft }> = ({ setFigure }) => {
   const router = useRouter();
   const { user, signAccess } = useUserStore();
   const { setLocalSets, localSets } = useLocalStore();
@@ -80,54 +80,49 @@ const SetEditing: NextPage<{ setFigure?: SetInterfaceDraft }> = ({ setFigure }) 
         <p>{setFigure && setFigure.id ? 'Update study set' : 'Create study set'}</p>
         <button onClick={handleSubmit(onSubmit)}>Save</button>
       </Header>
-      <div
-        className={`container ${style.class}`}
-        style={isImportShown ? { overflow: 'hidden', maxHeight: 'calc(100vh - 50px)' } : undefined}
-      >
-        <form autoComplete="off">
-          <div className={style.class__general}>
-            <Input label="Title" {...register('title')} required />
-            <Input label="Tags (through comma)" {...register('tags')} />
-            <Input label="Description (optional)" {...register('description')} />
-          </div>
-          <div className={style.class__actions}>
-            <button onClick={() => setIsImportShown(true)} type="button">
-              <span>
-                <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24">
-                  <path d="M4 20q-.825 0-1.412-.587Q2 18.825 2 18V6q0-.825.588-1.412Q3.175 4 4 4h5v2H4v12h16V6h-5V4h5q.825 0 1.413.588Q22 5.175 22 6v12q0 .825-.587 1.413Q20.825 20 20 20Zm8-4.6-5-5L8.4 9l2.6 2.6V4h2v7.6L15.6 9l1.4 1.4Z" />
+      <div className="container" style={isImportShown ? { overflow: 'hidden', maxHeight: 'calc(100vh - 50px)' } : undefined}>
+        <form autoComplete="off" className={style.form}>
+          <Input label="Title" {...register('title')} required />
+          <Input label="Tags (through comma)" {...register('tags')} />
+          <Input label="Description (optional)" {...register('description')} />
+        </form>
+        <div className={style.actions}>
+          <button onClick={() => setIsImportShown(true)} type="button">
+            <span>
+              <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24">
+                <path d="M4 20q-.825 0-1.412-.587Q2 18.825 2 18V6q0-.825.588-1.412Q3.175 4 4 4h5v2H4v12h16V6h-5V4h5q.825 0 1.413.588Q22 5.175 22 6v12q0 .825-.587 1.413Q20.825 20 20 20Zm8-4.6-5-5L8.4 9l2.6 2.6V4h2v7.6L15.6 9l1.4 1.4Z" />
+              </svg>
+            </span>
+            <p>Import cards</p>
+          </button>
+          <button onClick={flipCardValues} type="button">
+            <span>
+              <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="currentColor">
+                <path d="M5.1 16.05q-.55-.95-.825-1.95Q4 13.1 4 12.05q0-3.35 2.325-5.7T12 4h.175l-1.6-1.6 1.4-1.4 4 4-4 4-1.4-1.4 1.6-1.6H12Q9.5 6 7.75 7.762 6 9.525 6 12.05q0 .65.15 1.275.15.625.45 1.225ZM12.025 23l-4-4 4-4 1.4 1.4-1.6 1.6H12q2.5 0 4.25-1.762Q18 14.475 18 11.95q0-.65-.15-1.275-.15-.625-.45-1.225l1.5-1.5q.55.95.825 1.95.275 1 .275 2.05 0 3.35-2.325 5.7T12 20h-.175l1.6 1.6Z" />
+              </svg>
+            </span>
+            <p>Flip terms and definitions</p>
+          </button>
+        </div>
+        <ul className={style.cards}>
+          {fields.map((content, i) => (
+            <li key={content.id} className={style.cards__block}>
+              <Input label="Term" {...register(`cards.${i}.term`)} required />
+              <Input label="Definition" {...register(`cards.${i}.definition`)} required />
+              <Button onClick={() => remove(i)} type="button" title="remove" variant="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
+                  <path d="M0 0h24v24H0V0z" fill="none" />
+                  <path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z" />
                 </svg>
-              </span>
-              <p>Import cards</p>
-            </button>
-            <button onClick={flipCardValues} type="button">
-              <span>
-                <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="currentColor">
-                  <path d="M5.1 16.05q-.55-.95-.825-1.95Q4 13.1 4 12.05q0-3.35 2.325-5.7T12 4h.175l-1.6-1.6 1.4-1.4 4 4-4 4-1.4-1.4 1.6-1.6H12Q9.5 6 7.75 7.762 6 9.525 6 12.05q0 .65.15 1.275.15.625.45 1.225ZM12.025 23l-4-4 4-4 1.4 1.4-1.6 1.6H12q2.5 0 4.25-1.762Q18 14.475 18 11.95q0-.65-.15-1.275-.15-.625-.45-1.225l1.5-1.5q.55.95.825 1.95.275 1 .275 2.05 0 3.35-2.325 5.7T12 20h-.175l1.6 1.6Z" />
-                </svg>
-              </span>
-              <p>Flip terms and definitions</p>
-            </button>
-          </div>
-          <ul className={style.cards}>
-            {fields.map((content, i) => (
-              <li key={content.id} className={style.cards__block}>
-                <Input label="Term" {...register(`cards.${i}.term`)} required />
-                <Input label="Definition" {...register(`cards.${i}.definition`)} required />
-                <Button onClick={() => remove(i)} type="button" title="remove" variant="icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
-                    <path d="M0 0h24v24H0V0z" fill="none" />
-                    <path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z" />
-                  </svg>
-                </Button>
-              </li>
-            ))}
-            <li style={{ textAlign: 'center' }}>
-              <Button onClick={() => append({ order: fields.length, term: '', definition: '' })} type="button">
-                ADD CARD
               </Button>
             </li>
-          </ul>
-        </form>
+          ))}
+          <li style={{ textAlign: 'center' }}>
+            <Button onClick={() => append({ order: fields.length, term: '', definition: '' })} type="button">
+              ADD CARD
+            </Button>
+          </li>
+        </ul>
         <Modal isOpen={isModalShown} onClose={toggleModalShown}>
           <ModalBody>
             <h3>Information</h3>
@@ -145,7 +140,7 @@ const SetEditing: NextPage<{ setFigure?: SetInterfaceDraft }> = ({ setFigure }) 
   );
 };
 
-export default SetEditing;
+export default SetForm;
 
 const generateSet = (data: SetInterfaceDraft): SetInterface => {
   const obj = {
