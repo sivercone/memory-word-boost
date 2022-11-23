@@ -1,7 +1,9 @@
+@use 'styles/globals/utils.scss' as *;
+
 .cardbox {
   width: 100%;
   padding: 1rem;
-  border-radius: 20px;
+  border-radius: rem(20);
   color: var(--color-on-surface);
   background-color: var(--color-surface);
   box-shadow: var(--box-shadow);
@@ -10,7 +12,7 @@
     display: flex;
 
     > div {
-      border-radius: 50px;
+      border-radius: rem(50);
     }
   }
 
@@ -27,7 +29,7 @@
 
     li {
       padding: 0.1rem 0.5rem;
-      border-radius: 25px;
+      border-radius: rem(25);
       color: var(--color-on-background);
       background-color: var(--color-background);
       border: 1px solid var(--color-outline);

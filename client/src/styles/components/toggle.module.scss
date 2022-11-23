@@ -1,3 +1,5 @@
+@use 'styles/globals/utils.scss' as *;
+
 .toggle {
   display: flex;
   justify-content: space-between;
@@ -7,14 +9,14 @@
   input {
     position: relative;
     -webkit-appearance: none;
-    min-width: 50px;
-    width: 50px;
-    min-height: 30px;
-    height: 30px;
+    min-width: rem(50);
+    width: rem(50);
+    min-height: rem(30);
+    height: rem(30);
     background-color: #fff;
     border: 1px solid var(--color-outline);
-    border-radius: 50px;
-    box-shadow: inset -20px 0 0 0 var(--color-outline);
+    border-radius: rem(50);
+    box-shadow: inset rem(-20) 0 0 0 var(--color-outline);
     transition: all 0.3s;
   }
 
@@ -24,17 +26,17 @@
     top: 1px;
     left: 1px;
     background: transparent;
-    width: 26px;
-    height: 26px;
+    width: rem(26);
+    height: rem(26);
     border-radius: 50%;
   }
 
   input:checked {
-    box-shadow: inset 20px 0 0 0 var(--color-primary);
+    box-shadow: inset rem(20) 0 0 0 var(--color-primary);
     border-color: var(--color-primary);
   }
 
   input:checked:after {
-    left: 20px;
+    left: rem(20);
   }
 }

@@ -80,17 +80,19 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   return (
     <>
       <div className="container">
-        <div className={style.card}>
-          <h1>{currSet.title}</h1>
-          {currSet.description ? <p>{currSet.description}</p> : undefined}
-          {currSet.tags.length ? (
-            <ul className={style.card__tags}>
-              {currSet.tags.map((tag, i) => (
-                <li key={tag + i}>{tag}</li>
-              ))}
-            </ul>
-          ) : undefined}
-          <ul className={style.card__studies}>
+        <div className={style.head}>
+          <div className={style.head__subject}>
+            <h1>{currSet.title}</h1>
+            {currSet.description ? <p>{currSet.description}</p> : undefined}
+            {currSet.tags.length ? (
+              <ul>
+                {currSet.tags.map((tag, i) => (
+                  <li key={tag + i}>{tag}</li>
+                ))}
+              </ul>
+            ) : undefined}
+          </div>
+          <ul className={style.head__studies}>
             <li>
               <Link href={`${pagekey}/learn`}>
                 <a>
@@ -156,8 +158,8 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
             </li>
           </ul>
         </div>
-        <div className={style.createdby}>
-          <div className={style.createdby__author}>
+        <div className={style.nav}>
+          <div className={style.nav__author}>
             <span>
               Created by{' '}
               <Link href={`/u/${currSet.user.id}`}>
@@ -166,7 +168,7 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
               {currSet.user.id === user?.id ? '(you)' : undefined}
             </span>
           </div>
-          <div className={style.createdby__movements}>
+          <div className={style.nav__movements}>
             {currSet.user.id === user?.id || isBackendLess ? (
               <>
                 <button onClick={onEdit} title="edit">
@@ -214,7 +216,7 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
             </button>
           </div>
         </div>
-        <div className={style.listset}>
+        <div className={style.body}>
           <h2>Terms in this set ({currSet.cards.length})</h2>
           <ul>
             {currSet.cards.map((content, i) => (
