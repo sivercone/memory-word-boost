@@ -11,7 +11,7 @@ import { isAnswerCorrect } from 'utils/isAnswerCorrect';
 import { flashCardMotions, isBackendLess } from 'utils/staticData';
 import { useLocalStore } from 'storage/useLocalStore';
 import Header from 'ui/Header';
-import style from 'styles/pages/learn.module.scss';
+import style from 'styles/pages/study.module.scss';
 
 type StudyCard = CardInterface & { flash: boolean; write: boolean; quiz: boolean };
 
@@ -125,13 +125,13 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
         </Link>
         <div></div>
       </Header>
-      <div className={style.learn}>
-        <div className={style.progressbar}>
+      <div className={style.study}>
+        <div className={style.study__score}>
           <span>{score}%</span>
           <div style={{ width: `${score}%` }}></div>
         </div>
         <motion.div
-          className={style.learn__card}
+          className={style.study__card}
           animate={isProceedTransition ? flashCardMotions.scale : flashCardMotions.init}
           id="learn__card"
         >
@@ -154,8 +154,8 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
           </motion.button>
         </motion.div>
         {isEnd ? (
-          <div className={style.learn__moves}>
-            <button onClick={onRestart} className={style.learn__arrow}>
+          <div className={style.study__moves}>
+            <button onClick={onRestart} className={style.study__arrow}>
               <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">
                 <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z" />
                 <path
@@ -165,7 +165,7 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
               </svg>
               <span>Restart</span>
             </button>
-            <button onClick={() => push(`/${pagekey}`)} className={style.learn__arrow}>
+            <button onClick={() => push(`/${pagekey}`)} className={style.study__arrow}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 enableBackground="new 0 0 24 24"
@@ -181,9 +181,9 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
             </button>
           </div>
         ) : !currCard?.flash ? (
-          <div className={style.learn__moves} style={{ height: 'auto' }}>
+          <div className={style.study__moves} style={{ height: 'auto' }}>
             <style>{'#learn__card {height: 100%}'}</style>
-            <button onClick={() => onFlash(true)} className={style.learn__arrow} style={{ padding: '2rem' }}>
+            <button onClick={() => onFlash(true)} className={style.study__arrow}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 enableBackground="new 0 0 24 24"
@@ -197,7 +197,7 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
               </svg>
               <span>Already know</span>
             </button>
-            <button onClick={() => onFlash()} className={style.learn__arrow}>
+            <button onClick={() => onFlash()} className={style.study__arrow}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 enableBackground="new 0 0 24 24"
@@ -213,25 +213,30 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
             </button>
           </div>
         ) : !currCard?.quiz ? (
-          <div className={style.learn__moves} style={{ flexWrap: 'wrap' }}>
+          <div className={style.study__moves} style={{ flexWrap: 'wrap' }}>
             {quizItems.map((card) => (
-              <motion.button onClick={() => onQuiz(card.definition)} key={card.order} className={style.learn__arrow}>
+              <motion.button
+                onClick={() => onQuiz(card.definition)}
+                key={card.order}
+                className={style.study__arrow}
+                style={{ padding: '1rem' }}
+              >
                 <span>{card.definition}</span>
               </motion.button>
             ))}
           </div>
         ) : !currCard?.write ? (
-          <div className={style.learn__moves} style={{ height: '10%' }}>
+          <div className={style.study__moves} style={{ height: '10%' }}>
             <style>{'#learn__card {height: 20%}'}</style>
             <input
               value={inputValue}
               onChange={onWrite}
               placeholder="Enter the answer"
-              className={style.learn__arrow}
+              className={style.study__arrow}
               style={{ textAlign: 'center' }}
               autoFocus
             />
-            <button onClick={() => onWrite(undefined, true)} className={style.learn__arrow} style={{ width: '15%' }}>
+            <button onClick={() => onWrite(undefined, true)} className={style.study__arrow} style={{ width: '15%' }}>
               <span>?</span>
             </button>
           </div>
