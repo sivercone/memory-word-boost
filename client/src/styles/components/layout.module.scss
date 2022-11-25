@@ -98,13 +98,14 @@
     padding: 1rem;
 
     li {
-      color: var(--color-on-primary);
+      color: var(--color-on-surface);
       background-color: var(--color-surface);
       border-radius: 10px;
       border: 1px solid var(--color-outline);
       border-color: var(--color-outline);
 
       &:hover {
+        color: var(--color-on-primary);
         background-color: var(--color-primary);
       }
 
@@ -214,7 +215,7 @@
     gap: 0.5rem;
 
     li {
-      color: var(--color-on-primary);
+      color: var(--color-on-surface);
       background-color: var(--color-surface);
       border-radius: 10px;
       border: 1px solid var(--color-outline);
@@ -222,6 +223,7 @@
 
       &:active,
       &:hover {
+        color: var(--color-on-primary);
         background-color: var(--color-primary);
       }
 
