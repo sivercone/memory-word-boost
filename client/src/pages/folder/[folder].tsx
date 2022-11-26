@@ -157,20 +157,21 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
       <FolderEditing folderFigure={folder.data} isOpen={shownModal === 'edit'} onClose={closeModal} />
       <Modal isOpen={shownModal === 'del'} onClose={closeModal}>
         <ModalBody>
-          <h3>Are you sure you want to delete this folder?</h3>
+          <h3>{`Remove "${folder.data.name}"?`}</h3>
           <p>Deleting a folder is a permanent action.</p>
-          <p>This cannot be undone.</p>
-          <p>The sets in this folder will not be deleted.</p>
+          <p>Sets in this folder will not be deleted.</p>
         </ModalBody>
         <ModalActions>
           <button onClick={closeModal}>Cancel</button>
-          <button onClick={onDelete}>Delete</button>
+          <button onClick={onDelete} style={{ color: 'var(--color-error)' }}>
+            Delete
+          </button>
         </ModalActions>
       </Modal>
       <Modal isOpen={shownModal === 'sets'} onClose={closeModal}>
         <ModalBody>
           <h3>Sets Management</h3>
-          <p>Organise all the sets you&#39;re studying for a particular subject</p>
+          <p>Organise sets you&#39;re studying for a particular subject</p>
         </ModalBody>
         {sets.data ? (
           <ModalList>

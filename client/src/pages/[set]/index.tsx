@@ -234,9 +234,8 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
             ? {
                 del: (
                   <>
-                    <h3>Are you sure you want to delete this set?</h3>
+                    <h3>{`Remove "${currSet.title}"?`}</h3>
                     <p>Deleting a set is a permanent action.</p>
-                    <p>This cannot be undone.</p>
                   </>
                 ),
                 info: (
@@ -282,7 +281,9 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                 del: (
                   <>
                     <button onClick={closeModal}>Cancel</button>
-                    <button onClick={onDeleteSet}>Delete</button>
+                    <button onClick={onDeleteSet} style={{ color: 'var(--color-error)' }}>
+                      Delete
+                    </button>
                   </>
                 ),
                 info: <button onClick={closeModal}>OK</button>,
