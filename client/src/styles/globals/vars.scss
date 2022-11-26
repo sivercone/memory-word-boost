@@ -8,8 +8,8 @@
   // --color-primary-container: #f0f15e;
   // --color-on-primary-container: #616200;
 
-  // --color-secondary: #f0eddd;
-  // --color-on-secondary: #1f1f1f;
+  --color-success: #0582f0; // #0f88f2, #0583f2
+  --color-on-success: #1f1f1f;
   // --color-secondary-container: #d9e7ca;
   // --color-on-secondary-container: #141f0d;
 
@@ -19,8 +19,8 @@
   --color-on-surface: hsl(60, 12%, 10%);
   --color-outline: hsl(83, 11%, 76%); // 0000001a
 
-  // --color-error: #b3251e;
-  // --color-on-error: #ffffff;
+  --color-error: #b3251e;
+  --color-on-error: #ffffff;
   // --color-error-container: #f9dedc;
   // --color-on-error-container: #400f0c;
 }
@@ -36,7 +36,7 @@
     --color-on-background: hsl(65, 61%, 93%);
     --color-surface: hsl(60, 4%, 14%);
     --color-on-surface: hsl(60, 50%, 96%);
-    --color-outline: hsl(83, 11%, 76%);
+    --color-outline: #5b5f55;
   }
 }
 

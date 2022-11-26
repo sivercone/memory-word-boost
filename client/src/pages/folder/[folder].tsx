@@ -66,14 +66,14 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   if (!folder.data) return <Custom404 />;
   return (
     <div className="container">
-      <div className={style.card}>
-        <h1 className={style.card__h1}>
-          <span>{folder.data.name}</span>
-        </h1>
-        <p>{folder.data.description}</p>
+      <div className={style.head}>
+        <div className={style.head__subject}>
+          <h1>{folder.data.name}</h1>
+          <p>{folder.data.description}</p>
+        </div>
       </div>
-      <div className={style.createdby}>
-        <div className={style.createdby__author}>
+      <div className={style.nav}>
+        <div className={style.nav__author}>
           <span>
             Created by{' '}
             <Link href={`/u/${folder.data.user.id}`}>
@@ -82,11 +82,11 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
             {folder.data.user.id === user?.id ? '(you)' : undefined}
           </span>
         </div>
-        <div className={style.createdby__movements}>
+        <div className={style.nav__movements}>
           {folder.data.user.id === user?.id ? (
             <>
               <button onClick={() => openModal('edit')} title="edit">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#181818">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor">
                   <path d="M0 0h24v24H0V0z" fill="none" />
                   <path d="M14.06 9.02l.92.92L5.92 19H5v-.92l9.06-9.06M17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83 3.75 3.75 1.83-1.83c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29zm-3.6 3.19L3 17.25V21h3.75L17.81 9.94l-3.75-3.75z" />
                 </svg>
@@ -98,7 +98,7 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                   height="24"
                   viewBox="0 0 24 24"
                   width="24"
-                  fill="#181818"
+                  fill="currentColor"
                 >
                   <g>
                     <rect fill="none" height="24" width="24" />
@@ -116,7 +116,7 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                 </svg>
               </button>
               <button onClick={() => openModal('del')} title="delete">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="#181818">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
                   <path d="M0 0h24v24H0V0z" fill="none" />
                   <path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z" />
                 </svg>
@@ -124,7 +124,7 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
             </>
           ) : undefined}
           <button title="info">
-            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="#181818">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
               <path d="M0 0h24v24H0V0z" fill="none" />
               <path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
             </svg>
@@ -136,7 +136,7 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
               height="24"
               viewBox="0 0 24 24"
               width="24"
-              fill="#181818"
+              fill="currentColor"
             >
               <g>
                 <rect fill="none" height="24" width="24" />
