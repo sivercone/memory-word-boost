@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
 import { AnimatePresence, motion } from 'framer-motion';
-import Avatar from 'boring-avatars';
 import { authApi } from 'apis/authApi';
 import { useUserStore } from 'storage/useUserStore';
 import { sessionMemory } from 'utils/browserMemory';
@@ -28,6 +27,8 @@ const Layout: React.FC<Props> = ({ children }) => {
 };
 
 const TopBar = () => {
+  const { pathname } = useRouter();
+  const [isHovered, setIsHovered] = React.useState(false);
   const { user, setUser, signAccess } = useUserStore();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -40,9 +41,7 @@ const TopBar = () => {
     window.location.replace('/login');
   };
 
-  const { pathname } = useRouter();
   if (pathsForHidingLayout.includes(pathname)) return null;
-
   return (
     <>
       <Header>
@@ -50,20 +49,35 @@ const TopBar = () => {
           <a>PROJECT MWB</a>
         </Link>
         {isBackendLess ? undefined : (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            {user ? (
-              <button onClick={toggleMenu} style={{ height: '40px', borderRadius: '50%' }}>
-                <Avatar size={40} variant="ring" colors={['#92A1C6', '#146A7C', '#F0AB3D', '#C271B4', '#C20D90']} />
+          <>
+            {!user ? (
+              <button
+                onClick={toggleMenu}
+                style={{ height: '40px', borderRadius: '50%', color: 'inherit' }}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+              >
+                {isHovered ? (
+                  <svg xmlns="http://www.w3.org/2000/svg" height="40" width="40" fill="currentColor">
+                    <path d="M20 29.125q2.792 0 5.104-1.521 2.313-1.521 3.354-4.062H11.542q1.083 2.541 3.375 4.062 2.291 1.521 5.083 1.521Zm-7.292-11.167 1.875-1.833 1.834 1.833L18 16.375l-3.417-3.417-3.458 3.417Zm10.917 0 1.833-1.833 1.834 1.833 1.583-1.583-3.417-3.417-3.416 3.417ZM20 36.667q-3.458 0-6.5-1.313-3.042-1.312-5.292-3.562T4.646 26.5Q3.333 23.458 3.333 20t1.313-6.5q1.312-3.042 3.562-5.292T13.5 4.646q3.042-1.313 6.5-1.313t6.5 1.313q3.042 1.312 5.292 3.562t3.562 5.292q1.313 3.042 1.313 6.5t-1.313 6.5q-1.312 3.042-3.562 5.292T26.5 35.354q-3.042 1.313-6.5 1.313ZM20 20Zm0 13.875q5.833 0 9.854-4.021 4.021-4.021 4.021-9.854 0-5.833-4.021-9.854Q25.833 6.125 20 6.125q-5.833 0-9.854 4.021Q6.125 14.167 6.125 20q0 5.833 4.021 9.854 4.021 4.021 9.854 4.021Z" />
+                  </svg>
+                ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" height="40" width="40" fill="currentColor">
+                    <path d="M26 17.958q.958 0 1.646-.666.687-.667.687-1.667 0-.958-.687-1.646-.688-.687-1.646-.687t-1.646.687q-.687.688-.687 1.646 0 1 .687 1.667.688.666 1.646.666Zm-12 0q.958 0 1.646-.666.687-.667.687-1.667 0-.958-.687-1.646-.688-.687-1.646-.687t-1.646.687q-.687.688-.687 1.646 0 1 .687 1.667.688.666 1.646.666Zm6 11.167q2.792 0 5.104-1.521 2.313-1.521 3.354-4.062h-2.375q-.958 1.625-2.562 2.52-1.604.896-3.521.896-1.875 0-3.5-.896-1.625-.895-2.542-2.52h-2.416q1.083 2.541 3.375 4.062 2.291 1.521 5.083 1.521Zm0 7.542q-3.458 0-6.5-1.313-3.042-1.312-5.292-3.562T4.646 26.5Q3.333 23.458 3.333 20t1.313-6.5q1.312-3.042 3.562-5.292T13.5 4.646q3.042-1.313 6.5-1.313t6.5 1.313q3.042 1.312 5.292 3.562t3.562 5.292q1.313 3.042 1.313 6.5t-1.313 6.5q-1.312 3.042-3.562 5.292T26.5 35.354q-3.042 1.313-6.5 1.313ZM20 20Zm0 13.875q5.833 0 9.854-4.021 4.021-4.021 4.021-9.854 0-5.833-4.021-9.854Q25.833 6.125 20 6.125q-5.833 0-9.854 4.021Q6.125 14.167 6.125 20q0 5.833 4.021 9.854 4.021 4.021 9.854 4.021Z" />
+                  </svg>
+                )}
               </button>
             ) : (
               <Link href="/login">
-                <a className={style.avatarbutton}>
-                  <img className={style.avatarpic} src={'/assets/avatar.svg'} alt="" />
+                <a className={style.smile}>
+                  <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24">
+                    <path d="M15.5 11q.625 0 1.062-.438Q17 10.125 17 9.5t-.438-1.062Q16.125 8 15.5 8t-1.062.438Q14 8.875 14 9.5t.438 1.062Q14.875 11 15.5 11Zm-7 0q.625 0 1.062-.438Q10 10.125 10 9.5t-.438-1.062Q9.125 8 8.5 8t-1.062.438Q7 8.875 7 9.5t.438 1.062Q7.875 11 8.5 11Zm3.5 6.5q1.7 0 3.088-.962Q16.475 15.575 17.1 14h-1.65q-.55.925-1.462 1.462Q13.075 16 12 16t-1.988-.538Q9.1 14.925 8.55 14H6.9q.625 1.575 2.013 2.538Q10.3 17.5 12 17.5Zm0 4.5q-2.075 0-3.9-.788-1.825-.787-3.175-2.137-1.35-1.35-2.137-3.175Q2 14.075 2 12t.788-3.9q.787-1.825 2.137-3.175 1.35-1.35 3.175-2.138Q9.925 2 12 2t3.9.787q1.825.788 3.175 2.138 1.35 1.35 2.137 3.175Q22 9.925 22 12t-.788 3.9q-.787 1.825-2.137 3.175-1.35 1.35-3.175 2.137Q14.075 22 12 22Zm0-10Zm0 8q3.35 0 5.675-2.325Q20 15.35 20 12q0-3.35-2.325-5.675Q15.35 4 12 4 8.65 4 6.325 6.325 4 8.65 4 12q0 3.35 2.325 5.675Q8.65 20 12 20Z" />
+                  </svg>
                   <span>Login</span>
                 </a>
               </Link>
             )}
-          </div>
+          </>
         )}
       </Header>
       <AnimatePresence>
