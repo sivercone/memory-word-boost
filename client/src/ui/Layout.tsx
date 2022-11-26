@@ -50,7 +50,7 @@ const TopBar = () => {
         </Link>
         {isBackendLess ? undefined : (
           <>
-            {!user ? (
+            {user ? (
               <button
                 onClick={toggleMenu}
                 style={{ height: '40px', borderRadius: '50%', color: 'inherit' }}
