@@ -36,7 +36,7 @@ const ExamPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const onSubmit = (payload: SubmitData) => {
     setIncorrect(
       payload.form.map((el, i) =>
-        isAnswerCorrect(el.input, cards[i].definition)
+        !isAnswerCorrect(el.input, cards[i].definition)
           ? { correct: false, index: i, answer: el.input }
           : { correct: true, index: i, answer: el.input },
       ),
@@ -87,7 +87,7 @@ const ExamPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                 <span>Correct</span>
                 <span>{cards.length - incorrect.filter((el) => !el.correct).length}</span>
               </p>
-              <p style={{ color: 'tomato' }}>
+              <p style={{ color: 'var(--color-error)' }}>
                 <span>Incorrect</span>
                 <span>{incorrect.filter((el) => !el.correct).length}</span>
               </p>
@@ -111,9 +111,9 @@ const ExamPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
             <div key={i} onFocus={() => setCurrIndex(i)} className={style.list__block}>
               <div className={style.list__learn}>
                 <span>{el.term}</span>
-                {incorrect.length && !incorrect[i].correct ? (
+                {incorrect.length ? (
                   <>
-                    <span>correct answer</span>
+                    <span style={!incorrect[i].correct ? { color: 'var(--color-error)' } : undefined}>correct answer</span>
                     <span>{cards[i].definition}</span>
                   </>
                 ) : undefined}

@@ -123,9 +123,15 @@ const WritePage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
               <form onSubmit={handleSubmit(onSubmit)} className={style.form__fields} autoComplete="off">
                 <input type="text" {...register('answer')} required autoFocus />
                 <div>
-                  <Button type="submit">{'>'}</Button>
-                  <Button onClick={loseCard} type="button" title="click if don't know">
-                    ?
+                  <Button type="submit" title="Submit">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24">
+                      <path d="m14 18-1.4-1.45L16.15 13H4v-2h12.15L12.6 7.45 14 6l6 6Z" />
+                    </svg>
+                  </Button>
+                  <Button onClick={loseCard} type="button" title="I don't know">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24">
+                      <path d="M10.6 16q0-2.025.363-2.913.362-.887 1.537-1.937 1.025-.9 1.562-1.563.538-.662.538-1.512 0-1.025-.687-1.7Q13.225 5.7 12 5.7q-1.275 0-1.938.775-.662.775-.937 1.575L6.55 6.95q.525-1.6 1.925-2.775Q9.875 3 12 3q2.625 0 4.038 1.463 1.412 1.462 1.412 3.512 0 1.25-.537 2.138-.538.887-1.688 2.012Q14 13.3 13.738 13.912q-.263.613-.263 2.088Zm1.4 6q-.825 0-1.412-.587Q10 20.825 10 20q0-.825.588-1.413Q11.175 18 12 18t1.413.587Q14 19.175 14 20q0 .825-.587 1.413Q12.825 22 12 22Z" />
+                    </svg>
                   </Button>
                 </div>
               </form>

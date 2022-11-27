@@ -115,7 +115,7 @@
     }
   }
 
-  @include breakpoint-max(md) {
+  @include breakpoint-min(md) {
     &__structure {
       flex-direction: row;
       align-items: flex-end;
