@@ -1,6 +1,5 @@
 import React from 'react';
 import { NextPage } from 'next';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { useForm } from 'react-hook-form';
@@ -72,9 +71,9 @@ const ExamPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
             <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
           </svg>
         </button>
-        <Link href="/">
-          <a className={style.header__logo}>Project MWB</a>
-        </Link>
+        <span>
+          <strong>PROJECT MWB</strong>
+        </span>
         <div style={{ userSelect: 'none', width: '24px', height: '24px', visibility: 'hidden' }}></div>
       </Header>
       <div className={style.container}>

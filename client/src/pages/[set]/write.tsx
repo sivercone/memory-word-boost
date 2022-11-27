@@ -1,18 +1,17 @@
 import React from 'react';
 import { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { setApi } from 'apis/setApi';
 import Custom404 from 'pages/404';
-import style from 'styles/pages/write.module.scss';
-import { useRouter } from 'next/router';
 import { Button } from 'ui/Button';
 import { CardInterface, SetInterface } from 'interfaces';
-import Link from 'next/link';
 import { isAnswerCorrect } from 'utils/isAnswerCorrect';
 import { useLocalStore } from 'storage/useLocalStore';
 import { isBackendLess } from 'utils/staticData';
 import Header from 'ui/Header';
+import style from 'styles/pages/write.module.scss';
 
 type Results = {
   round: number;
@@ -100,9 +99,9 @@ const WritePage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
             <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
           </svg>
         </button>
-        <Link href="/">
-          <a className={style.header__logo}>Project MWB</a>
-        </Link>
+        <span>
+          <strong>PROJECT MWB</strong>
+        </span>
         <div style={{ userSelect: 'none', width: '24px', height: '24px', visibility: 'hidden' }}></div>
       </Header>
       {cards.length && status !== 'E' ? (

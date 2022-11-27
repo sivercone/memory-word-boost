@@ -68,9 +68,9 @@ const TopBar = () => {
             <path d="M6.667 24.167v-2.792h26.666v2.792Zm0-5.542v-2.792h26.666v2.792Z" />
           </svg>
         </button>
-        <Link href="/">
-          <a>PROJECT MWB</a>
-        </Link>
+        <span>
+          <strong>PROJECT MWB</strong>
+        </span>
         <div style={{ userSelect: 'none', width: '40px', height: '40px', visibility: 'hidden' }}></div>
       </Header>
       <AnimatePresence>
@@ -83,7 +83,9 @@ const TopBar = () => {
                   <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
                 </svg>
               </Button>
-              <p>Menu</p>
+              <span>
+                <strong>MENU</strong>
+              </span>
               <div style={{ userSelect: 'none', width: '24px', height: '24px', visibility: 'hidden' }}></div>
             </Header>
             <div className={style.menu__inner}>
