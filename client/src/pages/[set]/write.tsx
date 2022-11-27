@@ -103,7 +103,7 @@ const WritePage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
         <Link href="/">
           <a className={style.header__logo}>Project MWB</a>
         </Link>
-        <div></div>
+        <div style={{ userSelect: 'none', width: '24px', height: '24px', visibility: 'hidden' }}></div>
       </Header>
       {cards.length && status !== 'E' ? (
         <div className={style.form}>

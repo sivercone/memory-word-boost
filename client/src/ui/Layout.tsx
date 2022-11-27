@@ -63,14 +63,15 @@ const TopBar = () => {
   return (
     <>
       <Header>
-        <Link href="/">
-          <a>PROJECT MWB</a>
-        </Link>
         <button onClick={toggleMenu} style={{ height: '40px', borderRadius: '50%', color: 'inherit' }} title="Menu">
           <svg xmlns="http://www.w3.org/2000/svg" height="40" width="40" fill="currentColor">
             <path d="M6.667 24.167v-2.792h26.666v2.792Zm0-5.542v-2.792h26.666v2.792Z" />
           </svg>
         </button>
+        <Link href="/">
+          <a>PROJECT MWB</a>
+        </Link>
+        <div style={{ userSelect: 'none', width: '40px', height: '40px', visibility: 'hidden' }}></div>
       </Header>
       <AnimatePresence>
         {isMenuOpen ? (

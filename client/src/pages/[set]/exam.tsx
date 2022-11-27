@@ -75,6 +75,7 @@ const ExamPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
         <Link href="/">
           <a className={style.header__logo}>Project MWB</a>
         </Link>
+        <div style={{ userSelect: 'none', width: '24px', height: '24px', visibility: 'hidden' }}></div>
       </Header>
       <div className={style.container}>
         {formState.isSubmitted ? (
