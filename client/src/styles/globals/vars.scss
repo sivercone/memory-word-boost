@@ -40,14 +40,29 @@
   }
 }
 
-// html,
-// body,
-// #__next.light {
-//   background-color: #000000;
-// }
+body.light {
+  --box-shadow: 0px 2px 1px -1px #00000033, 0px 1px 1px 0px #00000024, 0px 1px 3px 0px #0000001f;
 
-// html,
-// body,
-// #__next.dark {
-//   background-color: #000000;
-// }
+  // theme
+  --color-primary: hsl(267, 100%, 82%);
+  --color-on-primary: hsl(0, 0%, 12%);
+
+  --color-background: hsl(45, 100%, 98%);
+  --color-on-background: hsl(90, 8%, 10%);
+  --color-surface: hsl(60, 18%, 93%);
+  --color-on-surface: hsl(60, 12%, 10%);
+  --color-outline: hsl(83, 11%, 76%); // 0000001a
+}
+
+body.dark {
+  --box-shadow: 0px 2px 1px -1px #00000033, 0px 1px 1px 0px #00000024, 0px 1px 3px 0px #0000001f;
+
+  // theme
+  --color-primary: hsl(267, 100%, 82%);
+  --color-on-primary: hsl(0, 0%, 12%);
+  --color-background: hsl(30, 2%, 18%);
+  --color-on-background: hsl(65, 61%, 93%);
+  --color-surface: hsl(60, 4%, 14%);
+  --color-on-surface: hsl(60, 50%, 96%);
+  --color-outline: #5b5f55;
+}

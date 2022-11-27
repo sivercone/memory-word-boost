@@ -5,7 +5,7 @@ import { useQuery } from 'react-query';
 import { AnimatePresence, motion } from 'framer-motion';
 import { authApi } from 'apis/authApi';
 import { useUserStore } from 'storage/useUserStore';
-import { sessionMemory } from 'utils/browserMemory';
+import { localMemory, sessionMemory } from 'utils/browserMemory';
 import { growUpMotions, isBackendLess, pathsForHidingLayout } from 'utils/staticData';
 import { FolderEditing } from 'modules/FolderEditing';
 import { Button } from 'ui/Button';
@@ -13,6 +13,7 @@ import Header from 'ui/Header';
 import style from 'styles/components/layout.module.scss';
 import { Toggle } from './Toggle';
 
+type ThemeType = 'light' | 'dark' | 'system';
 interface Props {
   children: React.ReactNode;
 }
@@ -32,6 +33,12 @@ const TopBar = () => {
   const { user, setUser, signAccess } = useUserStore();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const [theme, setTheme] = React.useState<ThemeType>('system');
+  const onThemeChange = (payload: ThemeType) => {
+    setTheme(payload);
+    document.body.classList.replace(theme, payload);
+    localMemory.set('mwb_theme', payload);
+  };
 
   const { refetch: callLogout } = useQuery('user', () => authApi.logout(signAccess), { enabled: false });
   const onLogout = async () => {
@@ -40,6 +47,17 @@ const TopBar = () => {
     sessionMemory.set('logged', 'no');
     window.location.replace('/login');
   };
+
+  React.useEffect(() => {
+    const localTheme = localMemory.get('mwb_theme');
+    if (['light', 'dark', 'system'].includes(localTheme)) {
+      document.body.classList.add(localTheme);
+      onThemeChange(localTheme);
+    } else {
+      document.body.classList.add('system');
+      onThemeChange('system');
+    }
+  }, []);
 
   if (pathsForHidingLayout.includes(pathname)) return null;
   return (
@@ -115,7 +133,7 @@ const TopBar = () => {
                   )}
                 </ul>
               ) : undefined}
-              {/* <ul className={style.menu__list}>
+              <ul className={style.menu__list}>
                 <li>
                   <button>
                     <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24">
@@ -124,18 +142,30 @@ const TopBar = () => {
                         fill="currentColor"
                       />
                     </svg>
-                    <Toggle label="Match system theme" style={{ width: '100%' }} />
+                    <Toggle
+                      onChange={() => onThemeChange(theme !== 'system' ? 'system' : 'dark')}
+                      checked={theme === 'system'}
+                      label="Match system theme"
+                      style={{ width: '100%' }}
+                    />
                   </button>
                 </li>
-                <li>
-                  <button>
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="currentColor">
-                      <path d="M12 21q-3.75 0-6.375-2.625T3 12q0-3.75 2.625-6.375T12 3q.35 0 .688.025.337.025.662.075-1.025.725-1.637 1.887Q11.1 6.15 11.1 7.5q0 2.25 1.575 3.825Q14.25 12.9 16.5 12.9q1.375 0 2.525-.613 1.15-.612 1.875-1.637.05.325.075.662Q21 11.65 21 12q0 3.75-2.625 6.375T12 21Zm0-2q2.2 0 3.95-1.212 1.75-1.213 2.55-3.163-.5.125-1 .2-.5.075-1 .075-3.075 0-5.238-2.162Q9.1 10.575 9.1 7.5q0-.5.075-1t.2-1q-1.95.8-3.162 2.55Q5 9.8 5 12q0 2.9 2.05 4.95Q9.1 19 12 19Zm-.25-6.75Z" />
-                    </svg>
-                    <Toggle label="Dark theme" style={{ width: '100%' }} />
-                  </button>
-                </li>
-              </ul> */}
+                {theme !== 'system' ? (
+                  <li>
+                    <button>
+                      <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="currentColor">
+                        <path d="M12 21q-3.75 0-6.375-2.625T3 12q0-3.75 2.625-6.375T12 3q.35 0 .688.025.337.025.662.075-1.025.725-1.637 1.887Q11.1 6.15 11.1 7.5q0 2.25 1.575 3.825Q14.25 12.9 16.5 12.9q1.375 0 2.525-.613 1.15-.612 1.875-1.637.05.325.075.662Q21 11.65 21 12q0 3.75-2.625 6.375T12 21Zm0-2q2.2 0 3.95-1.212 1.75-1.213 2.55-3.163-.5.125-1 .2-.5.075-1 .075-3.075 0-5.238-2.162Q9.1 10.575 9.1 7.5q0-.5.075-1t.2-1q-1.95.8-3.162 2.55Q5 9.8 5 12q0 2.9 2.05 4.95Q9.1 19 12 19Zm-.25-6.75Z" />
+                      </svg>
+                      <Toggle
+                        onChange={() => onThemeChange(theme !== 'light' ? 'light' : 'dark')}
+                        checked={theme === 'dark'}
+                        label="Dark theme"
+                        style={{ width: '100%' }}
+                      />
+                    </button>
+                  </li>
+                ) : undefined}
+              </ul>
               <ul className={style.menu__list}>
                 {/* <li>
                   <a
