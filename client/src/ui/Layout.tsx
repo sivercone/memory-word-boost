@@ -84,7 +84,7 @@ const TopBar = () => {
                 </svg>
               </Button>
               <p>Menu</p>
-              <div></div>
+              <div style={{ userSelect: 'none', width: '24px', height: '24px', visibility: 'hidden' }}></div>
             </Header>
             <div className={style.menu__inner}>
               {!isBackendLess ? (
