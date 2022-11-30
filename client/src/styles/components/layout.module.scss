@@ -32,8 +32,7 @@
       border-color: var(--color-outline);
 
       &:hover {
-        color: var(--color-on-primary);
-        background-color: var(--color-primary);
+        background-color: var(--color-background);
       }
 
       a,
@@ -70,7 +69,7 @@
     max-width: var(--container-width);
     width: 100%;
     margin: 0 auto;
-    padding-bottom: 1rem;
+    padding-bottom: 1.5rem;
   }
 
   &__item {
@@ -150,8 +149,7 @@
 
       &:active,
       &:hover {
-        color: var(--color-on-primary);
-        background-color: var(--color-primary);
+        background-color: var(--color-background);
       }
 
       button {
@@ -168,7 +166,7 @@
 }
 
 .overlay {
-  height: calc(50px + 1rem);
+  height: calc(50px + 1.5rem);
 }
 .overlayActive {
   z-index: 10;
