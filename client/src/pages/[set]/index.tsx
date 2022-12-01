@@ -14,9 +14,9 @@ import { FolderInterface, SetInterface } from 'interfaces';
 import { useUserStore } from 'storage/useUserStore';
 import { formatDate } from 'utils/formatDate';
 import { Toggle } from 'ui/Toggle';
-import { growUpMotions, isBackendLess } from 'utils/staticData';
+import { isBackendLess } from 'utils/staticData';
 import { useLocalStore } from 'storage/useLocalStore';
-import { AnimatePresence, motion } from 'framer-motion';
+import { BottomSheet, useBottomSheet } from 'ui/BottomSheet';
 
 type ModalVariants = 'del' | 'info' | 'folder';
 
@@ -24,7 +24,7 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const router = useRouter();
   const { localSets, setLocalSets } = useLocalStore();
   const { user, signAccess } = useUserStore();
-  const [isActionsVisible, setActionsVisible] = React.useState(false);
+  const { toggleSheet, isSheetVisible } = useBottomSheet();
 
   const set = useQuery(['set', pagekey], () => setApi.getById(pagekey), { enabled: !!pagekey && !isBackendLess });
   const [currSet, setCurrSet] = React.useState<SetInterface>();
@@ -56,7 +56,7 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
 
   const [shownModal, setShownModal] = React.useState<ModalVariants>();
   const openModal = (payload: ModalVariants) => {
-    setActionsVisible(false);
+    toggleSheet();
     setShownModal(payload);
   };
   const closeModal = () => setShownModal(undefined);
@@ -173,15 +173,13 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
             </a>
           </Link>
           <button>
-            <span>
-              <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="currentColor">
-                <path d="M6 23q-.825 0-1.412-.587Q4 21.825 4 21V10q0-.825.588-1.413Q5.175 8 6 8h3v2H6v11h12V10h-3V8h3q.825 0 1.413.587Q20 9.175 20 10v11q0 .825-.587 1.413Q18.825 23 18 23Zm5-7V4.825l-1.6 1.6L8 5l4-4 4 4-1.4 1.425-1.6-1.6V16Z" />
-              </svg>
-            </span>
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="currentColor">
+              <path d="M6 23q-.825 0-1.412-.587Q4 21.825 4 21V10q0-.825.588-1.413Q5.175 8 6 8h3v2H6v11h12V10h-3V8h3q.825 0 1.413.587Q20 9.175 20 10v11q0 .825-.587 1.413Q18.825 23 18 23Zm5-7V4.825l-1.6 1.6L8 5l4-4 4 4-1.4 1.425-1.6-1.6V16Z" />
+            </svg>
             <span>Share</span>
           </button>
           {currSet.user.id === user?.id || isBackendLess ? (
-            <button onClick={() => setActionsVisible(true)} title="More Actions">
+            <button onClick={() => toggleSheet()} title="More Actions">
               <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="currentColor">
                 <path d="M6 14q-.825 0-1.412-.588Q4 12.825 4 12t.588-1.413Q5.175 10 6 10t1.412.587Q8 11.175 8 12q0 .825-.588 1.412Q6.825 14 6 14Zm6 0q-.825 0-1.412-.588Q10 12.825 10 12t.588-1.413Q11.175 10 12 10t1.413.587Q14 11.175 14 12q0 .825-.587 1.412Q12.825 14 12 14Zm6 0q-.825 0-1.413-.588Q16 12.825 16 12t.587-1.413Q17.175 10 18 10q.825 0 1.413.587Q20 11.175 20 12q0 .825-.587 1.412Q18.825 14 18 14Z" />
               </svg>
@@ -208,60 +206,44 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
           </ul>
         </div>
       </div>
-      <div onClick={() => setActionsVisible(false)} className={isActionsVisible ? style.overlay : undefined}></div>
-      <AnimatePresence>
-        {isActionsVisible ? (
-          <motion.div className={style.creation} variants={growUpMotions} initial="init" animate="anim" exit="init">
-            <div className={style.creation__top}>
-              <span>{currSet.title}</span>
-              <button onClick={() => setActionsVisible(false)}>
-                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
-                  <path d="M0 0h24v24H0V0z" fill="none" />
-                  <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
-                </svg>
-              </button>
-            </div>
-            <ul>
-              <li>
-                <button onClick={() => openModal('info')}>
-                  <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
-                    <path d="M0 0h24v24H0V0z" fill="none" />
-                    <path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
-                  </svg>
-                  <span>Information</span>
-                </button>
-              </li>
-              <li>
-                <button onClick={onEdit}>
-                  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor">
-                    <path d="M0 0h24v24H0V0z" fill="none" />
-                    <path d="M14.06 9.02l.92.92L5.92 19H5v-.92l9.06-9.06M17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83 3.75 3.75 1.83-1.83c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29zm-3.6 3.19L3 17.25V21h3.75L17.81 9.94l-3.75-3.75z" />
-                  </svg>
-                  <span>Edit</span>
-                </button>
-              </li>
-              <li>
-                <button onClick={() => openModal('folder')}>
-                  <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
-                    <path d="M0 0h24v24H0V0z" fill="none" />
-                    <path d="M20 6h-8l-2-2H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm0 12H4V6h5.17l2 2H20v10zm-8-4h2v2h2v-2h2v-2h-2v-2h-2v2h-2z" />
-                  </svg>
-                  <span>Manage folders</span>
-                </button>
-              </li>
-              <li>
-                <button onClick={() => openModal('del')}>
-                  <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
-                    <path d="M0 0h24v24H0V0z" fill="none" />
-                    <path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z" />
-                  </svg>
-                  <span>Delete</span>
-                </button>
-              </li>
-            </ul>
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
+      <BottomSheet visible={isSheetVisible} toggleVisible={toggleSheet} label={currSet.title}>
+        <li>
+          <button onClick={() => openModal('info')}>
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
+              <path d="M0 0h24v24H0V0z" fill="none" />
+              <path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
+            </svg>
+            <span>Information</span>
+          </button>
+        </li>
+        <li>
+          <button onClick={onEdit}>
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor">
+              <path d="M0 0h24v24H0V0z" fill="none" />
+              <path d="M14.06 9.02l.92.92L5.92 19H5v-.92l9.06-9.06M17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83 3.75 3.75 1.83-1.83c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29zm-3.6 3.19L3 17.25V21h3.75L17.81 9.94l-3.75-3.75z" />
+            </svg>
+            <span>Edit</span>
+          </button>
+        </li>
+        <li>
+          <button onClick={() => openModal('folder')}>
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
+              <path d="M0 0h24v24H0V0z" fill="none" />
+              <path d="M20 6h-8l-2-2H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm0 12H4V6h5.17l2 2H20v10zm-8-4h2v2h2v-2h2v-2h-2v-2h-2v2h-2z" />
+            </svg>
+            <span>Manage folders</span>
+          </button>
+        </li>
+        <li>
+          <button onClick={() => openModal('del')}>
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
+              <path d="M0 0h24v24H0V0z" fill="none" />
+              <path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z" />
+            </svg>
+            <span>Delete</span>
+          </button>
+        </li>
+      </BottomSheet>
       <Modal isOpen={!!shownModal} onClose={closeModal}>
         <ModalBody>
           {shownModal

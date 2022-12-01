@@ -23,3 +23,8 @@ export const growUpMotions = {
   init: { y: '100%', transition: { duration: 0.1 } },
   anim: { y: '0%', transition: { duration: 0.15 } },
 };
+
+export const opacityFadeMotions = {
+  init: { opacity: 0, transition: { duration: 0.15, ease: [0.4, 0, 0.2, 1] } },
+  anim: { opacity: 1, transition: { duration: 0.15, ease: [0.4, 0, 0.2, 1] } },
+};
