@@ -15,6 +15,8 @@ import { SetInterface } from 'interfaces';
 import { useUserStore } from 'storage/useUserStore';
 import { Toggle } from 'ui/Toggle';
 import { CardBox } from 'ui/CardBox';
+import { BottomSheet, useBottomSheet } from 'ui/BottomSheet';
+import { shareValue } from 'utils/shareValue';
 
 type ModalVariants = 'edit' | 'del' | 'sets';
 
@@ -24,8 +26,12 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const { user, signAccess } = useUserStore();
   const queryClient = useQueryClient();
 
+  const { toggleSheet, isSheetVisible } = useBottomSheet();
   const [shownModal, setShownModal] = React.useState<ModalVariants>();
-  const openModal = (payload: ModalVariants) => setShownModal(payload);
+  const openModal = (payload: ModalVariants) => {
+    toggleSheet(false);
+    setShownModal(payload);
+  };
   const closeModal = () => {
     if (folder.data && folder.data.sets?.length) setIncludedSets(folder.data.sets);
     setShownModal(undefined);
@@ -73,80 +79,35 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
         </div>
       </div>
       <div className={style.nav}>
-        <div className={style.nav__author}>
-          <span>
-            Created by{' '}
-            <Link href={`/u/${folder.data.user.id}`}>
-              <a>{folder.data.user.name}</a>
-            </Link>{' '}
-            {folder.data.user.id === user?.id ? '(you)' : undefined}
-          </span>
-        </div>
-        <div className={style.nav__movements}>
-          {folder.data.user.id === user?.id ? (
-            <>
-              <button onClick={() => openModal('edit')} title="edit">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor">
-                  <path d="M0 0h24v24H0V0z" fill="none" />
-                  <path d="M14.06 9.02l.92.92L5.92 19H5v-.92l9.06-9.06M17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83 3.75 3.75 1.83-1.83c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29zm-3.6 3.19L3 17.25V21h3.75L17.81 9.94l-3.75-3.75z" />
-                </svg>
-              </button>
-              <button onClick={() => openModal('sets')} title="include or exclude sets">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  enableBackground="new 0 0 24 24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  width="24"
-                  fill="currentColor"
-                >
-                  <g>
-                    <rect fill="none" height="24" width="24" />
-                  </g>
-                  <g>
-                    <g />
-                    <g>
-                      <path d="M17,19.22H5V7h7V5H5C3.9,5,3,5.9,3,7v12c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2v-7h-2V19.22z" />
-                      <path d="M19,2h-2v3h-3c0.01,0.01,0,2,0,2h3v2.99c0.01,0.01,2,0,2,0V7h3V5h-3V2z" />
-                      <rect height="2" width="8" x="7" y="9" />
-                      <polygon points="7,12 7,14 15,14 15,12 12,12" />
-                      <rect height="2" width="8" x="7" y="15" />
-                    </g>
-                  </g>
-                </svg>
-              </button>
-              <button onClick={() => openModal('del')} title="delete">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
-                  <path d="M0 0h24v24H0V0z" fill="none" />
-                  <path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z" />
-                </svg>
-              </button>
-            </>
-          ) : undefined}
-          <button title="info">
+        <Link href={`/u/${folder.data.user.id}`}>
+          <a>
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="currentColor">
+              <path d="M12 12q-1.65 0-2.825-1.175Q8 9.65 8 8q0-1.65 1.175-2.825Q10.35 4 12 4q1.65 0 2.825 1.175Q16 6.35 16 8q0 1.65-1.175 2.825Q13.65 12 12 12Zm-8 8v-2.8q0-.85.438-1.563.437-.712 1.162-1.087 1.55-.775 3.15-1.163Q10.35 13 12 13t3.25.387q1.6.388 3.15 1.163.725.375 1.162 1.087Q20 16.35 20 17.2V20Zm2-2h12v-.8q0-.275-.137-.5-.138-.225-.363-.35-1.35-.675-2.725-1.013Q13.4 15 12 15t-2.775.337Q7.85 15.675 6.5 16.35q-.225.125-.362.35-.138.225-.138.5Zm6-8q.825 0 1.413-.588Q14 8.825 14 8t-.587-1.412Q12.825 6 12 6q-.825 0-1.412.588Q10 7.175 10 8t.588 1.412Q11.175 10 12 10Zm0-2Zm0 10Z" />
+            </svg>
+            <span>{folder.data.user.name}</span>
+          </a>
+        </Link>
+        <button onClick={() => shareValue(window.location.href)}>
+          <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="currentColor">
+            <path d="M6 23q-.825 0-1.412-.587Q4 21.825 4 21V10q0-.825.588-1.413Q5.175 8 6 8h3v2H6v11h12V10h-3V8h3q.825 0 1.413.587Q20 9.175 20 10v11q0 .825-.587 1.413Q18.825 23 18 23Zm5-7V4.825l-1.6 1.6L8 5l4-4 4 4-1.4 1.425-1.6-1.6V16Z" />
+          </svg>
+          <span>Share</span>
+        </button>
+        {folder.data.user.id === user?.id ? (
+          <button onClick={() => toggleSheet()} title="More Actions">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="currentColor">
+              <path d="M6 14q-.825 0-1.412-.588Q4 12.825 4 12t.588-1.413Q5.175 10 6 10t1.412.587Q8 11.175 8 12q0 .825-.588 1.412Q6.825 14 6 14Zm6 0q-.825 0-1.412-.588Q10 12.825 10 12t.588-1.413Q11.175 10 12 10t1.413.587Q14 11.175 14 12q0 .825-.587 1.412Q12.825 14 12 14Zm6 0q-.825 0-1.413-.588Q16 12.825 16 12t.587-1.413Q17.175 10 18 10q.825 0 1.413.587Q20 11.175 20 12q0 .825-.587 1.412Q18.825 14 18 14Z" />
+            </svg>
+          </button>
+        ) : (
+          <button>
             <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
               <path d="M0 0h24v24H0V0z" fill="none" />
               <path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
             </svg>
+            <span>Info</span>
           </button>
-          <button title="share">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              enableBackground="new 0 0 24 24"
-              height="24"
-              viewBox="0 0 24 24"
-              width="24"
-              fill="currentColor"
-            >
-              <g>
-                <rect fill="none" height="24" width="24" />
-              </g>
-              <g>
-                <path d="M16,5l-1.42,1.42l-1.59-1.59V16h-1.98V4.83L9.42,6.42L8,5l4-4L16,5z M20,10v11c0,1.1-0.9,2-2,2H6c-1.11,0-2-0.9-2-2V10 c0-1.11,0.89-2,2-2h3v2H6v11h12V10h-3V8h3C19.1,8,20,8.89,20,10z" />
-              </g>
-            </svg>
-          </button>
-        </div>
+        )}
       </div>
       <h2 style={{ marginBottom: '1rem' }}>Study sets in this folder ({folder.data.sets?.length})</h2>
       <div className={style2.cardlist}>
@@ -154,6 +115,44 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
           <CardBox key={content.id} content={content.title} id={content.id} type="set" />
         ))}
       </div>
+      <BottomSheet visible={isSheetVisible} toggleVisible={toggleSheet} label={folder.data.name}>
+        <li>
+          <button>
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
+              <path d="M0 0h24v24H0V0z" fill="none" />
+              <path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
+            </svg>
+            <span>Information</span>
+          </button>
+        </li>
+        <li>
+          <button onClick={() => openModal('edit')}>
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor">
+              <path d="M0 0h24v24H0V0z" fill="none" />
+              <path d="M14.06 9.02l.92.92L5.92 19H5v-.92l9.06-9.06M17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83 3.75 3.75 1.83-1.83c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29zm-3.6 3.19L3 17.25V21h3.75L17.81 9.94l-3.75-3.75z" />
+            </svg>
+            <span>Edit</span>
+          </button>
+        </li>
+        <li>
+          <button onClick={() => openModal('sets')}>
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
+              <path d="M0 0h24v24H0V0z" fill="none" />
+              <path d="M20 6h-8l-2-2H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm0 12H4V6h5.17l2 2H20v10zm-8-4h2v2h2v-2h2v-2h-2v-2h-2v2h-2z" />
+            </svg>
+            <span>Manage folders</span>
+          </button>
+        </li>
+        <li>
+          <button onClick={() => openModal('del')}>
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
+              <path d="M0 0h24v24H0V0z" fill="none" />
+              <path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z" />
+            </svg>
+            <span>Delete</span>
+          </button>
+        </li>
+      </BottomSheet>
       <FolderEditing folderFigure={folder.data} isOpen={shownModal === 'edit'} onClose={closeModal} />
       <Modal isOpen={shownModal === 'del'} onClose={closeModal}>
         <ModalBody>
