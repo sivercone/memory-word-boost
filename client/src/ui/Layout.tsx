@@ -64,7 +64,7 @@ const TopBar = () => {
   if (pathsForHidingLayout.includes(pathname)) return null;
   return (
     <>
-      <NextHead themeColor={['dark', 'light'].includes(theme) ? 'var(--color-surface)' : '#000000'} />
+      <NextHead themeColor={theme === 'dark' ? '#252522' : theme === 'light' ? '#f0f0ea' : '#000000'} />
       <Header>
         <button onClick={toggleMenu} style={{ height: '40px', borderRadius: '50%', color: 'inherit' }} title="Menu">
           <svg xmlns="http://www.w3.org/2000/svg" height="40" width="40" fill="currentColor">
