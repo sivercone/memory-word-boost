@@ -13,6 +13,7 @@ import Header from 'ui/Header';
 import { Toggle } from 'ui/Toggle';
 import { BottomSheet, useBottomSheet } from './BottomSheet';
 import style from 'styles/components/layout.module.scss';
+import { NextHead } from 'modules/NextHead';
 
 type ThemeType = 'light' | 'dark' | 'system';
 interface Props {
@@ -63,6 +64,7 @@ const TopBar = () => {
   if (pathsForHidingLayout.includes(pathname)) return null;
   return (
     <>
+      <NextHead themeColor={['dark', 'light'].includes(theme) ? 'var(--color-surface)' : '#000000'} />
       <Header>
         <button onClick={toggleMenu} style={{ height: '40px', borderRadius: '50%', color: 'inherit' }} title="Menu">
           <svg xmlns="http://www.w3.org/2000/svg" height="40" width="40" fill="currentColor">

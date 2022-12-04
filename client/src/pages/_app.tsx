@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import type { AppProps } from 'next/app';
 import { QueryClientProvider, Hydrate } from 'react-query';
 import { ToastContainer } from 'react-toastify';
@@ -12,9 +11,6 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <Hydrate state={pageProps.dehydratedState}>
-        <Head>
-          <title>PROJ MWB</title>
-        </Head>
         <Layout>
           <Component {...pageProps} />
         </Layout>

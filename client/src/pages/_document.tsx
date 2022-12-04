@@ -5,7 +5,6 @@ export default class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
-          <meta name="description" content="sivercone - developer crafting interactive experiences" />
           <link rel="manifest" href="/manifest.json" />
           <link rel="apple-touch-icon" href="/logo.png" />
           <link rel="icon" href="/logo.png" />
