@@ -7,7 +7,7 @@ import { FolderInterfaceDraft } from 'interfaces';
 import { useUserStore } from 'storage/useUserStore';
 import { Modal, ModalBody, ModalInputs, ModalActions } from 'ui/Modal';
 import { Input } from 'ui/Input';
-import { notify } from 'utils/notify';
+import { notify } from 'lib/notify';
 
 interface Props {
   isOpen: boolean;

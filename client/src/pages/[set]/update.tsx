@@ -6,7 +6,7 @@ import SetForm from 'modules/SetForm';
 import Custom404 from 'pages/404';
 import { useUserStore } from 'storage/useUserStore';
 import ErrorPage from 'modules/ErrorPage';
-import { isBackendLess } from 'utils/staticData';
+import { isBackendLess } from 'lib/staticData';
 
 const UpdateSet: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const { setFigure } = useSetStore();

@@ -6,7 +6,7 @@ import { useMutation, useQuery } from 'react-query';
 import { authApi } from 'apis/authApi';
 import { UserInterface } from 'interfaces';
 import Custom404 from 'pages/404';
-import { notify } from 'utils/notify';
+import { notify } from 'lib/notify';
 import { Input } from 'ui/Input';
 import { Button } from 'ui/Button';
 import { useUserStore } from 'storage/useUserStore';

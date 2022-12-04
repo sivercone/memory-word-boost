@@ -9,14 +9,14 @@ import style2 from 'styles/pages/home.module.scss'; // todo - fix that
 import { FolderEditing } from 'modules/FolderEditing';
 import { useRouter } from 'next/dist/client/router';
 import { Modal, ModalActions, ModalBody, ModalList } from 'ui/Modal';
-import { notify } from 'utils/notify';
+import { notify } from 'lib/notify';
 import { setApi } from 'apis/setApi';
 import { SetInterface } from 'interfaces';
 import { useUserStore } from 'storage/useUserStore';
 import { Toggle } from 'ui/Toggle';
 import { CardBox } from 'ui/CardBox';
 import { BottomSheet, useBottomSheet } from 'ui/BottomSheet';
-import { shareValue } from 'utils/shareValue';
+import { shareValue } from 'lib/utils';
 
 type ModalVariants = 'edit' | 'del' | 'sets';
 

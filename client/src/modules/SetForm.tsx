@@ -12,7 +12,7 @@ import { CardInterface, SetInterface, SetInterfaceDraft } from 'interfaces';
 import style from 'styles/pages/createset.module.scss';
 import { Toggle } from 'ui/Toggle';
 import { AnimatePresence, motion } from 'framer-motion';
-import { growUpMotions, isBackendLess } from 'utils/staticData';
+import { growUpMotions, isBackendLess } from 'lib/staticData';
 import { useLocalStore } from 'storage/useLocalStore';
 import Header from 'ui/Header';
 

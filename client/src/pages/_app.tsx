@@ -3,7 +3,7 @@ import type { AppProps } from 'next/app';
 import { QueryClientProvider, Hydrate } from 'react-query';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
-import { queryClient } from 'utils/queryClient';
+import { queryClient } from 'lib/queryClient';
 import { AuthCheck } from 'modules/AuthCheck';
 import Layout from 'ui/Layout';
 import 'styles/style.scss';

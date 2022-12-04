@@ -7,10 +7,10 @@ import { setApi } from 'apis/setApi';
 import Custom404 from 'pages/404';
 import { Button } from 'ui/Button';
 import { CardInterface, SetInterface } from 'interfaces';
-import { isAnswerCorrect } from 'utils/isAnswerCorrect';
+import { isAnswerCorrect } from 'lib/utils';
 import style from 'styles/pages/exam.module.scss';
 import { useLocalStore } from 'storage/useLocalStore';
-import { isBackendLess } from 'utils/staticData';
+import { isBackendLess } from 'lib/staticData';
 import Header from 'ui/Header';
 
 type SubmitData = { form: { input: string }[] };

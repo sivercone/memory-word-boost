@@ -5,19 +5,18 @@ import Link from 'next/link';
 import { QueryClient, useQuery, dehydrate, useMutation, useQueryClient } from 'react-query';
 import { setApi } from 'apis/setApi';
 import { useRouter } from 'next/dist/client/router';
-import { notify } from 'utils/notify';
+import { notify } from 'lib/notify';
 import { Modal, ModalBody, ModalActions, ModalList } from 'ui/Modal';
 import Custom404 from 'pages/404';
 import { useSetStore } from 'storage/useSetStore';
 import { folderApi } from 'apis/folderApi';
 import { FolderInterface, SetInterface } from 'interfaces';
 import { useUserStore } from 'storage/useUserStore';
-import { formatDate } from 'utils/formatDate';
+import { formatDate, shareValue } from 'lib/utils';
 import { Toggle } from 'ui/Toggle';
-import { isBackendLess } from 'utils/staticData';
+import { isBackendLess } from 'lib/staticData';
 import { useLocalStore } from 'storage/useLocalStore';
 import { BottomSheet, useBottomSheet } from 'ui/BottomSheet';
-import { shareValue } from 'utils/shareValue';
 
 type ModalVariants = 'del' | 'info' | 'folder';
 

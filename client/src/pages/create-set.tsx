@@ -3,7 +3,7 @@ import { useQuery } from 'react-query';
 import { authApi } from 'apis/authApi';
 import SetForm from 'modules/SetForm';
 import { useUserStore } from 'storage/useUserStore';
-import { isBackendLess } from 'utils/staticData';
+import { isBackendLess } from 'lib/staticData';
 
 const CreateSet = () => {
   const { signAccess } = useUserStore();

@@ -6,11 +6,11 @@ import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { setApi } from 'apis/setApi';
 import Custom404 from 'pages/404';
 import { CardInterface, SetInterface } from 'interfaces';
-import { flashCardMotions, isBackendLess } from 'utils/staticData';
+import { flashCardMotions, isBackendLess } from 'lib/staticData';
 import { useLocalStore } from 'storage/useLocalStore';
 import Header from 'ui/Header';
 import style from 'styles/pages/study.module.scss';
-import { fontSizeBasedOnLength } from 'utils/fontSizeBasedOnLength';
+import { fontSizeBasedOnLength } from 'lib/utils';
 
 // drag - https://codesandbox.io/s/5trtt
 

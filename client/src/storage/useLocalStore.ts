@@ -1,7 +1,7 @@
 import create from 'zustand';
 import { combine } from 'zustand/middleware';
 import { FolderInterface, SetInterface } from 'interfaces';
-import { localMemory } from 'utils/browserMemory';
+import { localMemory } from 'lib/browserMemory';
 
 const sets = localMemory.get('mwb_sets');
 const folders = localMemory.get('mwb_folders');

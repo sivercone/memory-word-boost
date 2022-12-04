@@ -10,7 +10,7 @@ import style from 'styles/pages/home.module.scss';
 import { useRouter } from 'next/router';
 import { FolderEditing } from 'modules/FolderEditing';
 import { authApi } from 'apis/authApi';
-import { isBackendLess } from 'utils/staticData';
+import { isBackendLess } from 'lib/staticData';
 import { useLocalStore } from 'storage/useLocalStore';
 import { FolderInterface, SetInterface } from 'interfaces';
 

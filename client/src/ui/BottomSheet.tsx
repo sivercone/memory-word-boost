@@ -1,6 +1,6 @@
 import React from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { growUpMotions, opacityFadeMotions } from 'utils/staticData';
+import { growUpMotions, opacityFadeMotions } from 'lib/staticData';
 import style from 'styles/components/bottomSheet.module.scss';
 
 interface ComponentProps {

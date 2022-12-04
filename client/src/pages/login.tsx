@@ -1,8 +1,8 @@
 import { NextPage } from 'next';
 import Link from 'next/link';
 import style from 'styles/pages/login.module.scss';
-import { sessionMemory } from 'utils/browserMemory';
-import { isBackendLess } from 'utils/staticData';
+import { sessionMemory } from 'lib/browserMemory';
+import { isBackendLess } from 'lib/staticData';
 
 const login: NextPage = () => {
   const resetLoggedState = () => sessionMemory.remove('logged');

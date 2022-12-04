@@ -7,7 +7,7 @@ import { setApi } from 'apis/setApi';
 import style from 'styles/pages/user.module.scss';
 import { authApi } from 'apis/authApi';
 import Custom404 from 'pages/404';
-import { formatDate } from 'utils/formatDate';
+import { formatDate } from 'lib/utils';
 import { folderApi } from 'apis/folderApi';
 import { useUserStore } from 'storage/useUserStore';
 import { CardBox } from 'ui/CardBox';
