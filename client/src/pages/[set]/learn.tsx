@@ -6,12 +6,11 @@ import { motion } from 'framer-motion';
 import { setApi } from 'apis/setApi';
 import { CardInterface, SetInterface } from 'interfaces';
 import Custom404 from 'pages/404';
-import { isAnswerCorrect } from 'lib/utils';
+import { isAnswerCorrect, fontSizeBasedOnLength } from 'lib/utils';
 import { flashCardMotions, isBackendLess } from 'lib/staticData';
 import { useLocalStore } from 'storage/useLocalStore';
 import Header from 'ui/Header';
 import style from 'styles/pages/study.module.scss';
-import { fontSizeBasedOnLength } from 'lib/utils';
 
 type StudyCard = CardInterface & { flash: boolean; write: boolean; quiz: boolean };
 
