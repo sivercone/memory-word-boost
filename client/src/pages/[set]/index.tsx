@@ -195,7 +195,7 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
           )}
         </div>
         <div className={style.body}>
-          <h2>Terms in this set ({currSet.cards.length})</h2>
+          <h2>Cards in this set ({currSet.cards.length})</h2>
           <ul>
             {currSet.cards.map((content, i) => (
               <li key={i}>
