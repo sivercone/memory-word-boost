@@ -197,6 +197,14 @@ const TopBar = () => {
                     <span>Report an issue</span>
                   </a>
                 </li>
+                <li>
+                  <a onClick={toggleMenu} href="https://sivercone.vercel.app/" target="_blank" rel="noreferrer">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="currentColor">
+                      <path d="M5.4 20 4 18.6 15.6 7H9V5h10v10h-2V8.4Z" />
+                    </svg>
+                    <span>Visit developer&#39;s site</span>
+                  </a>
+                </li>
               </ul>
             </div>
           </motion.div>
