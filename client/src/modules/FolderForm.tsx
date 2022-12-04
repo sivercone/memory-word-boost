@@ -15,7 +15,7 @@ interface Props {
   folderFigure?: FolderInterfaceDraft;
 }
 
-export const FolderEditing: React.FC<Props> = ({ isOpen, onClose, folderFigure }) => {
+export const FolderForm: React.FC<Props> = ({ isOpen, onClose, folderFigure }) => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { user, signAccess } = useUserStore();

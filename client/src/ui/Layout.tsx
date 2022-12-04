@@ -7,12 +7,12 @@ import { authApi } from 'apis/authApi';
 import { useUserStore } from 'storage/useUserStore';
 import { localMemory, sessionMemory } from 'lib/browserMemory';
 import { growUpMotions, isBackendLess, pathsForHidingLayout } from 'lib/staticData';
-import { FolderEditing } from 'modules/FolderEditing';
+import { FolderForm } from 'modules/FolderForm';
 import { Button } from 'ui/Button';
 import Header from 'ui/Header';
-import style from 'styles/components/layout.module.scss';
-import { Toggle } from './Toggle';
+import { Toggle } from 'ui/Toggle';
 import { BottomSheet, useBottomSheet } from './BottomSheet';
+import style from 'styles/components/layout.module.scss';
 
 type ThemeType = 'light' | 'dark' | 'system';
 interface Props {
@@ -285,7 +285,7 @@ const BottomBar = () => {
           </button>
         </li>
       </BottomSheet>
-      <FolderEditing isOpen={shownFolder} onClose={toggleShownFolder} />
+      <FolderForm isOpen={shownFolder} onClose={toggleShownFolder} />
     </>
   );
 };

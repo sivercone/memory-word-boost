@@ -1,22 +1,22 @@
-import { folderApi } from 'apis/folderApi';
+import React from 'react';
 import { NextPage } from 'next';
 import Link from 'next/link';
-import Custom404 from 'pages/404';
-import React from 'react';
+import { useRouter } from 'next/router';
 import { dehydrate, QueryClient, useMutation, useQuery, useQueryClient } from 'react-query';
-import style from 'styles/pages/set.module.scss';
-import style2 from 'styles/pages/home.module.scss'; // todo - fix that
-import { FolderEditing } from 'modules/FolderEditing';
-import { useRouter } from 'next/dist/client/router';
-import { Modal, ModalActions, ModalBody, ModalList } from 'ui/Modal';
-import { notify } from 'lib/notify';
+import { folderApi } from 'apis/folderApi';
 import { setApi } from 'apis/setApi';
-import { SetInterface } from 'interfaces';
+import { notify } from 'lib/notify';
+import { shareValue } from 'lib/utils';
 import { useUserStore } from 'storage/useUserStore';
+import { Modal, ModalActions, ModalBody, ModalList } from 'ui/Modal';
 import { Toggle } from 'ui/Toggle';
 import { CardBox } from 'ui/CardBox';
 import { BottomSheet, useBottomSheet } from 'ui/BottomSheet';
-import { shareValue } from 'lib/utils';
+import { SetInterface } from 'interfaces';
+import { FolderForm } from 'modules/FolderForm';
+import Custom404 from 'pages/404';
+import style2 from 'styles/pages/home.module.scss'; // @todo - fix that
+import style from 'styles/pages/set.module.scss';
 
 type ModalVariants = 'edit' | 'del' | 'sets';
 
@@ -153,7 +153,7 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
           </button>
         </li>
       </BottomSheet>
-      <FolderEditing folderFigure={folder.data} isOpen={shownModal === 'edit'} onClose={closeModal} />
+      <FolderForm folderFigure={folder.data} isOpen={shownModal === 'edit'} onClose={closeModal} />
       <Modal isOpen={shownModal === 'del'} onClose={closeModal}>
         <ModalBody>
           <h3>{`Remove "${folder.data.name}"?`}</h3>
