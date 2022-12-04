@@ -11,6 +11,7 @@ import { flashCardMotions, isBackendLess } from 'utils/staticData';
 import { useLocalStore } from 'storage/useLocalStore';
 import Header from 'ui/Header';
 import style from 'styles/pages/study.module.scss';
+import { fontSizeBasedOnLength } from 'utils/fontSizeBasedOnLength';
 
 type StudyCard = CardInterface & { flash: boolean; write: boolean; quiz: boolean };
 
@@ -140,7 +141,12 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
             disabled={currCard?.flash || isToggling}
             style={currCard?.flash ? { cursor: 'default' } : undefined}
           >
-            <motion.span animate={toggled ? flashCardMotions.rotate : flashCardMotions.init}>
+            <motion.div
+              animate={toggled ? flashCardMotions.rotate : flashCardMotions.init}
+              style={
+                currCard ? { fontSize: fontSizeBasedOnLength(toggled ? currCard.definition.length : currCard.term.length) } : undefined
+              }
+            >
               {!isToggling ? (toggled ? currCard?.definition : currCard?.term) : ''}
               {isEnd ? (
                 <>
@@ -149,7 +155,7 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                   <p>{`You just studied ${cards.length} terms!`}</p>
                 </>
               ) : undefined}
-            </motion.span>
+            </motion.div>
           </motion.button>
         </motion.div>
         {isEnd ? (

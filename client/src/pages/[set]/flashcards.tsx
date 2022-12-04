@@ -10,6 +10,7 @@ import { flashCardMotions, isBackendLess } from 'utils/staticData';
 import { useLocalStore } from 'storage/useLocalStore';
 import Header from 'ui/Header';
 import style from 'styles/pages/study.module.scss';
+import { fontSizeBasedOnLength } from 'utils/fontSizeBasedOnLength';
 
 // drag - https://codesandbox.io/s/5trtt
 
@@ -132,7 +133,18 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
             animate={toggled ? flashCardMotions.rotate : flashCardMotions.init}
             disabled={currentIndex >= cards.length || isToggling}
           >
-            <motion.span animate={toggled ? flashCardMotions.rotate : flashCardMotions.init}>
+            <motion.div
+              animate={toggled ? flashCardMotions.rotate : flashCardMotions.init}
+              style={
+                cards[currentIndex]
+                  ? {
+                      fontSize: fontSizeBasedOnLength(
+                        toggled ? cards[currentIndex].definition.length : cards[currentIndex].term.length,
+                      ),
+                    }
+                  : undefined
+              }
+            >
               {!isToggling ? (toggled ? cards[currentIndex]?.definition : cards[currentIndex]?.term) : ''}
               {currentIndex >= cards.length ? (
                 <>
@@ -154,7 +166,7 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                   </p>
                 </>
               ) : undefined}
-            </motion.span>
+            </motion.div>
           </motion.button>
         </motion.div>
         <div className={style.study__moves}>
