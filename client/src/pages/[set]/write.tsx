@@ -7,7 +7,7 @@ import { setApi } from 'apis/setApi';
 import Custom404 from 'pages/404';
 import { Button } from 'ui/Button';
 import { CardInterface, SetInterface } from 'interfaces';
-import { isAnswerCorrect } from 'lib/utils';
+import { fontSizeBasedOnLength, isAnswerCorrect } from 'lib/utils';
 import { useLocalStore } from 'storage/useLocalStore';
 import { isBackendLess } from 'lib/staticData';
 import Header from 'ui/Header';
@@ -61,7 +61,7 @@ const WritePage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
 
   const { register, handleSubmit, reset } = useForm<SubmitData>();
   const onSubmit = (payload: SubmitData) => {
-    if (isAnswerCorrect(cards[currentIndex].definition, payload.answer)) nextCard();
+    if (isAnswerCorrect(cards[currentIndex].term, payload.answer)) nextCard();
     else loseCard();
   };
 
@@ -111,12 +111,15 @@ const WritePage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
               <div style={{ width: `${scorePercent}%` }}></div>
             </div>
             <div className={style.form__main}>
-              <div className={style.form__learn}>
-                <span>{cards[currentIndex].term}</span>
+              <div
+                className={style.form__learn}
+                style={cards[currentIndex] ? { fontSize: fontSizeBasedOnLength(cards[currentIndex].definition.length) } : undefined}
+              >
+                <span>{cards[currentIndex].definition}</span>
                 {status === 'F' ? (
                   <>
-                    <span>correct answer</span>
-                    <span>{cards[currentIndex].definition}</span>
+                    <span>Correct Answer</span>
+                    <span>{cards[currentIndex].term}</span>
                   </>
                 ) : undefined}
               </div>

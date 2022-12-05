@@ -109,7 +109,9 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
           </button>
         )}
       </div>
-      <h2 style={{ marginBottom: '1rem' }}>Study sets in this folder ({folder.data.sets?.length})</h2>
+      <div className={style.body}>
+        <h2 style={{ marginBottom: '1rem' }}>Study sets in this folder ({folder.data.sets?.length})</h2>
+      </div>
       <div className={style2.cardlist}>
         {folder.data.sets?.map((content) => (
           <CardBox key={content.id} content={content.title} id={content.id} type="set" />

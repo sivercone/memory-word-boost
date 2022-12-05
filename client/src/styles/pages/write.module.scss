@@ -42,9 +42,12 @@
     justify-content: center;
     height: 100%;
     padding: 1rem 0;
+    overflow-y: auto;
 
     span {
-      font-size: clamp(1rem, 1.1vw, 2.5rem);
+      display: block;
+      max-height: 100px;
+      min-height: 100%;
       word-break: break-word;
     }
 
@@ -66,7 +69,7 @@
     input {
       width: 100%;
       border-bottom: 2px solid var(--color-on-surface);
-      font-size: 1.5rem;
+      font-size: 1.25rem;
       outline: none;
     }
 
@@ -119,13 +122,16 @@
   &__content {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 1rem;
 
     p {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      font-size: 1.25rem;
+      gap: 1rem;
+
+      span {
+        width: 100%;
+      }
     }
   }
 

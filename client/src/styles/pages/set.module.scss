@@ -119,10 +119,15 @@
   a {
     min-width: 50%;
   }
+
+  @include breakpoint-max(sm) {
+    flex-wrap: wrap;
+  }
 }
 
 .body {
   h2 {
+    font-size: 1.25rem;
     margin: 0.5rem 0;
   }
 
@@ -134,7 +139,6 @@
     li {
       display: flex;
       justify-content: space-between;
-      align-items: center;
       gap: 1rem;
       padding: 1rem;
       border-radius: rem(10);
@@ -146,7 +150,8 @@
         flex-basis: 100%;
       }
 
-      @include breakpoint-max(md) {
+      @include breakpoint-max(sm) {
+        align-items: center;
         flex-direction: column;
       }
     }

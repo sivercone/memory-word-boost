@@ -36,7 +36,7 @@ const ExamPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const onSubmit = (payload: SubmitData) => {
     setIncorrect(
       payload.form.map((el, i) =>
-        !isAnswerCorrect(el.input, cards[i].definition)
+        !isAnswerCorrect(el.input, cards[i].term)
           ? { correct: false, index: i, answer: el.input }
           : { correct: true, index: i, answer: el.input },
       ),
@@ -110,11 +110,11 @@ const ExamPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
           {cards.map((el, i) => (
             <div key={i} onFocus={() => setCurrIndex(i)} className={style.list__block}>
               <div className={style.list__learn}>
-                <span>{el.term}</span>
+                <span>{el.definition}</span>
                 {incorrect.length ? (
                   <>
                     <span style={!incorrect[i].correct ? { color: 'var(--color-error)' } : undefined}>correct answer</span>
-                    <span>{cards[i].definition}</span>
+                    <span>{cards[i].term}</span>
                   </>
                 ) : undefined}
               </div>

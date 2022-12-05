@@ -139,13 +139,13 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                 cards[currentIndex]
                   ? {
                       fontSize: fontSizeBasedOnLength(
-                        toggled ? cards[currentIndex].definition.length : cards[currentIndex].term.length,
+                        toggled ? cards[currentIndex].term.length : cards[currentIndex].definition.length,
                       ),
                     }
                   : undefined
               }
             >
-              {!isToggling ? (toggled ? cards[currentIndex]?.definition : cards[currentIndex]?.term) : ''}
+              {!isToggling ? (toggled ? cards[currentIndex]?.term : cards[currentIndex]?.definition) : ''}
               {currentIndex >= cards.length ? (
                 <>
                   {repeatCards.length === currSet.cards.length ? (

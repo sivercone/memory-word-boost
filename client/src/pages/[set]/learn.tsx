@@ -76,8 +76,8 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   };
 
   const onQuiz = (answer: string) => {
-    if (currCard?.definition === answer) {
-      const nextCards = cards.map((c) => (c.order === currCard?.order ? { ...c, quiz: true } : c));
+    if (currCard && isAnswerCorrect(currCard.term, answer)) {
+      const nextCards = cards.map((c) => (c.order === currCard.order ? { ...c, quiz: true } : c));
       setCards(nextCards);
       const nextCurrCard = nextCards.sort(() => Math.random() - 0.5).find((c) => !c.flash || !c.quiz || !c.write);
       setCurrCard(nextCurrCard);
@@ -97,7 +97,7 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const onWrite = (event?: React.ChangeEvent<HTMLInputElement>, idk?: boolean) => {
     const value = event?.target.value || '';
     setInputValue(value);
-    if (currCard && (idk || isAnswerCorrect(currCard.definition, value))) {
+    if (currCard && (idk || isAnswerCorrect(currCard.term, value))) {
       setInputValue('');
       const nextCards = cards.map((c) =>
         c.order === currCard?.order ? (idk ? { ...c, quiz: false, write: false } : { ...c, write: true }) : c,
@@ -143,10 +143,10 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
             <motion.div
               animate={toggled ? flashCardMotions.rotate : flashCardMotions.init}
               style={
-                currCard ? { fontSize: fontSizeBasedOnLength(toggled ? currCard.definition.length : currCard.term.length) } : undefined
+                currCard ? { fontSize: fontSizeBasedOnLength(toggled ? currCard.term.length : currCard.definition.length) } : undefined
               }
             >
-              {!isToggling ? (toggled ? currCard?.definition : currCard?.term) : ''}
+              {!isToggling ? (toggled ? currCard?.term : currCard?.definition) : ''}
               {isEnd ? (
                 <>
                   <p>⚡️</p>
@@ -220,12 +220,12 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
           <div className={style.study__moves} style={{ flexWrap: 'wrap' }}>
             {quizItems.map((card) => (
               <motion.button
-                onClick={() => onQuiz(card.definition)}
+                onClick={() => onQuiz(card.term)}
                 key={card.order}
                 className={style.study__arrow}
                 style={{ padding: '1rem' }}
               >
-                <span>{card.definition}</span>
+                <span>{card.term}</span>
               </motion.button>
             ))}
           </div>
