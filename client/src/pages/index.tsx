@@ -20,6 +20,7 @@ const Home: NextPage = () => {
   const { localSets } = useLocalStore();
   const { signAccess } = useUserStore();
   const router = useRouter();
+  const [shownEntities, setShownEntities] = React.useState<'sets' | 'folders'>('sets');
 
   const user = useQuery('user', () => authApi.me(signAccess)); // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const userSets = useQuery('userSets', () => setApi.getByUser(user.data!), { enabled: !!user.data }); // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -39,47 +40,66 @@ const Home: NextPage = () => {
 
   return (
     <div className={style.container}>
-      <section>
-        <h2>Recent study sets</h2>
-        <div className={style.cardlist}>
-          {state.userSets.length ? (
-            state.userSets.map((content) => <CardBox key={content.id} content={content.title} id={content.id} type="set" />)
-          ) : (
-            <div className={style.emptyCard}>
-              <p>You don&#39;t have any study sets yet</p>
-              <Button onClick={() => router.push('/create-set')}>Create your first study set</Button>
+      <div className={style.toggle}>
+        <button onClick={() => setShownEntities('sets')} className={shownEntities === 'sets' ? style.toggle__active : undefined}>
+          Sets
+        </button>
+        <button onClick={() => setShownEntities('folders')} className={shownEntities === 'folders' ? style.toggle__active : undefined}>
+          Folders
+        </button>
+      </div>
+      {shownEntities === 'sets' ? (
+        <>
+          <section>
+            <h2>Recent study sets</h2>
+            <div className={style.cardlist}>
+              {state.userSets.length ? (
+                state.userSets.map((content) => <CardBox key={content.id} content={content.title} id={content.id} type="set" />)
+              ) : (
+                <div className={style.emptyCard}>
+                  <p>You don&#39;t have any study sets yet</p>
+                  <Button onClick={() => router.push('/create-set')}>Create your first study set</Button>
+                </div>
+              )}
             </div>
-          )}
-        </div>
-      </section>
-      <section>
-        <h2>Recent folders</h2>
-        <div className={style.cardlist}>
-          {state.userFolders.length ? (
-            state.userFolders.map((content) => <CardBox key={content.id} content={content.name} id={content.id} type="folder" />)
-          ) : (
-            <>
-              <div className={style.emptyCard}>
-                <p>You don&#39;t have any folders yet</p>
-                <Button onClick={toggleShownFolder}>Create your first folder</Button>
-              </div>
-              <FolderForm isOpen={shownFolder} onClose={toggleShownFolder} />
-            </>
-          )}
-        </div>
-      </section>
-      {set.data?.length || folder.data?.length ? (
-        <section>
-          <h2>Discover solutions from other users</h2>
-          <div className={style.cardlist}>
-            {set.data?.length
-              ? set.data.map((content) => <CardBox key={content.id} content={content.title} id={content.id} type="set" />)
-              : undefined}
-            {folder.data?.length
-              ? folder.data.map((content) => <CardBox key={content.id} content={content.name} id={content.id} type="folder" />)
-              : undefined}
-          </div>
-        </section>
+          </section>
+          <section>
+            <h2>Discover solutions from other users</h2>
+            <div className={style.cardlist}>
+              {set.data?.length
+                ? set.data.map((content) => <CardBox key={content.id} content={content.title} id={content.id} type="set" />)
+                : undefined}
+            </div>
+          </section>
+        </>
+      ) : undefined}
+      {shownEntities === 'folders' ? (
+        <>
+          <section>
+            <h2>Recent folders</h2>
+            <div className={style.cardlist}>
+              {state.userFolders.length ? (
+                state.userFolders.map((content) => <CardBox key={content.id} content={content.name} id={content.id} type="folder" />)
+              ) : (
+                <>
+                  <div className={style.emptyCard}>
+                    <p>You don&#39;t have any folders yet</p>
+                    <Button onClick={toggleShownFolder}>Create your first folder</Button>
+                  </div>
+                  <FolderForm isOpen={shownFolder} onClose={toggleShownFolder} />
+                </>
+              )}
+            </div>
+          </section>{' '}
+          <section>
+            <h2>Discover solutions from other users</h2>
+            <div className={style.cardlist}>
+              {folder.data?.length
+                ? folder.data.map((content) => <CardBox key={content.id} content={content.name} id={content.id} type="folder" />)
+                : undefined}
+            </div>
+          </section>
+        </>
       ) : undefined}
     </div>
   );
