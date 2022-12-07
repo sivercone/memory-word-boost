@@ -112,7 +112,7 @@ const WritePage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
             </div>
             <div className={style.write__card}>
               <div className={style.write__content}>
-                <span>{cards[currentIndex].definition}</span>
+                <span style={status === 'F' ? { maxHeight: '100px' } : undefined}>{cards[currentIndex].definition}</span>
                 {status === 'F' ? (
                   <>
                     <span>Correct Answer</span>
