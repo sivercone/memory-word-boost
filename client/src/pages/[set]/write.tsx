@@ -122,7 +122,7 @@ const WritePage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
               </div>
               <form onSubmit={handleSubmit(onSubmit)} className={style.write__form} autoComplete="off">
                 <label>
-                  <input type="text" {...register('answer')} required autoFocus placeholder="Enter answer" />
+                  <input type="text" {...register('answer')} required placeholder="Enter answer" />
                 </label>
                 <div>
                   <Button type="submit" title="Submit">

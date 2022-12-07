@@ -63,20 +63,21 @@
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
-    height: 50%;
+    height: 60%;
 
     label {
       width: 100%;
-      height: 100%;
+      height: auto;
+      min-height: 100%;
       padding: 1rem;
       border-radius: rem(10);
       background-color: var(--color-surface);
       color: var(--color-on-surface);
       box-shadow: var(--box-shadow);
-      transition: all 0.3s linear;
+      transition: all 0.2s linear;
 
       &:focus-within {
-        height: auto;
+        min-height: 0%;
       }
 
       input {
