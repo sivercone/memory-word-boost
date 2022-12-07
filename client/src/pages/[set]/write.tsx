@@ -7,7 +7,7 @@ import { setApi } from 'apis/setApi';
 import Custom404 from 'pages/404';
 import { Button } from 'ui/Button';
 import { CardInterface, SetInterface } from 'interfaces';
-import { fontSizeBasedOnLength, isAnswerCorrect } from 'lib/utils';
+import { isAnswerCorrect } from 'lib/utils';
 import { useLocalStore } from 'storage/useLocalStore';
 import { isBackendLess } from 'lib/staticData';
 import Header from 'ui/Header';
@@ -105,16 +105,13 @@ const WritePage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
         <div style={{ userSelect: 'none', width: '24px', height: '24px', visibility: 'hidden' }}></div>
       </Header>
       {cards.length && status !== 'E' ? (
-        <div className={style.form}>
-          <div className={style.form__inner}>
-            <div className={style.form__progressbar} title={`${scorePercent}%`}>
+        <div className={style.write}>
+          <div className={style.write__inner}>
+            <div className={style.write__score} title={`${scorePercent}%`}>
               <div style={{ width: `${scorePercent}%` }}></div>
             </div>
-            <div className={style.form__main}>
-              <div
-                className={style.form__learn}
-                style={cards[currentIndex] ? { fontSize: fontSizeBasedOnLength(cards[currentIndex].definition.length) } : undefined}
-              >
+            <div className={style.write__card}>
+              <div className={style.write__content}>
                 <span>{cards[currentIndex].definition}</span>
                 {status === 'F' ? (
                   <>
@@ -123,8 +120,10 @@ const WritePage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                   </>
                 ) : undefined}
               </div>
-              <form onSubmit={handleSubmit(onSubmit)} className={style.form__fields} autoComplete="off">
-                <input type="text" {...register('answer')} required autoFocus />
+              <form onSubmit={handleSubmit(onSubmit)} className={style.write__form} autoComplete="off">
+                <label>
+                  <input type="text" {...register('answer')} required autoFocus />
+                </label>
                 <div>
                   <Button type="submit" title="Submit">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24">
