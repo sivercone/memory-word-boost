@@ -21,11 +21,12 @@
 
 .toggle {
   display: flex;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
   padding: 0.25rem;
   border-radius: rem(50);
   color: var(--color-on-surface);
   background-color: var(--color-surface);
+  box-shadow: var(--box-shadow);
 
   button {
     width: 100%;

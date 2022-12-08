@@ -1,26 +1,53 @@
 import React from 'react';
 import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
 import { setApi } from 'apis/setApi';
 import { folderApi } from 'apis/folderApi';
+import { authApi } from 'apis/authApi';
 import { useUserStore } from 'storage/useUserStore';
+import { useLocalStore } from 'storage/useLocalStore';
 import { CardBox } from 'ui/CardBox';
 import { Button } from 'ui/Button';
-import { useRouter } from 'next/router';
-import { FolderForm } from 'modules/FolderForm';
-import { authApi } from 'apis/authApi';
 import { isBackendLess } from 'lib/staticData';
-import { useLocalStore } from 'storage/useLocalStore';
+import { FolderForm } from 'modules/FolderForm';
 import { FolderInterface, SetInterface } from 'interfaces';
 import style from 'styles/pages/home.module.scss';
 
+type TabsOptions = 'sets' | 'folders';
+type TabsProps = { onTabSelect: React.Dispatch<React.SetStateAction<TabsOptions>>; selectedTab: TabsOptions };
 type StateType = { userSets: SetInterface[]; userFolders: FolderInterface[] };
 
 const Home: NextPage = () => {
-  const { localSets } = useLocalStore();
-  const { signAccess } = useUserStore();
+  const [selectedTab, setSelectedTab] = React.useState<TabsOptions>('sets');
+
+  return (
+    <div className={style.container}>
+      <Tabs onTabSelect={setSelectedTab} selectedTab={selectedTab} />
+      <DisplayData selectedTab={selectedTab} />
+    </div>
+  );
+};
+
+const Tabs: React.FC<TabsProps> = ({ onTabSelect, selectedTab }) => {
+  return (
+    <div className={style.toggle}>
+      <button onClick={() => onTabSelect('sets')} className={selectedTab === 'sets' ? style.toggle__active : undefined}>
+        Sets
+      </button>
+      <button onClick={() => onTabSelect('folders')} className={selectedTab === 'folders' ? style.toggle__active : undefined}>
+        Folders
+      </button>
+    </div>
+  );
+};
+
+const DisplayData: React.FC<{ selectedTab: TabsOptions }> = ({ selectedTab }) => {
   const router = useRouter();
-  const [shownEntities, setShownEntities] = React.useState<'sets' | 'folders'>('sets');
+  const { signAccess } = useUserStore();
+  const { localSets } = useLocalStore();
+  const [shownFolder, setShownFolder] = React.useState(false);
+  const toggleShownFolder = () => setShownFolder(!shownFolder);
 
   const user = useQuery('user', () => authApi.me(signAccess)); // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const userSets = useQuery('userSets', () => setApi.getByUser(user.data!), { enabled: !!user.data }); // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -28,30 +55,18 @@ const Home: NextPage = () => {
   const set = useQuery('sets', () => setApi.get(user.data?.id), { enabled: !!user.data || user.isFetched });
   const folder = useQuery('folders', () => folderApi.get(user.data?.id), { enabled: !!user.data || user.isFetched });
 
-  const [shownFolder, setShownFolder] = React.useState(false);
-  const toggleShownFolder = () => setShownFolder(!shownFolder);
-
   const [state, setState] = React.useState<StateType>({ userSets: [], userFolders: [] });
   React.useEffect(() => {
     if (isBackendLess) setState({ userSets: localSets, userFolders: [] });
-    else if (userSets.data) setState((prev) => ({ ...prev, userSets: userSets.data }));
-    else if (userFolders.data) setState((prev) => ({ ...prev, userFolders: userFolders.data }));
+    if (userSets.data) setState((prev) => ({ ...prev, userSets: userSets.data }));
+    if (userFolders.data) setState((prev) => ({ ...prev, userFolders: userFolders.data }));
   }, [isBackendLess, userSets.data, userFolders.data]);
 
   return (
-    <div className={style.container}>
-      <div className={style.toggle}>
-        <button onClick={() => setShownEntities('sets')} className={shownEntities === 'sets' ? style.toggle__active : undefined}>
-          Sets
-        </button>
-        <button onClick={() => setShownEntities('folders')} className={shownEntities === 'folders' ? style.toggle__active : undefined}>
-          Folders
-        </button>
-      </div>
-      {shownEntities === 'sets' ? (
+    <>
+      {selectedTab === 'sets' ? (
         <>
           <section>
-            <h2>Recent study sets</h2>
             <div className={style.cardlist}>
               {state.userSets.length ? (
                 state.userSets.map((content) => <CardBox key={content.id} content={content.title} id={content.id} type="set" />)
@@ -73,10 +88,9 @@ const Home: NextPage = () => {
           </section>
         </>
       ) : undefined}
-      {shownEntities === 'folders' ? (
+      {selectedTab === 'folders' ? (
         <>
           <section>
-            <h2>Recent folders</h2>
             <div className={style.cardlist}>
               {state.userFolders.length ? (
                 state.userFolders.map((content) => <CardBox key={content.id} content={content.name} id={content.id} type="folder" />)
@@ -90,7 +104,7 @@ const Home: NextPage = () => {
                 </>
               )}
             </div>
-          </section>{' '}
+          </section>
           <section>
             <h2>Discover solutions from other users</h2>
             <div className={style.cardlist}>
@@ -101,7 +115,7 @@ const Home: NextPage = () => {
           </section>
         </>
       ) : undefined}
-    </div>
+    </>
   );
 };
 
