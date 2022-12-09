@@ -235,7 +235,7 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
             <input
               value={inputValue}
               onChange={onWrite}
-              placeholder="Enter the answer"
+              placeholder="Enter answer"
               className={style.study__arrow}
               style={{ textAlign: 'center' }}
               autoFocus

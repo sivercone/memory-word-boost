@@ -19,6 +19,7 @@ export const FolderForm: React.FC<Props> = ({ isOpen, onClose, folderFigure }) =
   const router = useRouter();
   const queryClient = useQueryClient();
   const { user, signAccess } = useUserStore();
+
   const { register, handleSubmit, reset } = useForm<FolderInterfaceDraft>({ defaultValues: { ...folderFigure, user } }); // https://stackoverflow.com/a/64307087
   const save = useMutation(folderApi.save, {
     onSuccess: (data) => {
@@ -47,7 +48,7 @@ export const FolderForm: React.FC<Props> = ({ isOpen, onClose, folderFigure }) =
         <ModalBody>
           <h3>{folderFigure && folderFigure.id ? 'Update folder' : 'Create a new folder'}</h3>
           <ModalInputs>
-            <Input label="Name" {...register('name')} required />
+            <Input label="Name" {...register('name', { required: true })} />
             <Input label="Description (optional)" {...register('description')} />
           </ModalInputs>
         </ModalBody>

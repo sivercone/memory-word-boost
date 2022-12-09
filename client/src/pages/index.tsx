@@ -79,7 +79,7 @@ const DisplayData: React.FC<{ selectedTab: TabsOptions }> = ({ selectedTab }) =>
             </div>
           </section>
           <section>
-            <h2>Discover solutions from other users</h2>
+            <h2>{isBackendLess ? 'Discover sample solutions' : 'Discover solutions from other users'}</h2>
             <div className={style.cardlist}>
               {set.data?.length
                 ? set.data.map((content) => <CardBox key={content.id} content={content.title} id={content.id} type="set" />)
@@ -106,7 +106,7 @@ const DisplayData: React.FC<{ selectedTab: TabsOptions }> = ({ selectedTab }) =>
             </div>
           </section>
           <section>
-            <h2>Discover solutions from other users</h2>
+            <h2>{isBackendLess ? 'Discover sample solutions' : 'Discover solutions from other users'}</h2>
             <div className={style.cardlist}>
               {folder.data?.length
                 ? folder.data.map((content) => <CardBox key={content.id} content={content.name} id={content.id} type="folder" />)

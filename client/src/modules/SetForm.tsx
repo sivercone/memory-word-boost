@@ -84,8 +84,8 @@ const SetForm: NextPage<{ setFigure?: SetInterfaceDraft }> = ({ setFigure }) => 
       </Header>
       <div className="container" style={isImportShown ? { overflow: 'hidden', maxHeight: 'calc(100vh - 50px)' } : undefined}>
         <form autoComplete="off" className={style.form}>
-          <Input label="Title" {...register('title')} required />
-          <Input label="Tags (through comma)" {...register('tags')} />
+          <Input label="Title" {...register('title', { required: true })} />
+          <Input label="Tags (through comma)" {...register('tags', { required: true })} placeholder="en, ua" />
           <Input label="Description (optional)" {...register('description')} />
         </form>
         <div className={style.actions}>
@@ -109,8 +109,8 @@ const SetForm: NextPage<{ setFigure?: SetInterfaceDraft }> = ({ setFigure }) => 
         <ul className={style.cards}>
           {fields.map((content, i) => (
             <li key={content.id} className={style.cards__block}>
-              <Input label="Term" {...register(`cards.${i}.term`)} required />
-              <Input label="Definition" {...register(`cards.${i}.definition`)} required />
+              <Input label="Term" {...register(`cards.${i}.term`, { required: true })} />
+              <Input label="Definition" {...register(`cards.${i}.definition`, { required: true })} />
               <Button onClick={() => remove(i)} type="button" title="remove" variant="icon">
                 <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
                   <path d="M0 0h24v24H0V0z" fill="none" />
@@ -141,8 +141,6 @@ const SetForm: NextPage<{ setFigure?: SetInterfaceDraft }> = ({ setFigure }) => 
     </>
   );
 };
-
-export default SetForm;
 
 const generateSet = (data: SetInterfaceDraft): SetInterface => {
   const obj = {
@@ -254,3 +252,5 @@ const Import: React.FC<ImportProps> = ({ setIsImportShown, insertImport }) => {
     </motion.div>
   );
 };
+
+export default SetForm;
