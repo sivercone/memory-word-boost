@@ -38,6 +38,7 @@ export const FolderForm: React.FC<Props> = ({ isOpen, onClose, folderFigure }) =
     if (isBackendLess) {
       const generatedFolder = generateEntity.folder(data);
       setLocalFolders([...localFolders.filter(({ id }) => id !== generatedFolder.id), generatedFolder]);
+      onClose();
       if (router.pathname !== `/folder/${generatedFolder.id}`) router.push(`/folder/${generatedFolder.id}`);
     } else {
       try {

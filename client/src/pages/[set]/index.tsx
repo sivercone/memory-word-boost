@@ -19,6 +19,24 @@ import { useLocalStore } from 'storage/useLocalStore';
 import { BottomSheet, useBottomSheet } from 'ui/BottomSheet';
 
 type ModalVariants = 'del' | 'info' | 'folder';
+type ManageSetProps = {
+  isSheetVisible: boolean;
+  toggleSheet: () => void;
+  openModal: (payload: ModalVariants) => void;
+  shownModal: string | undefined;
+  closeModal: () => void;
+  set: SetInterface;
+  signAccess: string | undefined;
+  pagekey: string;
+};
+type ManageFoldersProps = {
+  set: SetInterface;
+  user: UserInterface | undefined;
+  isModalOpened: boolean;
+  onCloseModal: () => void;
+  signAccess: string | undefined;
+  pagekey: string;
+};
 
 const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const { localSets } = useLocalStore();
@@ -186,16 +204,6 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   );
 };
 
-type ManageSetProps = {
-  isSheetVisible: boolean;
-  toggleSheet: () => void;
-  openModal: (payload: ModalVariants) => void;
-  shownModal: string | undefined;
-  closeModal: () => void;
-  set: SetInterface;
-  signAccess: string | undefined;
-  pagekey: string;
-};
 const ManageSet: React.FC<ManageSetProps> = ({
   isSheetVisible,
   toggleSheet,
@@ -312,19 +320,13 @@ const ManageSet: React.FC<ManageSetProps> = ({
   );
 };
 
-type ManageFoldersProps = {
-  set: SetInterface;
-  user: UserInterface | undefined;
-  isModalOpened: boolean;
-  onCloseModal: () => void;
-  signAccess: string | undefined;
-  pagekey: string;
-};
 const ManageFolders: React.FC<ManageFoldersProps> = ({ set, user, isModalOpened, onCloseModal, signAccess, pagekey }) => {
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const folder = useQuery('userFolders', () => folderApi.getByUser(user!), { enabled: isModalOpened && !!user });
+  const { localFolders, localSets, setLocalSets, setLocalFolders } = useLocalStore(); // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const userFolders = useQuery('userFolders', () => folderApi.getByUser(user!), { enabled: isModalOpened && !!user });
+  const folders = isBackendLess ? localFolders : userFolders.data;
   const [includedFolders, setIncludedFolders] = React.useState<FolderInterface[]>([]);
   React.useEffect(() => {
+    if (isBackendLess) setIncludedFolders(set.folders || []);
     if (set && set.folders?.length) setIncludedFolders(set.folders);
   }, [set]);
   const toggleIncludeFolder = (payload: FolderInterface) => {
@@ -335,16 +337,24 @@ const ManageFolders: React.FC<ManageFoldersProps> = ({ set, user, isModalOpened,
   const fetchUpdate = useMutation(setApi.save, { onSuccess: () => queryClient.invalidateQueries(['set', pagekey]) });
   const updateSetFolders = async () => {
     if (!set) return;
-    try {
-      await fetchUpdate.mutateAsync({ data: { ...set, folders: includedFolders }, token: signAccess });
+    if (isBackendLess) {
+      setLocalSets([...localSets.filter(({ id }) => id !== set.id), { ...set, folders: includedFolders }]);
+      includedFolders.forEach((element) => {
+        setLocalFolders([...localFolders.filter(({ id }) => id !== element.id), { ...element, sets: [...element.sets, set] }]);
+      });
       onCloseModal();
-    } catch (error) {}
+    } else {
+      try {
+        await fetchUpdate.mutateAsync({ data: { ...set, folders: includedFolders }, token: signAccess });
+        onCloseModal();
+      } catch (error) {}
+    }
   };
 
   return (
     <Modal isOpen={isModalOpened} onClose={onCloseModal}>
       <ModalBody>
-        {folder.data?.length ? (
+        {folders?.length ? (
           <>
             <h3>Folder Management</h3>
             <p>Organise set for a particular subject</p>
@@ -356,9 +366,9 @@ const ManageFolders: React.FC<ManageFoldersProps> = ({ set, user, isModalOpened,
           </>
         )}
       </ModalBody>
-      {folder.data?.length ? (
+      {folders?.length ? (
         <ModalList>
-          {folder.data.map((content) => (
+          {folders.map((content) => (
             <li key={content.id}>
               <Toggle
                 label={content.name}
@@ -372,7 +382,7 @@ const ManageFolders: React.FC<ManageFoldersProps> = ({ set, user, isModalOpened,
         <div style={{ textAlign: 'center', paddingBottom: '2rem', fontSize: '4rem' }}>📁</div>
       )}
       <ModalActions>
-        {folder.data?.length ? (
+        {folders?.length ? (
           <>
             <button onClick={onCloseModal}>Cancel</button>
             <button onClick={updateSetFolders}>Apply</button>
@@ -388,7 +398,7 @@ const ManageFolders: React.FC<ManageFoldersProps> = ({ set, user, isModalOpened,
 SetPage.getInitialProps = async ({ query }) => {
   const pagekey = typeof query.set === 'string' ? query.set : '';
   const queryClient = new QueryClient();
-  if (pagekey) await queryClient.prefetchQuery(['set', pagekey], () => setApi.getById(pagekey));
+  if (pagekey && !isBackendLess) await queryClient.prefetchQuery(['set', pagekey], () => setApi.getById(pagekey));
   return { pagekey, dehydratedState: dehydrate(queryClient) };
 };
 
