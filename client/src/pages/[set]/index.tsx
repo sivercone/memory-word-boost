@@ -339,9 +339,13 @@ const ManageFolders: React.FC<ManageFoldersProps> = ({ set, user, isModalOpened,
     if (!set) return;
     if (isBackendLess) {
       setLocalSets([...localSets.filter(({ id }) => id !== set.id), { ...set, folders: includedFolders }]);
-      includedFolders.forEach((element) => {
-        setLocalFolders([...localFolders.filter(({ id }) => id !== element.id), { ...element, sets: [...element.sets, set] }]);
-      });
+      setLocalFolders(
+        localFolders.map((fldr) =>
+          includedFolders.find((ifolder) => fldr.id === ifolder.id)
+            ? { ...fldr, sets: [...fldr.sets, set] }
+            : { ...fldr, sets: fldr.sets.filter(({ id }) => id !== set.id) },
+        ),
+      );
       onCloseModal();
     } else {
       try {

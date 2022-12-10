@@ -82,9 +82,13 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     if (!currFolder) return;
     if (isBackendLess) {
       setLocalFolders([...localFolders.filter(({ id }) => id !== currFolder.id), { ...currFolder, sets: includedSets }]);
-      includedSets.forEach((set) => {
-        setLocalSets([...localSets.filter(({ id }) => id !== set.id), { ...set, folders: [...set.folders, currFolder] }]);
-      });
+      setLocalSets(
+        localSets.map((set) =>
+          includedSets.find((iset) => set.id === iset.id)
+            ? { ...set, folders: [...set.folders, currFolder] }
+            : { ...set, folders: set.folders.filter(({ id }) => id !== currFolder.id) },
+        ),
+      );
     } else await fetchUpdate.mutateAsync({ data: { ...currFolder, sets: includedSets }, token: signAccess }).catch(() => null);
     closeModal();
   };
