@@ -1,4 +1,5 @@
 import format from 'date-fns/format';
+import { FolderInterface, FolderInterfaceDraft, SetInterface, SetInterfaceDraft } from 'interfaces';
 import { notify } from './notify';
 
 interface FormatDateProps {
@@ -43,4 +44,32 @@ export const fontSizeBasedOnLength = (length: number) => {
 
 export const formatDate = ({ createdAt, pattern }: FormatDateProps) => {
   return format(new Date(createdAt), pattern);
+};
+
+const dummyUser = { id: 'unknown', name: 'user122510', email: 'user@mail.com', bio: '', avatar: '', createdAt: '', updatedAt: '' };
+export const generateEntity = {
+  set(payload: SetInterfaceDraft & Partial<SetInterface>): SetInterface {
+    const obj = {
+      ...payload,
+      id: payload.id || Date.now().toString(),
+      tags: (payload.tags as unknown as string).replace(/\s+/g, '').split(','),
+      user: dummyUser,
+      folders: payload.folders || [],
+      createdAt: payload.createdAt || new Date(Date.now()).toISOString(),
+      updatedAt: new Date(Date.now()).toISOString(),
+    };
+    return obj;
+  },
+
+  folder(payload: FolderInterfaceDraft & Partial<FolderInterface>): FolderInterface {
+    const obj = {
+      ...payload,
+      id: payload.id || Date.now().toString(),
+      sets: payload.sets || [],
+      user: dummyUser,
+      createdAt: payload.createdAt || new Date(Date.now()).toISOString(),
+      updatedAt: new Date(Date.now()).toISOString(),
+    };
+    return obj;
+  },
 };

@@ -8,13 +8,14 @@ import { useUserStore } from 'storage/useUserStore';
 import { Modal, ModalActions, ModalBody } from 'ui/Modal';
 import { Input } from 'ui/Input';
 import { Button } from 'ui/Button';
-import { CardInterface, SetInterface, SetInterfaceDraft } from 'interfaces';
+import { CardInterface, SetInterfaceDraft } from 'interfaces';
 import style from 'styles/pages/createset.module.scss';
 import { Toggle } from 'ui/Toggle';
 import { AnimatePresence, motion } from 'framer-motion';
 import { growUpMotions, isBackendLess } from 'lib/staticData';
 import { useLocalStore } from 'storage/useLocalStore';
 import Header from 'ui/Header';
+import { generateEntity } from 'lib/utils';
 
 const SetForm: NextPage<{ setFigure?: SetInterfaceDraft }> = ({ setFigure }) => {
   const router = useRouter();
@@ -44,7 +45,7 @@ const SetForm: NextPage<{ setFigure?: SetInterfaceDraft }> = ({ setFigure }) => 
       })),
     };
     if (isBackendLess) {
-      const generatedSet = generateSet(data);
+      const generatedSet = generateEntity.set(data);
       setLocalSets([...localSets.filter(({ id }) => id !== generatedSet.id), generatedSet]);
       router.push(`/${generatedSet.id}`);
     } else {
@@ -140,19 +141,6 @@ const SetForm: NextPage<{ setFigure?: SetInterfaceDraft }> = ({ setFigure }) => 
       </AnimatePresence>
     </>
   );
-};
-
-const generateSet = (data: SetInterfaceDraft): SetInterface => {
-  const obj = {
-    ...data,
-    id: data.id || Date.now().toString(),
-    tags: (data.tags as unknown as string).replace(/\s+/g, '').split(','),
-    user: { id: 'unknown', name: 'SIVERCONE', email: 'sivercone@gmail.com', bio: '', avatar: '', createdAt: '', updatedAt: '' },
-    folders: [],
-    createdAt: new Date(Date.now()).toISOString(),
-    updatedAt: new Date(Date.now()).toISOString(),
-  };
-  return obj;
 };
 
 interface ImportProps {

@@ -10,7 +10,7 @@ import { Modal, ModalBody, ModalActions, ModalList } from 'ui/Modal';
 import Custom404 from 'pages/404';
 import { useSetStore } from 'storage/useSetStore';
 import { folderApi } from 'apis/folderApi';
-import { FolderInterface, SetInterface } from 'interfaces';
+import { FolderInterface, SetInterface, UserInterface } from 'interfaces';
 import { useUserStore } from 'storage/useUserStore';
 import { formatDate, shareValue } from 'lib/utils';
 import { Toggle } from 'ui/Toggle';
@@ -21,8 +21,7 @@ import { BottomSheet, useBottomSheet } from 'ui/BottomSheet';
 type ModalVariants = 'del' | 'info' | 'folder';
 
 const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
-  const router = useRouter();
-  const { localSets, setLocalSets } = useLocalStore();
+  const { localSets } = useLocalStore();
   const { user, signAccess } = useUserStore();
   const { toggleSheet, isSheetVisible } = useBottomSheet();
 
@@ -33,53 +32,12 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     else setCurrSet(set.data);
   }, [set.data, localSets]);
 
-  const { setSetFigure } = useSetStore();
-  const onEdit = () => {
-    setSetFigure(currSet);
-    router.push(`${pagekey}/update`);
-  };
-
-  const fetchDelete = useMutation(setApi.delete, {
-    onSuccess: () => {
-      notify('Successfully deleted study set');
-      queryClient.invalidateQueries('sets');
-      return router.push('/');
-    },
-  });
-  const onDeleteSet = async () => {
-    if (!currSet) return;
-    if (isBackendLess) {
-      setLocalSets(localSets.filter(({ id }) => id !== currSet.id));
-      router.push('/');
-    } else await fetchDelete.mutateAsync({ id: currSet.id, token: signAccess }).catch(() => null);
-  };
-
   const [shownModal, setShownModal] = React.useState<ModalVariants>();
   const openModal = (payload: ModalVariants) => {
     toggleSheet();
     setShownModal(payload);
   };
   const closeModal = () => setShownModal(undefined);
-
-  // prettier-ignore
-  const folder = useQuery('userFolders', () => { if (user) return folderApi.getByUser(user); }, { enabled: shownModal === 'folder' });
-  const [includedFolders, setIncludedFolders] = React.useState<FolderInterface[]>([]);
-  React.useEffect(() => {
-    if (set.data && set.data.folders?.length) setIncludedFolders(set.data.folders);
-  }, [set.data]);
-  const toggleIncludeFolder = (payload: FolderInterface) => {
-    if (includedFolders.find((el) => el.id === payload.id)) setIncludedFolders(includedFolders.filter((el) => el.id !== payload.id));
-    else setIncludedFolders([...includedFolders, payload]);
-  };
-  const queryClient = useQueryClient();
-  const fetchUpdate = useMutation(setApi.save, { onSuccess: () => queryClient.invalidateQueries(['set', pagekey]) });
-  const updateSetFolders = async () => {
-    if (!set.data) return;
-    try {
-      await fetchUpdate.mutateAsync({ data: { ...set.data, folders: includedFolders }, token: signAccess });
-      closeModal();
-    } catch (error) {}
-  };
 
   if (!currSet) return <Custom404 />;
   return (
@@ -206,7 +164,76 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
           </ul>
         </div>
       </div>
-      <BottomSheet visible={isSheetVisible} toggleVisible={toggleSheet} label={currSet.title}>
+      <ManageSet
+        isSheetVisible={isSheetVisible}
+        toggleSheet={toggleSheet}
+        openModal={openModal}
+        shownModal={shownModal}
+        closeModal={closeModal}
+        set={currSet}
+        signAccess={signAccess}
+        pagekey={pagekey}
+      />
+      <ManageFolders
+        set={currSet}
+        user={user}
+        isModalOpened={shownModal === 'folder'}
+        onCloseModal={closeModal}
+        signAccess={signAccess}
+        pagekey={pagekey}
+      />
+    </>
+  );
+};
+
+type ManageSetProps = {
+  isSheetVisible: boolean;
+  toggleSheet: () => void;
+  openModal: (payload: ModalVariants) => void;
+  shownModal: string | undefined;
+  closeModal: () => void;
+  set: SetInterface;
+  signAccess: string | undefined;
+  pagekey: string;
+};
+const ManageSet: React.FC<ManageSetProps> = ({
+  isSheetVisible,
+  toggleSheet,
+  openModal,
+  shownModal,
+  closeModal,
+  set,
+  signAccess,
+  pagekey,
+}) => {
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  const { localSets, setLocalSets } = useLocalStore();
+
+  const { setSetFigure } = useSetStore();
+  const onEdit = () => {
+    setSetFigure(set);
+    router.push(`${pagekey}/update`);
+  };
+
+  const fetchDelete = useMutation(setApi.delete, {
+    onSuccess: () => {
+      notify('Successfully deleted study set');
+      queryClient.invalidateQueries('sets');
+      return router.push('/');
+    },
+  });
+  const onDeleteSet = async () => {
+    if (!set) return;
+    if (isBackendLess) {
+      setLocalSets(localSets.filter(({ id }) => id !== set.id));
+      router.push('/');
+    } else await fetchDelete.mutateAsync({ id: set.id, token: signAccess }).catch(() => null);
+  };
+
+  return (
+    <>
+      <BottomSheet visible={isSheetVisible} toggleVisible={toggleSheet} label={set.title}>
         <li>
           <button onClick={() => openModal('info')}>
             <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
@@ -250,47 +277,20 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
             ? {
                 del: (
                   <>
-                    <h3>{`Remove "${currSet.title}"?`}</h3>
+                    <h3>{`Remove "${set.title}"?`}</h3>
                     <p>Deleting a set is a permanent action.</p>
                   </>
                 ),
                 info: (
                   <>
                     <h3>Information</h3>
-                    <p>{`This set was created ${formatDate({ createdAt: currSet.createdAt, pattern: 'dd MMM yyyy' })}`}</p>
+                    <p>{`This set was created ${formatDate({ createdAt: set.createdAt, pattern: 'dd MMM yyyy' })}`}</p>
                   </>
                 ),
-                folder: folder.data?.length ? (
-                  <>
-                    <h3>Folder Management</h3>
-                    <p>Organise set for a particular subject</p>
-                  </>
-                ) : (
-                  <>
-                    <h3>You don&#39;t have folders</h3>
-                    <p>With folder you will can organise sets for a particular subject</p>
-                  </>
-                ),
+                folder: null,
               }[shownModal]
             : undefined}
         </ModalBody>
-        {shownModal === 'folder' ? (
-          folder.data?.length ? (
-            <ModalList>
-              {folder.data.map((content) => (
-                <li key={content.id}>
-                  <Toggle
-                    label={content.name}
-                    onClick={() => toggleIncludeFolder(content)}
-                    defaultChecked={!!currSet.folders?.find((el) => el.id === content.id)}
-                  />
-                </li>
-              ))}
-            </ModalList>
-          ) : (
-            <div style={{ textAlign: 'center', paddingBottom: '2rem', fontSize: '4rem' }}>📁</div>
-          )
-        ) : undefined}
         <ModalActions>
           {shownModal
             ? {
@@ -303,19 +303,85 @@ const SetPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                   </>
                 ),
                 info: <button onClick={closeModal}>OK</button>,
-                folder: folder.data?.length ? (
-                  <>
-                    <button onClick={closeModal}>Cancel</button>
-                    <button onClick={updateSetFolders}>Apply</button>
-                  </>
-                ) : (
-                  <button onClick={closeModal}>OK</button>
-                ),
+                folder: null,
               }[shownModal]
             : undefined}
         </ModalActions>
       </Modal>
     </>
+  );
+};
+
+type ManageFoldersProps = {
+  set: SetInterface;
+  user: UserInterface | undefined;
+  isModalOpened: boolean;
+  onCloseModal: () => void;
+  signAccess: string | undefined;
+  pagekey: string;
+};
+const ManageFolders: React.FC<ManageFoldersProps> = ({ set, user, isModalOpened, onCloseModal, signAccess, pagekey }) => {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const folder = useQuery('userFolders', () => folderApi.getByUser(user!), { enabled: isModalOpened && !!user });
+  const [includedFolders, setIncludedFolders] = React.useState<FolderInterface[]>([]);
+  React.useEffect(() => {
+    if (set && set.folders?.length) setIncludedFolders(set.folders);
+  }, [set]);
+  const toggleIncludeFolder = (payload: FolderInterface) => {
+    if (includedFolders.find((el) => el.id === payload.id)) setIncludedFolders(includedFolders.filter((el) => el.id !== payload.id));
+    else setIncludedFolders([...includedFolders, payload]);
+  };
+  const queryClient = useQueryClient();
+  const fetchUpdate = useMutation(setApi.save, { onSuccess: () => queryClient.invalidateQueries(['set', pagekey]) });
+  const updateSetFolders = async () => {
+    if (!set) return;
+    try {
+      await fetchUpdate.mutateAsync({ data: { ...set, folders: includedFolders }, token: signAccess });
+      onCloseModal();
+    } catch (error) {}
+  };
+
+  return (
+    <Modal isOpen={isModalOpened} onClose={onCloseModal}>
+      <ModalBody>
+        {folder.data?.length ? (
+          <>
+            <h3>Folder Management</h3>
+            <p>Organise set for a particular subject</p>
+          </>
+        ) : (
+          <>
+            <h3>You don&#39;t have folders</h3>
+            <p>With folder you will can organise sets for a particular subject</p>
+          </>
+        )}
+      </ModalBody>
+      {folder.data?.length ? (
+        <ModalList>
+          {folder.data.map((content) => (
+            <li key={content.id}>
+              <Toggle
+                label={content.name}
+                onClick={() => toggleIncludeFolder(content)}
+                defaultChecked={!!set.folders?.find(({ id }) => id === content.id)}
+              />
+            </li>
+          ))}
+        </ModalList>
+      ) : (
+        <div style={{ textAlign: 'center', paddingBottom: '2rem', fontSize: '4rem' }}>📁</div>
+      )}
+      <ModalActions>
+        {folder.data?.length ? (
+          <>
+            <button onClick={onCloseModal}>Cancel</button>
+            <button onClick={updateSetFolders}>Apply</button>
+          </>
+        ) : (
+          <button onClick={onCloseModal}>OK</button>
+        )}
+      </ModalActions>
+    </Modal>
   );
 };
 

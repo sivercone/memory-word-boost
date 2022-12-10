@@ -45,7 +45,7 @@ const Tabs: React.FC<TabsProps> = ({ onTabSelect, selectedTab }) => {
 const DisplayData: React.FC<{ selectedTab: TabsOptions }> = ({ selectedTab }) => {
   const router = useRouter();
   const { signAccess } = useUserStore();
-  const { localSets } = useLocalStore();
+  const { localSets, localFolders } = useLocalStore();
   const [shownFolder, setShownFolder] = React.useState(false);
   const toggleShownFolder = () => setShownFolder(!shownFolder);
 
@@ -57,7 +57,7 @@ const DisplayData: React.FC<{ selectedTab: TabsOptions }> = ({ selectedTab }) =>
 
   const [state, setState] = React.useState<StateType>({ userSets: [], userFolders: [] });
   React.useEffect(() => {
-    if (isBackendLess) setState({ userSets: localSets, userFolders: [] });
+    if (isBackendLess) setState({ userSets: localSets, userFolders: localFolders });
     if (userSets.data) setState((prev) => ({ ...prev, userSets: userSets.data }));
     if (userFolders.data) setState((prev) => ({ ...prev, userFolders: userFolders.data }));
   }, [isBackendLess, userSets.data, userFolders.data]);
