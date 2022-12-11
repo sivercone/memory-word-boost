@@ -9,6 +9,9 @@ module.exports = {
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  images: {
+    domains: ['localhost', 'res.cloudinary.com'],
+  },
   // pwa: {
   // dest: 'public',
   // disable: true,

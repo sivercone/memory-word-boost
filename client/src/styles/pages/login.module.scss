@@ -4,15 +4,11 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 5rem;
+  gap: 3rem;
   min-height: 100vh;
   height: 100%;
   padding: 0 1rem;
   background-image: linear-gradient(var(--color-background), #dcbeff, var(--color-background));
-
-  @include breakpoint-max(lg) {
-    gap: 3rem;
-  }
 
   section:first-child {
     margin-top: 5rem;
@@ -64,9 +60,10 @@
       align-items: center;
       justify-content: center;
       gap: 1rem;
-      font-size: 1.2rem;
       padding: 1rem;
       margin-top: 1rem;
+      font-size: 1.2rem;
+      font-weight: 700;
       border-radius: 10px;
       box-shadow: var(--box-shadow);
     }

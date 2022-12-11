@@ -3,6 +3,7 @@ import Link from 'next/link';
 import style from 'styles/pages/login.module.scss';
 import { sessionMemory } from 'lib/browserMemory';
 import { isBackendLess } from 'lib/staticData';
+import Image from 'next/image';
 
 const login: NextPage = () => {
   const resetLoggedState = () => sessionMemory.remove('logged');
@@ -36,7 +37,14 @@ const login: NextPage = () => {
           </a>
         )}
       </section>
-      {/* @todo - add screenshots, gifs, videos of process studying with app */}
+      <section>
+        <Image
+          src="https://res.cloudinary.com/jegeyaf716-dxecig/image/upload/q_auto:eco/v1670775693/imgs/proj-mwb_jyptbt.png"
+          alt=""
+          width={2730}
+          height={2206}
+        />
+      </section>
       <section className={style.cards}>
         <ul>
           <li>
@@ -52,8 +60,8 @@ const login: NextPage = () => {
             <p>Shortcut on the screen that imitates a standard native application</p>
           </li>
           <li>
-            <p>No ADS</p>
-            <p>Totally free</p>
+            <p>FREE</p>
+            <p>Currently offered for free for reasonable public usage</p>
           </li>
         </ul>
       </section>
