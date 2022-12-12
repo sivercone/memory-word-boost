@@ -34,7 +34,7 @@ export const exampleSets = [
     id: 'example-93cb5c8a-14ee-4ce2-9898-476a7bcf9316',
     title: 'World Capital Cities',
     description: 'Learn the names of the capitals of different countries',
-    tags: ['en-en', 'countries', 'example', 'please-create-new-one-to-start'],
+    tags: ['en-en', 'example', 'please-create-new-one-to-start'],
     cards: [
       {
         order: 0,
@@ -173,7 +173,7 @@ export const exampleSets = [
     user: {
       id: '7ca8f7b0-4d1c-4c08-b470-1895c1edb3d6',
       email: 'you@domain.com',
-      name: 'user251015',
+      name: 'SIVERCONE',
       bio: '',
       avatar: '',
       createdAt: '',
@@ -184,7 +184,7 @@ export const exampleSets = [
     id: 'example-9bf2a68d-9280-4d13-84a1-a1f595c12158',
     title: 'Political terms',
     description: 'A learning set with political terms',
-    tags: ['en-en', 'political', 'example', 'please-create-new-one-to-start'],
+    tags: ['en-en', 'example', 'please-create-new-one-to-start'],
     cards: [
       {
         order: 0,
@@ -217,7 +217,7 @@ export const exampleSets = [
     user: {
       id: '7ca8f7b0-4d1c-4c08-b470-1895c1edb3d6',
       email: 'you@domain.com',
-      name: 'user251015',
+      name: 'SIVERCONE',
       bio: '',
       avatar: '',
       createdAt: '',
