@@ -9,7 +9,7 @@ import { useUserStore } from 'storage/useUserStore';
 import { useLocalStore } from 'storage/useLocalStore';
 import { CardBox } from 'ui/CardBox';
 import { Button } from 'ui/Button';
-import { isBackendLess } from 'lib/staticData';
+import { exampleSets, isBackendLess } from 'lib/staticData';
 import { FolderForm } from 'modules/FolderForm';
 import { FolderInterface, SetInterface } from 'interfaces';
 import style from 'styles/pages/home.module.scss';
@@ -45,7 +45,7 @@ const Tabs: React.FC<TabsProps> = ({ onTabSelect, selectedTab }) => {
 const DisplayData: React.FC<{ selectedTab: TabsOptions }> = ({ selectedTab }) => {
   const router = useRouter();
   const { signAccess } = useUserStore();
-  const { localSets, localFolders } = useLocalStore();
+  const { setLocalSets, localSets, localFolders } = useLocalStore();
   const [shownFolder, setShownFolder] = React.useState(false);
   const toggleShownFolder = () => setShownFolder(!shownFolder);
 
@@ -57,7 +57,10 @@ const DisplayData: React.FC<{ selectedTab: TabsOptions }> = ({ selectedTab }) =>
 
   const [state, setState] = React.useState<StateType>({ userSets: [], userFolders: [] });
   React.useEffect(() => {
-    if (isBackendLess) setState({ userSets: localSets, userFolders: localFolders });
+    if (isBackendLess) {
+      if (!localSets.find(({ id }) => id.includes('example'))) setLocalSets([...exampleSets, ...localSets]);
+      setState({ userSets: localSets.filter(({ id }) => !id.includes('example')), userFolders: localFolders });
+    }
     if (userSets.data) setState((prev) => ({ ...prev, userSets: userSets.data }));
     if (userFolders.data) setState((prev) => ({ ...prev, userFolders: userFolders.data }));
   }, [isBackendLess, userSets.data, userFolders.data]);
@@ -83,6 +86,8 @@ const DisplayData: React.FC<{ selectedTab: TabsOptions }> = ({ selectedTab }) =>
             <div className={style.cardlist}>
               {set.data?.length
                 ? set.data.map((content) => <CardBox key={content.id} content={content.title} id={content.id} type="set" />)
+                : isBackendLess
+                ? exampleSets.map((content) => <CardBox key={content.id} content={content.title} id={content.id} type="set" />)
                 : undefined}
             </div>
           </section>
@@ -105,14 +110,16 @@ const DisplayData: React.FC<{ selectedTab: TabsOptions }> = ({ selectedTab }) =>
               )}
             </div>
           </section>
-          <section>
-            <h2>{isBackendLess ? 'Discover sample solutions' : 'Discover solutions from other users'}</h2>
-            <div className={style.cardlist}>
-              {folder.data?.length
-                ? folder.data.map((content) => <CardBox key={content.id} content={content.name} id={content.id} type="folder" />)
-                : undefined}
-            </div>
-          </section>
+          {!isBackendLess ? (
+            <section>
+              <h2>Discover solutions from other users</h2>
+              <div className={style.cardlist}>
+                {folder.data?.length
+                  ? folder.data.map((content) => <CardBox key={content.id} content={content.name} id={content.id} type="folder" />)
+                  : undefined}
+              </div>
+            </section>
+          ) : undefined}
         </>
       ) : undefined}
     </>
