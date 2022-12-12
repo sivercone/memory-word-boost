@@ -8,6 +8,7 @@ import { useUserStore } from 'storage/useUserStore';
 import { localMemory, sessionMemory } from 'lib/browserMemory';
 import { growUpMotions, isBackendLess, pathsForHidingLayout } from 'lib/staticData';
 import { FolderForm } from 'modules/FolderForm';
+import { NextHead } from 'modules/NextHead';
 import { Button } from 'ui/Button';
 import Header from 'ui/Header';
 import { Toggle } from 'ui/Toggle';
@@ -60,10 +61,14 @@ const TopBar = () => {
     }
   }, []);
 
-  if (pathsForHidingLayout.includes(pathname)) return null;
+  const isPreferedDark =
+    typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const themeColor = theme === 'dark' || (theme === 'system' && isPreferedDark) ? '#252522' : '#f0f0ea';
+
   return (
     <>
-      <Header>
+      <NextHead themeColor={themeColor} />
+      <Header style={pathsForHidingLayout.includes(pathname) ? { zIndex: 0 } : undefined}>
         <button onClick={toggleMenu} style={{ height: '40px', borderRadius: '50%', color: 'inherit' }} title="Menu">
           <svg xmlns="http://www.w3.org/2000/svg" height="40" width="40" fill="currentColor">
             <path d="M6.667 24.167v-2.792h26.666v2.792Zm0-5.542v-2.792h26.666v2.792Z" />
@@ -169,6 +174,14 @@ const TopBar = () => {
                     </button>
                   </li>
                 ) : undefined}
+                {/* <li>
+                  <button>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="currentColor">
+                      <path d="M13 14h2v-3h3V9h-3V6h-2v3h-3v2h3Zm-5 4q-.825 0-1.412-.587Q6 16.825 6 16V4q0-.825.588-1.413Q7.175 2 8 2h12q.825 0 1.413.587Q22 3.175 22 4v12q0 .825-.587 1.413Q20.825 18 20 18Zm0-2h12V4H8v12Zm-4 6q-.825 0-1.412-.587Q2 20.825 2 20V6h2v14h14v2ZM8 4v12V4Z" />
+                    </svg>
+                    <span>Add application shortcut</span>
+                  </button>
+                </li> */}
               </ul>
               <ul className={style.menu__list}>
                 {/* <li>

@@ -9,7 +9,7 @@ interface Props {
 const Header: React.FC<Props> = ({ children, style }) => {
   return (
     <>
-      <div style={{ height: '50px' }}></div>
+      <div style={style?.zIndex === 0 ? undefined : { height: '50px' }}></div>
       <header className={scss.header} style={style}>
         <div className={scss.header__inner}>{children}</div>
       </header>
