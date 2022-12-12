@@ -23,10 +23,10 @@ const UserPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
 
   // prettier-ignore
   const sets = useQuery(['sets', pagekey], 
-    () => { if (user.data) return setApi.getByUser(user.data) }, { enabled: !!pagekey && !!user.data && router.query.entries === 'sets' });
+    () => { if (user.data) return setApi.getByUser(user.data.id) }, { enabled: !!pagekey && !!user.data && router.query.entries === 'sets' });
   // prettier-ignore
   const folders = useQuery(['folders', pagekey],
-    () => { if (user.data) return folderApi.getByUser(user.data) }, { enabled: !!pagekey && !!user.data && router.query.entries === 'folders' });
+    () => { if (user.data) return folderApi.getByUser(user.data.id) }, { enabled: !!pagekey && !!user.data && router.query.entries === 'folders' });
 
   if (!user.data) return <Custom404 />;
   return (

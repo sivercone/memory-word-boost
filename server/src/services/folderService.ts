@@ -3,7 +3,7 @@ import { dataSource } from '@/core/db';
 import FolderEntity from '@/entities/FolderEntity';
 import { HttpException } from '@/utils/HttpException';
 import { isEmpty } from '@/utils/isEmpty';
-import { FolderInterface, UserInterface } from '@/interfaces';
+import { FolderInterface } from '@/interfaces';
 import { logger } from '@/utils/logger';
 
 class FolderService {
@@ -37,10 +37,10 @@ class FolderService {
     }
   }
 
-  async findByUser(payload: UserInterface): Promise<FolderInterface[]> {
+  async findByUser(payload: string): Promise<FolderInterface[]> {
     if (isEmpty(payload)) throw new HttpException(400, 'Payload is missed. Do not repeat this request without modification.');
     try {
-      const data = await this.folderRepository.find({ where: { user: { id: payload.id } }, order: { createdAt: 'DESC' } });
+      const data = await this.folderRepository.find({ where: { user: { id: payload } }, order: { createdAt: 'DESC' } });
       return data;
     } catch (error) {
       logger.error('[FolderService - findByUser] >> Message:', error);

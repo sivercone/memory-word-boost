@@ -1,4 +1,4 @@
-import { FolderInterface, FolderInterfaceDraft, SetInterface, UserInterface } from 'interfaces';
+import { FolderInterface, FolderInterfaceDraft, SetInterface } from 'interfaces';
 
 const path = 'http://localhost:7001/folder';
 
@@ -15,13 +15,8 @@ export const folderApi = {
     return response.json();
   },
 
-  // @todo - refactor payload, we should get userId instead whole user
-  async getByUser(payload: UserInterface): Promise<FolderInterface[]> {
-    const response = await fetch(`${path}/byuser`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
+  async getByUser(id: string): Promise<FolderInterface[]> {
+    const response = await fetch(`${path}/byuser/${id}`);
     if (!response.ok) throw await response.json();
     return response.json();
   },

@@ -50,8 +50,8 @@ const DisplayData: React.FC<{ selectedTab: TabsOptions }> = ({ selectedTab }) =>
   const toggleShownFolder = () => setShownFolder(!shownFolder);
 
   const user = useQuery('user', () => authApi.me(signAccess)); // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const userSets = useQuery('userSets', () => setApi.getByUser(user.data!), { enabled: !!user.data }); // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const userFolders = useQuery('userFolders', () => folderApi.getByUser(user.data!), { enabled: !!user.data });
+  const userSets = useQuery('userSets', () => setApi.getByUser(user.data!.id), { enabled: !!user.data }); // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const userFolders = useQuery('userFolders', () => folderApi.getByUser(user.data!.id), { enabled: !!user.data });
   const set = useQuery('sets', () => setApi.get(user.data?.id), { enabled: !!user.data || user.isFetched });
   const folder = useQuery('folders', () => folderApi.get(user.data?.id), { enabled: !!user.data || user.isFetched });
 

@@ -4,7 +4,7 @@ import SetEntity from '@/entities/SetEntity';
 import { HttpException } from '@/utils/HttpException';
 import { isEmpty } from '@/utils/isEmpty';
 import { logger } from '@/utils/logger';
-import { SetInterface, UserInterface } from '@/interfaces';
+import { SetInterface } from '@/interfaces';
 
 class SetService {
   private setRepository = dataSource.getRepository(SetEntity);
@@ -36,10 +36,10 @@ class SetService {
     }
   }
 
-  async findByUser(payload: UserInterface): Promise<SetInterface[]> {
+  async findByUser(payload: string): Promise<SetInterface[]> {
     if (isEmpty(payload)) throw new HttpException(400, 'Payload is missed. Do not repeat this request without modification.');
     try {
-      const data = await this.setRepository.find({ where: { user: { id: payload.id } }, order: { createdAt: 'DESC' } });
+      const data = await this.setRepository.find({ where: { user: { id: payload } }, order: { createdAt: 'DESC' } });
       return data;
     } catch (error) {
       logger.error('[SetService - findByUser] >> Message:', error);

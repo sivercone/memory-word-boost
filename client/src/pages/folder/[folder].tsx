@@ -40,7 +40,9 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   };
 
   const folder = useQuery(['folder', pagekey], () => folderApi.getById(pagekey), { enabled: !!pagekey && !isBackendLess }); // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const userSets = useQuery('userSets', () => setApi.getByUser(user!), { enabled: shownModal === 'sets' && !!user && !isBackendLess });
+  const userSets = useQuery('userSets', () => setApi.getByUser(user!.id), {
+    enabled: shownModal === 'sets' && !!user && !isBackendLess,
+  });
   const sets = isBackendLess ? localSets : userSets.data;
 
   const [currFolder, setCurrFolder] = React.useState<FolderInterface>();

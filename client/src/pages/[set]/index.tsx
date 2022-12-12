@@ -322,7 +322,7 @@ const ManageSet: React.FC<ManageSetProps> = ({
 
 const ManageFolders: React.FC<ManageFoldersProps> = ({ set, user, isModalOpened, onCloseModal, signAccess, pagekey }) => {
   const { localFolders, localSets, setLocalSets, setLocalFolders } = useLocalStore(); // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const userFolders = useQuery('userFolders', () => folderApi.getByUser(user!), { enabled: isModalOpened && !!user });
+  const userFolders = useQuery('userFolders', () => folderApi.getByUser(user!.id), { enabled: isModalOpened && !!user });
   const folders = isBackendLess ? localFolders : userFolders.data;
   const [includedFolders, setIncludedFolders] = React.useState<FolderInterface[]>([]);
   React.useEffect(() => {
