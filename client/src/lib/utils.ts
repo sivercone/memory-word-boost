@@ -46,7 +46,7 @@ export const formatDate = ({ createdAt, pattern }: FormatDateProps) => {
   return format(new Date(createdAt), pattern);
 };
 
-const dummyUser = { id: 'unknown', name: 'user122510', email: 'user@mail.com', bio: '', avatar: '', createdAt: '', updatedAt: '' };
+const dummyUser = { id: 'unknown', name: 'user', email: 'you@domain.com', bio: '', avatar: '', createdAt: '', updatedAt: '' };
 export const generateEntity = {
   set(payload: SetInterfaceDraft & Partial<SetInterface>): SetInterface {
     const obj = {
