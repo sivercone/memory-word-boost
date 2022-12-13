@@ -240,13 +240,13 @@ const BottomBar = () => {
     toggleSheet(false);
     setShownFolder(!shownFolder);
   };
-
+  const isStandalone = typeof window !== 'undefined' && window.matchMedia('(display-mode: standalone)').matches;
   if (pathsForHidingLayout.includes(pathname)) return null;
   return (
     <>
-      <div style={{ height: 'calc(50px + 1.5rem)' }}></div>
+      <div style={isStandalone ? { height: 'calc(50px + 1.5rem)' } : { height: '50px' }}></div>
       <nav className={style.navigation}>
-        <div className={style.navigation__inner}>
+        <div className={style.navigation__inner} style={isStandalone ? undefined : { paddingBottom: 0 }}>
           <Link href="/">
             <a className={style.navigation__item}>
               <span className={pathname === '/' ? style.activeItem : undefined}>
