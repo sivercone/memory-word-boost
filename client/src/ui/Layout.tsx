@@ -68,7 +68,7 @@ const TopBar = () => {
   return (
     <>
       <NextHead themeColor={themeColor} />
-      <Header style={pathsForHidingLayout.includes(pathname) ? { zIndex: 0 } : undefined}>
+      <Header style={pathsForHidingLayout.includes(pathname) ? { zIndex: 0, display: 'none' } : undefined}>
         <button onClick={toggleMenu} style={{ height: '40px', borderRadius: '50%', color: 'inherit' }} title="Menu">
           <svg xmlns="http://www.w3.org/2000/svg" height="40" width="40" fill="currentColor">
             <path d="M6.667 24.167v-2.792h26.666v2.792Zm0-5.542v-2.792h26.666v2.792Z" />
