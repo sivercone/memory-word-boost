@@ -122,8 +122,36 @@
     min-width: 50%;
   }
 
+  @include breakpoint-min(md) {
+    button {
+      span[data-moreactions='true'] {
+        display: none;
+      }
+    }
+  }
+
+  @include breakpoint-max(md) {
+    button:nth-child(3) {
+      span {
+        display: none;
+      }
+    }
+  }
+
   @include breakpoint-max(sm) {
     flex-wrap: wrap;
+
+    a,
+    button {
+      justify-content: flex-start;
+      gap: 1rem;
+    }
+
+    button:nth-child(3) {
+      span {
+        display: flex;
+      }
+    }
   }
 }
 
