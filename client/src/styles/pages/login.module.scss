@@ -6,17 +6,8 @@
   justify-content: center;
   gap: 3rem;
   min-height: 100%;
-  height: 100%;
-  padding: 0 1rem;
+  padding: 5rem 1rem;
   background-image: linear-gradient(var(--color-background), #dcbeff, var(--color-background));
-
-  section:first-child {
-    margin-top: 5rem;
-  }
-
-  section:last-child {
-    margin-bottom: 5rem;
-  }
 
   section {
     display: flex;
