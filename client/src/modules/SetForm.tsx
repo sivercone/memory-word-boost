@@ -83,7 +83,7 @@ const SetForm: NextPage<{ setFigure?: SetInterfaceDraft }> = ({ setFigure }) => 
         </span>
         <button onClick={handleSubmit(onSubmit)}>Save</button>
       </Header>
-      <div className="container" style={isImportShown ? { overflow: 'hidden', maxHeight: 'calc(100vh - 50px)' } : undefined}>
+      <div className="container" style={isImportShown ? { overflow: 'hidden', maxHeight: 'calc(100% - 50px)' } : undefined}>
         <form autoComplete="off" className={style.form}>
           <Input label="Title" {...register('title', { required: true })} />
           <Input label="Tags (through comma)" {...register('tags', { required: true })} placeholder="en, ua" />
