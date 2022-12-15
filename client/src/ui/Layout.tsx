@@ -26,6 +26,7 @@ const Layout: React.FC<Props> = ({ children }) => {
       <TopBar />
       {children}
       <BottomBar />
+      <div style={{ backgroundColor: 'var(--color-background)', zIndex: -1, position: 'fixed', top: 0, bottom: 0, width: '100%' }} />
     </>
   );
 };
@@ -244,9 +245,9 @@ const BottomBar = () => {
   if (pathsForHidingLayout.includes(pathname)) return null;
   return (
     <>
-      <div style={isStandalone ? { height: 'calc(50px + 1.5rem)' } : { height: '50px' }}></div>
+      <div style={isStandalone ? { height: 'calc(50px + 1.5rem)' } : { height: 'calc(50px + 0.5rem)' }}></div>
       <nav className={style.navigation}>
-        <div className={style.navigation__inner} style={isStandalone ? undefined : { paddingBottom: 0 }}>
+        <div className={style.navigation__inner} style={isStandalone ? undefined : { paddingBottom: '0.5rem' }}>
           <Link href="/">
             <a className={style.navigation__item}>
               <span className={pathname === '/' ? style.activeItem : undefined}>
