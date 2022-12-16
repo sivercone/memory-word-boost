@@ -367,7 +367,7 @@ const ManageFolders: React.FC<ManageFoldersProps> = ({ set, user, isModalOpened,
         ) : (
           <>
             <h3>You don&#39;t have folders</h3>
-            <p>With folder you will can organise sets for a particular subject</p>
+            <p>Create folders to organise sets for a particular subject</p>
           </>
         )}
       </ModalBody>

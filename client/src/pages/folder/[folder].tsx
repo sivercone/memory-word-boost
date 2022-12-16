@@ -43,7 +43,7 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const userSets = useQuery('userSets', () => setApi.getByUser(user!.id), {
     enabled: shownModal === 'sets' && !!user && !isBackendLess,
   });
-  const sets = isBackendLess ? localSets : userSets.data;
+  const sets = isBackendLess ? localSets.filter(({ id }) => !id.includes('example')) : userSets.data;
 
   const [currFolder, setCurrFolder] = React.useState<FolderInterface>();
   React.useEffect(() => {
@@ -197,8 +197,14 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
       </Modal>
       <Modal isOpen={shownModal === 'sets'} onClose={closeModal}>
         <ModalBody>
-          <h3>Sets Management</h3>
-          <p>Organise sets you&#39;re studying for a particular subject</p>
+          {sets?.length ? (
+            <>
+              <h3>Sets Management</h3>
+              <p>Organise sets you&#39;re studying for a particular subject</p>
+            </>
+          ) : (
+            <h3>You don&#39;t have sets</h3>
+          )}
         </ModalBody>
         {sets?.length ? (
           <ModalList>
@@ -214,8 +220,14 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
           </ModalList>
         ) : undefined}
         <ModalActions>
-          <button onClick={closeModal}>Cancel</button>
-          <button onClick={updateFolderSets}>Apply</button>
+          {sets?.length ? (
+            <>
+              <button onClick={closeModal}>Cancel</button>
+              <button onClick={updateFolderSets}>Apply</button>
+            </>
+          ) : (
+            <button onClick={closeModal}>OK</button>
+          )}
         </ModalActions>
       </Modal>
     </div>
