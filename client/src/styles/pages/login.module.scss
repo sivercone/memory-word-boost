@@ -38,11 +38,7 @@
       text-align: center;
       margin-top: 0.5rem;
       font-size: 1.25rem;
-      color: #505050;
-
-      @include dark-scheme {
-        color: #d3d3d3;
-      }
+      color: var(--color-on-surface-variant);
     }
 
     button,
@@ -101,11 +97,7 @@
       }
 
       p:last-child {
-        color: #505050;
-
-        @include dark-scheme {
-          color: #d3d3d3;
-        }
+        color: var(--color-on-surface-variant);
       }
     }
   }

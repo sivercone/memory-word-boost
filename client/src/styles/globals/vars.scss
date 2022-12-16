@@ -17,6 +17,7 @@
   --color-on-background: hsl(90, 8%, 10%);
   --color-surface: hsl(60, 18%, 93%);
   --color-on-surface: hsl(60, 12%, 10%);
+  --color-on-surface-variant: #505050;
   --color-outline: hsl(83, 11%, 76%); // 0000001a
 
   --color-error: #e52f26;
@@ -36,6 +37,7 @@
     --color-on-background: hsl(65, 61%, 93%);
     --color-surface: hsl(60, 4%, 14%);
     --color-on-surface: hsl(60, 50%, 96%);
+    --color-on-surface-variant: #d3d3d3;
     --color-outline: #5b5f55;
   }
 }
@@ -50,6 +52,7 @@ body.light {
   --color-background: hsl(45, 100%, 98%);
   --color-on-background: hsl(90, 8%, 10%);
   --color-surface: hsl(60, 18%, 93%);
+  --color-on-surface-variant: #505050;
   --color-on-surface: hsl(60, 12%, 10%);
   --color-outline: hsl(83, 11%, 76%); // 0000001a
 }
@@ -64,5 +67,6 @@ body.dark {
   --color-on-background: hsl(65, 61%, 93%);
   --color-surface: hsl(60, 4%, 14%);
   --color-on-surface: hsl(60, 50%, 96%);
+  --color-on-surface-variant: #d3d3d3;
   --color-outline: #5b5f55;
 }

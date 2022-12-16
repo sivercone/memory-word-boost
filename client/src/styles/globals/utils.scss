@@ -46,9 +46,3 @@ $breakpoints-max: (
     @content;
   }
 }
-
-@mixin dark-scheme() {
-  @media (prefers-color-scheme: dark) {
-    @content;
-  }
-}
