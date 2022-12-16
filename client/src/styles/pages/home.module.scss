@@ -1,19 +1,43 @@
+@use 'styles/globals/utils.scss' as *;
+
 .container {
   width: 100%;
   max-width: var(--container-width);
   margin-left: auto;
   margin-right: auto;
-  padding: 0.5rem;
+  padding: 1rem;
 
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  gap: 1rem;
 
   section {
     > h2 {
       margin-bottom: 0.5rem;
-      font-size: 1.25rem;
+      font-size: 1.2rem;
     }
+  }
+}
+
+.toggle {
+  display: flex;
+  padding: 0.25rem;
+  border-radius: rem(50);
+  color: var(--color-on-surface);
+  background-color: var(--color-surface);
+  box-shadow: var(--box-shadow);
+
+  button {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+
+  &__active {
+    border-radius: rem(25);
+    color: var(--color-on-primary);
+    background-color: var(--color-primary);
   }
 }
 

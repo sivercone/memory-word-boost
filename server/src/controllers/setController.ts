@@ -25,7 +25,7 @@ class SetController {
 
   public getSetByUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const payload = req.body;
+      const payload = req.params.id;
       const data = await setService.findByUser(payload);
       res.status(200).json(data);
     } catch (error) {

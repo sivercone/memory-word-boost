@@ -7,7 +7,10 @@ import { FolderInterfaceDraft } from 'interfaces';
 import { useUserStore } from 'storage/useUserStore';
 import { Modal, ModalBody, ModalInputs, ModalActions } from 'ui/Modal';
 import { Input } from 'ui/Input';
-import { notify } from 'utils/notify';
+import { notify } from 'lib/notify';
+import { useLocalStore } from 'storage/useLocalStore';
+import { isBackendLess } from 'lib/staticData';
+import { generateEntity } from 'lib/utils';
 
 interface Props {
   isOpen: boolean;
@@ -15,10 +18,12 @@ interface Props {
   folderFigure?: FolderInterfaceDraft;
 }
 
-export const FolderEditing: React.FC<Props> = ({ isOpen, onClose, folderFigure }) => {
+export const FolderForm: React.FC<Props> = ({ isOpen, onClose, folderFigure }) => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { user, signAccess } = useUserStore();
+  const { setLocalFolders, localFolders } = useLocalStore();
+
   const { register, handleSubmit, reset } = useForm<FolderInterfaceDraft>({ defaultValues: { ...folderFigure, user } }); // https://stackoverflow.com/a/64307087
   const save = useMutation(folderApi.save, {
     onSuccess: (data) => {
@@ -30,11 +35,19 @@ export const FolderEditing: React.FC<Props> = ({ isOpen, onClose, folderFigure }
   });
   const onSubmit = async (data: FolderInterfaceDraft) => {
     if (user) data.user = user;
-    try {
-      await save.mutateAsync({ data, token: signAccess });
+    if (isBackendLess) {
+      const generatedFolder = generateEntity.folder(data);
+      setLocalFolders([...localFolders.filter(({ id }) => id !== generatedFolder.id), generatedFolder]);
       onClose();
       reset();
-    } catch (error) {}
+      if (router.pathname !== `/folder/${generatedFolder.id}`) router.push(`/folder/${generatedFolder.id}`);
+    } else {
+      try {
+        await save.mutateAsync({ data, token: signAccess });
+        onClose();
+        reset();
+      } catch (error) {}
+    }
   };
 
   React.useEffect(() => {
@@ -47,7 +60,7 @@ export const FolderEditing: React.FC<Props> = ({ isOpen, onClose, folderFigure }
         <ModalBody>
           <h3>{folderFigure && folderFigure.id ? 'Update folder' : 'Create a new folder'}</h3>
           <ModalInputs>
-            <Input label="Name" {...register('name')} autoFocus required />
+            <Input label="Name" {...register('name', { required: true })} />
             <Input label="Description (optional)" {...register('description')} />
           </ModalInputs>
         </ModalBody>

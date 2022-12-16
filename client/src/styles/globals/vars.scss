@@ -1,0 +1,72 @@
+:root {
+  --container-width: 1024px;
+  --box-shadow: 0px 2px 1px -1px #00000033, 0px 1px 1px 0px #00000024, 0px 1px 3px 0px #0000001f;
+
+  // theme
+  --color-primary: hsl(267, 100%, 82%);
+  --color-on-primary: hsl(0, 0%, 12%);
+  // --color-primary-container: #f0f15e;
+  // --color-on-primary-container: #616200;
+
+  --color-success: #0582f0; // #0f88f2, #0583f2
+  --color-on-success: #1f1f1f;
+  // --color-secondary-container: #d9e7ca;
+  // --color-on-secondary-container: #141f0d;
+
+  --color-background: hsl(45, 100%, 98%);
+  --color-on-background: hsl(90, 8%, 10%);
+  --color-surface: hsl(60, 18%, 93%);
+  --color-on-surface: hsl(60, 12%, 10%);
+  --color-on-surface-variant: #505050;
+  --color-outline: hsl(83, 11%, 76%); // 0000001a
+
+  --color-error: #e52f26;
+  --color-on-error: #ffffff;
+  // --color-error-container: #f9dedc;
+  // --color-on-error-container: #400f0c;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --box-shadow: 0px 2px 1px -1px #00000033, 0px 1px 1px 0px #00000024, 0px 1px 3px 0px #0000001f;
+
+    // theme
+    --color-primary: hsl(267, 100%, 82%);
+    --color-on-primary: hsl(0, 0%, 12%);
+    --color-background: hsl(30, 2%, 18%);
+    --color-on-background: hsl(65, 61%, 93%);
+    --color-surface: hsl(60, 4%, 14%);
+    --color-on-surface: hsl(60, 50%, 96%);
+    --color-on-surface-variant: #d3d3d3;
+    --color-outline: #5b5f55;
+  }
+}
+
+body.light {
+  --box-shadow: 0px 2px 1px -1px #00000033, 0px 1px 1px 0px #00000024, 0px 1px 3px 0px #0000001f;
+
+  // theme
+  --color-primary: hsl(267, 100%, 82%);
+  --color-on-primary: hsl(0, 0%, 12%);
+
+  --color-background: hsl(45, 100%, 98%);
+  --color-on-background: hsl(90, 8%, 10%);
+  --color-surface: hsl(60, 18%, 93%);
+  --color-on-surface-variant: #505050;
+  --color-on-surface: hsl(60, 12%, 10%);
+  --color-outline: hsl(83, 11%, 76%); // 0000001a
+}
+
+body.dark {
+  --box-shadow: 0px 2px 1px -1px #00000033, 0px 1px 1px 0px #00000024, 0px 1px 3px 0px #0000001f;
+
+  // theme
+  --color-primary: hsl(267, 100%, 82%);
+  --color-on-primary: hsl(0, 0%, 12%);
+  --color-background: hsl(30, 2%, 18%);
+  --color-on-background: hsl(65, 61%, 93%);
+  --color-surface: hsl(60, 4%, 14%);
+  --color-on-surface: hsl(60, 50%, 96%);
+  --color-on-surface-variant: #d3d3d3;
+  --color-outline: #5b5f55;
+}

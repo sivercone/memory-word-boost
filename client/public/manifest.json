@@ -2,8 +2,6 @@
   "name": "MEMORY WORD BOOST",
   "short_name": "PROJ MWB",
   "description": "PROJ MWB - web application that helps fast learning and memorizing anything",
-  "theme_color": "#f1f1eb",
-  "background_color": "#fffcf3",
   "display": "standalone",
   "orientation": "portrait",
   "scope": "/",

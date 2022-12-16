@@ -1,9 +1,9 @@
 import React from 'react';
 import { useQuery } from 'react-query';
 import { authApi } from 'apis/authApi';
-import SetEditing from 'modules/SetEditing';
+import SetForm from 'modules/SetForm';
 import { useUserStore } from 'storage/useUserStore';
-import { isBackendLess } from 'utils/staticData';
+import { isBackendLess } from 'lib/staticData';
 
 const CreateSet = () => {
   const { signAccess } = useUserStore();
@@ -12,7 +12,7 @@ const CreateSet = () => {
     if (!user.isFetching && !user.data && typeof window !== 'undefined' && !isBackendLess)
       setTimeout(() => window.location.replace('/login'), 1);
   }, [user]);
-  return <SetEditing />;
+  return <SetForm />;
 };
 
 export default CreateSet;

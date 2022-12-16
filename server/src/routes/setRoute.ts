@@ -14,7 +14,7 @@ class SetRoute implements Routes {
   private initializeRoutes() {
     this.router.get(`${this.path}s`, setController.getSets);
     this.router.get(`${this.path}/:id`, setController.getSetById);
-    this.router.post(`${this.path}/byuser`, setController.getSetByUser);
+    this.router.get(`${this.path}/byuser/:id`, setController.getSetByUser);
     this.router.post(`${this.path}`, isAuth, setController.createSet);
     this.router.put(`${this.path}`, isAuth, setController.updateSet);
     this.router.delete(`${this.path}/:id`, isAuth, setController.deleteSet);

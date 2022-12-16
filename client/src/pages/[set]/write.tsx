@@ -1,17 +1,17 @@
 import React from 'react';
 import { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { setApi } from 'apis/setApi';
 import Custom404 from 'pages/404';
-import style from 'styles/pages/write.module.scss';
-import { useRouter } from 'next/router';
 import { Button } from 'ui/Button';
 import { CardInterface, SetInterface } from 'interfaces';
-import Link from 'next/link';
-import { isAnswerCorrect } from 'utils/isAnswerCorrect';
+import { isAnswerCorrect } from 'lib/utils';
 import { useLocalStore } from 'storage/useLocalStore';
-import { isBackendLess } from 'utils/staticData';
+import { isBackendLess } from 'lib/staticData';
+import Header from 'ui/Header';
+import style from 'styles/pages/write.module.scss';
 
 type Results = {
   round: number;
@@ -61,7 +61,7 @@ const WritePage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
 
   const { register, handleSubmit, reset } = useForm<SubmitData>();
   const onSubmit = (payload: SubmitData) => {
-    if (isAnswerCorrect(cards[currentIndex].definition, payload.answer)) nextCard();
+    if (isAnswerCorrect(cards[currentIndex].term, payload.answer)) nextCard();
     else loseCard();
   };
 
@@ -92,41 +92,48 @@ const WritePage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   if (!currSet) return <Custom404 />;
   return (
     <>
-      <header className={style.header}>
-        <div className={style.header__inner}>
-          <button onClick={() => push(`/${pagekey}`)} title="close">
-            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
-              <path d="M0 0h24v24H0V0z" fill="none" />
-              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
-            </svg>
-          </button>
-          <Link href="/">
-            <a className={style.header__logo}>Project MWB</a>
-          </Link>
-        </div>
-      </header>
+      <Header>
+        <button onClick={() => push(`/${pagekey}`)} title="close">
+          <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
+            <path d="M0 0h24v24H0V0z" fill="none" />
+            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
+          </svg>
+        </button>
+        <span>
+          <strong>PROJECT MWB</strong>
+        </span>
+        <div style={{ userSelect: 'none', width: '24px', height: '24px', visibility: 'hidden' }}></div>
+      </Header>
       {cards.length && status !== 'E' ? (
-        <div className={style.form}>
-          <div className={style.form__inner}>
-            <div className={style.form__progressbar} title={`${scorePercent}%`}>
+        <div className={style.write}>
+          <div className={style.write__inner}>
+            <div className={style.write__score} title={`${scorePercent}%`}>
               <div style={{ width: `${scorePercent}%` }}></div>
             </div>
-            <div className={style.form__main}>
-              <div className={style.form__learn}>
-                <span>{cards[currentIndex].term}</span>
+            <div className={style.write__card}>
+              <div className={style.write__content}>
+                <span style={status === 'F' ? { maxHeight: '100px' } : undefined}>{cards[currentIndex].definition}</span>
                 {status === 'F' ? (
                   <>
-                    <span>correct answer</span>
-                    <span>{cards[currentIndex].definition}</span>
+                    <span>Correct Answer</span>
+                    <span>{cards[currentIndex].term}</span>
                   </>
                 ) : undefined}
               </div>
-              <form onSubmit={handleSubmit(onSubmit)} className={style.form__fields} autoComplete="off">
-                <input type="text" {...register('answer')} required autoFocus />
+              <form onSubmit={handleSubmit(onSubmit)} className={style.write__form} autoComplete="off">
+                <label>
+                  <input type="text" {...register('answer')} required placeholder="Enter answer" />
+                </label>
                 <div>
-                  <Button type="submit">ANSWER</Button>
-                  <Button onClick={loseCard} type="button" title="click if don't know">
-                    ?
+                  <Button type="submit" title="Submit">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24">
+                      <path d="m14 18-1.4-1.45L16.15 13H4v-2h12.15L12.6 7.45 14 6l6 6Z" />
+                    </svg>
+                  </Button>
+                  <Button onClick={loseCard} type="button" title="I don't know">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24">
+                      <path d="M10.6 16q0-2.025.363-2.913.362-.887 1.537-1.937 1.025-.9 1.562-1.563.538-.662.538-1.512 0-1.025-.687-1.7Q13.225 5.7 12 5.7q-1.275 0-1.938.775-.662.775-.937 1.575L6.55 6.95q.525-1.6 1.925-2.775Q9.875 3 12 3q2.625 0 4.038 1.463 1.412 1.462 1.412 3.512 0 1.25-.537 2.138-.538.887-1.688 2.012Q14 13.3 13.738 13.912q-.263.613-.263 2.088Zm1.4 6q-.825 0-1.412-.587Q10 20.825 10 20q0-.825.588-1.413Q11.175 18 12 18t1.413.587Q14 19.175 14 20q0 .825-.587 1.413Q12.825 22 12 22Z" />
+                    </svg>
                   </Button>
                 </div>
               </form>

@@ -1,27 +1,20 @@
 import React from 'react';
-import style from 'styles/pages/flashcards.module.scss';
-import { motion } from 'framer-motion';
 import { NextPage } from 'next';
+import { useRouter } from 'next/router';
+import { motion } from 'framer-motion';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { setApi } from 'apis/setApi';
 import Custom404 from 'pages/404';
-import { useRouter } from 'next/router';
-import Link from 'next/link';
-// import { Button } from 'ui/Button';
 import { CardInterface, SetInterface } from 'interfaces';
-import { isBackendLess } from 'utils/staticData';
+import { flashCardMotions, isBackendLess } from 'lib/staticData';
 import { useLocalStore } from 'storage/useLocalStore';
+import Header from 'ui/Header';
+import style from 'styles/pages/study.module.scss';
+import { fontSizeBasedOnLength } from 'lib/utils';
 
 // drag - https://codesandbox.io/s/5trtt
 
 // todo - describe how to learn with cards
-
-export const motions = {
-  init: { rotateY: 0, translateX: '0%', opacity: 1, transition: { duration: 0.25 } },
-  rotate: { rotateY: 180, translateX: '0%', opacity: 1, transition: { duration: 0.25 } },
-  translateLeft: { rotateY: 0, translateX: '100%', opacity: 0, transition: { duration: 0.3 } },
-  translateRight: { rotateY: 0, translateX: '-100%', opacity: 0, transition: { duration: 0.3 } },
-};
 
 const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const { push } = useRouter();
@@ -45,8 +38,8 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     if (currentIndex >= cards.length) return;
     setIsToggling(true);
     setToggled(!toggled);
-    // setIsToggling(false);
-    setTimeout(() => setIsToggling(false), 300);
+    setIsToggling(false);
+    // setTimeout(() => setIsToggling(false), 100);
   };
 
   const [currentIndex, setCurrentIndex] = React.useState<number>(0);
@@ -57,22 +50,22 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
 
   const onLearned = () => {
     setLearned(true);
+    setToggled(false);
     setTimeout(() => {
-      setToggled(false);
       setLearned(false);
       setCurrentIndex(currentIndex + 1);
-    }, 300);
+    }, 100);
   };
 
   const [repeatCards, setRepeatCards] = React.useState<CardInterface[]>([]);
   const toRepeat = () => {
     setToRepeated(true);
     setRepeatCards((prev) => [...prev, cards[currentIndex]]);
+    setToggled(false);
     setTimeout(() => {
-      setToggled(false);
       setToRepeated(false);
       setCurrentIndex(currentIndex + 1);
-    }, 300);
+    }, 100);
   };
 
   const onStudyAgain = () => {
@@ -101,49 +94,58 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   if (!currSet) return <Custom404 />;
   return (
     <>
-      <header className={style.header}>
-        <div className={style.header__inner}>
-          <button onClick={() => push(`/${pagekey}`)} title="close">
-            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
-              <path d="M0 0h24v24H0V0z" fill="none" />
-              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
-            </svg>
-          </button>
-          <Link href="/">
-            <a className={style.header__logo}>Project MWB</a>
-          </Link>
-          <div style={{ display: 'flex', gap: '0.5rem' }}>
-            <button onClick={onUndo} title="undo">
-              <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
-                <path d="M0 0h24v24H0V0z" fill="none" />
-                <path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z" />
-              </svg>
-            </button>
-            {/* <button title="settings">
+      <Header>
+        <button onClick={() => push(`/${pagekey}`)} title="close">
+          <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
+            <path d="M0 0h24v24H0V0z" fill="none" />
+            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
+          </svg>
+        </button>
+        <span>
+          <strong>PROJECT MWB</strong>
+        </span>
+        {/* <div style={{ display: 'flex', gap: '0.5rem' }}> */}
+        <button onClick={onUndo} title="undo">
+          <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
+            <path d="M0 0h24v24H0V0z" fill="none" />
+            <path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z" />
+          </svg>
+        </button>
+        {/* <button title="settings">
             <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
               <path d="M0 0h24v24H0V0z" fill="none" />
               <path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z" />
             </svg>
           </button> */}
-          </div>
-        </div>
-      </header>
-      <div className={style.flashcards}>
-        <div className={style.flashcards__score}>
+        {/* </div> */}
+      </Header>
+      <div className={style.study}>
+        <div className={style.study__score}>
           <span>{`${currentIndex >= cards.length ? currentIndex : currentIndex + 1}/${cards.length}`}</span>
           <div style={{ width: `${scorePercent}%` }}></div>
         </div>
         <motion.div
-          className={style.flashcards__card}
-          animate={learned ? motions.translateLeft : toRepeated ? motions.translateRight : motions.init}
+          className={style.study__card}
+          animate={learned ? flashCardMotions.translateLeft : toRepeated ? flashCardMotions.translateRight : flashCardMotions.init}
         >
           <motion.button
             onClick={onToggle}
-            animate={toggled ? motions.rotate : motions.init}
+            animate={toggled ? flashCardMotions.rotate : flashCardMotions.init}
             disabled={currentIndex >= cards.length || isToggling}
           >
-            <motion.span animate={toggled ? motions.rotate : motions.init}>
-              {!isToggling ? (toggled ? cards[currentIndex]?.definition : cards[currentIndex]?.term) : ''}
+            <motion.div
+              animate={toggled ? flashCardMotions.rotate : flashCardMotions.init}
+              style={
+                cards[currentIndex]
+                  ? {
+                      fontSize: fontSizeBasedOnLength(
+                        toggled ? cards[currentIndex].term.length : cards[currentIndex].definition.length,
+                      ),
+                    }
+                  : undefined
+              }
+            >
+              {!isToggling ? (toggled ? cards[currentIndex]?.term : cards[currentIndex]?.definition) : ''}
               {currentIndex >= cards.length ? (
                 <>
                   {repeatCards.length === currSet.cards.length ? (
@@ -164,12 +166,12 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
                   </p>
                 </>
               ) : undefined}
-            </motion.span>
+            </motion.div>
           </motion.button>
         </motion.div>
-        <div className={style.flashcards__moves}>
+        <div className={style.study__moves}>
           {currentIndex >= cards.length ? (
-            <button onClick={onRestart} className={`${style.flashcards__arrow} ${style.flashcards__arrowleft}`}>
+            <button onClick={onRestart} className={`${style.study__arrow} ${style.study__arrowleft}`}>
               <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">
                 <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z" />
                 <path
@@ -180,7 +182,7 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
               <span>Restart</span>
             </button>
           ) : (
-            <button onClick={toRepeat} className={`${style.flashcards__arrow} ${style.flashcards__arrowleft}`}>
+            <button onClick={toRepeat} className={`${style.study__arrow} ${style.study__arrowleft}`}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 enableBackground="new 0 0 24 24"
@@ -196,7 +198,7 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
             </button>
           )}
           {currentIndex >= cards.length && repeatCards.length ? (
-            <button onClick={onStudyAgain} className={`${style.flashcards__arrow} ${style.flashcards__arrowright}`}>
+            <button onClick={onStudyAgain} className={`${style.study__arrow} ${style.study__arrowright}`}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 enableBackground="new 0 0 24 24"
@@ -211,7 +213,7 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
               <span>Continue</span>
             </button>
           ) : currentIndex >= cards.length ? (
-            <button onClick={() => push(`/${pagekey}`)} className={`${style.flashcards__arrow} ${style.flashcards__arrowright}`}>
+            <button onClick={() => push(`/${pagekey}`)} className={`${style.study__arrow} ${style.study__arrowright}`}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 enableBackground="new 0 0 24 24"
@@ -226,7 +228,7 @@ const FlashCardsPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
               <span>Return to set page</span>
             </button>
           ) : (
-            <button onClick={onLearned} className={`${style.flashcards__arrow} ${style.flashcards__arrowright}`}>
+            <button onClick={onLearned} className={`${style.study__arrow} ${style.study__arrowright}`}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 enableBackground="new 0 0 24 24"

@@ -1,52 +1,24 @@
-// @todo - to refactor header component (used same in flashcards)
-.header {
-  position: relative;
-  width: 100%;
-  height: 50px;
+@use 'styles/globals/utils.scss' as *;
 
-  color: var(--color-on-surface);
-  background-color: var(--color-surface);
-  box-shadow: var(--box-shadow);
-
-  &__inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    max-width: var(--container-width);
-    height: 100%;
-    margin: 0 auto;
-    padding: 1rem;
-  }
-
-  &__logo {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-transform: uppercase;
-    font-weight: 700;
-  }
-}
-
-.form {
+.write {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: calc(100vh - 50px);
+  height: calc(100% - 50px);
 
   &__inner {
     display: flex;
     flex-direction: column;
-    height: 550px;
-    max-width: 800px;
+    max-width: rem(800);
     width: 100%;
+    height: 100%;
 
-    background-color: var(--color-surface);
-    color: var(--color-on-surface);
+    background-color: var(--color-background);
+    color: var(--color-on-background);
     box-shadow: var(--box-shadow);
   }
 
-  &__progressbar {
+  &__score {
     display: flex;
     height: 5px;
     background-color: var(--color-on-primary);
@@ -57,48 +29,80 @@
     }
   }
 
-  &__main {
+  &__card {
     display: flex;
     flex-direction: column;
-    padding: 1rem 2rem;
+    padding: 1rem;
     height: 100%;
   }
 
-  &__learn {
+  &__content {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    height: 100%;
+    padding: 1rem 0;
+    overflow-y: auto;
 
-    span {
-      font-size: 2.5rem;
+    span:first-child {
+      display: block;
+      max-height: 150px;
+      word-break: break-word;
+      overflow-y: scroll;
     }
 
     span:nth-child(2) {
       font-size: 1rem;
-      margin-top: 10px;
+      margin: rem(10) 0;
       text-transform: uppercase;
       letter-spacing: 2px;
-      color: #616161;
+      color: var(--color-error);
     }
   }
 
-  &__fields {
+  &__form {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 1rem;
-    height: 100%;
+    gap: 0.5rem;
+    height: 60%;
 
-    input {
+    label {
       width: 100%;
-      border-bottom: 2px solid var(--color-on-surface);
-      font-size: 2rem;
-      outline: none;
+      height: auto;
+      min-height: 100%;
+      padding: 1rem;
+      border-radius: rem(10);
+      background-color: var(--color-surface);
+      color: var(--color-on-surface);
+      box-shadow: var(--box-shadow);
+      transition: all 0.2s linear;
+
+      &:focus-within {
+        min-height: 0%;
+      }
+
+      input {
+        width: 100%;
+        outline: none;
+      }
     }
 
     > div {
       display: flex;
       gap: 0.5rem;
+
+      button {
+        box-shadow: var(--box-shadow);
+      }
+    }
+  }
+
+  @include breakpoint-min(xl) {
+    height: calc(100% - 50px - 4rem);
+    margin-top: 2rem;
+
+    &__inner {
+      overflow: hidden;
+      border-radius: 10px;
     }
   }
 }
@@ -110,7 +114,7 @@
   flex-direction: column;
   gap: 0.5rem;
   padding: 0.5rem;
-  min-height: calc(100vh - 50px);
+  min-height: calc(100% - 50px);
   height: 100%;
 
   &__inner {
@@ -145,13 +149,16 @@
   &__content {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 1rem;
 
     p {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      font-size: 1.25rem;
+      gap: 1rem;
+
+      span {
+        width: 100%;
+      }
     }
   }
 
@@ -165,37 +172,6 @@
 
     button {
       width: 100%;
-    }
-  }
-}
-
-@media screen and (min-width: 1024px) {
-  .form {
-    &__inner {
-      overflow: hidden;
-      border-radius: 10px;
-    }
-  }
-}
-
-@media screen and (max-width: 1024px) {
-  .form {
-    &__inner {
-      height: calc(100vh - 50px);
-    }
-
-    &__fields {
-      height: auto;
-      flex-direction: column;
-    }
-  }
-
-  .class {
-    padding: 0 0.5rem;
-
-    &__block {
-      width: 100%;
-      border-radius: 0;
     }
   }
 }

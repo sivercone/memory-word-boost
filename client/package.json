@@ -11,7 +11,6 @@
     "format": "prettier --write 'src/**/*.{js,jsx,ts,tsx,css,scss}' --config ./.prettierrc"
   },
   "dependencies": {
-    "boring-avatars": "^1.7.0",
     "date-fns": "^2.28.0",
     "framer-motion": "^7.2.1",
     "next": "^12.2.5",

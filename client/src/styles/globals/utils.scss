@@ -1,0 +1,48 @@
+@use 'sass:math';
+
+// Source: https://css-tricks.com/snippets/sass/px-to-em-functions/
+@function rem($pixels, $context: 16) {
+  @return (math.div($pixels, $context)) * 1rem;
+}
+
+/*
+  'sm': '375px',
+  'md': '425px',
+  'lg': '768px',
+  'xl': '1024px',
+  'xxl': '1400px',
+*/
+$breakpoints-min: (
+  'sm': '23.4375em',
+  'md': '26.5625em',
+  'lg': '48em',
+  'xl': '64em',
+  'xxl': '87.5em',
+);
+
+/*
+  'sm': '374px',
+  'md': '424px',
+  'lg': '767px',
+  'xl': '1023px',
+  'xxl': '1399px',
+*/
+$breakpoints-max: (
+  'sm': '23.375em',
+  'md': '26.5em',
+  'lg': '47.9375em',
+  'xl': '63.9375em',
+  'xxl': '87.4375em',
+);
+
+@mixin breakpoint-min($size) {
+  @media (min-width: map-get($breakpoints-min, $size)) {
+    @content;
+  }
+}
+
+@mixin breakpoint-max($size) {
+  @media (max-width: map-get($breakpoints-max, $size)) {
+    @content;
+  }
+}

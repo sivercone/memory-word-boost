@@ -14,7 +14,7 @@ class FolderRoute implements Routes {
   private initializeRoutes() {
     this.router.get(`${this.path}s`, folderController.getFolders);
     this.router.get(`${this.path}/:id`, folderController.getFolderById);
-    this.router.post(`${this.path}/byuser`, folderController.getFolderByUser);
+    this.router.get(`${this.path}/byuser/:id`, folderController.getFolderByUser);
     this.router.post(`${this.path}`, isAuth, folderController.createFolder);
     this.router.put(`${this.path}`, isAuth, folderController.updateFolder);
     this.router.delete(`${this.path}/:id`, isAuth, folderController.deleteFolder);

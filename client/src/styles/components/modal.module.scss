@@ -1,3 +1,5 @@
+@use 'styles/globals/utils.scss' as *;
+
 .overlay {
   position: fixed;
   top: 0;
@@ -18,10 +20,10 @@
   display: flex;
   flex-direction: column;
   max-width: 95%;
-  width: 430px;
+  width: rem(430);
   overflow: hidden;
   overflow-y: auto;
-  border-radius: 8px;
+  border-radius: rem(8);
   background-color: var(--color-surface);
   color: var(--color-on-surface);
 
@@ -43,9 +45,9 @@
     bottom: 0;
     display: flex;
     overflow: hidden;
-    border-bottom-right-radius: 8px;
-    border-bottom-left-radius: 8px;
-    border-top: 1px solid var(--color-on-surface);
+    border-bottom-right-radius: rem(8);
+    border-bottom-left-radius: rem(8);
+    border-top: 1px solid var(--color-outline);
 
     button {
       flex: 1 1 100%;
@@ -54,13 +56,13 @@
       justify-content: center;
       padding: 1rem 0;
       text-transform: uppercase;
-      color: var(--color-on-surface);
+      color: var(--color-success);
       background: var(--color-surface);
       transition: all 0.2s ease-in-out;
     }
 
     button:not(:only-child):not(:last-child) {
-      border-right: 1px solid var(--color-on-surface);
+      border-right: 1px solid var(--color-outline);
     }
 
     // button:hover {
@@ -78,12 +80,12 @@
     margin-right: 1rem;
     margin-left: 1rem;
     margin-bottom: 2rem;
-    border-radius: 10px;
+    border-radius: rem(10);
     overflow: hidden;
   }
 
   &__listWrapper {
-    max-height: 300px;
+    max-height: rem(300);
     overflow-y: auto;
 
     li {
@@ -97,11 +99,11 @@
     }
 
     li:first-child {
-      border-radius: 10px 10px 0 0;
+      border-radius: rem(10) rem(10) 0 0;
     }
 
     li:last-child {
-      border-radius: 0 0 10px 10px;
+      border-radius: 0 0 rem(10) rem(10);
     }
   }
 }

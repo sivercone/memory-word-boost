@@ -1,25 +1,22 @@
-import 'styles/globals.scss';
-import Head from 'next/head';
 import type { AppProps } from 'next/app';
 import { QueryClientProvider, Hydrate } from 'react-query';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
-import { queryClient } from 'utils/queryClient';
+import { queryClient } from 'lib/queryClient';
 import { AuthCheck } from 'modules/AuthCheck';
-import BottomNavigation from 'ui/BottomNavigation';
-import Header from 'ui/Header';
+import { NextHead } from 'modules/NextHead';
+import Layout from 'ui/Layout';
+import 'styles/style.scss';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <Hydrate state={pageProps.dehydratedState}>
-        <Head>
-          <title>PROJ MWB</title>
-        </Head>
-        <Header />
-        <Component {...pageProps} />
+        <NextHead />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
         <AuthCheck />
-        <BottomNavigation />
         <ToastContainer
           progressStyle={{ background: 'var(--color-primary)' }}
           position="bottom-right"

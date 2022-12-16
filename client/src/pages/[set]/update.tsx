@@ -2,11 +2,11 @@ import { NextPage } from 'next';
 import { useSetStore } from 'storage/useSetStore';
 import { useQuery } from 'react-query';
 import { setApi } from 'apis/setApi';
-import SetEditing from 'modules/SetEditing';
+import SetForm from 'modules/SetForm';
 import Custom404 from 'pages/404';
 import { useUserStore } from 'storage/useUserStore';
 import ErrorPage from 'modules/ErrorPage';
-import { isBackendLess } from 'utils/staticData';
+import { isBackendLess } from 'lib/staticData';
 
 const UpdateSet: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const { setFigure } = useSetStore();
@@ -25,7 +25,7 @@ const UpdateSet: NextPage<{ pagekey: string }> = ({ pagekey }) => {
       </ErrorPage>
     );
 
-  return <SetEditing setFigure={data} />;
+  return <SetForm setFigure={data} />;
 };
 
 UpdateSet.getInitialProps = async ({ query }) => {
