@@ -137,7 +137,7 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
           <motion.button
             onClick={onToggle}
             animate={toggled ? flashCardMotions.rotate : flashCardMotions.init}
-            disabled={currCard?.flash || isToggling}
+            disabled={currCard?.flash || isToggling || isEnd}
             style={currCard?.flash ? { cursor: 'default' } : undefined}
           >
             <motion.div
@@ -184,67 +184,73 @@ const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
               <span>Return to set page</span>
             </button>
           </div>
-        ) : !currCard?.flash ? (
-          <div className={style.study__moves} style={{ height: 'auto' }}>
-            <style>{'#learn__card {height: 100%}'}</style>
-            <button onClick={() => onFlash(true)} className={style.study__arrow}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                enableBackground="new 0 0 24 24"
-                height="1em"
-                viewBox="0 0 24 24"
-                width="1em"
-                fill="currentColor"
-              >
-                <rect fill="none" height="24" width="24" />
-                <path d="M9,19l1.41-1.41L5.83,13H22V11H5.83l4.59-4.59L9,5l-7,7L9,19z" />
-              </svg>
-              <span>Already know</span>
-            </button>
-            <button onClick={() => onFlash()} className={style.study__arrow}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                enableBackground="new 0 0 24 24"
-                height="1em"
-                viewBox="0 0 24 24"
-                width="1em"
-                fill="currentColor"
-              >
-                <rect fill="none" height="24" width="24" />
-                <path d="M15,5l-1.41,1.41L18.17,11H2V13h16.17l-4.59,4.59L15,19l7-7L15,5z" />
-              </svg>
-              <span>Got it</span>
-            </button>
-          </div>
-        ) : !currCard?.quiz ? (
-          <div className={style.study__moves} style={{ flexWrap: 'wrap' }}>
-            {quizItems.map((card) => (
-              <motion.button
-                onClick={() => onQuiz(card.term)}
-                key={card.order}
-                className={style.study__arrow}
-                style={{ padding: '1rem' }}
-              >
-                <span>{card.term}</span>
-              </motion.button>
-            ))}
-          </div>
-        ) : !currCard?.write ? (
-          <div className={style.study__moves} style={{ height: '10%' }}>
-            <style>{'#learn__card {height: 20%}'}</style>
-            <input
-              value={inputValue}
-              onChange={onWrite}
-              placeholder="Enter answer"
-              className={style.study__arrow}
-              style={{ textAlign: 'center' }}
-              autoFocus
-            />
-            <button onClick={() => onWrite(undefined, true)} className={style.study__arrow} style={{ width: '15%' }}>
-              <span>?</span>
-            </button>
-          </div>
-        ) : undefined}
+        ) : (
+          <>
+            {!currCard?.flash && !currCard?.quiz && !currCard?.write ? (
+              <div className={style.study__moves} style={{ height: 'auto' }}>
+                <style>{'#learn__card {height: 100%}'}</style>
+                <button onClick={() => onFlash(true)} className={style.study__arrow}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    enableBackground="new 0 0 24 24"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    fill="currentColor"
+                  >
+                    <rect fill="none" height="24" width="24" />
+                    <path d="M9,19l1.41-1.41L5.83,13H22V11H5.83l4.59-4.59L9,5l-7,7L9,19z" />
+                  </svg>
+                  <span>Already know</span>
+                </button>
+                <button onClick={() => onFlash()} className={style.study__arrow}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    enableBackground="new 0 0 24 24"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    fill="currentColor"
+                  >
+                    <rect fill="none" height="24" width="24" />
+                    <path d="M15,5l-1.41,1.41L18.17,11H2V13h16.17l-4.59,4.59L15,19l7-7L15,5z" />
+                  </svg>
+                  <span>Got it</span>
+                </button>
+              </div>
+            ) : undefined}
+            {!currCard?.quiz && currCard?.flash && !currCard.write ? (
+              <div className={style.study__moves} style={{ flexWrap: 'wrap' }}>
+                {quizItems.map((card) => (
+                  <motion.button
+                    onClick={() => onQuiz(card.term)}
+                    key={card.order}
+                    className={style.study__arrow}
+                    style={{ padding: '1rem' }}
+                  >
+                    <span>{card.term}</span>
+                  </motion.button>
+                ))}
+              </div>
+            ) : undefined}
+            {!currCard?.write && currCard?.flash && currCard.quiz ? (
+              <div className={style.study__moves} style={{ height: '10%' }}>
+                <style>{'#learn__card {height: 20%}'}</style>
+                <input
+                  value={inputValue}
+                  onChange={onWrite}
+                  placeholder="Enter answer"
+                  className={style.study__arrow}
+                  style={{ textAlign: 'center' }}
+                  autoFocus
+                />
+                <button onClick={() => onWrite(undefined, true)} className={style.study__arrow} style={{ width: '15%' }}>
+                  <span>?</span>
+                </button>
+              </div>
+            ) : undefined}
+          </>
+        )}
       </div>
     </>
   );
