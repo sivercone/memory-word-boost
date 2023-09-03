@@ -5,7 +5,6 @@ import { useQuery } from 'react-query';
 import { AnimatePresence, motion } from 'framer-motion';
 import { authApi } from 'apis/authApi';
 import { useUserStore } from 'storage/useUserStore';
-import { localMemory, sessionMemory } from 'lib/browserMemory';
 import { growUpMotions, pathsForHidingLayout } from 'lib/staticData';
 import { FolderForm } from 'modules/FolderForm';
 import { NextHead } from 'modules/NextHead';
@@ -40,19 +39,19 @@ const TopBar = () => {
   const onThemeChange = (payload: ThemeType) => {
     setTheme(payload);
     document.body.classList.replace(theme, payload);
-    localMemory.set('mwb_theme', payload);
+    localStorage.setItem('mwb_theme', payload);
   };
 
   const { refetch: callLogout } = useQuery('user', () => authApi.logout(signAccess), { enabled: false });
   const onLogout = async () => {
     await callLogout();
     setUser(undefined);
-    sessionMemory.set('logged', 'no');
+    sessionStorage.setItem('logged', 'no');
     window.location.replace('/login');
   };
 
   React.useEffect(() => {
-    const localTheme = localMemory.get('mwb_theme');
+    const localTheme = localStorage['mwb_theme'];
     if (['light', 'dark', 'system'].includes(localTheme)) {
       document.body.classList.add(localTheme);
       onThemeChange(localTheme);

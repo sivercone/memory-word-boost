@@ -1,10 +1,9 @@
 import { NextPage } from 'next';
 import style from 'styles/pages/login.module.scss';
-import { sessionMemory } from 'lib/browserMemory';
 import Image from 'next/image';
 
 const login: NextPage = () => {
-  const resetLoggedState = () => sessionMemory.remove('logged');
+  const resetLoggedState = () => sessionStorage.removeItem('logged');
 
   return (
     <main className={style.container}>
