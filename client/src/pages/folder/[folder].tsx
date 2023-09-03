@@ -15,8 +15,6 @@ import { BottomSheet, useBottomSheet } from 'ui/BottomSheet';
 import { FolderInterface, SetInterface } from 'interfaces';
 import { FolderForm } from 'modules/FolderForm';
 import Custom404 from 'pages/404';
-import { useLocalStore } from 'storage/useLocalStore';
-import { isBackendLess } from 'lib/staticData';
 import style2 from 'styles/pages/home.module.scss'; // @todo - fix that
 import style from 'styles/pages/set.module.scss';
 
@@ -25,7 +23,6 @@ type ModalVariants = 'edit' | 'del' | 'sets';
 const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const router = useRouter();
   const { user, signAccess } = useUserStore();
-  const { localSets, localFolders, setLocalSets, setLocalFolders } = useLocalStore();
   const queryClient = useQueryClient();
 
   const { toggleSheet, isSheetVisible } = useBottomSheet();
@@ -39,24 +36,19 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     setShownModal(undefined);
   };
 
-  const folder = useQuery(['folder', pagekey], () => folderApi.getById(pagekey), { enabled: !!pagekey && !isBackendLess }); // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const folder = useQuery(['folder', pagekey], () => folderApi.getById(pagekey), { enabled: !!pagekey }); // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const userSets = useQuery('userSets', () => setApi.getByUser(user!.id), {
-    enabled: shownModal === 'sets' && !!user && !isBackendLess,
+    enabled: shownModal === 'sets' && !!user,
   });
-  const sets = isBackendLess ? localSets.filter(({ id }) => !id.includes('example')) : userSets.data;
+  const sets = userSets.data;
 
   const [currFolder, setCurrFolder] = React.useState<FolderInterface>();
   React.useEffect(() => {
-    if (isBackendLess) {
-      const localFolder = localFolders.find(({ id }) => id === pagekey);
-      setCurrFolder(localFolder);
-      setIncludedSets(localFolder?.sets || []);
-    }
     if (folder.data) {
       setCurrFolder(folder.data);
       setIncludedSets(folder.data.sets || []);
     }
-  }, [folder.data, localFolders]);
+  }, [folder.data]);
 
   const fetchDelete = useMutation(folderApi.delete, {
     onSuccess: () => {
@@ -67,10 +59,7 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   });
   const onDelete = async () => {
     if (!currFolder) return;
-    if (isBackendLess) {
-      setLocalFolders(localFolders.filter(({ id }) => id !== currFolder.id));
-      router.push('/');
-    } else await fetchDelete.mutateAsync({ id: currFolder.id, token: signAccess }).catch(() => null);
+    await fetchDelete.mutateAsync({ id: currFolder.id, token: signAccess }).catch(() => null);
   };
 
   const [includedSets, setIncludedSets] = React.useState<SetInterface[]>([]);
@@ -82,16 +71,7 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const fetchUpdate = useMutation(folderApi.save, { onSuccess: () => queryClient.invalidateQueries(['folder', pagekey]) });
   const updateFolderSets = async () => {
     if (!currFolder) return;
-    if (isBackendLess) {
-      setLocalFolders([...localFolders.filter(({ id }) => id !== currFolder.id), { ...currFolder, sets: includedSets }]);
-      setLocalSets(
-        localSets.map((set) =>
-          includedSets.find((iset) => set.id === iset.id)
-            ? { ...set, folders: [...set.folders, currFolder] }
-            : { ...set, folders: set.folders.filter(({ id }) => id !== currFolder.id) },
-        ),
-      );
-    } else await fetchUpdate.mutateAsync({ data: { ...currFolder, sets: includedSets }, token: signAccess }).catch(() => null);
+    await fetchUpdate.mutateAsync({ data: { ...currFolder, sets: includedSets }, token: signAccess }).catch(() => null);
     closeModal();
   };
 
@@ -119,7 +99,7 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
           </svg>
           <span>Share</span>
         </button>
-        {currFolder.user.id === user?.id || isBackendLess ? (
+        {currFolder.user.id === user?.id ? (
           <button onClick={() => toggleSheet()} title="More Actions">
             <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="currentColor">
               <path d="M6 14q-.825 0-1.412-.588Q4 12.825 4 12t.588-1.413Q5.175 10 6 10t1.412.587Q8 11.175 8 12q0 .825-.588 1.412Q6.825 14 6 14Zm6 0q-.825 0-1.412-.588Q10 12.825 10 12t.588-1.413Q11.175 10 12 10t1.413.587Q14 11.175 14 12q0 .825-.587 1.412Q12.825 14 12 14Zm6 0q-.825 0-1.413-.588Q16 12.825 16 12t.587-1.413Q17.175 10 18 10q.825 0 1.413.587Q20 11.175 20 12q0 .825-.587 1.412Q18.825 14 18 14Z" />
@@ -237,7 +217,7 @@ const FolderPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
 FolderPage.getInitialProps = async ({ query }) => {
   const pagekey = typeof query.folder === 'string' ? query.folder : '';
   const queryClient = new QueryClient();
-  if (pagekey && !isBackendLess) await queryClient.prefetchQuery(['folder', pagekey], () => folderApi.getById(pagekey));
+  if (pagekey) await queryClient.prefetchQuery(['folder', pagekey], () => folderApi.getById(pagekey));
   return { pagekey, dehydratedState: dehydrate(queryClient) };
 };
 

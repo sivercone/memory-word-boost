@@ -8,9 +8,6 @@ import { useUserStore } from 'storage/useUserStore';
 import { Modal, ModalBody, ModalInputs, ModalActions } from 'ui/Modal';
 import { Input } from 'ui/Input';
 import { notify } from 'lib/notify';
-import { useLocalStore } from 'storage/useLocalStore';
-import { isBackendLess } from 'lib/staticData';
-import { generateEntity } from 'lib/utils';
 
 interface Props {
   isOpen: boolean;
@@ -22,7 +19,6 @@ export const FolderForm: React.FC<Props> = ({ isOpen, onClose, folderFigure }) =
   const router = useRouter();
   const queryClient = useQueryClient();
   const { user, signAccess } = useUserStore();
-  const { setLocalFolders, localFolders } = useLocalStore();
 
   const { register, handleSubmit, reset } = useForm<FolderInterfaceDraft>({ defaultValues: { ...folderFigure, user } }); // https://stackoverflow.com/a/64307087
   const save = useMutation(folderApi.save, {
@@ -35,19 +31,11 @@ export const FolderForm: React.FC<Props> = ({ isOpen, onClose, folderFigure }) =
   });
   const onSubmit = async (data: FolderInterfaceDraft) => {
     if (user) data.user = user;
-    if (isBackendLess) {
-      const generatedFolder = generateEntity.folder(data);
-      setLocalFolders([...localFolders.filter(({ id }) => id !== generatedFolder.id), generatedFolder]);
+    try {
+      await save.mutateAsync({ data, token: signAccess });
       onClose();
       reset();
-      if (router.pathname !== `/folder/${generatedFolder.id}`) router.push(`/folder/${generatedFolder.id}`);
-    } else {
-      try {
-        await save.mutateAsync({ data, token: signAccess });
-        onClose();
-        reset();
-      } catch (error) {}
-    }
+    } catch (error) {}
   };
 
   React.useEffect(() => {

@@ -1,43 +1,54 @@
+import http from 'lib/http';
 import { FolderInterface, FolderInterfaceDraft, SetInterface } from 'interfaces';
-
-const path = 'http://localhost:7001/folder';
 
 export const folderApi = {
   async get(excludeUserId: string | undefined): Promise<FolderInterface[]> {
-    const response = await fetch(`${path}s${excludeUserId ? `?excludeUserId=${excludeUserId}` : ''}`);
-    if (!response.ok) throw await response.json();
-    return response.json();
+    try {
+      const response = await http.get(`/folders${excludeUserId ? `?excludeUserId=${excludeUserId}` : ''}`);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data;
+    }
   },
 
   async getById(payload: string): Promise<FolderInterface> {
-    const response = await fetch(`${path}/${payload}`);
-    if (!response.ok) throw await response.json();
-    return response.json();
+    try {
+      const response = await http.get(`/folder/${payload}`);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data;
+    }
   },
 
   async getByUser(id: string): Promise<FolderInterface[]> {
-    const response = await fetch(`${path}/byuser/${id}`);
-    if (!response.ok) throw await response.json();
-    return response.json();
+    try {
+      const response = await http.get(`/folder/byuser/${id}`);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data;
+    }
   },
 
   async save(payload: { data: FolderInterfaceDraft & { sets?: SetInterface[] }; token: string | undefined }): Promise<string> {
-    const response = await fetch(path, {
-      method: payload.data.id ? 'PUT' : 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${payload.token}` },
-      credentials: 'include',
-      body: JSON.stringify(payload.data),
-    });
-    if (!response.ok) throw await response.json();
-    return response.json();
+    try {
+      const method = payload.data.id ? 'PUT' : 'POST';
+      const response = await http({
+        url: '/folder',
+        method,
+        headers: { Authorization: `Bearer ${payload.token}` },
+        data: payload.data,
+      });
+      return response.data;
+    } catch (error) {
+      throw error.response?.data;
+    }
   },
 
   async delete(payload: { id: string; token: string | undefined }): Promise<void> {
-    const response = await fetch(`${path}/${payload.id}`, {
-      method: 'DELETE',
-      credentials: 'include',
-      headers: { Authorization: `Bearer ${payload.token}` },
-    });
-    if (!response.ok) throw await response.json();
+    try {
+      await http.delete(`/folder/${payload.id}`, { headers: { Authorization: `Bearer ${payload.token}` } });
+    } catch (error) {
+      throw error.response?.data;
+    }
   },
 };

@@ -7,8 +7,7 @@ import { setApi } from 'apis/setApi';
 import { CardInterface, SetInterface } from 'interfaces';
 import Custom404 from 'pages/404';
 import { isAnswerCorrect, fontSizeBasedOnLength } from 'lib/utils';
-import { flashCardMotions, isBackendLess } from 'lib/staticData';
-import { useLocalStore } from 'storage/useLocalStore';
+import { flashCardMotions } from 'lib/staticData';
 import Header from 'ui/Header';
 import style from 'styles/pages/study.module.scss';
 
@@ -16,15 +15,13 @@ type StudyCard = CardInterface & { flash: boolean; write: boolean; quiz: boolean
 
 const LearnPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const { push } = useRouter();
-  const { localSets } = useLocalStore();
 
   const set = useQuery(['set', pagekey], () => setApi.getById(pagekey));
 
   const [currSet, setCurrSet] = React.useState<SetInterface>();
   React.useEffect(() => {
-    if (isBackendLess) setCurrSet(localSets.find(({ id }) => id === pagekey));
-    else setCurrSet(set.data);
-  }, [set.data, localSets]);
+    setCurrSet(set.data);
+  }, [set.data]);
 
   const [currCard, setCurrCard] = React.useState<StudyCard>();
   const [cards, setCards] = React.useState<StudyCard[]>([]);

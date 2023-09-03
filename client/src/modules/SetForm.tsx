@@ -12,15 +12,12 @@ import { CardInterface, SetInterfaceDraft } from 'interfaces';
 import style from 'styles/pages/createset.module.scss';
 import { Toggle } from 'ui/Toggle';
 import { AnimatePresence, motion } from 'framer-motion';
-import { growUpMotions, isBackendLess } from 'lib/staticData';
-import { useLocalStore } from 'storage/useLocalStore';
+import { growUpMotions } from 'lib/staticData';
 import Header from 'ui/Header';
-import { generateEntity } from 'lib/utils';
 
 const SetForm: NextPage<{ setFigure?: SetInterfaceDraft }> = ({ setFigure }) => {
   const router = useRouter();
   const { user, signAccess } = useUserStore();
-  const { setLocalSets, localSets } = useLocalStore();
 
   const { register, handleSubmit, control, setValue } = useForm<SetInterfaceDraft & { tags: string | string[] }>({
     defaultValues: {
@@ -44,15 +41,10 @@ const SetForm: NextPage<{ setFigure?: SetInterfaceDraft }> = ({ setFigure }) => 
         definition: c.definition?.replace(/^\s+|\s+$/g, '').replace(/\s+/g, ' ') || '',
       })),
     };
-    if (isBackendLess) {
-      const generatedSet = generateEntity.set(data);
-      setLocalSets([...localSets.filter(({ id }) => id !== generatedSet.id), generatedSet]);
-      router.push(`/${generatedSet.id}`);
-    } else {
-      try {
-        await save.mutateAsync({ data, token: signAccess });
-      } catch (error) {}
-    }
+
+    try {
+      await save.mutateAsync({ data, token: signAccess });
+    } catch (error) {}
   };
 
   React.useEffect(() => {

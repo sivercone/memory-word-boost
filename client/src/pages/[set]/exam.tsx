@@ -9,22 +9,18 @@ import { Button } from 'ui/Button';
 import { CardInterface, SetInterface } from 'interfaces';
 import { isAnswerCorrect } from 'lib/utils';
 import style from 'styles/pages/exam.module.scss';
-import { useLocalStore } from 'storage/useLocalStore';
-import { isBackendLess } from 'lib/staticData';
 import Header from 'ui/Header';
 
 type SubmitData = { form: { input: string }[] };
 
 const ExamPage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const { push } = useRouter();
-  const { localSets } = useLocalStore();
 
   const set = useQuery(['set', pagekey], () => setApi.getById(pagekey));
   const [currSet, setCurrSet] = React.useState<SetInterface>();
   React.useEffect(() => {
-    if (isBackendLess) setCurrSet(localSets.find(({ id }) => id === pagekey));
-    else setCurrSet(set.data);
-  }, [set.data, localSets]);
+    setCurrSet(set.data);
+  }, [set.data]);
 
   const [cards, setCards] = React.useState<CardInterface[]>([]);
   React.useEffect(() => {

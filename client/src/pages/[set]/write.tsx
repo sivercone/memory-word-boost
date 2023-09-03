@@ -8,8 +8,6 @@ import Custom404 from 'pages/404';
 import { Button } from 'ui/Button';
 import { CardInterface, SetInterface } from 'interfaces';
 import { isAnswerCorrect } from 'lib/utils';
-import { useLocalStore } from 'storage/useLocalStore';
-import { isBackendLess } from 'lib/staticData';
 import Header from 'ui/Header';
 import style from 'styles/pages/write.module.scss';
 
@@ -22,14 +20,12 @@ type SubmitData = { answer: string };
 
 const WritePage: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const { push } = useRouter();
-  const { localSets } = useLocalStore();
 
   const set = useQuery(['set', pagekey], () => setApi.getById(pagekey));
   const [currSet, setCurrSet] = React.useState<SetInterface>();
   React.useEffect(() => {
-    if (isBackendLess) setCurrSet(localSets.find(({ id }) => id === pagekey));
-    else setCurrSet(set.data);
-  }, [set.data, localSets]);
+    setCurrSet(set.data);
+  }, [set.data]);
 
   const [cards, setCards] = React.useState<CardInterface[]>([]);
   React.useEffect(() => {
