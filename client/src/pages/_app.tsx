@@ -1,7 +1,6 @@
 import type { AppProps } from 'next/app';
 import { QueryClientProvider, Hydrate } from 'react-query';
 import { ToastContainer } from 'react-toastify';
-import { Analytics } from '@vercel/analytics/react';
 import 'react-toastify/dist/ReactToastify.min.css';
 import { queryClient } from 'lib/queryClient';
 import { AuthCheck } from 'modules/AuthCheck';
@@ -16,7 +15,6 @@ function MyApp({ Component, pageProps }: AppProps) {
         <NextHead />
         <Layout>
           <Component {...pageProps} />
-          <Analytics />
         </Layout>
         <AuthCheck />
         <ToastContainer

@@ -13,6 +13,7 @@ import Header from 'ui/Header';
 import { Toggle } from 'ui/Toggle';
 import { BottomSheet, useBottomSheet } from './BottomSheet';
 import style from 'styles/components/layout.module.scss';
+import { ActionList } from './ActionList';
 
 type ThemeType = 'light' | 'dark' | 'system';
 interface Props {
@@ -22,10 +23,107 @@ interface Props {
 const Layout: React.FC<Props> = ({ children }) => {
   return (
     <>
-      <TopBar />
-      {children}
-      <BottomBar />
-      <div style={{ backgroundColor: 'var(--color-background)', zIndex: -1, position: 'fixed', top: 0, bottom: 0, width: '100%' }} />
+      {/* <TopBar /> */}
+      <Navigation />
+      <div className="max-w-4xl mx-auto">{children}</div>
+      {/* <BottomBar /> */}
+      {/* <div style={{ backgroundColor: 'var(--color-background)', zIndex: -1, position: 'fixed', top: 0, bottom: 0, width: '100%' }} /> */}
+    </>
+  );
+};
+
+const menuOptions = [
+  { title: 'Profile', href: '', action: null },
+  { title: 'Log out', href: '', action: null },
+  { title: 'Login', href: '', action: null },
+  { title: 'Theme', href: '', action: null },
+];
+
+const Navigation = () => {
+  const router = useRouter();
+  const [menu, setMenu] = React.useState<'menu_default' | 'menu_creation' | null>(null);
+  const toggleMenu = (value: typeof menu) => setMenu((prev) => (prev === value ? null : value));
+  React.useEffect(() => {
+    if (menu !== null) {
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+    } else {
+      document.body.style.position = '';
+      document.body.style.width = '';
+    }
+  }, [menu]);
+
+  return (
+    <>
+      <nav className="py-[16px] border-b border-b-gray-200 bg-white sticky top-0">
+        <div className="flex items-center max-w-4xl mx-auto px-4">
+          <Link href="/">
+            <a>{'Qsets </>'}</a>
+          </Link>
+          <div className="ml-auto flex items-center gap-2">
+            <button
+              onClick={() => toggleMenu('menu_creation')}
+              className="w-[32px] h-[32px] rounded-full border border-gray-200 py-2 border-solid items-center justify-center flex"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" className="fill-gray-600">
+                <path d="M450.001-450.001h-230v-59.998h230v-230h59.998v230h230v59.998h-230v230h-59.998v-230Z" />
+              </svg>
+            </button>
+            <button
+              onClick={() => toggleMenu('menu_default')}
+              className="w-[32px] h-[32px] rounded-full border border-gray-200 py-2 border-solid items-center justify-center flex"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" className="fill-gray-600">
+                <path d="M140.001-254.616v-59.999h679.998v59.999H140.001Zm0-195.385v-59.998h679.998v59.998H140.001Zm0-195.384v-59.999h679.998v59.999H140.001Z" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      {menu === 'menu_default' ? (
+        <nav className="fixed bottom-0 left-0 right-0 top-[65px] overflow-y-auto z-50 py-4 bg-gray-50">
+          <div className="max-w-4xl mx-auto px-4">
+            <ActionList
+              data={menuOptions}
+              keyExtractor={(item) => item.title}
+              renderItem={(item, index) => (
+                <ActionList.Link href={item.href} isFirst={index === 0}>
+                  {item.title}
+                </ActionList.Link>
+              )}
+            />
+          </div>
+        </nav>
+      ) : null}
+      <BottomSheet visible={menu === 'menu_creation'} toggleVisible={() => toggleMenu('menu_creation')} label="Create">
+        <li>
+          <button
+            onClick={() => {
+              toggleMenu('menu_creation');
+              router.push('/create-set');
+            }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="currentColor">
+              <path d="M12 20q-1.2-.95-2.6-1.475Q8 18 6.5 18q-1.05 0-2.062.275-1.013.275-1.938.775-.525.275-1.012-.025Q1 18.725 1 18.15V6.1q0-.275.138-.525.137-.25.412-.375 1.15-.6 2.4-.9Q5.2 4 6.5 4q1.45 0 2.838.375Q10.725 4.75 12 5.5v12.1q1.275-.8 2.675-1.2 1.4-.4 2.825-.4.9 0 1.763.15.862.15 1.737.45v-12q.375.125.738.262.362.138.712.338.275.125.413.375.137.25.137.525v12.05q0 .575-.487.875-.488.3-1.013.025-.925-.5-1.938-.775Q18.55 18 17.5 18q-1.5 0-2.9.525T12 20Zm2-5V5.5l5-5v10Zm-4 1.625v-9.9q-.825-.35-1.712-.537Q7.4 6 6.5 6q-.925 0-1.8.175T3 6.7v9.925q.875-.325 1.738-.475Q5.6 16 6.5 16t1.762.15q.863.15 1.738.475Zm0 0v-9.9Z" />
+            </svg>
+            <span>Create study set</span>
+          </button>
+        </li>
+        <li>
+          <button
+            onClick={() => {
+              toggleMenu('menu_creation');
+              router.push('/create-folder');
+            }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="currentColor">
+              <path d="M4 20q-.825 0-1.412-.587Q2 18.825 2 18V6q0-.825.588-1.412Q3.175 4 4 4h6l2 2h8q.825 0 1.413.588Q22 7.175 22 8H11.175l-2-2H4v12l2.4-8h17.1l-2.575 8.575q-.2.65-.737 1.038Q19.65 20 19 20Zm2.1-2H19l1.8-6H7.9Zm0 0 1.8-6-1.8 6ZM4 8V6v2Z" />
+            </svg>
+            <span>Create folder</span>
+          </button>
+        </li>
+      </BottomSheet>
     </>
   );
 };

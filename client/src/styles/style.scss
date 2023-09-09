@@ -1,2 +1,6 @@
 @use 'globals';
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap'); // @todo - remove import from here
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

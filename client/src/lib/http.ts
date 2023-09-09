@@ -13,7 +13,7 @@ instance.interceptors.response.use(
   },
   function (error) {
     if (error.response?.status === 401 && typeof window !== 'undefined') {
-      notify('Авторизація відсутня. Ви повинні увійти перш ніж продовжити');
+      notify('Authorization is missing. You must sign in before continuing');
       Router.replace('/login');
     }
 
