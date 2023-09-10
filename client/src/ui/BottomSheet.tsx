@@ -17,23 +17,20 @@ export const BottomSheet: React.FC<ComponentProps> = ({ visible, toggleVisible, 
         <>
           <motion.div
             onClick={toggleVisible}
-            className={style.overlay}
+            className="fixed w-full h-full top-0 bottom-0 left-0 right-0 bg-gray-800 bg-opacity-50 z-40 backdrop-blur-[2px]"
             variants={opacityFadeMotions}
             initial="init"
             animate="anim"
             exit="init"
           ></motion.div>
-          <motion.div className={style.popup} variants={growUpMotions} initial="init" animate="anim" exit="init">
-            <div className={style.popup__top}>
-              <span>{label}</span>
-              <button onClick={toggleVisible}>
-                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
-                  <path d="M0 0h24v24H0V0z" fill="none" />
-                  <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
-                </svg>
-              </button>
-            </div>
-            <ul className={style.popup__list}>{children}</ul>
+          <motion.div
+            className="z-50 fixed bottom-0 left-0 right-0 w-full mx-auto px-4 pt-4 pb-12 bg-gray-50 rounded-t-2xl max-w-4xl"
+            variants={growUpMotions}
+            initial="init"
+            animate="anim"
+            exit="init"
+          >
+            {children}
           </motion.div>
         </>
       ) : undefined}
