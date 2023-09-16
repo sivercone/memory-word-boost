@@ -59,7 +59,7 @@ const Navigation = () => {
   return (
     <>
       <nav className="py-[16px] border-b border-b-gray-200 bg-white sticky top-0">
-        <div className="flex items-center max-w-4xl mx-auto px-4">
+        <div className="flex items-center max-w-3xl mx-auto px-4">
           <Link href="/">
             <a>{'Qsets </>'}</a>
           </Link>
@@ -86,7 +86,7 @@ const Navigation = () => {
 
       {menu === 'menu_default' ? (
         <nav className="fixed bottom-0 left-0 right-0 top-[65px] overflow-y-auto z-50 py-4 bg-gray-50">
-          <div className="max-w-4xl mx-auto px-4">
+          <div className="max-w-3xl mx-auto px-4">
             <ActionList
               data={menuOptions}
               keyExtractor={(item) => item.title}

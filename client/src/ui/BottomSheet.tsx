@@ -24,7 +24,7 @@ export const BottomSheet: React.FC<ComponentProps> = ({ visible, toggleVisible, 
             exit="init"
           ></motion.div>
           <motion.div
-            className="z-50 fixed bottom-0 left-0 right-0 w-full mx-auto px-4 pt-4 pb-12 bg-gray-50 rounded-t-2xl max-w-4xl"
+            className="z-50 fixed bottom-0 left-0 right-0 w-full mx-auto px-4 pt-4 pb-12 bg-gray-50 rounded-t-2xl max-w-3xl"
             variants={growUpMotions}
             initial="init"
             animate="anim"

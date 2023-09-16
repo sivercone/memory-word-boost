@@ -9,6 +9,7 @@ export const queryClient = new QueryClient({
       },
     },
     queries: {
+      refetchOnWindowFocus: true,
       retry: false,
       staleTime: 60 * 1000 * 5,
       onError: (e) => {

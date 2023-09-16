@@ -64,7 +64,7 @@ const SetDetails: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   return (
     <>
       <div className="bg-white py-8 border-b border-b-gray-200">
-        <div className="max-w-4xl mx-auto flex flex-col gap-4 px-4">
+        <div className="max-w-3xl mx-auto flex flex-col gap-4 px-4">
           <div>
             <h1 className="text-3xl">{currSet.title}</h1>
             {currSet.description ? <p className="leading-relaxed text-gray-600">{currSet.description}</p> : null}
@@ -87,7 +87,7 @@ const SetDetails: NextPage<{ pagekey: string }> = ({ pagekey }) => {
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto p-4">
+      <div className="max-w-3xl mx-auto p-4">
         <h2 className="text-2xl mb-4">Overview</h2>
         <ul className="flex flex-col gap-2">
           {currSet.cards.map((content, i) => (

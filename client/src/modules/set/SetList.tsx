@@ -75,7 +75,7 @@ const SetList: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const menuOptions = [
     { title: 'Information', action: () => openModal('edit') },
     { title: 'Share', action: () => shareValue(window.location.href) },
-    { title: 'Author', action: () => router.push(`/u/${currFolder?.user.id}`) },
+    { title: 'Author', action: () => router.push(`/user/${currFolder?.user.id}`) },
     { title: 'Edit', action: () => openModal('edit') },
     { title: 'Delete', action: () => openModal('del') },
   ];
@@ -84,7 +84,7 @@ const SetList: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   return (
     <>
       <div className="bg-white py-8 border-b border-b-gray-200">
-        <div className="max-w-4xl mx-auto flex flex-col gap-4 px-4">
+        <div className="max-w-3xl mx-auto flex flex-col gap-4 px-4">
           <h1 className="text-3xl">{currFolder.name}</h1>
           <button
             onClick={() => toggleSheet()}
@@ -109,7 +109,7 @@ const SetList: NextPage<{ pagekey: string }> = ({ pagekey }) => {
         />
       </BottomSheet>
 
-      <div className="p-4 max-w-4xl mx-auto">
+      <div className="p-4 max-w-3xl mx-auto">
         <ActionList
           data={currFolder.sets}
           keyExtractor={(item) => item.id}
