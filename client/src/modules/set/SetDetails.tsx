@@ -15,6 +15,8 @@ import { formatDate, shareValue } from 'lib/utils';
 import { Toggle } from 'ui/Toggle';
 import { BottomSheet, useBottomSheet } from 'ui/BottomSheet';
 import { ActionList } from '@src/ui/ActionList';
+import { DropdownMenu } from '@src/ui';
+import { MoreIcon } from '@src/ui/Icons';
 
 type ModalVariants = 'del' | 'info' | 'folder';
 type ManageSetProps = {
@@ -37,6 +39,7 @@ type ManageFoldersProps = {
 };
 
 const SetDetails: NextPage<{ pagekey: string }> = ({ pagekey }) => {
+  const router = useRouter();
   const { user, signAccess } = useUserStore();
   const { toggleSheet, isSheetVisible } = useBottomSheet();
 
@@ -60,6 +63,15 @@ const SetDetails: NextPage<{ pagekey: string }> = ({ pagekey }) => {
     { title: 'Exam', href: `${pagekey}/exam` },
   ];
 
+  const menuOptions = [
+    { title: 'Information', action: () => openModal('info') },
+    { title: 'Share', action: () => shareValue(window.location.href) },
+    { title: 'Author', action: () => true },
+    { title: 'Edit', action: () => router.push(`${pagekey}/update`) },
+    { title: 'Add to Folder', action: () => openModal('folder') },
+    { title: 'Delete', action: () => openModal('del') },
+  ];
+
   if (!currSet) return <Custom404 />;
   return (
     <>
@@ -76,14 +88,20 @@ const SetDetails: NextPage<{ pagekey: string }> = ({ pagekey }) => {
               </a>
             </Link>
           ))}
-          <button
-            onClick={() => toggleSheet()}
-            className="border border-gray-200 border-solid w-full p-2 rounded-lg flex items-center justify-center"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" className="fill-gray-600">
-              <path d="M249.231-420.001q-24.749 0-42.374-17.625-17.624-17.625-17.624-42.374 0-24.749 17.624-42.374 17.625-17.625 42.374-17.625 24.75 0 42.374 17.625Q309.23-504.749 309.23-480q0 24.749-17.625 42.374-17.624 17.625-42.374 17.625Zm230.769 0q-24.749 0-42.374-17.625-17.625-17.625-17.625-42.374 0-24.749 17.625-42.374 17.625-17.625 42.374-17.625 24.749 0 42.374 17.625 17.625 17.625 17.625 42.374 0 24.749-17.625 42.374-17.625 17.625-42.374 17.625Zm230.769 0q-24.75 0-42.374-17.625Q650.77-455.251 650.77-480q0-24.749 17.625-42.374 17.624-17.625 42.374-17.625 24.749 0 42.374 17.625 17.624 17.625 17.624 42.374 0 24.749-17.624 42.374-17.625 17.625-42.374 17.625Z" />
-            </svg>
-          </button>
+          <DropdownMenu
+            options={menuOptions}
+            trigger={
+              <button className="border border-gray-200 border-solid w-full p-2 rounded-lg flex items-center justify-center">
+                <MoreIcon />
+              </button>
+            }
+            keyExtractor={(item) => item.title}
+            renderItem={(item) => (
+              <DropdownMenu.Item onClick={item.action}>
+                <span>{item.title}</span>
+              </DropdownMenu.Item>
+            )}
+          />
         </div>
       </div>
 
@@ -135,10 +153,6 @@ const ManageSet: React.FC<ManageSetProps> = ({
   const queryClient = useQueryClient();
 
   const { setSetFigure } = useSetStore();
-  const onEdit = () => {
-    setSetFigure(set);
-    router.push(`${pagekey}/update`);
-  };
 
   const fetchDelete = useMutation(setApi.delete, {
     onSuccess: () => {
@@ -156,7 +170,6 @@ const ManageSet: React.FC<ManageSetProps> = ({
     { title: 'Information', action: () => openModal('info') },
     { title: 'Share', action: () => shareValue(window.location.href) },
     { title: 'Author', action: () => true },
-    { title: 'Edit', action: onEdit },
     { title: 'Add to Folder', action: () => openModal('folder') },
     { title: 'Delete', action: () => openModal('del') },
   ];

@@ -9,11 +9,12 @@ import { shareValue } from 'lib/utils';
 import { useUserStore } from 'storage/useUserStore';
 import { Modal, ModalActions, ModalBody, ModalList } from 'ui/Modal';
 import { Toggle } from 'ui/Toggle';
-import { BottomSheet, useBottomSheet } from 'ui/BottomSheet';
 import { FolderInterface, SetInterface } from 'interfaces';
 import { FolderForm } from 'modules/FolderForm';
 import Custom404 from 'pages/404';
 import { ActionList } from '@src/ui/ActionList';
+import { MoreIcon } from '@src/ui/Icons';
+import { DropdownMenu } from '@src/ui';
 
 type ModalVariants = 'edit' | 'del' | 'sets';
 
@@ -22,10 +23,8 @@ const SetList: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const { user, signAccess } = useUserStore();
   const queryClient = useQueryClient();
 
-  const { toggleSheet, isSheetVisible } = useBottomSheet();
   const [shownModal, setShownModal] = React.useState<ModalVariants>();
   const openModal = (payload: ModalVariants) => {
-    toggleSheet(false);
     setShownModal(payload);
   };
   const closeModal = () => {
@@ -86,28 +85,22 @@ const SetList: NextPage<{ pagekey: string }> = ({ pagekey }) => {
       <div className="bg-white py-8 border-b border-b-gray-200">
         <div className="max-w-3xl mx-auto flex flex-col gap-4 px-4">
           <h1 className="text-3xl">{currFolder.name}</h1>
-          <button
-            onClick={() => toggleSheet()}
-            className="border border-gray-200 border-solid w-full p-2 rounded-lg flex items-center justify-center"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" className="fill-gray-600">
-              <path d="M249.231-420.001q-24.749 0-42.374-17.625-17.624-17.625-17.624-42.374 0-24.749 17.624-42.374 17.625-17.625 42.374-17.625 24.75 0 42.374 17.625Q309.23-504.749 309.23-480q0 24.749-17.625 42.374-17.624 17.625-42.374 17.625Zm230.769 0q-24.749 0-42.374-17.625-17.625-17.625-17.625-42.374 0-24.749 17.625-42.374 17.625-17.625 42.374-17.625 24.749 0 42.374 17.625 17.625 17.625 17.625 42.374 0 24.749-17.625 42.374-17.625 17.625-42.374 17.625Zm230.769 0q-24.75 0-42.374-17.625Q650.77-455.251 650.77-480q0-24.749 17.625-42.374 17.624-17.625 42.374-17.625 24.749 0 42.374 17.625 17.624 17.625 17.624 42.374 0 24.749-17.624 42.374-17.625 17.625-42.374 17.625Z" />
-            </svg>
-          </button>
+          <DropdownMenu
+            options={menuOptions}
+            trigger={
+              <button className="border border-gray-200 border-solid w-full p-2 rounded-lg flex items-center justify-center">
+                <MoreIcon />
+              </button>
+            }
+            keyExtractor={(item) => item.title}
+            renderItem={(item) => (
+              <DropdownMenu.Item onClick={item.action}>
+                <span>{item.title}</span>
+              </DropdownMenu.Item>
+            )}
+          />
         </div>
       </div>
-
-      <BottomSheet visible={isSheetVisible} toggleVisible={toggleSheet} label={currFolder.name}>
-        <ActionList
-          data={menuOptions}
-          keyExtractor={(item) => item.title}
-          renderItem={(item, index) => (
-            <ActionList.Button onClick={item.action} isFirst={index === 0}>
-              {item.title}
-            </ActionList.Button>
-          )}
-        />
-      </BottomSheet>
 
       <div className="p-4 max-w-3xl mx-auto">
         <ActionList

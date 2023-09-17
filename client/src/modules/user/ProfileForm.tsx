@@ -14,7 +14,7 @@ const ProfileForm: React.FC<{ open: boolean; setOpen: (value: boolean) => void }
   const queryClient = useQueryClient();
   const mutation = useMutation(authApi.update);
   const { data: userData } = useQuery('user', () => authApi.me(signAccess));
-  const { register, handleSubmit, reset, formState } = useForm<UserInterface>({ defaultValues: { ...userData } });
+  const { register, handleSubmit, reset } = useForm<UserInterface>({ defaultValues: { ...userData } });
 
   React.useEffect(() => {
     if (userData) {
@@ -25,7 +25,6 @@ const ProfileForm: React.FC<{ open: boolean; setOpen: (value: boolean) => void }
   }, [userData]);
 
   const onSubmit = async (payload: UserInterface) => {
-    if (!formState.isDirty) return setOpen(false);
     try {
       await mutation.mutateAsync({ data: payload, token: signAccess });
       queryClient.invalidateQueries('user');
