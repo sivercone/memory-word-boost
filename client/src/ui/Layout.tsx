@@ -20,7 +20,7 @@ const menuOptions = [
   { id: 'theme', title: 'Theme', href: '/' },
 ];
 const creationOptions = [
-  { id: 'set', title: 'Create Set', href: '/create/set', icon: <SetIcon /> },
+  { id: 'set', title: 'Create Set', href: '/sets/new', icon: <SetIcon /> },
   { id: 'folder', title: 'Create Folder', href: '/sets?folder=new', icon: <FolderIcon /> },
 ];
 
