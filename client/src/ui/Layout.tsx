@@ -32,7 +32,7 @@ const Navigation = () => {
       <nav className="py-[16px] border-b border-b-gray-200 bg-white sticky top-0">
         <div className="flex items-center max-w-3xl mx-auto px-4">
           <Link href="/">
-            <a>{'Qsets </>'}</a>
+            <a className="font-semibold">PROJECT MWB</a>
           </Link>
           <div className="ml-auto flex items-center gap-2">
             <DropdownMenu
