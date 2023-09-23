@@ -10,7 +10,7 @@ import { ActionList } from '@src/ui/ActionList';
 import { MoreIcon } from '@src/ui/Icons';
 import { DropdownMenu } from '@src/ui';
 
-const SetList: NextPage<{ queryId: string }> = ({ queryId }) => {
+const FolderDetails: NextPage<{ queryId: string }> = ({ queryId }) => {
   const router = useRouter();
   const [shownModal, setShownModal] = React.useState<'edit' | 'del' | null>(null);
   const { data: folder } = useQuery(['folder', queryId], () => folderApi.getById(queryId), { enabled: !!queryId });
@@ -21,7 +21,6 @@ const SetList: NextPage<{ queryId: string }> = ({ queryId }) => {
     { title: 'Delete', action: () => setShownModal('del') },
   ];
 
-  // @todo - loading
   if (!folder) return <Custom404 />;
   return (
     <>
@@ -58,17 +57,17 @@ const SetList: NextPage<{ queryId: string }> = ({ queryId }) => {
         />
       </div>
 
-      <FolderForm data={folder} open={shownModal === 'edit'} setOpen={() => setShownModal('edit')} />
-      <FolderDelete data={folder} open={shownModal === 'del'} setOpen={() => setShownModal('del')} />
+      <FolderForm data={folder} open={shownModal === 'edit'} setOpen={() => setShownModal(null)} />
+      <FolderDelete data={folder} open={shownModal === 'del'} setOpen={() => setShownModal(null)} />
     </>
   );
 };
 
-SetList.getInitialProps = async ({ query }) => {
+FolderDetails.getInitialProps = async ({ query }) => {
   const queryId = typeof query.folder === 'string' ? query.folder : '';
   const queryClient = new QueryClient();
   if (queryId) await queryClient.prefetchQuery(['folder', queryId], () => folderApi.getById(queryId));
   return { queryId, dehydratedState: dehydrate(queryClient) };
 };
 
-export default SetList;
+export default FolderDetails;

@@ -1,3 +1,3 @@
-import SetList from '@src/modules/set/SetList';
+import FolderDetails from '@src/modules/folder/FolderDetails';
 
-export default SetList;
+export default FolderDetails;
