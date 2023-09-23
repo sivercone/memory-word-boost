@@ -21,7 +21,7 @@ const menuOptions = [
 ];
 const creationOptions = [
   { id: 'set', title: 'Create Set', href: '/create/set', icon: <SetIcon /> },
-  { id: 'folder', title: 'Create Folder', href: '/create/folder', icon: <FolderIcon /> },
+  { id: 'folder', title: 'Create Folder', href: '/sets?folder=new', icon: <FolderIcon /> },
 ];
 
 const Navigation = () => {
