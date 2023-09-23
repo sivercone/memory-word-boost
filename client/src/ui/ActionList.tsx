@@ -7,10 +7,11 @@ interface ActionListProps<T> {
   keyExtractor: (item: T, index: number) => string;
   header?: { title: React.ReactNode; action?: React.ReactNode };
   footer?: string;
+  placeholder?: React.ReactNode;
 }
 
-export function ActionList<T>({ data, renderItem, keyExtractor, header, footer }: ActionListProps<T>) {
-  if (!data.length) return null;
+export function ActionList<T>({ data, renderItem, keyExtractor, header, footer, placeholder }: ActionListProps<T>) {
+  if (!data.length) return <>{placeholder}</>;
 
   return (
     <div className="space-y-2">
