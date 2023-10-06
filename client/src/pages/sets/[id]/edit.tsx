@@ -2,10 +2,10 @@ import { NextPage } from 'next';
 import { useSetStore } from 'storage/useSetStore';
 import { useQuery } from 'react-query';
 import { setApi } from 'apis/setApi';
-import SetForm from 'modules/SetForm';
 import Custom404 from 'pages/404';
 import { useUserStore } from 'storage/useUserStore';
 import ErrorPage from 'modules/ErrorPage';
+import SetForm from '@src/modules/set/SetForm';
 
 const UpdateSet: NextPage<{ pagekey: string }> = ({ pagekey }) => {
   const { setFigure } = useSetStore();

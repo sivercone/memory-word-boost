@@ -12,7 +12,6 @@ body,
   padding: 0;
   margin: 0;
   font-size: 16px;
-  font-family: 'Roboto', sans-serif;
   // background-color: var(--color-background);
   // color: var(--color-on-background);
 }
@@ -59,30 +58,30 @@ button {
   }
 }
 
-input,
-textarea {
-  font-family: inherit;
-  font-size: inherit;
-  font-weight: inherit;
-  background: inherit;
-  color: inherit;
-  border: 0;
-  padding: 0;
-  margin: 0;
-  border-radius: 0;
+// input,
+// textarea {
+//   font-family: inherit;
+//   font-size: inherit;
+//   font-weight: inherit;
+//   background: inherit;
+//   color: inherit;
+//   border: 0;
+//   padding: 0;
+//   margin: 0;
+//   border-radius: 0;
 
-  &::placeholder {
-    color: #666;
-    font-family: inherit;
-    font-size: inherit;
-    font-weight: inherit;
-  }
-}
+//   &::placeholder {
+//     color: #666;
+//     font-family: inherit;
+//     font-size: inherit;
+//     font-weight: inherit;
+//   }
+// }
 
-textarea {
-  resize: vertical;
-  min-height: 100px;
-}
+// textarea {
+//   resize: vertical;
+//   min-height: 100px;
+// }
 
 .container {
   width: 100%;

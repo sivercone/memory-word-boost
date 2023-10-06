@@ -28,7 +28,7 @@ const FolderDetails: NextPage<{ queryId: string; data: FolderInterface }> = ({ q
         <>
           <div className="bg-white py-8 border-b border-b-gray-200">
             <div className="max-w-3xl mx-auto flex flex-col gap-4 px-4">
-              <h1 className="text-3xl">{folder.name}</h1>
+              <h1 className="text-2xl font-medium">{folder.name}</h1>
               <DropdownMenu
                 options={menuOptions}
                 trigger={
@@ -47,7 +47,7 @@ const FolderDetails: NextPage<{ queryId: string; data: FolderInterface }> = ({ q
           </div>
 
           <div className="p-4 max-w-3xl mx-auto">
-            <h2 className="text-2xl mb-4">Sets</h2>
+            <h2 className="text-xl mb-4 font-medium">Sets</h2>
             <ActionList
               placeholder={'Nothing yet'}
               data={folder.sets}

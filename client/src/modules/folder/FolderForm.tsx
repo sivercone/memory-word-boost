@@ -37,7 +37,7 @@ export const FolderForm: React.FC<Props> = ({ open, setOpen, data }) => {
   };
 
   React.useEffect(() => {
-    if (data) reset({ ...data, user }); // https://stackoverflow.com/a/64307087
+    if (data?.id) reset({ ...data, user }); // https://stackoverflow.com/a/64307087
   }, [data, user]);
 
   return (

@@ -12,7 +12,7 @@ const UserProfile: React.FC<{ user: UserInterface; onEdit: () => void }> = ({ us
   <div className="bg-white py-8 border-b border-b-gray-200">
     <div className="max-w-3xl mx-auto flex flex-col gap-4 px-4">
       <div>
-        <h1 className="text-3xl">{user.name}</h1>
+        <h1 className="text-2xl font-medium">{user.name}</h1>
         <p className="leading-relaxed text-gray-600 text-sm">
           On project since {formatDate({ createdAt: user.createdAt, pattern: 'dd MMM yyyy' })}
         </p>
@@ -31,7 +31,7 @@ const UserFolders: React.FC<{ userId: string }> = ({ userId }) => {
   if (isLoading) return <Spinner className="mx-auto m-8 h-8" />;
   return (
     <div className="max-w-3xl mx-auto p-4">
-      <h2 className="text-2xl mb-4">Folders</h2>
+      <h2 className="text-2xl mb-4 font-medium">Folders</h2>
       <ActionList
         data={data}
         keyExtractor={(item) => item.id}
