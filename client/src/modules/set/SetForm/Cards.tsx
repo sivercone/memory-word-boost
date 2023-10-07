@@ -1,12 +1,12 @@
 import React from 'react';
-import { SetInterfaceDraft } from '@src/interfaces';
+import { SetInterface, SetInterfaceDraft } from '@src/interfaces';
 import { Textarea } from '@src/ui';
 import { ArrowLeftIcon, MinusIcon, PlusIcon, SwapVertIcon } from '@src/ui/Icons';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useFieldArray, useForm } from 'react-hook-form';
 
-const Cards = () => {
+const Cards: React.FC<{ data?: SetInterface }> = ({ data }) => {
   const [scrolled, setScrolled] = React.useState(false);
   React.useEffect(() => {
     const handleScroll = () => (window.scrollY > 0 ? setScrolled(true) : setScrolled(false));
@@ -17,7 +17,7 @@ const Cards = () => {
   }, []);
 
   const router = useRouter();
-  const { register, handleSubmit, control, setValue } = useForm<SetInterfaceDraft & { tags: string | string[] }>();
+  const { register, handleSubmit, control, setValue } = useForm<SetInterfaceDraft>({ defaultValues: { ...data } });
   const { fields, append, remove } = useFieldArray({ name: 'cards', control });
 
   //   cards: payload.cards.map((c, i) => ({
@@ -38,7 +38,7 @@ const Cards = () => {
           <h1 className="text-2xl font-medium">Cards</h1>
           <div className="ml-auto flex items-center gap-4">
             <Link
-              href={router.pathname}
+              href={{ pathname: router.pathname, query: data && { id: router.query.id } }}
               legacyBehavior={false}
               title="Back"
               className="bg-white border border-gray-200 border-solid p-2 rounded-lg"

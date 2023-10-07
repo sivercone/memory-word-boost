@@ -1,35 +1,21 @@
-import { NextPage } from 'next';
-import { useSetStore } from 'storage/useSetStore';
-import { useQuery } from 'react-query';
-import { setApi } from 'apis/setApi';
-import Custom404 from 'pages/404';
-import { useUserStore } from 'storage/useUserStore';
-import ErrorPage from 'modules/ErrorPage';
+import { GetServerSideProps } from 'next';
+import { QueryClient, dehydrate } from 'react-query';
 import SetForm from '@src/modules/set/SetForm';
+import { setApi } from '@src/apis';
 
-const UpdateSet: NextPage<{ pagekey: string }> = ({ pagekey }) => {
-  const { setFigure } = useSetStore();
-  const { user } = useUserStore();
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const queryId = typeof context.query.id === 'string' ? context.query.id : '';
+  const queryClient = new QueryClient();
+  let set;
 
-  const fetch = useQuery(['set', pagekey], () => setApi.getById(pagekey), { enabled: !setFigure });
+  try {
+    set = await queryClient.fetchQuery(['set', queryId], () => setApi.getById(queryId));
+    if (!set && !queryId) return { notFound: true };
+  } catch (error) {
+    console.error('Error fetching set:', error);
+    return { notFound: true };
+  }
 
-  const data = setFigure || fetch.data;
-
-  if (!data) return <Custom404 />;
-  if (user?.id !== data.user.id)
-    return (
-      <ErrorPage>
-        <p>Error 403</p>
-        <p>Good news, we didn&#39;t forget to check permissions in this place.</p>
-      </ErrorPage>
-    );
-
-  return <SetForm setFigure={data} />;
+  return { props: { data: set, queryId, dehydratedState: dehydrate(queryClient) } };
 };
-
-UpdateSet.getInitialProps = async ({ query }) => {
-  const pagekey = typeof query.set === 'string' ? query.set : '';
-  return { pagekey };
-};
-
-export default UpdateSet;
+export default SetForm;

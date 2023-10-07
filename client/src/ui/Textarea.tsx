@@ -1,12 +1,16 @@
 import React from 'react';
 
 /**
- * source - https://css-tricks.com/the-cleanest-trick-for-autogrowing-textareas/
- * @param props
- * @returns
+ * plain logic source https://css-tricks.com/the-cleanest-trick-for-autogrowing-textareas/
+ * The Textarea component provides an auto-resizable textarea element.
+ * It uses a combination of an internal ref for managing auto-resizing behavior
+ * and allows for an external ref to be passed in for external access to the textarea DOM element.
  */
-const Textarea: React.FC<React.TextareaHTMLAttributes<HTMLTextAreaElement>> = (props) => {
+const Textarea = React.forwardRef<HTMLTextAreaElement, React.TextareaHTMLAttributes<HTMLTextAreaElement>>((props, forwardedRef) => {
   const textareaRef = React.useRef<HTMLTextAreaElement | null>(null);
+
+  // Merge internal ref and forwarded ref
+  React.useImperativeHandle(forwardedRef, () => textareaRef.current!);
 
   React.useEffect(() => {
     const handleInput = () => {
@@ -31,6 +35,6 @@ const Textarea: React.FC<React.TextareaHTMLAttributes<HTMLTextAreaElement>> = (p
   }, []);
 
   return <textarea {...props} ref={textareaRef} className={`resize-none overflow-hidden ${props.className}`} />;
-};
+});
 
 export default Textarea;
