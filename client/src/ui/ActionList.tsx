@@ -11,7 +11,7 @@ interface ActionListProps<T> {
 }
 
 export function ActionList<T>({ data, renderItem, keyExtractor, header, footer, placeholder }: ActionListProps<T>) {
-  if (!data.length) return <>{placeholder}</>;
+  if (!data.length) return <p className="text-gray-600">{placeholder}</p>;
 
   return (
     <div className="space-y-2">

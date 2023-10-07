@@ -45,3 +45,18 @@ export const ChevronRightIcon: React.FC<SVGProps> = ({ className = 'fill-gray-60
     <path d="m517.847-480-184-184L376-706.153 602.153-480 376-253.847 333.847-296l184-184Z" />
   </svg>
 );
+export const ArrowLeftIcon: React.FC<SVGProps> = ({ className = 'fill-gray-600', height = 24, width = 24 }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" height={height} width={width} className={className}>
+    <path d="m294.922-450.001 227.846 227.847L480-180.001 180.001-480 480-779.999l42.768 42.153-227.846 227.847h485.077v59.998H294.922Z" />
+  </svg>
+);
+export const DeleteIcon: React.FC<SVGProps> = ({ className = 'fill-gray-600', height = 24, width = 24 }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" height={height} width={width} className={className}>
+    <path d="M292.309-140.001q-29.923 0-51.115-21.193-21.193-21.192-21.193-51.115V-720h-40v-59.999H360v-35.384h240v35.384h179.999V-720h-40v507.691q0 30.308-21 51.308t-51.308 21H292.309ZM680-720H280v507.691q0 5.385 3.462 8.847 3.462 3.462 8.847 3.462h375.382q4.616 0 8.463-3.846 3.846-3.847 3.846-8.463V-720ZM376.155-280h59.999v-360h-59.999v360Zm147.691 0h59.999v-360h-59.999v360ZM280-720v520-520Z" />
+  </svg>
+);
+export const SwapVertIcon: React.FC<SVGProps> = ({ className = 'fill-gray-600', height = 24, width = 24 }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" height={height} width={width} className={className}>
+    <path d="M336.155-453.847v-291.231L222.77-631.693l-42.769-42.153 186.153-186.153 186.153 186.153-42.768 42.153-113.385-113.385v291.231h-59.999Zm257.306 353.846L407.308-286.154l42.768-42.153 113.386 113.385v-291.231h59.998v291.231l113.386-113.385 42.768 42.153-186.153 186.153Z" />
+  </svg>
+);

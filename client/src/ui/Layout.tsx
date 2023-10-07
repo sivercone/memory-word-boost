@@ -29,7 +29,7 @@ const Navigation = () => {
 
   return (
     <>
-      <nav className="py-[16px] border-b border-b-gray-200 bg-white sticky top-0">
+      <nav id="navigation" className="py-[16px] border-b border-b-gray-200 bg-white sticky top-0">
         <div className="flex items-center max-w-3xl mx-auto px-4">
           <Link href="/">
             <a className="font-semibold">PROJECT MWB</a>
