@@ -1,33 +1,33 @@
 import React from 'react';
-import { useRouter } from 'next/router';
-import { ChevronRightIcon } from '@src/ui/Icons';
 import Link from 'next/link';
-import { useForm } from 'react-hook-form';
-import { SetInterface, SetInterfaceDraft } from '@src/interfaces';
+import { useRouter } from 'next/router';
 import { useMutation, useQueryClient } from 'react-query';
+import { useForm } from 'react-hook-form';
 import { setApi } from '@src/apis';
-import { useSetStore } from '@src/storage/useSetStore';
+import { ChevronRightIcon } from '@src/ui/Icons';
 import { useUserStore } from '@src/storage/useUserStore';
+import { SetInterface } from '@src/interfaces';
+import { useSetStore } from '@src/storage/useSetStore';
 
-const General: React.FC<{ data?: SetInterface }> = ({ data }) => {
+const General: React.FC = () => {
   const router = useRouter();
   const { user, signAccess } = useUserStore();
-  const setStore = useSetStore();
-  const { register, handleSubmit } = useForm<SetInterfaceDraft>({ defaultValues: { ...data } });
+  const { setCurrStudySet, currStudySet } = useSetStore();
+  const { register, handleSubmit, reset } = useForm<Pick<SetInterface, 'title' | 'description'>>();
+  React.useEffect(() => {
+    reset(currStudySet);
+  }, [reset, currStudySet]);
 
   const queryClient = useQueryClient();
   const save = useMutation(setApi.save, {
-    onSuccess: () => {
+    onSuccess: (res) => {
       queryClient.invalidateQueries('sets');
-      router.push(`/${save.data}`);
+      router.push(`/sets/${res}`);
     },
   });
-  const onSubmit = async (payload: SetInterfaceDraft) => {
-    const data = { ...setStore.currStudySet, ...payload, user: user!, tags: [], cards: [] };
-    console.log([setStore.currStudySet, payload, user]);
-    try {
-      await save.mutateAsync({ data, token: signAccess });
-    } catch (error) {}
+  const onSubmit = async (payload: Pick<SetInterface, 'title' | 'description'>) => {
+    const datus = { ...currStudySet, title: payload.title, description: payload.description, user };
+    await save.mutateAsync({ data: datus, token: signAccess }).catch((error) => console.error(error));
   };
 
   return (
@@ -41,12 +41,12 @@ const General: React.FC<{ data?: SetInterface }> = ({ data }) => {
       <form autoComplete="off" className="flex flex-col gap-4">
         <input
           placeholder="Name"
-          {...register('title', { required: true })}
+          {...register('title', { required: true, onChange: (event) => setCurrStudySet({ title: event.target.value }) })}
           className="border border-gray-200 border-solid p-2 rounded-lg bg-white"
         />
         <input
           placeholder="Description"
-          {...register('description')}
+          {...register('description', { onChange: (event) => setCurrStudySet({ description: event.target.value }) })}
           className="border border-gray-200 border-solid p-2 rounded-lg bg-white"
         />
       </form>

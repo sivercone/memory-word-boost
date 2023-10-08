@@ -1,12 +1,13 @@
 import React from 'react';
-import { SetInterface, SetInterfaceDraft } from '@src/interfaces';
+import { SetInterface } from '@src/interfaces';
 import { Textarea } from '@src/ui';
 import { ArrowLeftIcon, MinusIcon, PlusIcon, SwapVertIcon } from '@src/ui/Icons';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useFieldArray, useForm } from 'react-hook-form';
+import { useSetStore } from '@src/storage/useSetStore';
 
-const Cards: React.FC<{ data?: SetInterface }> = ({ data }) => {
+const Cards: React.FC = () => {
   const [scrolled, setScrolled] = React.useState(false);
   React.useEffect(() => {
     const handleScroll = () => (window.scrollY > 0 ? setScrolled(true) : setScrolled(false));
@@ -17,19 +18,17 @@ const Cards: React.FC<{ data?: SetInterface }> = ({ data }) => {
   }, []);
 
   const router = useRouter();
-  const { register, handleSubmit, control, setValue } = useForm<SetInterfaceDraft>({ defaultValues: { ...data } });
+  const { setCurrStudySet, currStudySet } = useSetStore();
+  const { register, control, reset, watch } = useForm<Pick<SetInterface, 'cards'>>();
   const { fields, append, remove } = useFieldArray({ name: 'cards', control });
-
-  //   cards: payload.cards.map((c, i) => ({
-  //     order: c.order ? c.order : i,
-  //     term: c.term?.replace(/^\s+|\s+$/g, '').replace(/\s+/g, ' ') || '',
-  //     definition: c.definition?.replace(/^\s+|\s+$/g, '').replace(/\s+/g, ' ') || '',
-  //   })),
-
-  const flipCardValues = () => {
-    const flippedFields = fields.map((obj) => ({ ...obj, term: obj.definition, definition: obj.term }));
-    setValue('cards', flippedFields);
-  };
+  React.useEffect(() => {
+    reset(currStudySet);
+  }, [reset, currStudySet]);
+  React.useEffect(() => {
+    return () => {
+      setCurrStudySet({ cards: watch('cards') });
+    };
+  }, []);
 
   return (
     <>
@@ -38,18 +37,14 @@ const Cards: React.FC<{ data?: SetInterface }> = ({ data }) => {
           <h1 className="text-2xl font-medium">Cards</h1>
           <div className="ml-auto flex items-center gap-4">
             <Link
-              href={{ pathname: router.pathname, query: data && { id: router.query.id } }}
+              href={{ pathname: router.pathname, query: currStudySet?.id && { id: router.query.id } }}
               legacyBehavior={false}
               title="Back"
               className="bg-white border border-gray-200 border-solid p-2 rounded-lg"
             >
               <ArrowLeftIcon />
             </Link>
-            <button
-              title="Flip Cards"
-              onClick={flipCardValues}
-              className="ml-auto bg-white border border-gray-200 border-solid p-2 rounded-lg"
-            >
+            <button title="Flip Cards" className="ml-auto bg-white border border-gray-200 border-solid p-2 rounded-lg">
               <SwapVertIcon />
             </button>
             <button

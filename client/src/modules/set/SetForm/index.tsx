@@ -4,9 +4,18 @@ import { useRouter } from 'next/router';
 import Cards from './Cards';
 import General from './General';
 import { SetInterface } from '@src/interfaces';
+import { useSetStore } from '@src/storage/useSetStore';
 
 const SetForm: NextPage<{ data?: SetInterface }> = ({ data: studySet }) => {
   const { query } = useRouter();
+  const { setCurrStudySet } = useSetStore();
+
+  React.useEffect(() => {
+    if (studySet) setCurrStudySet(studySet);
+    return () => {
+      setCurrStudySet({});
+    };
+  }, []);
 
   React.useEffect(() => {
     const nav = document.querySelector('#navigation');
@@ -17,7 +26,7 @@ const SetForm: NextPage<{ data?: SetInterface }> = ({ data: studySet }) => {
     };
   }, [query]);
 
-  return <>{query.tab === 'cards' ? <Cards data={studySet} /> : query.tab === 'folders' ? <></> : <General data={studySet} />}</>;
+  return <React.Fragment>{query.tab === 'cards' ? <Cards /> : query.tab === 'folders' ? <></> : <General />}</React.Fragment>;
 };
 
 export default SetForm;
