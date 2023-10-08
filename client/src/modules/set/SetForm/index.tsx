@@ -27,7 +27,13 @@ const SetForm: NextPage<{ data?: SetInterface }> = ({ data: studySet }) => {
     };
   }, [query]);
 
-  return <React.Fragment>{query.tab === 'cards' ? <Cards /> : query.tab === 'folders' ? <Folders /> : <General />}</React.Fragment>;
+  const tabComponentMapping = {
+    cards: <Cards />,
+    folders: <Folders />,
+    default: <General />,
+  };
+
+  return tabComponentMapping[String(query.tab) as 'cards' | 'folders'] || tabComponentMapping['default'];
 };
 
 export default SetForm;

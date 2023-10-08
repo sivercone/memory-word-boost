@@ -34,9 +34,20 @@ const General: React.FC = () => {
     <div className="max-w-3xl mx-auto flex flex-col gap-4 py-4 px-4">
       <div className="flex items-center gap-2">
         <h1 className="text-2xl font-medium">New Set</h1>
-        <button onClick={handleSubmit(onSubmit)} className="ml-auto bg-white border border-gray-200 border-solid p-2 rounded-lg">
-          Save
-        </button>
+        <div className="ml-auto flex gap-4 items-center">
+          {currStudySet.id ? (
+            <Link
+              href={`/sets/${currStudySet.id}`}
+              legacyBehavior={false}
+              className="ml-auto bg-white border border-gray-200 border-solid p-2 rounded-lg"
+            >
+              Cancel
+            </Link>
+          ) : null}
+          <button onClick={handleSubmit(onSubmit)} className="bg-white border border-gray-200 border-solid p-2 rounded-lg">
+            Save
+          </button>
+        </div>
       </div>
       <form autoComplete="off" className="flex flex-col gap-4">
         <input
