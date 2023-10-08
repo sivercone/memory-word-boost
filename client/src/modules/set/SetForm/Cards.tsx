@@ -30,6 +30,11 @@ const Cards: React.FC = () => {
     };
   }, []);
 
+  const flipCards = () => {
+    const flippedCards = watch('cards').map((card) => ({ ...card, term: card.definition, definition: card.term }));
+    reset({ cards: flippedCards });
+  };
+
   return (
     <>
       <div className={`sticky top-0 ${scrolled ? 'bg-white border-b border-b-gray-200' : ''}`}>
@@ -44,7 +49,11 @@ const Cards: React.FC = () => {
             >
               <ArrowLeftIcon />
             </Link>
-            <button title="Flip Cards" className="ml-auto bg-white border border-gray-200 border-solid p-2 rounded-lg">
+            <button
+              onClick={flipCards}
+              title="Flip Cards"
+              className="ml-auto bg-white border border-gray-200 border-solid p-2 rounded-lg"
+            >
               <SwapVertIcon />
             </button>
             <button
