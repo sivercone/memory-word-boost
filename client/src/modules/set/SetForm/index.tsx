@@ -5,6 +5,7 @@ import Cards from './Cards';
 import General from './General';
 import { SetInterface } from '@src/interfaces';
 import { useSetStore } from '@src/storage/useSetStore';
+import Folders from './Folders';
 
 const SetForm: NextPage<{ data?: SetInterface }> = ({ data: studySet }) => {
   const { query } = useRouter();
@@ -26,7 +27,7 @@ const SetForm: NextPage<{ data?: SetInterface }> = ({ data: studySet }) => {
     };
   }, [query]);
 
-  return <React.Fragment>{query.tab === 'cards' ? <Cards /> : query.tab === 'folders' ? <></> : <General />}</React.Fragment>;
+  return <React.Fragment>{query.tab === 'cards' ? <Cards /> : query.tab === 'folders' ? <Folders /> : <General />}</React.Fragment>;
 };
 
 export default SetForm;
