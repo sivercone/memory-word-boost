@@ -2,33 +2,38 @@ import React from 'react';
 import { NextPage } from 'next';
 import CardView from './CardView';
 import { SetInterface } from '@src/interfaces';
+import { useIsClient } from '@src/lib/hooks';
 
 const Flashcards: NextPage<{ data: SetInterface }> = ({ data }) => {
-  const [currentCardIndex, setCurrentCardIndex] = React.useState(0);
-
+  const isClient = useIsClient();
   const cards = data.cards;
+  const [currentCardIndex, setCurrentCardIndex] = React.useState(0);
+  const [correctAnswers, setCorrectAnswers] = React.useState(0);
+  const scorePercentage = ((correctAnswers / cards.length) * 100).toFixed(0);
 
-  const moveLeft = () => {
-    if (currentCardIndex > 0) {
-      setCurrentCardIndex((prev) => prev - 1);
-    }
+  const onSwipe = (markAsCorrect: boolean) => {
+    setCurrentCardIndex((prev) => {
+      if (prev < cards.length) {
+        if (markAsCorrect) setCorrectAnswers((prev) => prev + 1);
+        return prev + 1;
+      } else return prev;
+    });
   };
 
-  const moveRight = () => {
-    if (currentCardIndex < cards.length - 1) {
-      setCurrentCardIndex((prev) => prev + 1);
-    }
-  };
-
+  if (!isClient) return null;
   return (
-    <>
-      <CardView
-        front={cards[currentCardIndex].term}
-        back={cards[currentCardIndex].definition}
-        onSwipeLeft={moveLeft}
-        onSwipeRight={moveRight}
-      />
-    </>
+    <div className="max-w-3xl mx-auto flex flex-col gap-4 p-4">
+      {currentCardIndex !== cards.length ? (
+        <CardView
+          front={cards[currentCardIndex].term}
+          back={cards[currentCardIndex].definition}
+          onSwipeLeft={() => onSwipe(false)}
+          onSwipeRight={() => onSwipe(true)}
+        />
+      ) : (
+        <p>Score:{scorePercentage}%</p>
+      )}
+    </div>
   );
 };
 

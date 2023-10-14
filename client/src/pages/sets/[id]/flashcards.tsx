@@ -245,6 +245,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   try {
     set = queryId && queryId !== 'new' ? await queryClient.fetchQuery(['set', queryId], () => setApi.getById(queryId)) : null;
+    if (set && set?.cards?.length) set.cards = set.cards.sort(() => Math.random() - 0.5);
     if (!set && queryId !== 'new') return { notFound: true };
   } catch (error) {
     console.error('Error fetching set:', error);

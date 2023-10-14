@@ -25,12 +25,12 @@ const CardView: React.FC<CardViewProps> = ({ front, back, onSwipeLeft, onSwipeRi
   };
 
   return (
-    <div className="max-w-3xl mx-auto flex flex-col gap-4 p-4">
+    <>
       <button
         onClick={handleCardClick}
         style={{
           transition: 'transform 0.5s, opacity 0.5s',
-          opacity: swipeDirection ? 0 : '',
+          opacity: swipeDirection ? 0 : 1,
           transform: swipeDirection === 'left' ? 'translateX(-100%)' : swipeDirection === 'right' ? 'translateX(100%)' : '',
           transformStyle: 'preserve-3d',
           perspective: '20000px',
@@ -59,13 +59,13 @@ const CardView: React.FC<CardViewProps> = ({ front, back, onSwipeLeft, onSwipeRi
 
       <div className="flex gap-4 w-full">
         <button onClick={() => handleSwipe('left')} className="bg-white border border-gray-200 border-solid p-2 rounded-lg w-full">
-          Swipe Left
+          Missed
         </button>
         <button onClick={() => handleSwipe('right')} className="bg-white border border-gray-200 border-solid p-2 rounded-lg w-full">
-          Swipe Right
+          Correct
         </button>
       </div>
-    </div>
+    </>
   );
 };
 
