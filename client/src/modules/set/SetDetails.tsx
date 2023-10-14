@@ -11,10 +11,8 @@ const SetDetails: React.FC<{ queryId: string; data: SetInterface }> = ({ queryId
   const [deletion, setDeletion] = React.useState(false);
 
   const studyMethods = [
-    { title: 'Learn', href: `${queryId}/learn` },
     { title: 'Flashcards', href: `${queryId}/flashcards` },
-    { title: 'Write', href: `${queryId}/write` },
-    { title: 'Exam', href: `${queryId}/exam` },
+    { title: 'Typing', href: `${queryId}/typing` },
   ];
 
   const menuOptions = [
