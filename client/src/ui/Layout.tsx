@@ -34,7 +34,7 @@ const Navigation = () => {
           <Link href="/">
             <a className="font-semibold">PROJECT MWB</a>
           </Link>
-          <div className="ml-auto flex items-center gap-2">
+          <div className="ml-auto flex items-center gap-4">
             <DropdownMenu
               options={creationOptions}
               trigger={
