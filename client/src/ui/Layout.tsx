@@ -32,7 +32,17 @@ const Navigation = () => {
       <nav id="navigation" className="py-[16px] border-b border-b-gray-200 bg-white sticky top-0">
         <div className="flex items-center max-w-3xl mx-auto px-4">
           <Link href="/">
-            <a className="font-semibold">PROJECT MWB</a>
+            <a className="flex gap-1 items-center">
+              <span
+                className="font-semibold bg-gradient-to-br from-gray-300 to-gray-900 box-decoration-slice bg-clip-text text-transparent"
+                style={{ letterSpacing: '-0.9px', lineHeight: '0.8' }}
+              >
+                PROJECT MWB
+              </span>
+              <span className="bg-gray-100 text-xs font-medium rounded-lg px-1 text-gray-500" style={{ letterSpacing: '-0.8px' }}>
+                Prototype
+              </span>
+            </a>
           </Link>
           <div className="ml-auto flex items-center gap-4">
             <DropdownMenu
