@@ -28,6 +28,7 @@ const CardView: React.FC<CardViewProps> = ({ front, back, onSwipeLeft, onSwipeRi
     <>
       <button
         onClick={handleCardClick}
+        className="flex-1"
         style={{
           transition: 'transform 0.5s, opacity 0.5s',
           opacity: swipeDirection ? 0 : 1,
@@ -43,26 +44,26 @@ const CardView: React.FC<CardViewProps> = ({ front, back, onSwipeLeft, onSwipeRi
             transform: isFlipped ? 'rotateY(180deg)' : '',
             transition: !swipeDirection ? 'transform 0.5s' : '',
           }}
-          className="h-[500px] relative bg-white border border-gray-200 border-solid rounded-lg"
+          className="h-full relative bg-white border border-gray-200 border-solid rounded-lg"
         >
           <div style={{ backfaceVisibility: 'hidden' }} className="absolute w-full h-full flex items-center justify-center">
-            {front}
+            <span className="leading-relaxed text-xl">{front}</span>
           </div>
           <div
             style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
             className="absolute w-full h-full flex items-center justify-center"
           >
-            {back}
+            <span className="leading-relaxed text-xl">{back}</span>
           </div>
         </div>
       </button>
 
       <div className="flex gap-4 w-full">
         <button onClick={() => handleSwipe('left')} className="bg-white border border-gray-200 border-solid p-2 rounded-lg w-full">
-          Missed
+          <span className="font-medium">Missed</span>
         </button>
         <button onClick={() => handleSwipe('right')} className="bg-white border border-gray-200 border-solid p-2 rounded-lg w-full">
-          Correct
+          <span className="font-medium">Correct</span>
         </button>
       </div>
     </>

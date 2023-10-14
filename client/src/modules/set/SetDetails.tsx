@@ -33,7 +33,7 @@ const SetDetails: React.FC<{ queryId: string; data: SetInterface }> = ({ queryId
           {studyMethods.map((item) => (
             <Link key={item.title} href={item.href}>
               <a className="border border-gray-200 border-solid w-full p-2 rounded-lg flex items-center justify-center">
-                {item.title}
+                <span className="font-medium">{item.title}</span>
               </a>
             </Link>
           ))}

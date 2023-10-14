@@ -1,10 +1,11 @@
 import React from 'react';
 import { NextPage } from 'next';
-import CardView from './CardView';
 import { SetInterface } from '@src/interfaces';
 import { useIsClient } from '@src/lib/hooks';
+import CardView from './CardView';
+import CompleteView from './CompleteView';
 
-const Flashcards: NextPage<{ data: SetInterface }> = ({ data }) => {
+const Flashcards: NextPage<{ data: SetInterface; queryId: string }> = ({ data, queryId }) => {
   const isClient = useIsClient();
   const cards = data.cards;
   const [currentCardIndex, setCurrentCardIndex] = React.useState(0);
@@ -22,8 +23,8 @@ const Flashcards: NextPage<{ data: SetInterface }> = ({ data }) => {
 
   if (!isClient) return null;
   return (
-    <div className="max-w-3xl mx-auto flex flex-col gap-4 p-4">
-      {currentCardIndex !== cards.length ? (
+    <div className="max-w-3xl mx-auto flex flex-col gap-4 p-4" style={{ height: 'calc(100% - 65px)' }}>
+      {currentCardIndex < cards.length ? (
         <CardView
           front={cards[currentCardIndex].term}
           back={cards[currentCardIndex].definition}
@@ -31,7 +32,7 @@ const Flashcards: NextPage<{ data: SetInterface }> = ({ data }) => {
           onSwipeRight={() => onSwipe(true)}
         />
       ) : (
-        <p>Score:{scorePercentage}%</p>
+        <CompleteView queryId={queryId} scorePercentage={scorePercentage} cardsLength={cards.length} />
       )}
     </div>
   );
