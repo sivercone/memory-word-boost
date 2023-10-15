@@ -7,7 +7,7 @@ type ButtonProps = DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HT
   // loading?: boolean;
 };
 
-const commonStyles = 'transition-colors hover:bg-gray-50';
+const commonStyles = 'transition-colors hover:bg-gray-50 select-none';
 
 export const ButtonSquare = forwardRef<HTMLButtonElement, ButtonProps>(({ children, className, href, ...props }, ref) => {
   const baseClasses = `flex justify-center items-center text-center bg-white border border-gray-200 border-solid p-2 rounded-lg ${commonStyles} ${className}`;
