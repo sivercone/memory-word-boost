@@ -34,8 +34,8 @@ const UserFolders: React.FC<{ userId: string }> = ({ userId }) => {
   if (isLoading) return <Spinner className="mx-auto m-8 h-8" />;
   return (
     <div className="max-w-3xl mx-auto p-4">
-      <h2 className="text-2xl mb-4 font-medium">Folders</h2>
       <ActionList
+        header={{ title: 'Folders' }}
         data={data}
         keyExtractor={(item) => item.id}
         renderItem={(item, index) => (

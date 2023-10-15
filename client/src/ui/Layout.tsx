@@ -56,7 +56,7 @@ const Navigation = () => {
               renderItem={(item) => (
                 <DropdownMenu.Item onClick={() => router.push(item.href)}>
                   {item.icon}
-                  <span>{item.title}</span>
+                  <span className="font-medium">{item.title}</span>
                 </DropdownMenu.Item>
               )}
             />
@@ -70,7 +70,7 @@ const Navigation = () => {
               keyExtractor={(item) => item.id}
               renderItem={(item) => (
                 <DropdownMenu.Item onClick={() => router.push(item.href)}>
-                  <span>{item.title}</span>
+                  <span className="font-medium">{item.title}</span>
                 </DropdownMenu.Item>
               )}
             />

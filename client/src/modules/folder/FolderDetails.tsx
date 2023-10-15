@@ -46,7 +46,7 @@ const FolderDetails: NextPage<{ queryId: string; queryUser: string; data: Folder
                 keyExtractor={(item) => item.title}
                 renderItem={(item) => (
                   <DropdownMenu.Item onClick={item.action}>
-                    <span>{item.title}</span>
+                    <span className="font-medium">{item.title}</span>
                   </DropdownMenu.Item>
                 )}
               />
@@ -58,8 +58,8 @@ const FolderDetails: NextPage<{ queryId: string; queryUser: string; data: Folder
       ) : null}
 
       <div className="p-4 max-w-3xl mx-auto">
-        <h2 className="text-xl mb-4 font-medium">Sets</h2>
         <ActionList
+          header={{ title: 'Sets' }}
           placeholder={'Nothing yet'}
           data={folder?.sets || userSets.data || []}
           keyExtractor={(item) => item.id}

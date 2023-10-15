@@ -41,11 +41,11 @@ const General: React.FC = () => {
               legacyBehavior={false}
               className="ml-auto bg-white border border-gray-200 border-solid p-2 rounded-lg"
             >
-              Cancel
+              <span className="font-medium">Cancel</span>
             </Link>
           ) : null}
           <button onClick={handleSubmit(onSubmit)} className="bg-white border border-gray-200 border-solid p-2 rounded-lg">
-            Save
+            <span className="font-medium">Save</span>
           </button>
         </div>
       </div>

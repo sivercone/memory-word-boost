@@ -6,17 +6,10 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { useSetStore } from '@src/storage/useSetStore';
+import { useScroll } from '@src/lib/hooks';
 
 const Cards: React.FC = () => {
-  const [scrolled, setScrolled] = React.useState(false);
-  React.useEffect(() => {
-    const handleScroll = () => (window.scrollY > 0 ? setScrolled(true) : setScrolled(false));
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
+  const { scrolled } = useScroll();
   const router = useRouter();
   const { setCurrStudySet, currStudySet } = useSetStore();
   const { register, control, reset, watch } = useForm<Pick<SetInterface, 'cards'>>();

@@ -11,8 +11,6 @@ interface ActionListProps<T> {
 }
 
 export function ActionList<T>({ data, renderItem, keyExtractor, header, footer, placeholder }: ActionListProps<T>) {
-  if (!data.length) return <p className="text-gray-600">{placeholder}</p>;
-
   return (
     <div className="space-y-2">
       {header ? (
@@ -21,18 +19,24 @@ export function ActionList<T>({ data, renderItem, keyExtractor, header, footer, 
           {header.action}
         </div>
       ) : null}
-      <div className={`rounded-lg bg-white border border-gray-200 overflow-hidden`}>
-        {data.map((item, index) => (
-          <div key={keyExtractor(item, index)} className="bg-transparent">
-            {renderItem(item, index)}
+      {data.length ? (
+        <>
+          <div className={`rounded-lg bg-white border border-gray-200 overflow-hidden`}>
+            {data.map((item, index) => (
+              <div key={keyExtractor(item, index)} className="bg-transparent">
+                {renderItem(item, index)}
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      {footer ? (
-        <div className="px-2">
-          <span className="text-xs">{footer}</span>
-        </div>
-      ) : null}
+          {footer ? (
+            <div className="px-2">
+              <span className="text-xs">{footer}</span>
+            </div>
+          ) : null}
+        </>
+      ) : (
+        <p className="text-gray-600">{placeholder}</p>
+      )}
     </div>
   );
 }
@@ -80,8 +84,8 @@ const HeaderButton: React.FC<any> = ({ children, ...otherProps }) => (
   </button>
 );
 
-const HeaderTitle: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  return <p className="font-medium text-sm text-gray-600">{children}</p>;
+const HeaderTitle: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className }) => {
+  return <h2 className={`text-xl font-medium text-gray-600 ${className}`}>{children}</h2>;
 };
 
 ActionList.Button = ActionButton;

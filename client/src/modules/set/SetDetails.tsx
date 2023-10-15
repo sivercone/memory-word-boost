@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { SetInterface } from '@src/interfaces';
-import { DropdownMenu } from '@src/ui';
+import { ActionList, DropdownMenu } from '@src/ui';
 import { MoreIcon } from '@src/ui/Icons';
 import { SetDelete } from '@src/modules/set/SetDelete';
 
@@ -10,11 +10,7 @@ const SetDetails: React.FC<{ queryId: string; data: SetInterface }> = ({ queryId
   const router = useRouter();
   const [deletion, setDeletion] = React.useState(false);
 
-  const studyMethods = [
-    { title: 'Flashcards', href: `${queryId}/flashcards` },
-    { title: 'Typing', href: `${queryId}/typing` },
-  ];
-
+  const studyMethods = [{ title: 'Flashcards', href: `${queryId}/flashcards` }];
   const menuOptions = [
     { title: 'Author', action: () => router.push(`/user/${set.user.id}`) },
     { title: 'Edit', action: () => router.push(`${queryId}/edit`) },
@@ -47,7 +43,7 @@ const SetDetails: React.FC<{ queryId: string; data: SetInterface }> = ({ queryId
             keyExtractor={(item) => item.title}
             renderItem={(item) => (
               <DropdownMenu.Item onClick={item.action}>
-                <span>{item.title}</span>
+                <span className="font-medium">{item.title}</span>
               </DropdownMenu.Item>
             )}
           />
@@ -55,7 +51,7 @@ const SetDetails: React.FC<{ queryId: string; data: SetInterface }> = ({ queryId
       </div>
 
       <div className="max-w-3xl mx-auto p-4">
-        <h2 className="text-xl mb-4 font-medium">Overview</h2>
+        <ActionList.HeaderTitle className="mb-4">Overview</ActionList.HeaderTitle>
         <ul className="flex flex-col gap-2">
           {set.cards.map((content, i) => (
             <li key={i} className="flex border-b border-b-gray-200 p-2">

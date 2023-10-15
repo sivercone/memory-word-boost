@@ -34,7 +34,7 @@ const DialogButton: React.FC<DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonEl
 }) => {
   return (
     <button className="border border-gray-200 border-solid p-2 rounded-lg" {...props}>
-      {children}
+      <span className="font-medium">{children}</span>
     </button>
   );
 };
