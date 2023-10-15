@@ -31,8 +31,12 @@ const Flashcards: NextPage<{ data: SetInterface; queryId: string }> = ({ data, q
           onSwipeLeft={() => onSwipe(false)}
           onSwipeRight={() => onSwipe(true)}
         />
-      ) : (
+      ) : cards.length ? (
         <CompleteView queryId={queryId} scorePercentage={scorePercentage} cardsLength={cards.length} />
+      ) : (
+        <div className="flex-1 flex items-center justify-center">
+          <p className="text-gray-600">There are no cards..</p>
+        </div>
       )}
     </div>
   );
