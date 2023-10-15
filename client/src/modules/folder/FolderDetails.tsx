@@ -34,7 +34,10 @@ const FolderDetails: NextPage<{ queryId: string; queryUser: string; data: Folder
         <>
           <div className="bg-white py-8 border-b border-b-gray-200">
             <div className="max-w-3xl mx-auto flex flex-col gap-4 px-4">
-              <h1 className="text-2xl font-medium">{folder.name}</h1>
+              <div>
+                <h1 className="text-2xl font-medium">{folder.name}</h1>
+                {folder.description ? <p className="leading-relaxed text-gray-600">{folder.description}</p> : null}
+              </div>
               <DropdownMenu
                 options={menuOptions}
                 trigger={
