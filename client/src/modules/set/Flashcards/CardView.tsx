@@ -21,17 +21,30 @@ const CardView: React.FC<CardViewProps> = ({ front, back, onSwipeLeft, onSwipeRi
     setTimeout(() => {
       direction === 'left' ? onSwipeLeft() : onSwipeRight();
       setIsFlipped(false); // Set card to its initial state (not flipped)
-    }, 500); // matches the transition duration
-    setTimeout(() => setSwipeDirection(null), 600); // keeps smooth animation
+    }, 350); // matches the transition duration
+    setTimeout(() => setSwipeDirection(null), 450); // keeps smooth animation
   };
+
+  React.useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (['a', 'A', 'ArrowLeft'].includes(event.key)) handleSwipe('left');
+      if (['d', 'D', 'ArrowRight'].includes(event.key)) handleSwipe('right');
+      if (['w', 'W', ' ', 'ArrowUp'].includes(event.key)) handleCardClick();
+    };
+    document.addEventListener('keyup', handleKeyPress);
+    return () => {
+      document.removeEventListener('keyup', handleKeyPress);
+    };
+  }, []);
 
   return (
     <>
       <button
         onClick={handleCardClick}
-        className="flex-1"
+        onKeyUp={(event) => event.key === ' ' && handleCardClick()}
+        className="flex-1 rounded-lg focus-visible:shadow-none group"
         style={{
-          transition: 'transform 0.5s, opacity 0.5s',
+          transition: 'transform 0.35s, opacity 0.35s',
           opacity: swipeDirection ? 0 : 1,
           transform: swipeDirection === 'left' ? 'translateX(-100%)' : swipeDirection === 'right' ? 'translateX(100%)' : '',
           transformStyle: 'preserve-3d',
@@ -43,9 +56,11 @@ const CardView: React.FC<CardViewProps> = ({ front, back, onSwipeLeft, onSwipeRi
             transformStyle: 'preserve-3d',
             perspective: '20000px',
             transform: isFlipped ? 'rotateY(180deg)' : '',
-            transition: !swipeDirection ? 'transform 0.5s' : '',
+            transition: !swipeDirection ? 'transform 0.35s' : 'border-color 0.1s',
           }}
-          className="h-full relative bg-white border border-gray-200 border-solid rounded-lg"
+          className={`${
+            swipeDirection === 'left' ? 'border-rose-500' : swipeDirection === 'right' ? 'border-violet-500' : 'border-gray-200'
+          } bg-white h-full relative border border-solid rounded-lg group-focus-visible:shadow-[0_0_0_2px] group-focus-visible:shadow-violet-400`}
         >
           <div style={{ backfaceVisibility: 'hidden' }} className="absolute w-full h-full flex items-center justify-center">
             <span className="leading-relaxed text-xl">{front}</span>
