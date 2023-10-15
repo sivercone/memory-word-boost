@@ -22,7 +22,7 @@ const CardView: React.FC<CardViewProps> = ({ front, back, onSwipeLeft, onSwipeRi
       direction === 'left' ? onSwipeLeft() : onSwipeRight();
       setIsFlipped(false); // Set card to its initial state (not flipped)
     }, 350); // matches the transition duration
-    setTimeout(() => setSwipeDirection(null), 450); // keeps smooth animation
+    setTimeout(() => setSwipeDirection(null), 360); // keeps smooth animation
   };
 
   React.useEffect(() => {
