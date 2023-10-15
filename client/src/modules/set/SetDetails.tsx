@@ -52,14 +52,18 @@ const SetDetails: React.FC<{ queryId: string; data: SetInterface }> = ({ queryId
 
       <div className="max-w-3xl mx-auto p-4">
         <ActionList.HeaderTitle className="mb-4">Overview</ActionList.HeaderTitle>
-        <ul className="flex flex-col gap-2">
-          {set.cards.map((content, i) => (
-            <li key={i} className="flex border-b border-b-gray-200 p-2">
-              <p className="basis-full">{content.term}</p>
-              <p className="basis-full">{content.definition}</p>
-            </li>
-          ))}
-        </ul>
+        {set.cards.length ? (
+          <ul className="flex flex-col gap-2">
+            {set.cards.map((content, i) => (
+              <li key={i} className="flex border-b border-b-gray-200 p-2">
+                <p className="basis-full">{content.term}</p>
+                <p className="basis-full">{content.definition}</p>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-gray-600">Nothing yet</p>
+        )}
       </div>
 
       <SetDelete data={set} open={deletion} setOpen={setDeletion} />

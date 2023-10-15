@@ -10,7 +10,7 @@ interface ActionListProps<T> {
   placeholder?: React.ReactNode;
 }
 
-export function ActionList<T>({ data, renderItem, keyExtractor, header, footer, placeholder }: ActionListProps<T>) {
+function ActionList<T>({ data, renderItem, keyExtractor, header, footer, placeholder }: ActionListProps<T>) {
   return (
     <div className="space-y-2">
       {header ? (
@@ -93,3 +93,5 @@ ActionList.Link = ActionLink;
 ActionList.HeaderLink = HeaderLink;
 ActionList.HeaderButton = HeaderButton;
 ActionList.HeaderTitle = HeaderTitle;
+
+export default ActionList;

@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import { useQuery } from 'react-query';
 import { useUserStore } from '@src/storage/useUserStore';
-import { ActionList } from '@src/ui/ActionList';
+import { ActionList } from '@src/ui';
 import { authApi, folderApi } from '@src/apis';
 
 const Dashboard: NextPage = () => {

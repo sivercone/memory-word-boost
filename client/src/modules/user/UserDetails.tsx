@@ -3,10 +3,9 @@ import { NextPage } from 'next';
 import { useQuery } from 'react-query';
 import { folderApi } from '@src/apis';
 import { formatDate } from '@src/lib/utils';
-import { ActionList } from '@src/ui/ActionList';
+import { ActionList, Spinner } from '@src/ui';
 import ProfileForm from '@src/modules/user/ProfileForm';
 import { UserInterface } from '@src/interfaces';
-import { Spinner } from '@src/ui/Spinner';
 
 const UserProfile: React.FC<{ user: UserInterface; onEdit: () => void }> = ({ user, onEdit }) => (
   <div className="bg-white py-8 border-b border-b-gray-200">
