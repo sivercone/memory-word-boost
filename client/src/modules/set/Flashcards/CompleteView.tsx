@@ -1,5 +1,5 @@
-import Link from 'next/link';
 import React from 'react';
+import { ButtonSquare } from '@src/ui';
 
 const CompleteView: React.FC<{ queryId: string; cardsLength: number; scorePercentage: string }> = ({
   queryId,
@@ -26,13 +26,9 @@ const CompleteView: React.FC<{ queryId: string; cardsLength: number; scorePercen
         </svg>
         <p className="text-3xl font-semibold text-white">{`Score: ${scorePercentage}%`}</p>
       </div>
-      <Link
-        href={`/sets/${queryId}`}
-        legacyBehavior={false}
-        className="text-center bg-white border border-gray-200 border-solid p-2 rounded-lg w-full"
-      >
+      <ButtonSquare href={`/sets/${queryId}`} className="w-full">
         <span className="font-medium">Continue</span>
-      </Link>
+      </ButtonSquare>
     </div>
   );
 };

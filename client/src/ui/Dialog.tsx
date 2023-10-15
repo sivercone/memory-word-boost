@@ -1,5 +1,6 @@
-import * as DialogRX from '@radix-ui/react-dialog';
 import { DetailedHTMLProps, ButtonHTMLAttributes } from 'react';
+import * as DialogRX from '@radix-ui/react-dialog';
+import { ButtonSquare } from './Buttons';
 
 interface DialogProps {
   defaultOpen?: boolean;
@@ -33,9 +34,9 @@ const DialogButton: React.FC<DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonEl
   ...props
 }) => {
   return (
-    <button className="border border-gray-200 border-solid p-2 rounded-lg" {...props}>
+    <ButtonSquare {...props}>
       <span className="font-medium">{children}</span>
-    </button>
+    </ButtonSquare>
   );
 };
 const DialogTitle: React.FC<{ children: React.ReactNode }> = ({ children }) => {

@@ -1,4 +1,5 @@
 import React from 'react';
+import { ButtonSquare } from '@src/ui';
 
 type CardViewProps = {
   front: string;
@@ -59,12 +60,12 @@ const CardView: React.FC<CardViewProps> = ({ front, back, onSwipeLeft, onSwipeRi
       </button>
 
       <div className="flex gap-4 w-full">
-        <button onClick={() => handleSwipe('left')} className="bg-white border border-gray-200 border-solid p-2 rounded-lg w-full">
+        <ButtonSquare onClick={() => handleSwipe('left')} className="w-full">
           <span className="font-medium">Missed</span>
-        </button>
-        <button onClick={() => handleSwipe('right')} className="bg-white border border-gray-200 border-solid p-2 rounded-lg w-full">
+        </ButtonSquare>
+        <ButtonSquare onClick={() => handleSwipe('right')} className="w-full">
           <span className="font-medium">Correct</span>
-        </button>
+        </ButtonSquare>
       </div>
     </>
   );

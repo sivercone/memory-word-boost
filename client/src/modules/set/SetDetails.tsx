@@ -1,8 +1,7 @@
 import React from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { SetInterface } from '@src/interfaces';
-import { ActionList, DropdownMenu } from '@src/ui';
+import { ActionList, ButtonSquare, DropdownMenu } from '@src/ui';
 import { MoreIcon } from '@src/ui/Icons';
 import { SetDelete } from '@src/modules/set/SetDelete';
 
@@ -27,18 +26,16 @@ const SetDetails: React.FC<{ queryId: string; data: SetInterface }> = ({ queryId
             {set.description ? <p className="leading-relaxed text-gray-600">{set.description}</p> : null}
           </div>
           {studyMethods.map((item) => (
-            <Link key={item.title} href={item.href}>
-              <a className="border border-gray-200 border-solid w-full p-2 rounded-lg flex items-center justify-center">
-                <span className="font-medium">{item.title}</span>
-              </a>
-            </Link>
+            <ButtonSquare key={item.title} href={item.href}>
+              <span className="font-medium">{item.title}</span>
+            </ButtonSquare>
           ))}
           <DropdownMenu
             options={menuOptions}
             trigger={
-              <button className="border border-gray-200 border-solid w-full p-2 rounded-lg flex items-center justify-center">
+              <ButtonSquare>
                 <MoreIcon />
-              </button>
+              </ButtonSquare>
             }
             keyExtractor={(item) => item.title}
             renderItem={(item) => (

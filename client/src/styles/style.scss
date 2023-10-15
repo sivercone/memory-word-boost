@@ -7,3 +7,10 @@
 body {
   @apply antialiased;
 }
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  @apply shadow-[0_0_0_2px] shadow-blue-500 outline-none;
+}

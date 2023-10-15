@@ -3,7 +3,7 @@ import { NextPage } from 'next';
 import { useQuery } from 'react-query';
 import { folderApi } from '@src/apis';
 import { formatDate } from '@src/lib/utils';
-import { ActionList, Spinner } from '@src/ui';
+import { ActionList, ButtonSquare, Spinner } from '@src/ui';
 import ProfileForm from '@src/modules/user/ProfileForm';
 import { UserInterface } from '@src/interfaces';
 
@@ -20,9 +20,7 @@ const UserProfile: React.FC<{ user: UserInterface; onEdit: () => void }> = ({ us
           {user.bio ? <p className="leading-relaxed text-gray-600">{user.bio}</p> : null}
         </div>
       </div>
-      <button onClick={onEdit} className="border border-gray-200 border-solid w-full p-2 rounded-lg flex items-center justify-center">
-        Edit
-      </button>
+      <ButtonSquare onClick={onEdit}>Edit</ButtonSquare>
     </div>
   </div>
 );

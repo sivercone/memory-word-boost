@@ -1,10 +1,9 @@
 import React from 'react';
-import Link from 'next/link';
+import { useQuery } from 'react-query';
 import { useRouter } from 'next/router';
 import { ArrowLeftIcon } from '@src/ui/Icons';
 import { useSetStore } from '@src/storage/useSetStore';
-import { ActionList } from '@src/ui';
-import { useQuery } from 'react-query';
+import { ActionList, ButtonSquare } from '@src/ui';
 import { authApi, folderApi } from '@src/apis';
 import { useUserStore } from '@src/storage/useUserStore';
 
@@ -26,14 +25,9 @@ const Folders: React.FC = () => {
       <div className="flex items-center gap-2">
         <h1 className="text-2xl font-medium">Folders</h1>
         <div className="ml-auto flex items-center gap-4">
-          <Link
-            href={{ pathname: router.pathname, query: currStudySet?.id && { id: router.query.id } }}
-            legacyBehavior={false}
-            title="Back"
-            className="bg-white border border-gray-200 border-solid p-2 rounded-lg"
-          >
+          <ButtonSquare href={{ pathname: router.pathname, query: currStudySet?.id && { id: router.query.id } }} title="Back">
             <ArrowLeftIcon />
-          </Link>
+          </ButtonSquare>
         </div>
       </div>
 

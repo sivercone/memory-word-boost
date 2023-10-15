@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FolderIcon, MenuIcon, PlusIcon, SetIcon } from '@src/ui/Icons';
-import DropdownMenu from './DropdownMenu';
+import { DropdownMenu, ButtonCircle } from '@src/ui';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
@@ -48,9 +48,9 @@ const Navigation = () => {
             <DropdownMenu
               options={creationOptions}
               trigger={
-                <button className="w-[32px] h-[32px] rounded-full border border-gray-200 py-2 border-solid items-center justify-center flex">
+                <ButtonCircle>
                   <PlusIcon />
-                </button>
+                </ButtonCircle>
               }
               keyExtractor={(item) => item.id}
               renderItem={(item) => (
@@ -63,9 +63,9 @@ const Navigation = () => {
             <DropdownMenu
               options={menuOptions}
               trigger={
-                <button className="w-[32px] h-[32px] rounded-full border border-gray-200 py-2 border-solid items-center justify-center flex">
+                <ButtonCircle>
                   <MenuIcon />
-                </button>
+                </ButtonCircle>
               }
               keyExtractor={(item) => item.id}
               renderItem={(item) => (

@@ -8,6 +8,7 @@ import { ChevronRightIcon } from '@src/ui/Icons';
 import { useUserStore } from '@src/storage/useUserStore';
 import { SetInterface } from '@src/interfaces';
 import { useSetStore } from '@src/storage/useSetStore';
+import { ButtonSquare } from '@src/ui';
 
 const General: React.FC = () => {
   const router = useRouter();
@@ -36,17 +37,13 @@ const General: React.FC = () => {
         <h1 className="text-2xl font-medium">New Set</h1>
         <div className="ml-auto flex gap-4 items-center">
           {currStudySet.id ? (
-            <Link
-              href={`/sets/${currStudySet.id}`}
-              legacyBehavior={false}
-              className="ml-auto bg-white border border-gray-200 border-solid p-2 rounded-lg"
-            >
+            <ButtonSquare href={`/sets/${currStudySet.id}`}>
               <span className="font-medium">Cancel</span>
-            </Link>
+            </ButtonSquare>
           ) : null}
-          <button onClick={handleSubmit(onSubmit)} className="bg-white border border-gray-200 border-solid p-2 rounded-lg">
+          <ButtonSquare onClick={handleSubmit(onSubmit)}>
             <span className="font-medium">Save</span>
-          </button>
+          </ButtonSquare>
         </div>
       </div>
       <form autoComplete="off" className="flex flex-col gap-4">

@@ -1,9 +1,8 @@
 import React from 'react';
-import { SetInterface } from '@src/interfaces';
-import { Textarea } from '@src/ui';
-import { ArrowLeftIcon, MinusIcon, PlusIcon, SwapVertIcon } from '@src/ui/Icons';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { SetInterface } from '@src/interfaces';
+import { ButtonSquare, Textarea } from '@src/ui';
+import { ArrowLeftIcon, MinusIcon, PlusIcon, SwapVertIcon } from '@src/ui/Icons';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { useSetStore } from '@src/storage/useSetStore';
 import { useScroll } from '@src/lib/hooks';
@@ -34,28 +33,15 @@ const Cards: React.FC = () => {
         <div className="p-4 flex items-center gap-2 max-w-3xl mx-auto">
           <h1 className="text-2xl font-medium">Cards</h1>
           <div className="ml-auto flex items-center gap-4">
-            <Link
-              href={{ pathname: router.pathname, query: currStudySet?.id && { id: router.query.id } }}
-              legacyBehavior={false}
-              title="Back"
-              className="bg-white border border-gray-200 border-solid p-2 rounded-lg"
-            >
+            <ButtonSquare href={{ pathname: router.pathname, query: currStudySet?.id && { id: router.query.id } }} title="Back">
               <ArrowLeftIcon />
-            </Link>
-            <button
-              onClick={flipCards}
-              title="Flip Cards"
-              className="ml-auto bg-white border border-gray-200 border-solid p-2 rounded-lg"
-            >
+            </ButtonSquare>
+            <ButtonSquare onClick={flipCards} title="Flip Cards">
               <SwapVertIcon />
-            </button>
-            <button
-              title="Add Card"
-              onClick={() => append({ order: fields.length, term: '', definition: '' })}
-              className="ml-auto bg-white border border-gray-200 border-solid p-2 rounded-lg"
-            >
+            </ButtonSquare>
+            <ButtonSquare onClick={() => append({ order: fields.length, term: '', definition: '' })} title="Add Card">
               <PlusIcon />
-            </button>
+            </ButtonSquare>
           </div>
         </div>
       </div>
@@ -65,9 +51,9 @@ const Cards: React.FC = () => {
           <li key={content.id} className="flex gap-4 items-end">
             <div className="flex flex-col justify-center items-center gap-4">
               <p className="text-gray-600 text-sm">{i + 1}</p>
-              <button title="Remove" onClick={() => remove(i)} className="bg-white border border-gray-200 border-solid p-2 rounded-lg">
+              <ButtonSquare onClick={() => remove(i)} title="Remove">
                 <MinusIcon />
-              </button>
+              </ButtonSquare>
             </div>
             <div className="flex flex-col border border-gray-200 border-solid overflow-hidden rounded-lg bg-white w-full">
               <Textarea
