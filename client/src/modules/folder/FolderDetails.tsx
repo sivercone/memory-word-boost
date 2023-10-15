@@ -3,7 +3,7 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { FolderForm } from '@src/modules/folder/FolderForm';
 import { FolderDelete } from '@src/modules/folder/FolderDelete';
-import { ActionList, DropdownMenu } from '@src/ui';
+import { ActionList, ButtonSquare, DropdownMenu } from '@src/ui';
 import { MoreIcon } from '@src/ui/Icons';
 import { FolderInterface } from '@src/interfaces';
 import { setApi } from '@src/apis';
@@ -41,9 +41,9 @@ const FolderDetails: NextPage<{ queryId: string; queryUser: string; data: Folder
               <DropdownMenu
                 options={menuOptions}
                 trigger={
-                  <button className="border border-gray-200 border-solid w-full p-2 rounded-lg flex items-center justify-center">
+                  <ButtonSquare>
                     <MoreIcon />
-                  </button>
+                  </ButtonSquare>
                 }
                 keyExtractor={(item) => item.title}
                 renderItem={(item) => (

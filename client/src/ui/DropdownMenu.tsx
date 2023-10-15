@@ -17,7 +17,7 @@ function DropdownMenu<T>({ trigger, options, renderItem, keyExtractor }: Dropdow
 
       <Dropdown.Portal>
         <Dropdown.Content
-          className="min-w-[220px] bg-white rounded-md p-2 shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] will-change-[opacity,transform] data-[side=top]:animate-slideDownAndFade data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade"
+          className={`data-[side=bottom]:animate-slideUpAndFade min-w-[220px] bg-white rounded-md p-2 shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] will-change-[opacity,transform]`}
           sideOffset={5}
         >
           {options.map((item, index) => (
@@ -36,7 +36,7 @@ const DropdownItem: React.FC<{ children: React.ReactNode; onClick?: React.MouseE
   return (
     <Dropdown.Item
       onClick={onClick}
-      className="flex gap-2 items-center p-3 cursor-pointer select-none outline-none data-[highlighted]:bg-gray-100 rounded-md data-[disabled]:pointer-events-none"
+      className="flex gap-2 items-center p-3 cursor-pointer select-none outline-none data-[highlighted]:bg-gray-50 rounded-md data-[disabled]:pointer-events-none"
     >
       {children}
     </Dropdown.Item>

@@ -34,7 +34,7 @@ const Navigation = () => {
           <Link href="/">
             <a className="flex gap-1 items-center select-none">
               <span
-                className="font-semibold bg-gradient-to-br from-gray-300 to-gray-900 box-decoration-slice bg-clip-text text-transparent"
+                className="font-semibold bg-gradient-to-br from-violet-500 to-gray-900 box-decoration-slice bg-clip-text text-transparent"
                 style={{ letterSpacing: '-0.9px', lineHeight: '0.8' }}
               >
                 PROJECT MWB
