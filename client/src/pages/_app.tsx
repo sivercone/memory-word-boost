@@ -5,8 +5,8 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import { queryClient } from 'lib/queryClient';
 import { AuthCheck } from 'modules/AuthCheck';
 import { NextHead } from 'modules/NextHead';
-import 'styles/style.scss';
 import { Layout } from '@src/ui';
+import '../style.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
