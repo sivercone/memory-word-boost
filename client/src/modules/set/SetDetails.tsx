@@ -14,7 +14,7 @@ const SetDetails: React.FC<{ queryId: string; data: SetInterface }> = ({ queryId
   const menuOptions = [
     { title: 'Author', action: () => router.push(`/user/${set.user.id}`) },
     { title: 'Edit', action: () => router.push(`${queryId}/edit`) },
-    { title: 'Add to Folder', action: () => router.push(`${queryId}/edit/folders`) },
+    { title: 'Add to Folder', action: () => router.push(`${queryId}/edit?tab=folders`) },
     { title: 'Delete', action: () => setDeletion(true) },
   ];
 
