@@ -55,18 +55,18 @@ const Cards: React.FC = () => {
                 <MinusIcon />
               </ButtonSquare>
             </div>
-            <div className="flex flex-col border border-gray-200 border-solid overflow-hidden rounded-lg bg-white w-full">
+            <div className="flex flex-col border border-gray-200 border-solid rounded-lg bg-white w-full">
               <Textarea
                 placeholder="Front"
                 {...register(`cards.${i}.term`, { required: true })}
-                className="p-2 outline-none"
+                className="p-2 rounded-t-lg"
                 rows={1}
               />
               <hr className="border-gray-200" />
               <Textarea
                 placeholder="Back"
                 {...register(`cards.${i}.definition`, { required: true })}
-                className="p-2 outline-none"
+                className="p-2 rounded-b-lg"
                 rows={1}
               />
             </div>
