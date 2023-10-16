@@ -7,16 +7,17 @@ import { SetInterface } from '@src/interfaces';
 import { useSetStore } from '@src/storage/useSetStore';
 import Folders from './Folders';
 
-const SetForm: NextPage<{ data?: SetInterface }> = ({ data: studySet }) => {
+const SetForm: NextPage<{ data?: SetInterface; queryId: string }> = ({ data: studySet, queryId }) => {
   const { query } = useRouter();
-  const { setCurrStudySet } = useSetStore();
+  const { setCurrStudySet, resetCurrStudySet } = useSetStore();
 
   React.useEffect(() => {
-    if (studySet) setCurrStudySet(studySet);
+    if (queryId === 'new') resetCurrStudySet();
+    else if (studySet) setCurrStudySet(studySet);
     return () => {
-      setCurrStudySet({});
+      resetCurrStudySet();
     };
-  }, []);
+  }, [queryId]);
 
   React.useEffect(() => {
     const nav = document.querySelector('#navigation');
