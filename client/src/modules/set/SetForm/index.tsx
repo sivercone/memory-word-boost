@@ -1,10 +1,10 @@
 import React from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import Cards from './Cards';
-import General from './General';
 import { SetInterface } from '@src/interfaces';
-import { useSetStore } from '@src/storage/useSetStore';
+import { useSetStore } from '@src/stores';
+import General from './General';
+import Cards from './Cards';
 import Folders from './Folders';
 
 const SetForm: NextPage<{ data?: SetInterface; queryId: string }> = ({ data: studySet, queryId }) => {

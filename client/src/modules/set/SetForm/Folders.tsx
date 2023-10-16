@@ -2,10 +2,9 @@ import React from 'react';
 import { useQuery } from 'react-query';
 import { useRouter } from 'next/router';
 import { ArrowLeftIcon } from '@src/ui/Icons';
-import { useSetStore } from '@src/storage/useSetStore';
+import { useSetStore, useUserStore } from '@src/stores';
 import { ActionList, ButtonSquare } from '@src/ui';
 import { authApi, folderApi } from '@src/apis';
-import { useUserStore } from '@src/storage/useUserStore';
 
 const Folders: React.FC = () => {
   const router = useRouter();

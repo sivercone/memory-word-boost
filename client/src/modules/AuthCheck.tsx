@@ -1,7 +1,7 @@
 import React from 'react';
 import { useQuery } from 'react-query';
 import { authApi } from 'apis/authApi';
-import { useUserStore } from 'storage/useUserStore';
+import { useUserStore } from '@src/stores';
 
 export const AuthCheck: React.FC = () => {
   const { setUser, setSignAccess, signAccess } = useUserStore();

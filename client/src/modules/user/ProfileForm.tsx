@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { authApi } from '@src/apis/authApi';
 import { notify } from '@src/lib/notify';
-import { useUserStore } from '@src/storage/useUserStore';
+import { useUserStore } from '@src/stores/useUserStore';
 import { UserInterface } from '@src/interfaces';
 import { Dialog } from '@src/ui';
 

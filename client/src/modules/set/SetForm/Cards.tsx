@@ -4,7 +4,7 @@ import { SetInterface } from '@src/interfaces';
 import { ButtonSquare, Textarea } from '@src/ui';
 import { ArrowLeftIcon, MinusIcon, PlusIcon, SwapVertIcon } from '@src/ui/Icons';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { useSetStore } from '@src/storage/useSetStore';
+import { useSetStore } from '@src/stores';
 import { useScroll } from '@src/lib/hooks';
 
 const Cards: React.FC = () => {

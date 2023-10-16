@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from 'react-query';
 import { folderApi } from '@src/apis';
 import { FolderInterfaceDraft } from '@src/interfaces';
-import { useUserStore } from '@src/storage/useUserStore';
+import { useUserStore } from '@src/stores';
 import { notify } from '@src/lib/notify';
 import { Dialog } from '@src/ui';
 

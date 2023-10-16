@@ -1,13 +1,11 @@
 import React from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useMutation, useQueryClient } from 'react-query';
 import { useForm } from 'react-hook-form';
 import { setApi } from '@src/apis';
 import { ChevronRightIcon } from '@src/ui/Icons';
-import { useUserStore } from '@src/storage/useUserStore';
+import { useUserStore, useSetStore } from '@src/stores';
 import { SetInterface } from '@src/interfaces';
-import { useSetStore } from '@src/storage/useSetStore';
 import { ButtonSquare } from '@src/ui';
 
 const General: React.FC = () => {

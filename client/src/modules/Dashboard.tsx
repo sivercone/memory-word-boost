@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import { useQuery } from 'react-query';
-import { useUserStore } from '@src/storage/useUserStore';
+import { useUserStore } from '@src/stores';
 import { ActionList } from '@src/ui';
 import { authApi, folderApi } from '@src/apis';
 

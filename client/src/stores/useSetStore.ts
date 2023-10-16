@@ -11,7 +11,6 @@ const initialState = {
     folders: [],
   } as Partial<SetInterface>,
 };
-
 export const useSetStore = create(
   combine(initialState, (set) => ({
     setCurrStudySet: (payload: Partial<SetInterface>) =>
@@ -19,3 +18,5 @@ export const useSetStore = create(
     resetCurrStudySet: () => set((state) => ({ ...state, currStudySet: initialState.currStudySet })),
   })),
 );
+
+export default useSetStore;
