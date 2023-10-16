@@ -73,18 +73,13 @@ const General: React.FC = () => {
           href: `${router.asPath}?tab=folders`,
         },
       ].map((item) => (
-        <Link
-          key={item.id}
-          href={item.href}
-          className="p-4 flex flex-col gap-1 border border-gray-200 border-solid overflow-hidden rounded-lg bg-white w-full"
-          legacyBehavior={false}
-        >
+        <ButtonSquare key={item.id} href={item.href} className="p-4 flex-col gap-1 overflow-hidden w-full items-stretch text-left">
           <div className="flex items-center">
             <span className="font-medium">{item.name}</span>
             <ChevronRightIcon className="ml-auto fill-gray-600" />
           </div>
           <span className="block text-sm max-w-[89%] text-gray-600">{item.lore}</span>
-        </Link>
+        </ButtonSquare>
       ))}
     </div>
   );

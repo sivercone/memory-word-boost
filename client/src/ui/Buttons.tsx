@@ -1,6 +1,7 @@
+import { forwardRef, ButtonHTMLAttributes, DetailedHTMLProps } from 'react';
 import Link from 'next/link';
 import { UrlObject } from 'url';
-import { forwardRef, ButtonHTMLAttributes, DetailedHTMLProps } from 'react';
+import { twMerge } from 'tailwind-merge';
 
 type ButtonProps = DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> & {
   href?: UrlObject | string;
@@ -10,7 +11,9 @@ type ButtonProps = DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HT
 const commonStyles = 'transition-colors hover:bg-gray-50 select-none';
 
 export const ButtonSquare = forwardRef<HTMLButtonElement, ButtonProps>(({ children, className, href, ...props }, ref) => {
-  const baseClasses = `flex justify-center items-center text-center bg-white border border-gray-200 border-solid p-2 rounded-lg ${commonStyles} ${className}`;
+  const baseClasses = twMerge(
+    `flex justify-center items-center text-center bg-white border border-gray-200 border-solid p-2 rounded-lg ${commonStyles} ${className}`,
+  );
 
   if (href) {
     return (
