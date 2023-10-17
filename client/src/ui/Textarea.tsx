@@ -10,6 +10,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, React.TextareaHTMLAttribu
   const textareaRef = React.useRef<HTMLTextAreaElement | null>(null);
 
   // Merge internal ref and forwarded ref
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   React.useImperativeHandle(forwardedRef, () => textareaRef.current!);
 
   React.useEffect(() => {

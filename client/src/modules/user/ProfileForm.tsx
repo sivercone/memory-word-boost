@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { authApi } from '@src/apis/authApi';
+import { authApi } from '@src/apis';
 import { notify } from '@src/lib/notify';
 import { useUserStore } from '@src/stores';
 import { UserInterface } from '@src/interfaces';

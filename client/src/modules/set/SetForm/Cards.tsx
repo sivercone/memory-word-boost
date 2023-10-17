@@ -1,9 +1,9 @@
 import React from 'react';
 import { useRouter } from 'next/router';
+import { useFieldArray, useForm } from 'react-hook-form';
 import { SetInterface } from '@src/interfaces';
 import { ButtonSquare, Textarea } from '@src/ui';
 import { ArrowLeftIcon, MinusIcon, PlusIcon, SwapVertIcon } from '@src/ui/Icons';
-import { useFieldArray, useForm } from 'react-hook-form';
 import { useSetStore } from '@src/stores';
 import { useScroll } from '@src/lib/hooks';
 

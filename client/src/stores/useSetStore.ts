@@ -1,6 +1,6 @@
 import create from 'zustand';
 import { combine } from 'zustand/middleware';
-import { SetInterface } from 'interfaces';
+import { SetInterface } from '@src/interfaces';
 
 const initialState = {
   currStudySet: {

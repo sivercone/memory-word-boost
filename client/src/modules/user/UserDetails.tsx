@@ -4,8 +4,8 @@ import { useQuery } from 'react-query';
 import { folderApi } from '@src/apis';
 import { formatDate } from '@src/lib/utils';
 import { ActionList, ButtonSquare, Spinner } from '@src/ui';
-import ProfileForm from '@src/modules/user/ProfileForm';
 import { UserInterface } from '@src/interfaces';
+import ProfileForm from './ProfileForm';
 
 const UserProfile: React.FC<{ user: UserInterface; onEdit: () => void }> = ({ user, onEdit }) => (
   <div className="bg-white py-8 border-b border-b-gray-200">

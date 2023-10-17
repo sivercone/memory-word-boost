@@ -1,13 +1,13 @@
 import React from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { FolderForm } from '@src/modules/folder/FolderForm';
-import { FolderDelete } from '@src/modules/folder/FolderDelete';
+import { useQuery } from 'react-query';
+import { FolderForm } from './FolderForm';
+import { FolderDelete } from './FolderDelete';
 import { ActionList, ButtonSquare, DropdownMenu } from '@src/ui';
 import { MoreIcon } from '@src/ui/Icons';
 import { FolderInterface } from '@src/interfaces';
 import { setApi } from '@src/apis';
-import { useQuery } from 'react-query';
 
 const FolderDetails: NextPage<{ queryId: string; queryUser: string; data: FolderInterface | null }> = ({
   queryId,

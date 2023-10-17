@@ -1,6 +1,6 @@
 import create from 'zustand';
 import { combine } from 'zustand/middleware';
-import { UserInterface } from 'interfaces';
+import { UserInterface } from '@src/interfaces';
 
 const useUserStore = create(
   combine(
