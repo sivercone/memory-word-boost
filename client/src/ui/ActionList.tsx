@@ -68,10 +68,13 @@ const ActionLink: React.FC<{ children: React.ReactNode; href: string; isFirst: b
   return (
     <>
       {!isFirst ? <div className="h-px bg-gray-200" /> : null}
-      <Link href={href} {...otherProps}>
-        <a className="flex space-x-4 items-center px-4 py-2 bg-transparent text-left w-full transition-colors hover:bg-gray-50 select-none focus-visible:bg-gray-50 focus-visible:shadow-none">
-          {children}
-        </a>
+      <Link
+        href={href}
+        {...otherProps}
+        legacyBehavior={false}
+        className="flex space-x-4 items-center px-4 py-2 bg-transparent text-left w-full transition-colors hover:bg-gray-50 select-none focus-visible:bg-gray-50 focus-visible:shadow-none"
+      >
+        {children}
       </Link>
     </>
   );

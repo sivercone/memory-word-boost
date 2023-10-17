@@ -37,7 +37,7 @@ const UserFolders: React.FC<{ userId: string }> = ({ userId }) => {
         keyExtractor={(item) => item.id}
         renderItem={(item, index) => (
           <ActionList.Link href={`/sets?folder=${item.id}`} isFirst={index === 0}>
-            <a>{item.name}</a>
+            {item.name}
           </ActionList.Link>
         )}
       />
