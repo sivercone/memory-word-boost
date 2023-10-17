@@ -26,35 +26,37 @@ const FolderDetails: NextPage<{ queryId: string; queryUser: string; data: Folder
     { title: 'Delete', action: () => setShownModal('del') },
   ];
 
-  const userSets = useQuery('userSets', () => setApi.getByUser(String(queryUser)), { enabled: Boolean(queryUser) });
+  const { data: userSets = [] } = useQuery('userSets', () => setApi.getByUser(String(queryUser)), { enabled: Boolean(queryUser) });
 
   return (
     <>
-      <div className="bg-white py-8 border-b border-b-gray-200">
-        <div className="max-w-3xl mx-auto flex flex-col gap-4 px-4">
-          <div className="flex items-center gap-4">
-            <div className="h-20 w-20 rounded-md bg-white border border-solid border-gray-200" />
-            <div>
-              <h1 className="text-2xl font-medium">{folder?.name || 'New Folder'}</h1>
-              {folder?.description ? <p className="leading-relaxed text-gray-600">{folder.description}</p> : null}
+      {!queryUser && (
+        <div className="bg-white py-8 border-b border-b-gray-200">
+          <div className="max-w-3xl mx-auto flex flex-col gap-4 px-4">
+            <div className="flex items-center gap-4">
+              <div className="h-20 w-20 rounded-md bg-white border border-solid border-gray-200" />
+              <div>
+                <h1 className="text-2xl font-medium">{folder?.name || 'New Folder'}</h1>
+                {folder?.description ? <p className="leading-relaxed text-gray-600">{folder.description}</p> : null}
+              </div>
             </div>
+            <DropdownMenu
+              options={menuOptions}
+              trigger={
+                <ButtonSquare title="Actions">
+                  <MoreIcon />
+                </ButtonSquare>
+              }
+              keyExtractor={(item) => item.title}
+              renderItem={(item) => (
+                <DropdownMenu.Item onClick={item.action}>
+                  <span className="font-medium">{item.title}</span>
+                </DropdownMenu.Item>
+              )}
+            />
           </div>
-          <DropdownMenu
-            options={menuOptions}
-            trigger={
-              <ButtonSquare title="Actions">
-                <MoreIcon />
-              </ButtonSquare>
-            }
-            keyExtractor={(item) => item.title}
-            renderItem={(item) => (
-              <DropdownMenu.Item onClick={item.action}>
-                <span className="font-medium">{item.title}</span>
-              </DropdownMenu.Item>
-            )}
-          />
         </div>
-      </div>
+      )}
 
       {folder && <FolderDelete data={folder} open={shownModal === 'del'} setOpen={() => setShownModal(null)} />}
 
@@ -62,7 +64,7 @@ const FolderDetails: NextPage<{ queryId: string; queryUser: string; data: Folder
         <ActionList
           header={{ title: 'Sets' }}
           placeholder={'Nothing yet'}
-          data={folder?.sets || userSets.data || []}
+          data={queryId !== 'new' ? folder?.sets || userSets : []}
           keyExtractor={(item) => item.id}
           renderItem={(item, index) => (
             <ActionList.Link href={`/sets/${item.id}`} isFirst={index === 0}>
