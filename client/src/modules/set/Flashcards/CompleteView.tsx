@@ -8,7 +8,7 @@ const CompleteView: React.FC<{ queryId: string; cardsLength: number; scorePercen
   scorePercentage,
 }) => {
   return (
-    <div className="flex-1 flex flex-col gap-4">
+    <div className="flex-1 flex flex-col gap-4 animate-fadeIn">
       <div className="bg-violet-200 rounded-lg flex-1 flex flex-col justify-end gap-4 items-start p-8">
         <CheckCircleIcon height="48" width="48" className="fill-gray-800" />
         <p className="text-xl font-semibold">Well done!</p>
