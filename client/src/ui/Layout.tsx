@@ -48,7 +48,7 @@ const Navigation = () => {
             <DropdownMenu
               options={creationOptions}
               trigger={
-                <ButtonCircle>
+                <ButtonCircle title="Create new..">
                   <PlusIcon />
                 </ButtonCircle>
               }
@@ -63,7 +63,7 @@ const Navigation = () => {
             <DropdownMenu
               options={menuOptions}
               trigger={
-                <ButtonCircle>
+                <ButtonCircle title="Menu">
                   <MenuIcon />
                 </ButtonCircle>
               }

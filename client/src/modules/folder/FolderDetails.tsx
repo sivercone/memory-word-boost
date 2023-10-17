@@ -42,7 +42,7 @@ const FolderDetails: NextPage<{ queryId: string; queryUser: string; data: Folder
           <DropdownMenu
             options={menuOptions}
             trigger={
-              <ButtonSquare>
+              <ButtonSquare title="Actions">
                 <MoreIcon />
               </ButtonSquare>
             }

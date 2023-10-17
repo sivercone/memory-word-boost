@@ -33,7 +33,7 @@ const SetDetails: React.FC<{ queryId: string; data: SetInterface }> = ({ queryId
           <DropdownMenu
             options={menuOptions}
             trigger={
-              <ButtonSquare>
+              <ButtonSquare title="Actions">
                 <MoreIcon />
               </ButtonSquare>
             }
