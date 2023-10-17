@@ -37,8 +37,9 @@ export const FolderForm: React.FC<Props> = ({ open, setOpen, data }) => {
   };
 
   React.useEffect(() => {
-    if (data?.id) reset({ ...data, user }); // https://stackoverflow.com/a/64307087
-  }, [data, user]);
+    if (data?.id) reset({ ...data, user });
+    else reset({ id: '', name: '', description: '', user });
+  }, [data, user, open]);
 
   return (
     <Dialog
@@ -61,7 +62,7 @@ export const FolderForm: React.FC<Props> = ({ open, setOpen, data }) => {
           {...register('description')}
           className="border border-gray-200 border-solid p-2 rounded-lg bg-white"
         />
-        <input type="submit" aria-hidden="true" style={{ display: 'none' }} />
+        <input type="submit" aria-hidden="true" hidden />
       </form>
     </Dialog>
   );
