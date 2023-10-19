@@ -1,20 +1,20 @@
 import { FolderInterface } from '@/interfaces';
-import { Column, CreateDateColumn, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, ManyToMany, ManyToOne, PrimaryColumn, UpdateDateColumn } from 'typeorm';
 import SetEntity from './SetEntity';
 import UserEntity from './UserEntity';
 
 @Entity()
 class FolderEntity implements FolderInterface {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn()
   id: string;
 
-  @Column()
+  @Column({ default: '' })
   name: string;
 
-  @Column()
+  @Column({ default: '' })
   description: string;
 
-  @ManyToMany(() => SetEntity, (x) => x.folders, { onDelete: 'CASCADE' })
+  @ManyToMany(() => SetEntity, (x) => x.folder, { onDelete: 'CASCADE' })
   sets: SetEntity[];
 
   @ManyToOne(() => UserEntity, (x) => x.folders)

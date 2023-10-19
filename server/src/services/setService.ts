@@ -5,6 +5,7 @@ import { HttpException } from '@/utils/HttpException';
 import { isEmpty } from '@/utils/isEmpty';
 import { logger } from '@/utils/logger';
 import { SetInterface } from '@/interfaces';
+import nanoid from '@/utils/nanoid';
 
 class SetService {
   private setRepository = dataSource.getRepository(SetEntity);
@@ -14,7 +15,6 @@ class SetService {
     try {
       const sets = await this.setRepository.find({
         where: excludeUserId ? { user: { id: Not(excludeUserId) } } : undefined,
-        relations: { folders: true },
         order: { createdAt: 'DESC' },
       });
       return sets;
@@ -27,7 +27,7 @@ class SetService {
   public async findById(payload: string): Promise<SetInterface> {
     if (isEmpty(payload)) throw new HttpException(400, 'Payload is missed. Do not repeat this request without modification.');
     try {
-      const data = await this.setRepository.findOne({ where: { id: payload }, relations: { folders: true, user: true } });
+      const data = await this.setRepository.findOne({ where: { id: payload }, relations: { user: true } });
       if (!data) throw new HttpException(404, 'Not Found');
       return data;
     } catch (error) {
@@ -51,8 +51,8 @@ class SetService {
     if (isEmpty(payload) || !payload.user)
       throw new HttpException(400, 'Payload is missed. Do not repeat this request without modification.');
     try {
-      if (!Array.isArray(payload.tags)) payload.tags = (payload.tags as string).replace(/\s+/g, '').split(',');
-      const saveSet = await this.setRepository.save(payload);
+      const generatedId = nanoid();
+      const saveSet = await this.setRepository.save({ ...payload, id: generatedId });
       return saveSet;
     } catch (error) {
       logger.error('[SetService - create] >> Message:', error);
@@ -67,7 +67,6 @@ class SetService {
       const findSet = await this.setRepository.findOne({ where: { id: payload.id }, relations: ['user'] });
       if (!findSet) throw new HttpException(409, 'Conflict');
       if (findSet.user.id !== userId) throw new HttpException(403, 'Forbidden');
-      if (!Array.isArray(payload.tags)) payload.tags = (payload.tags as string).replace(/\s+/g, '').split(',');
       const saveSet = await this.setRepository.save(payload);
       return saveSet;
     } catch (error) {

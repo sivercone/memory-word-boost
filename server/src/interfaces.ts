@@ -4,11 +4,10 @@ import express from 'express';
 
 export interface SetInterface {
   id: string;
-  title: string;
+  name: string;
   description: string;
-  tags: string[];
-  cards: { order: number; term: string; definition: string }[];
-  folders?: FolderInterface[];
+  cards: { order: number; front: string; back: string }[];
+  folder: FolderInterface;
   user: UserInterface;
   createdAt: string;
   updatedAt: string;

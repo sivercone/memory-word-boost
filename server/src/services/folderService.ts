@@ -5,6 +5,7 @@ import { HttpException } from '@/utils/HttpException';
 import { isEmpty } from '@/utils/isEmpty';
 import { FolderInterface } from '@/interfaces';
 import { logger } from '@/utils/logger';
+import nanoid from '@/utils/nanoid';
 
 class FolderService {
   private folderRepository = dataSource.getRepository(FolderEntity);
@@ -52,7 +53,8 @@ class FolderService {
     if (isEmpty(payload) || !payload.user)
       throw new HttpException(400, 'Payload is missed. Do not repeat this request without modification.');
     try {
-      const data = await this.folderRepository.save(payload);
+      const generatedId = nanoid();
+      const data = await this.folderRepository.save({ ...payload, id: generatedId });
       return data;
     } catch (error) {
       logger.error('[FolderService - create] >> Message:', error);
