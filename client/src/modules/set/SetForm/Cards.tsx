@@ -23,7 +23,7 @@ const Cards: React.FC = () => {
   }, []);
 
   const flipCards = () => {
-    const flippedCards = watch('cards').map((card) => ({ ...card, term: card.definition, definition: card.term }));
+    const flippedCards = watch('cards').map((card) => ({ ...card, front: card.back, back: card.front }));
     reset({ cards: flippedCards });
   };
 
@@ -39,7 +39,7 @@ const Cards: React.FC = () => {
             <ButtonSquare onClick={flipCards} title="Flip Cards">
               <SwapVertIcon />
             </ButtonSquare>
-            <ButtonSquare onClick={() => append({ order: fields.length, term: '', definition: '' })} title="Add Card">
+            <ButtonSquare onClick={() => append({ order: fields.length, front: '', back: '' })} title="Add Card">
               <PlusIcon />
             </ButtonSquare>
           </div>
@@ -58,14 +58,14 @@ const Cards: React.FC = () => {
             <div className="flex flex-col border border-gray-200 border-solid rounded-lg bg-white w-full">
               <Textarea
                 placeholder="Front"
-                {...register(`cards.${i}.term`, { required: true })}
+                {...register(`cards.${i}.front`, { required: true })}
                 className="p-2 rounded-t-lg"
                 rows={1}
               />
               <hr className="border-gray-200" />
               <Textarea
                 placeholder="Back"
-                {...register(`cards.${i}.definition`, { required: true })}
+                {...register(`cards.${i}.back`, { required: true })}
                 className="p-2 rounded-b-lg"
                 rows={1}
               />

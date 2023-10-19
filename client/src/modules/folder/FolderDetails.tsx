@@ -68,7 +68,7 @@ const FolderDetails: NextPage<{ queryId: string; queryUser: string; data: Folder
           keyExtractor={(item) => item.id}
           renderItem={(item, index) => (
             <ActionList.Link href={`/sets/${item.id}`} isFirst={index === 0}>
-              {item.title}
+              {item.name}
             </ActionList.Link>
           )}
         />

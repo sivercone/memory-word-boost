@@ -12,7 +12,7 @@ const General: React.FC = () => {
   const router = useRouter();
   const { user } = useUserStore();
   const { setCurrStudySet, currStudySet } = useSetStore();
-  const { register, handleSubmit, reset } = useForm<Pick<SetInterface, 'title' | 'description'>>();
+  const { register, handleSubmit, reset } = useForm<Pick<SetInterface, 'name' | 'description'>>();
   React.useEffect(() => {
     reset(currStudySet);
   }, [reset, currStudySet]);
@@ -24,8 +24,8 @@ const General: React.FC = () => {
       router.push(`/sets/${res}`);
     },
   });
-  const onSubmit = async (payload: Pick<SetInterface, 'title' | 'description'>) => {
-    const datus = { ...currStudySet, title: payload.title, description: payload.description, user };
+  const onSubmit = async (payload: Pick<SetInterface, 'name' | 'description'>) => {
+    const datus = { ...currStudySet, title: payload.name, description: payload.description, user };
     await save.mutateAsync(datus).catch((error) => console.error(error));
   };
 
@@ -47,7 +47,7 @@ const General: React.FC = () => {
       <form autoComplete="off" className="flex flex-col gap-4">
         <input
           placeholder="Name"
-          {...register('title', { required: true, onChange: (event) => setCurrStudySet({ title: event.target.value }) })}
+          {...register('name', { required: true, onChange: (event) => setCurrStudySet({ name: event.target.value }) })}
           className="border border-gray-200 border-solid p-2 rounded-lg bg-white"
         />
         <input

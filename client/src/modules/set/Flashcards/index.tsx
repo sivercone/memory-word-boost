@@ -26,8 +26,8 @@ const Flashcards: NextPage<{ data: SetInterface; queryId: string }> = ({ data, q
     <div className="max-w-3xl mx-auto flex flex-col gap-4 p-4" style={{ height: 'calc(100% - 65px)' }}>
       {currentCardIndex < cards.length ? (
         <CardView
-          front={cards[currentCardIndex].term}
-          back={cards[currentCardIndex].definition}
+          front={cards[currentCardIndex].front}
+          back={cards[currentCardIndex].back}
           onSwipeLeft={() => onSwipe(false)}
           onSwipeRight={() => onSwipe(true)}
         />

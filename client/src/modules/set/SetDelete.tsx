@@ -40,7 +40,7 @@ export const SetDelete: React.FC<Props> = ({ open, setOpen, data }) => {
       }}
     >
       <div className="px-4 py-20 text-center text-lg">
-        <p className="leading-relaxed">Are you sure you want to delete &#39;{data.title}&#39;?</p>
+        <p className="leading-relaxed">Are you sure you want to delete &#39;{data.name}&#39;?</p>
       </div>
     </Dialog>
   );

@@ -22,7 +22,7 @@ class UserService {
     if (!payload) throw new HttpException(400, 'Payload is missed. Do not repeat this request without modification.');
     try {
       const findUser = await this.userRepository.findOneBy({ id: payload });
-      if (!findUser) throw new HttpException(404, 'Not found');
+      if (!findUser) throw new HttpException(404, 'Not found'); // @todo - fix incorrect response for auth check..
       return findUser;
     } catch (error) {
       logger.error('[UserService - findById] >> Message:', error);

@@ -22,7 +22,7 @@ const SetDetails: React.FC<{ queryId: string; data: SetInterface }> = ({ queryId
       <div className="bg-white py-8 border-b border-b-gray-200">
         <div className="max-w-3xl mx-auto flex flex-col gap-4 px-4">
           <div>
-            <h1 className="text-2xl font-medium">{set.title}</h1>
+            <h1 className="text-2xl font-medium">{set.name}</h1>
             {set.description ? <p className="leading-relaxed text-gray-600">{set.description}</p> : null}
           </div>
           {studyMethods.map((item) => (
@@ -53,8 +53,8 @@ const SetDetails: React.FC<{ queryId: string; data: SetInterface }> = ({ queryId
           <ul className="flex flex-col gap-2">
             {set.cards.map((content, i) => (
               <li key={i} className="flex border-b border-b-gray-200 p-2">
-                <p className="basis-full">{content.term}</p>
-                <p className="basis-full">{content.definition}</p>
+                <p className="basis-full">{content.front}</p>
+                <p className="basis-full">{content.back}</p>
               </li>
             ))}
           </ul>

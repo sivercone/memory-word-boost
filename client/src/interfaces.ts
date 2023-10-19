@@ -1,16 +1,15 @@
 export interface CardInterface {
   order: number;
-  term: string;
-  definition: string;
+  front: string;
+  back: string;
 }
 
 export interface SetInterface {
   id: string;
-  title: string;
+  name: string;
   description: string;
-  tags: string[];
   cards: CardInterface[];
-  folders: FolderInterface[];
+  folder: FolderInterface;
   user: UserInterface;
   createdAt: string;
   updatedAt: string;
@@ -33,7 +32,6 @@ export interface UserInterface {
   email: string;
   name: string;
   bio: string;
-  avatar: string;
   createdAt: string;
   updatedAt: string;
 }

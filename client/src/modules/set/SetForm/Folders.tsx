@@ -15,7 +15,7 @@ const Folders: React.FC = () => {
   const folders = [...(userFolders.data || []), { id: 'sets', name: 'Sets' }];
 
   const onSelect = (id: string) => {
-    setCurrStudySet({ folders: [] }); // change logic to have only one folder
+    // setCurrStudySet({ folders: [] }); // change logic to have only one folder
   };
 
   return (
