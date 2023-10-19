@@ -4,29 +4,23 @@ import { useForm } from 'react-hook-form';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { authApi } from '@src/apis';
 import { notify } from '@src/lib/notify';
-import { useUserStore } from '@src/stores';
 import { UserInterface } from '@src/interfaces';
 import { Dialog } from '@src/ui';
 
 const ProfileForm: React.FC<{ open: boolean; setOpen: (value: boolean) => void }> = ({ open, setOpen }) => {
   const router = useRouter();
-  const { signAccess } = useUserStore();
   const queryClient = useQueryClient();
   const mutation = useMutation(authApi.update);
-  const { data: userData } = useQuery('user', () => authApi.me(signAccess));
+  const { data: userData } = useQuery('user', () => authApi.me());
   const { register, handleSubmit, reset } = useForm<UserInterface>({ defaultValues: { ...userData } });
 
   React.useEffect(() => {
-    if (userData) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { signAccess, ...data } = userData;
-      reset(data);
-    }
+    if (userData) reset(userData);
   }, [userData]);
 
   const onSubmit = async (payload: UserInterface) => {
     try {
-      await mutation.mutateAsync({ data: payload, token: signAccess });
+      await mutation.mutateAsync(payload);
       queryClient.invalidateQueries('user');
       setOpen(false);
     } catch (error) {

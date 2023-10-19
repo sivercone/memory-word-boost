@@ -5,9 +5,11 @@ import { FolderIcon, MenuIcon, PlusIcon, SetIcon } from '@src/ui/Icons';
 import { DropdownMenu, ButtonCircle } from '@src/ui';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { pathname } = useRouter();
+
   return (
     <>
-      <Navigation />
+      {pathname !== '/login' && <Navigation />}
       {children}
     </>
   );
@@ -31,18 +33,16 @@ const Navigation = () => {
     <>
       <nav id="navigation" className="py-[16px] border-b border-b-gray-200 bg-white sticky top-0">
         <div className="flex items-center max-w-3xl mx-auto px-4">
-          <Link href="/">
-            <a className="flex gap-1 items-center select-none">
-              <span
-                className="font-semibold bg-gradient-to-br from-violet-500 to-gray-900 box-decoration-slice bg-clip-text text-transparent"
-                style={{ letterSpacing: '-0.9px', lineHeight: '0.8' }}
-              >
-                PROJECT MWB
-              </span>
-              <span className="bg-gray-100 text-xs font-medium rounded-lg px-1 text-gray-500" style={{ letterSpacing: '-0.8px' }}>
-                Prototype
-              </span>
-            </a>
+          <Link href="/" className="flex gap-1 items-center select-none" legacyBehavior={false}>
+            <span
+              className="font-semibold bg-gradient-to-br from-violet-500 to-gray-900 box-decoration-slice bg-clip-text text-transparent"
+              style={{ letterSpacing: '-0.9px', lineHeight: '0.8' }}
+            >
+              PROJECT MWB
+            </span>
+            <span className="bg-gray-100 text-xs font-medium rounded-lg px-1 text-gray-500" style={{ letterSpacing: '-0.8px' }}>
+              Prototype
+            </span>
           </Link>
           <div className="ml-auto flex items-center gap-4">
             <DropdownMenu

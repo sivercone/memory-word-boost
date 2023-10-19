@@ -2,16 +2,15 @@ import React from 'react';
 import { useQuery } from 'react-query';
 import { useRouter } from 'next/router';
 import { ArrowLeftIcon } from '@src/ui/Icons';
-import { useSetStore, useUserStore } from '@src/stores';
+import { useSetStore } from '@src/stores';
 import { ActionList, ButtonSquare } from '@src/ui';
 import { authApi, folderApi } from '@src/apis';
 
 const Folders: React.FC = () => {
   const router = useRouter();
   const { setCurrStudySet, currStudySet } = useSetStore();
-  const { signAccess } = useUserStore();
 
-  const user = useQuery('user', () => authApi.me(signAccess)); // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const user = useQuery('user', () => authApi.me()); // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const userFolders = useQuery('userFolders', () => folderApi.getByUser(user.data!.id), { enabled: !!user.data });
   const folders = [...(userFolders.data || []), { id: 'sets', name: 'Sets' }];
 

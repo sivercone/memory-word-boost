@@ -2,10 +2,27 @@ import http from 'lib/http';
 import { UserInterface } from 'interfaces';
 
 export const authApi = {
-  async me(token: string | undefined): Promise<UserInterface & { signAccess: string | undefined }> {
+  async login(body: { email: string; password: string }): Promise<void> {
     try {
-      const response = await http.get(`auth/me`, { headers: { Authorization: `Bearer ${token}` } });
+      const response = await http.post(`auth/login`, body);
       return response.data;
+    } catch (error) {
+      throw error.response?.data;
+    }
+  },
+
+  async me(): Promise<UserInterface> {
+    try {
+      const response = await http.get(`auth/me`);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data;
+    }
+  },
+
+  async logout(): Promise<void> {
+    try {
+      await http.post(`auth/logout`);
     } catch (error) {
       throw error.response?.data;
     }
@@ -20,17 +37,9 @@ export const authApi = {
     }
   },
 
-  async update(payload: { data: UserInterface; token: string | undefined }): Promise<void> {
+  async update(payload: UserInterface): Promise<void> {
     try {
-      await http.put(`auth/user/update`, payload.data, { headers: { Authorization: `Bearer ${payload.token}` } });
-    } catch (error) {
-      throw error.response?.data;
-    }
-  },
-
-  async logout(token: string | undefined): Promise<void> {
-    try {
-      await http.post(`auth/logout`, {}, { headers: { Authorization: `Bearer ${token}` } });
+      await http.put(`auth/user/update`, payload);
     } catch (error) {
       throw error.response?.data;
     }

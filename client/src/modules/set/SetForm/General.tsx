@@ -10,7 +10,7 @@ import { ButtonSquare } from '@src/ui';
 
 const General: React.FC = () => {
   const router = useRouter();
-  const { user, signAccess } = useUserStore();
+  const { user } = useUserStore();
   const { setCurrStudySet, currStudySet } = useSetStore();
   const { register, handleSubmit, reset } = useForm<Pick<SetInterface, 'title' | 'description'>>();
   React.useEffect(() => {
@@ -26,7 +26,7 @@ const General: React.FC = () => {
   });
   const onSubmit = async (payload: Pick<SetInterface, 'title' | 'description'>) => {
     const datus = { ...currStudySet, title: payload.title, description: payload.description, user };
-    await save.mutateAsync({ data: datus, token: signAccess }).catch((error) => console.error(error));
+    await save.mutateAsync(datus).catch((error) => console.error(error));
   };
 
   return (

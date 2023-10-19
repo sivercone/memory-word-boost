@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import { useMutation, useQueryClient } from 'react-query';
 import { setApi } from '@src/apis';
 import { SetInterface } from '@src/interfaces';
-import { useUserStore } from '@src/stores';
 import { notify } from '@src/lib/notify';
 import { Dialog } from '@src/ui';
 
@@ -16,7 +15,6 @@ interface Props {
 export const SetDelete: React.FC<Props> = ({ open, setOpen, data }) => {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { signAccess } = useUserStore();
 
   const fetchDelete = useMutation(setApi.delete, {
     onSuccess: () => {
@@ -25,7 +23,7 @@ export const SetDelete: React.FC<Props> = ({ open, setOpen, data }) => {
     },
   });
   const onDelete = async () => {
-    await fetchDelete.mutateAsync({ id: data.id, token: signAccess }).catch((error) => {
+    await fetchDelete.mutateAsync(data.id).catch((error) => {
       console.error(error);
       notify('Hmm, something went wrong, please try again later.');
     });

@@ -29,24 +29,18 @@ export const folderApi = {
     }
   },
 
-  async save(payload: { data: FolderInterfaceDraft & { sets?: SetInterface[] }; token: string | undefined }): Promise<string> {
+  async save(data: FolderInterfaceDraft): Promise<string> {
     try {
-      const method = payload.data.id ? 'PUT' : 'POST';
-      const response = await http({
-        url: '/folder',
-        method,
-        headers: { Authorization: `Bearer ${payload.token}` },
-        data: payload.data,
-      });
+      const response = await http({ url: '/folder', method: data.id ? 'PUT' : 'POST', data: data });
       return response.data;
     } catch (error) {
       throw error.response?.data;
     }
   },
 
-  async delete(payload: { id: string; token: string | undefined }): Promise<void> {
+  async delete(id: string): Promise<void> {
     try {
-      await http.delete(`/folder/${payload.id}`, { headers: { Authorization: `Bearer ${payload.token}` } });
+      await http.delete(`/folder/${id}`);
     } catch (error) {
       throw error.response?.data;
     }

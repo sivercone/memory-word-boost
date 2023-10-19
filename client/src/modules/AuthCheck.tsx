@@ -4,8 +4,8 @@ import { authApi } from '@src/apis';
 import { useUserStore } from '@src/stores';
 
 export const AuthCheck: React.FC = () => {
-  const { setUser, setSignAccess, signAccess } = useUserStore();
-  const { data, status, refetch } = useQuery('user', () => authApi.me(signAccess), { enabled: false });
+  const { setUser } = useUserStore();
+  const { data, status, refetch } = useQuery('user', () => authApi.me(), { enabled: false });
 
   React.useEffect(() => {
     const loggedInfo = sessionStorage.logged;
@@ -15,9 +15,7 @@ export const AuthCheck: React.FC = () => {
   React.useEffect(() => {
     if (status === 'error') sessionStorage.setItem('logged', 'no');
     if (status === 'success' && data) {
-      const { signAccess, ...user } = data;
-      setUser(user);
-      setSignAccess(signAccess);
+      setUser(data);
       sessionStorage.setItem('logged', 'yes');
     }
   }, [status, data, setUser]);

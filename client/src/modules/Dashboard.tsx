@@ -1,13 +1,10 @@
 import type { NextPage } from 'next';
 import { useQuery } from 'react-query';
-import { useUserStore } from '@src/stores';
 import { ActionList } from '@src/ui';
 import { authApi, folderApi } from '@src/apis';
 
 const Dashboard: NextPage = () => {
-  const { signAccess } = useUserStore();
-
-  const user = useQuery('user', () => authApi.me(signAccess)); // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const user = useQuery('user', () => authApi.me()); // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const userFolders = useQuery('userFolders', () => folderApi.getByUser(user.data!.id), { enabled: !!user.data });
   const folders = [...(userFolders.data || []), { id: 'sets', name: 'Sets' }].sort((a, b) =>
     a.id === 'sets' ? -1 : b.id === 'sets' ? 1 : a.name.localeCompare(b.name),

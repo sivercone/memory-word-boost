@@ -29,24 +29,18 @@ export const setApi = {
     }
   },
 
-  async save(payload: { data: SetInterfaceDraft & { folders?: FolderInterface[] }; token: string | undefined }): Promise<string> {
+  async save(data: SetInterfaceDraft): Promise<string> {
     try {
-      const method = payload.data.id ? 'PUT' : 'POST';
-      const response = await http({
-        url: '/set',
-        method,
-        headers: { Authorization: `Bearer ${payload.token}` },
-        data: payload.data,
-      });
+      const response = await http({ url: '/set', method: data.id ? 'PUT' : 'POST', data: data });
       return response.data;
     } catch (error) {
       throw error.response?.data;
     }
   },
 
-  async delete(payload: { id: string; token: string | undefined }): Promise<void> {
+  async delete(id: string): Promise<void> {
     try {
-      await http.delete(`/set/${payload.id}`, { headers: { Authorization: `Bearer ${payload.token}` } });
+      await http.delete(`/set/${id}`);
     } catch (error) {
       throw error.response?.data;
     }

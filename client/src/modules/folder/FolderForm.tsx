@@ -17,14 +17,14 @@ interface Props {
 export const FolderForm: React.FC<Props> = ({ open, setOpen, data }) => {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { user, signAccess } = useUserStore();
+  const { user } = useUserStore();
   const { register, handleSubmit, reset } = useForm<FolderInterfaceDraft>();
   const save = useMutation(folderApi.save);
 
   const onSubmit = async (data: FolderInterfaceDraft) => {
     if (user) data.user = user;
     try {
-      const res = await save.mutateAsync({ data, token: signAccess });
+      const res = await save.mutateAsync(data);
       setOpen(false);
       reset();
       if (router.pathname !== `/sets?folder=${res}`) router.push(`/sets?folder=${res}`);
