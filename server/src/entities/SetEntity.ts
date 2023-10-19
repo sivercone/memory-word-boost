@@ -14,7 +14,7 @@ class SetEntity implements SetInterface {
   @Column({ default: '' })
   description: string;
 
-  @Column('simple-json')
+  @Column('simple-json', { default: [] })
   cards: { order: number; front: string; back: string }[];
 
   @ManyToOne(() => FolderEntity, (x) => x.sets)
