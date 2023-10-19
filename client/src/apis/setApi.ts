@@ -1,5 +1,5 @@
 import http from 'lib/http';
-import { FolderInterface, SetInterface, SetInterfaceDraft } from 'interfaces';
+import { SetInterface, SetInterfaceDraft } from 'interfaces';
 
 export const setApi = {
   async get(excludeUserId: string | undefined): Promise<SetInterface[]> {
