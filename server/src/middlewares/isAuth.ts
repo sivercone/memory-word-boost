@@ -7,7 +7,7 @@ import { ReqWithSessionValues } from '@/interfaces';
 
 export const isAuth = async (req: ReqWithSessionValues, res: express.Response, next: express.NextFunction) => {
   try {
-    const accessToken: string | undefined = req.headers['authorization']?.split(' ')[1];
+    const accessToken: string | undefined = req.cookies['access_token'];
     const refreshToken: string | undefined = req.cookies['refresh_token'];
 
     if (!refreshToken) {

@@ -1,30 +1,27 @@
 import { UserInterface } from '@/interfaces';
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryColumn, UpdateDateColumn } from 'typeorm';
 import FolderEntity from './FolderEntity';
 import SetEntity from './SetEntity';
 
 @Entity()
 class UserEntity implements UserInterface {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn()
   id: string;
 
   @Column({ unique: true })
   email: string;
 
-  @Column()
+  @Column({ select: false })
+  password: string;
+
+  @Column({ default: '' })
   name: string;
 
-  @Column({ nullable: true })
+  @Column({ default: '' })
   bio: string;
 
-  @Column()
-  avatar: string;
-
-  @Column({ nullable: true, select: false })
+  @Column({ select: false, default: '' })
   refresh_token: string;
-
-  @Column({ nullable: true, select: false })
-  fingerprint: string;
 
   @OneToMany(() => SetEntity, (x) => x.user)
   sets: SetEntity[];

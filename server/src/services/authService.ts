@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 import { dataSource } from '@/core/db';
 import UserEntity from '@/entities/UserEntity';
 import { HttpException } from '@utils/HttpException';
@@ -6,23 +7,33 @@ import { isEmpty } from '@/utils/isEmpty';
 import { createAccessToken, createRefreshToken } from '@utils/createToken';
 import { logger } from '@utils/logger';
 import { UserInterface } from '@/interfaces';
+import nanoid from '@/utils/nanoid';
 
 class AuthService {
   private userRepository = dataSource.getRepository(UserEntity);
 
-  public async logIn(payload: { email: string; name: string; avatar: string }): Promise<string> {
+  public async logIn(payload: { email: string; password: string }): Promise<{ access: string; refresh: string }> {
     if (isEmpty(payload)) throw new HttpException(400, 'Payload is missed. Do not repeat this request without modification.');
     try {
-      const findUser = await this.userRepository.findOneBy({ email: payload.email });
+      const findUser = await this.userRepository.findOne({
+        where: { email: payload.email },
+        select: { id: true, email: true, password: true },
+      });
       if (findUser) {
+        const isPasswordCorrect = await bcrypt.compare(payload.password, findUser.password);
+        if (!isPasswordCorrect) throw new HttpException(401, 'Bad credentials.');
         const refreshToken = createRefreshToken(findUser.id);
-        await this.userRepository.update(findUser.id, { ...payload, refresh_token: refreshToken });
-        return refreshToken;
+        const accessToken = createAccessToken(findUser.id);
+        await this.userRepository.update(findUser.id, { refresh_token: refreshToken });
+        return { refresh: refreshToken, access: accessToken };
       } else {
-        const savedUser = await this.userRepository.save(payload);
+        const generatedId = nanoid();
+        const hashedPassword = await bcrypt.hash(payload.password, 10);
+        const savedUser = await this.userRepository.save({ id: generatedId, email: payload.email, password: hashedPassword });
         const refreshToken = createRefreshToken(savedUser.id);
-        await this.userRepository.update(savedUser.id, { ...savedUser, refresh_token: refreshToken });
-        return refreshToken;
+        const accessToken = createAccessToken(savedUser.id);
+        await this.userRepository.update(savedUser.id, { refresh_token: refreshToken });
+        return { refresh: refreshToken, access: accessToken };
       }
     } catch (error) {
       logger.error('[AuthService - logIn] >> Message:', error);
