@@ -17,7 +17,7 @@ function DropdownMenu<T>({ trigger, options, renderItem, keyExtractor }: Dropdow
 
       <Dropdown.Portal>
         <Dropdown.Content
-          className={`data-[side=bottom]:animate-slideUpAndFade min-w-[220px] bg-white rounded-md p-2 shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] will-change-[opacity,transform]`}
+          className={`z-50 data-[side=bottom]:animate-slideUpAndFade min-w-[220px] bg-white rounded-md p-2 shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] will-change-[opacity,transform]`}
           sideOffset={5}
         >
           {options.map((item, index) => (
