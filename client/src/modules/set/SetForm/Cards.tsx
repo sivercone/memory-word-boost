@@ -27,6 +27,51 @@ const Cards: React.FC = () => {
     reset({ cards: flippedCards });
   };
 
+  /**
+   * Handles the paste event for the 'Front' textarea.
+   *
+   * This function checks if the pasted data is from a two-column table format,
+   * where the first column represents the front of the card, and the second column
+   * represents the back. If so, it populates the cards accordingly:
+   * - The current card will be filled with the first row's data.
+   * - Any subsequent rows in the pasted data will result in new cards being appended.
+   *
+   * If the pasted data is not from a two-column table, the function falls back to the
+   * default paste behavior.
+   *
+   * @param {number} i - The index of the current card in the cards list.
+   * @param {React.ClipboardEvent<HTMLTextAreaElement>} event - The clipboard paste event.
+   */
+  const handlePaste = (i: number, event: React.ClipboardEvent<HTMLTextAreaElement>) => {
+    const pastedData = event.clipboardData.getData('text');
+    if (!pastedData.includes('\t')) {
+      // If the pasted data doesn't contain a tab, it's not from a two-column table.
+      // So, allow the default behavior for the textarea.
+      return;
+    }
+
+    event.preventDefault();
+    const pastedRows = pastedData.split('\n');
+
+    if (pastedRows.length > 0) {
+      const [firstFront, firstBack] = pastedRows[0].split('\t');
+
+      // Fill current card's front with the first column of the first row and back with the second column
+      reset((prev) => {
+        const cardsCopy = [...prev.cards];
+        cardsCopy[i].front = firstFront;
+        cardsCopy[i].back = firstBack;
+        return { cards: cardsCopy };
+      });
+
+      // For the remaining rows, append them as new cards
+      for (let j = 1; j < pastedRows.length; j++) {
+        const [front, back] = pastedRows[j].split('\t');
+        append({ order: fields.length + j, front, back });
+      }
+    }
+  };
+
   return (
     <>
       <div className={`sticky top-0 ${scrolled ? 'bg-white border-b border-b-gray-200' : ''}`}>
@@ -57,10 +102,11 @@ const Cards: React.FC = () => {
             </div>
             <div className="flex flex-col border border-gray-200 border-solid rounded-lg bg-white w-full">
               <Textarea
-                placeholder="Front"
+                placeholder="Front (Tip: You can paste 2-column table data here!)"
                 {...register(`cards.${i}.front`, { required: true })}
                 className="p-2 rounded-t-lg"
                 rows={1}
+                onPaste={(e) => handlePaste(i, e)}
               />
               <hr className="border-gray-200" />
               <Textarea
