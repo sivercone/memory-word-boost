@@ -74,7 +74,7 @@ const Cards: React.FC = () => {
 
   return (
     <>
-      <div className={`sticky top-0 ${scrolled ? 'bg-white border-b border-b-gray-200' : ''}`}>
+      <div className={`sticky z-10 top-0 ${scrolled ? 'bg-white border-b border-b-gray-200' : ''}`}>
         <div className="p-4 flex items-center gap-2 max-w-3xl mx-auto">
           <h1 className="text-2xl font-medium">Cards</h1>
           <div className="ml-auto flex items-center gap-4">

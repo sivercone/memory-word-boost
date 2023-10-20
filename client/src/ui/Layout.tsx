@@ -31,7 +31,7 @@ const Navigation = () => {
 
   return (
     <>
-      <nav id="navigation" className="py-[16px] border-b border-b-gray-200 bg-white sticky top-0">
+      <nav id="navigation" className="py-[16px] border-b border-b-gray-200 bg-white sticky top-0 z-10">
         <div className="flex items-center max-w-3xl mx-auto px-4">
           <Link href="/" className="flex gap-1 items-center select-none" legacyBehavior={false}>
             <span
