@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-import { setService } from '@/services/setService';
-import { ReqWithSessionValues } from '@/interfaces';
+import { setService } from '@src/services';
+import { ReqWithSessionValues } from '@src/interfaces';
 
 class SetController {
   public getSets = async (req: Request, res: Response, next: NextFunction) => {

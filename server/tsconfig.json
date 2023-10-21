@@ -20,19 +20,7 @@
     "resolveJsonModule": true,
     "importHelpers": true,
     "baseUrl": "src",
-    "paths": {
-      "@/*": ["*"],
-      "@controllers/*": ["controllers/*"],
-      "@databases": ["databases"],
-      "@dtos/*": ["dtos/*"],
-      "@exceptions/*": ["exceptions/*"],
-      "@interfaces/*": ["interfaces/*"],
-      "@middlewares/*": ["middlewares/*"],
-      "@models/*": ["models/*"],
-      "@routes/*": ["routes/*"],
-      "@services/*": ["services/*"],
-      "@utils/*": ["utils/*"]
-    }
+    "paths": { "@src/*": ["*"] }
   },
   "include": ["src/**/*.ts", "src/**/*.json", ".env"],
   "exclude": ["node_modules"]

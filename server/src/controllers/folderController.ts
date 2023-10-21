@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-import { folderService } from '@/services/folderService';
-import { ReqWithSessionValues } from '@/interfaces';
+import { folderService } from '@src/services';
+import { ReqWithSessionValues } from '@src/interfaces';
 
 class FolderController {
   public getFolders = async (req: Request, res: Response, next: NextFunction) => {

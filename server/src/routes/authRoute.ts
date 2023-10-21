@@ -1,8 +1,7 @@
 import { Router } from 'express';
-import { authController } from '@/controllers/authController';
-import { isAuth } from '@/middlewares/isAuth';
-import { userController } from '@/controllers/userController';
-import { Routes } from '@/interfaces';
+import { isAuth } from '@src/middlewares';
+import { Routes } from '@src/interfaces';
+import { authController, userController } from '@src/controllers';
 
 class AuthRoute implements Routes {
   public path = '/auth';

@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { setController } from '@controllers/setController';
-import { Routes } from '@/interfaces';
-import { isAuth } from '@/middlewares/isAuth';
+import { setController } from '@src/controllers';
+import { Routes } from '@src/interfaces';
+import { isAuth } from '@src/middlewares';
 
 class SetRoute implements Routes {
   public path = '/set';

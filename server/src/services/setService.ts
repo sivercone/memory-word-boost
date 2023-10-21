@@ -1,11 +1,9 @@
 import { Not } from 'typeorm';
-import { dataSource } from '@/core/db';
-import SetEntity from '@/entities/SetEntity';
-import { HttpException } from '@/utils/HttpException';
-import { isEmpty } from '@/utils/isEmpty';
-import { logger } from '@/utils/logger';
-import { SetInterface } from '@/interfaces';
-import nanoid from '@/utils/nanoid';
+import { dataSource } from '@src/core/db';
+import { SetEntity } from '@src/entities';
+import { HttpException, logger } from '@src/lib';
+import { isEmpty, nanoid } from '@src/lib/utils';
+import { SetInterface } from '@src/interfaces';
 
 class SetService {
   private setRepository = dataSource.getRepository(SetEntity);

@@ -1,11 +1,9 @@
 import { Not } from 'typeorm';
-import { dataSource } from '@/core/db';
-import FolderEntity from '@/entities/FolderEntity';
-import { HttpException } from '@/utils/HttpException';
-import { isEmpty } from '@/utils/isEmpty';
-import { FolderInterface } from '@/interfaces';
-import { logger } from '@/utils/logger';
-import nanoid from '@/utils/nanoid';
+import { dataSource } from '@src/core/db';
+import { FolderEntity } from '@src/entities';
+import { HttpException, logger } from '@src/lib';
+import { isEmpty, nanoid } from '@src/lib/utils';
+import { FolderInterface } from '@src/interfaces';
 
 class FolderService {
   private folderRepository = dataSource.getRepository(FolderEntity);

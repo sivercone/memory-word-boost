@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { userService } from '@/services/userService';
-import { authService } from '@/services/authService';
-import { ReqWithSessionValues } from '@/interfaces';
+import { userService, authService } from '@src/services';
+import { ReqWithSessionValues } from '@src/interfaces';
 
 class AuthController {
   async logIn(req: Request, res: Response, next: NextFunction): Promise<void> {

@@ -1,3 +1,6 @@
+import { customAlphabet } from 'nanoid';
+import { sign } from 'jsonwebtoken';
+
 /**
  * @method isEmpty
  * @param {String | Number | Object} value
@@ -16,4 +19,19 @@ export const isEmpty = (value: string | number | object): boolean => {
   } else {
     return false;
   }
+};
+
+export const nanoid = (alphabet = 'abcdefghijklmnopqrstuvwxyz1234567890', size = 21) => {
+  const id = customAlphabet(alphabet, size);
+  return id();
+};
+
+export const createToken = {
+  access(userId: string) {
+    return sign({ userId }, process.env.ACCESS_SECRET, { expiresIn: '30m', algorithm: 'HS256' });
+  },
+
+  refresh(userId: string) {
+    return sign({ userId }, process.env.REFRESH_SECRET, { expiresIn: '14d', algorithm: 'HS256' });
+  },
 };

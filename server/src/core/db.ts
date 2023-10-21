@@ -1,5 +1,5 @@
 import { DataSourceOptions, DataSource } from 'typeorm';
-import { dbConfig } from '@/interfaces';
+import { dbConfig } from '@src/interfaces';
 import config from 'config';
 
 const { host, port, database, user, password, synchronize, entities }: dbConfig = config.get('dbConfig');

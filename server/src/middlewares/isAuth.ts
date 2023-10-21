@@ -1,9 +1,9 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
-import { authService } from '@services/authService';
-import { logger } from '@utils/logger';
-import { HttpException } from '@utils/HttpException';
-import { ReqWithSessionValues } from '@/interfaces';
+import { authService } from '@src/services/authService';
+import { logger } from '@src/lib/logger';
+import { HttpException } from '@src/lib/HttpException';
+import { ReqWithSessionValues } from '@src/interfaces';
 
 export const isAuth = async (req: ReqWithSessionValues, res: express.Response, next: express.NextFunction) => {
   try {

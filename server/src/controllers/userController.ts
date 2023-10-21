@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { userService } from '@/services/userService';
-import { ReqWithSessionValues } from '@/interfaces';
+import { userService } from '@src/services';
+import { ReqWithSessionValues } from '@src/interfaces';
 
 class UserController {
   public getUsers = async (_: Request, res: Response, next: NextFunction) => {

@@ -1,13 +1,10 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import { dataSource } from '@/core/db';
-import UserEntity from '@/entities/UserEntity';
-import { HttpException } from '@utils/HttpException';
-import { isEmpty } from '@/utils/isEmpty';
-import { createAccessToken, createRefreshToken } from '@utils/createToken';
-import { logger } from '@utils/logger';
-import { UserInterface } from '@/interfaces';
-import nanoid from '@/utils/nanoid';
+import { dataSource } from '@src/core/db';
+import { UserEntity } from '@src/entities';
+import { HttpException, logger } from '@src/lib';
+import { isEmpty, createToken, nanoid } from '@src/lib/utils';
+import { UserInterface } from '@src/interfaces';
 
 class AuthService {
   private userRepository = dataSource.getRepository(UserEntity);
@@ -22,16 +19,16 @@ class AuthService {
       if (findUser) {
         const isPasswordCorrect = await bcrypt.compare(payload.password, findUser.password);
         if (!isPasswordCorrect) throw new HttpException(401, 'Bad credentials.');
-        const refreshToken = createRefreshToken(findUser.id);
-        const accessToken = createAccessToken(findUser.id);
+        const refreshToken = createToken.refresh(findUser.id);
+        const accessToken = createToken.access(findUser.id);
         await this.userRepository.update(findUser.id, { refresh_token: refreshToken });
         return { refresh: refreshToken, access: accessToken };
       } else {
         const generatedId = nanoid();
         const hashedPassword = await bcrypt.hash(payload.password, 10);
         const savedUser = await this.userRepository.save({ id: generatedId, email: payload.email, password: hashedPassword });
-        const refreshToken = createRefreshToken(savedUser.id);
-        const accessToken = createAccessToken(savedUser.id);
+        const refreshToken = createToken.refresh(savedUser.id);
+        const accessToken = createToken.access(savedUser.id);
         await this.userRepository.update(savedUser.id, { refresh_token: refreshToken });
         return { refresh: refreshToken, access: accessToken };
       }
@@ -58,8 +55,8 @@ class AuthService {
         if (err || !decoded.userId) throw new HttpException(401, 'Unauthorized. Your session has expired.');
         else decodedUserId = decoded.userId;
       });
-      const access_token = createAccessToken(decodedUserId);
-      const refresh_token = createRefreshToken(decodedUserId);
+      const access_token = createToken.access(decodedUserId);
+      const refresh_token = createToken.refresh(decodedUserId);
 
       await this.userRepository.update(findUser.id, { refresh_token: refresh_token });
       return { access_token, refresh_token, decodedUserId };

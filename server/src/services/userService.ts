@@ -1,9 +1,8 @@
-import { dataSource } from '@/core/db';
-import { HttpException } from '@/utils/HttpException';
-import { isEmpty } from '@/utils/isEmpty';
-import UserEntity from '@/entities/UserEntity';
-import { UserInterface } from '@/interfaces';
-import { logger } from '@/utils/logger';
+import { dataSource } from '@src/core/db';
+import { HttpException, logger } from '@src/lib';
+import { isEmpty } from '@src/lib/utils';
+import { UserEntity } from '@src/entities';
+import { UserInterface } from '@src/interfaces';
 
 class UserService {
   private userRepository = dataSource.getRepository(UserEntity);

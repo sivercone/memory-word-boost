@@ -1,7 +1,6 @@
-import { FolderInterface } from '@/interfaces';
 import { Column, CreateDateColumn, Entity, OneToMany, ManyToOne, PrimaryColumn, UpdateDateColumn } from 'typeorm';
-import SetEntity from './SetEntity';
-import UserEntity from './UserEntity';
+import { FolderInterface } from '@src/interfaces';
+import { SetEntity, UserEntity } from '@src/entities';
 
 @Entity()
 class FolderEntity implements FolderInterface {
