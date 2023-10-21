@@ -2,9 +2,8 @@ import React from 'react';
 import { twMerge } from 'tailwind-merge';
 
 /**
- * Below icons sourced from Google Fonts -- https://fonts.google.com/icons
- * Material Symbols (new)
- * Filters:
+ * Icons sourced from Google Fonts -- https://fonts.google.com/icons
+ * Material Symbols (new):
  * Weight: 300
  * Grade: 0
  * Optical Size: 24
@@ -173,6 +172,39 @@ export const CheckIcon: React.FC<SVGProps> = ({ className, height = 24, width = 
     width={width}
     className={twMerge(`${commonStyle} ${className}`)}
   >
-    <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
+    <path d="M382-253.847 168.616-467.231l42.769-42.768L382-339.384l366.615-366.615 42.769 42.768L382-253.847Z" />
+  </svg>
+);
+export const PersonIcon: React.FC<SVGProps> = ({ className, height = 24, width = 24 }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 -960 960 960"
+    height={height}
+    width={width}
+    className={twMerge(`${commonStyle} ${className}`)}
+  >
+    <path d="M480-492.309q-57.749 0-98.874-41.124-41.125-41.125-41.125-98.874 0-57.75 41.125-98.874 41.125-41.125 98.874-41.125 57.749 0 98.874 41.125 41.125 41.124 41.125 98.874 0 57.749-41.125 98.874-41.125 41.124-98.874 41.124ZM180.001-187.694v-88.922q0-29.384 15.962-54.422 15.961-25.038 42.653-38.5 59.308-29.077 119.654-43.615T480-427.691q61.384 0 121.73 14.538 60.346 14.538 119.654 43.615 26.692 13.462 42.653 38.5 15.962 25.038 15.962 54.422v88.922H180.001ZM240-247.693h480v-28.923q0-12.154-7.039-22.5-7.038-10.346-19.115-16.885-51.692-25.461-105.418-38.577Q534.702-367.693 480-367.693t-108.428 13.115q-53.726 13.116-105.418 38.577-12.077 6.539-19.115 16.885Q240-288.77 240-276.616v28.923Zm240-304.614q33 0 56.5-23.5t23.5-56.5q0-33-23.5-56.5t-56.5-23.5q-33 0-56.5 23.5t-23.5 56.5q0 33 23.5 56.5t56.5 23.5Zm0-80Zm0 384.614Z" />
+  </svg>
+);
+export const LogoutIcon: React.FC<SVGProps> = ({ className, height = 24, width = 24 }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 -960 960 960"
+    height={height}
+    width={width}
+    className={twMerge(`${commonStyle} ${className}`)}
+  >
+    <path d="M212.309-140.001q-30.308 0-51.308-21t-21-51.308v-535.382q0-30.308 21-51.308t51.308-21h268.076V-760H212.309q-4.616 0-8.463 3.846-3.846 3.847-3.846 8.463v535.382q0 4.616 3.846 8.463 3.847 3.846 8.463 3.846h268.076v59.999H212.309Zm436.922-169.232-41.537-43.383 97.384-97.385H363.846v-59.998h341.232l-97.384-97.385 41.537-43.383L819.999-480 649.231-309.233Z" />
+  </svg>
+);
+export const EditIcon: React.FC<SVGProps> = ({ className, height = 24, width = 24 }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 -960 960 960"
+    height={height}
+    width={width}
+    className={twMerge(`${commonStyle} ${className}`)}
+  >
+    <path d="M200-200h50.461l409.463-409.463-50.461-50.461L200-250.461V-200Zm-59.999 59.999v-135.383l527.616-527.384q9.073-8.241 20.036-12.736 10.963-4.495 22.993-4.495 12.029 0 23.307 4.27 11.277 4.269 19.969 13.576l48.846 49.461q9.308 8.692 13.269 20.004 3.962 11.311 3.962 22.622 0 12.065-4.121 23.028-4.12 10.964-13.11 20.037l-527.384 527H140.001Zm620.384-570.153-50.231-50.231 50.231 50.231Zm-126.134 75.903-24.788-25.673 50.461 50.461-25.673-24.788Z" />
   </svg>
 );

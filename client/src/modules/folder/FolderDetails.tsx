@@ -3,7 +3,7 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
 import { ActionList, ButtonSquare, DropdownMenu } from '@src/ui';
-import { MoreIcon } from '@src/ui/Icons';
+import { DeleteIcon, EditIcon, MoreIcon, PersonIcon } from '@src/ui/Icons';
 import { FolderInterface } from '@src/interfaces';
 import { setApi } from '@src/apis';
 import { FolderForm } from './FolderForm';
@@ -21,9 +21,9 @@ const FolderDetails: NextPage<{ queryId: string; queryUser: string; data: Folder
   }, [queryId]);
 
   const menuOptions = [
-    { title: 'Author', action: () => router.push(`/user/${folder?.user.id}`) },
-    { title: 'Edit', action: () => setShownModal('edit') },
-    { title: 'Delete', action: () => setShownModal('del') },
+    { title: 'Author', action: () => router.push(`/user/${folder?.user.id}`), icon: <PersonIcon /> },
+    { title: 'Edit', action: () => setShownModal('edit'), icon: <EditIcon /> },
+    { title: 'Delete', action: () => setShownModal('del'), icon: <DeleteIcon /> },
   ];
 
   const { data: userSets = [] } = useQuery('userSets', () => setApi.getByUser(String(queryUser)), { enabled: Boolean(queryUser) });
@@ -49,8 +49,9 @@ const FolderDetails: NextPage<{ queryId: string; queryUser: string; data: Folder
               }
               keyExtractor={(item) => item.title}
               renderItem={(item) => (
-                <DropdownMenu.Item onClick={item.action}>
-                  <span className="font-medium">{item.title}</span>
+                <DropdownMenu.Item onClick={item.action} className="justify-between">
+                  <span>{item.title}</span>
+                  {item.icon}
                 </DropdownMenu.Item>
               )}
             />

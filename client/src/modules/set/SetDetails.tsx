@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { SetInterface } from '@src/interfaces';
 import { ActionList, ButtonSquare, DropdownMenu } from '@src/ui';
-import { MoreIcon } from '@src/ui/Icons';
+import { DeleteIcon, EditIcon, FolderIcon, MoreIcon, PersonIcon } from '@src/ui/Icons';
 import { SetDelete } from '@src/modules/set/SetDelete';
 
 const SetDetails: React.FC<{ queryId: string; data: SetInterface }> = ({ queryId, data: set }) => {
@@ -11,10 +11,10 @@ const SetDetails: React.FC<{ queryId: string; data: SetInterface }> = ({ queryId
 
   const studyMethods = [{ title: 'Flashcards', href: `${queryId}/flashcards` }];
   const menuOptions = [
-    { title: 'Author', action: () => router.push(`/user/${set.user.id}`) },
-    { title: 'Edit', action: () => router.push(`${queryId}/edit`) },
-    { title: 'Add to Folder', action: () => router.push(`${queryId}/edit?tab=folders`) },
-    { title: 'Delete', action: () => setDeletion(true) },
+    { title: 'Author', action: () => router.push(`/user/${set.user.id}`), icon: <PersonIcon /> },
+    { title: 'Edit', action: () => router.push(`${queryId}/edit`), icon: <EditIcon /> },
+    { title: 'Add to Folder', action: () => router.push(`${queryId}/edit?tab=folders`), icon: <FolderIcon /> },
+    { title: 'Delete', action: () => setDeletion(true), icon: <DeleteIcon /> },
   ];
 
   return (
@@ -39,8 +39,9 @@ const SetDetails: React.FC<{ queryId: string; data: SetInterface }> = ({ queryId
             }
             keyExtractor={(item) => item.title}
             renderItem={(item) => (
-              <DropdownMenu.Item onClick={item.action}>
-                <span className="font-medium">{item.title}</span>
+              <DropdownMenu.Item onClick={item.action} className="justify-between">
+                <span>{item.title}</span>
+                {item.icon}
               </DropdownMenu.Item>
             )}
           />

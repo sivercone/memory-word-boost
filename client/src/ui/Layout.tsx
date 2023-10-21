@@ -1,8 +1,11 @@
 import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FolderIcon, MenuIcon, PlusIcon, SetIcon } from '@src/ui/Icons';
+import { useMutation } from 'react-query';
+import { FolderIcon, LogoutIcon, MenuIcon, PersonIcon, PlusIcon, SetIcon } from '@src/ui/Icons';
 import { DropdownMenu, ButtonCircle } from '@src/ui';
+import { useUserStore } from '@src/stores';
+import { authApi } from '@src/apis';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { pathname } = useRouter();
@@ -15,12 +18,6 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   );
 };
 
-const menuOptions = [
-  { id: 'profile', title: 'Profile', href: '/' },
-  { id: 'logout', title: 'Log out', href: '/' },
-  { id: 'login', title: 'Login', href: '/' },
-  { id: 'theme', title: 'Theme', href: '/' },
-];
 const creationOptions = [
   { id: 'set', title: 'Create Set', href: '/sets/new', icon: <SetIcon /> },
   { id: 'folder', title: 'Create Folder', href: '/sets?folder=new', icon: <FolderIcon /> },
@@ -28,6 +25,19 @@ const creationOptions = [
 
 const Navigation = () => {
   const router = useRouter();
+  const { user, setUser } = useUserStore();
+  const logout = useMutation(authApi.logout, {
+    onSuccess: () => {
+      setUser(undefined);
+      localStorage.setItem('logged', 'no');
+      router.push('/login');
+    },
+  });
+
+  const menuOptions = [
+    { id: 'profile', title: 'Profile', action: () => router.push(`/user/${user?.id}`), icon: <PersonIcon /> },
+    { id: 'logout', title: 'Log out', action: async () => await logout.mutateAsync(), icon: <LogoutIcon /> },
+  ];
 
   return (
     <>
@@ -54,9 +64,9 @@ const Navigation = () => {
               }
               keyExtractor={(item) => item.id}
               renderItem={(item) => (
-                <DropdownMenu.Item onClick={() => router.push(item.href)}>
+                <DropdownMenu.Item onClick={() => router.push(item.href)} className="justify-between">
+                  <span>{item.title}</span>
                   {item.icon}
-                  <span className="font-medium">{item.title}</span>
                 </DropdownMenu.Item>
               )}
             />
@@ -69,8 +79,9 @@ const Navigation = () => {
               }
               keyExtractor={(item) => item.id}
               renderItem={(item) => (
-                <DropdownMenu.Item onClick={() => router.push(item.href)}>
-                  <span className="font-medium">{item.title}</span>
+                <DropdownMenu.Item onClick={item.action} className="justify-between">
+                  <span>{item.title}</span>
+                  {item.icon}
                 </DropdownMenu.Item>
               )}
             />
