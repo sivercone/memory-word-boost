@@ -38,13 +38,13 @@ const General: React.FC = () => {
       <div className="flex items-center gap-2">
         <h1 className="text-2xl font-medium">{currStudySet.id ? 'Edit Set' : 'New Set'}</h1>
         <div className="ml-auto flex gap-4 items-center">
-          {currStudySet.id && !save.isLoading ? (
-            <ButtonSquare href={`/sets/${currStudySet.id}`}>
+          {currStudySet.id ? (
+            <ButtonSquare onClick={() => router.push(`/sets/${currStudySet.id}`)} disabled={save.isLoading}>
               <span className="font-medium">Cancel</span>
             </ButtonSquare>
           ) : null}
           <ButtonSquare onClick={handleSubmit(onSubmit)} disabled={save.isLoading}>
-            <span className="font-medium">{save.isLoading ? 'Loading..' : 'Save'}</span>
+            <span className="font-medium">Save</span>
           </ButtonSquare>
         </div>
       </div>
