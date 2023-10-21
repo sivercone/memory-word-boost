@@ -13,7 +13,11 @@ const SetForm: NextPage<{ data?: SetInterface; queryId: string }> = ({ data: stu
 
   React.useEffect(() => {
     if (queryId === 'new') resetCurrStudySet();
-    else if (studySet) setCurrStudySet({ ...studySet, folderId: studySet.folder.id });
+    else if (studySet) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { folder, user, ...set } = studySet;
+      setCurrStudySet({ ...set, folderId: folder?.id || 'sets' });
+    }
     return () => {
       resetCurrStudySet();
     };

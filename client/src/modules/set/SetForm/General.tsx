@@ -24,7 +24,12 @@ const General: React.FC = () => {
     },
   });
   const onSubmit = async (payload: Pick<SetInterface, 'name' | 'description'>) => {
-    const datus = { ...currStudySet, title: payload.name, description: payload.description };
+    const datus = {
+      ...currStudySet,
+      title: payload.name,
+      description: payload.description,
+      folderId: currStudySet.folderId === 'sets' ? null : currStudySet.folderId,
+    };
     await save.mutateAsync(datus).catch((error) => console.error(error));
   };
 
