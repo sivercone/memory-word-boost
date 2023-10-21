@@ -1,5 +1,5 @@
-import http from 'lib/http';
-import { UserInterface } from 'interfaces';
+import http from '@src/lib/http';
+import { UserInterface } from '@src/interfaces';
 
 export const authApi = {
   async login(body: { email: string; password: string }): Promise<void> {

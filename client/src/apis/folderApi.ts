@@ -1,5 +1,5 @@
-import http from 'lib/http';
-import { FolderInterface, FolderInterfaceDraft } from 'interfaces';
+import http from '@src/lib/http';
+import { FolderInterface, FolderInterfaceDraft } from '@src/interfaces';
 
 export const folderApi = {
   async get(excludeUserId: string | undefined): Promise<FolderInterface[]> {
