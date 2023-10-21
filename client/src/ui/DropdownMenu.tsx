@@ -1,5 +1,6 @@
 import React from 'react';
 import * as Dropdown from '@radix-ui/react-dropdown-menu';
+import { twMerge } from 'tailwind-merge';
 
 interface DropdownProps<T> {
   trigger: React.ReactNode;
@@ -29,14 +30,17 @@ function DropdownMenu<T>({ trigger, options, renderItem, keyExtractor }: Dropdow
   );
 }
 
-const DropdownItem: React.FC<{ children: React.ReactNode; onClick?: React.MouseEventHandler<HTMLDivElement> }> = ({
+const DropdownItem: React.FC<{ children: React.ReactNode; onClick?: React.MouseEventHandler<HTMLDivElement>; className?: string }> = ({
   children,
   onClick,
+  className,
 }) => {
   return (
     <Dropdown.Item
       onClick={onClick}
-      className="flex gap-2 items-center p-3 cursor-pointer select-none outline-none data-[highlighted]:bg-gray-50 rounded-md data-[disabled]:pointer-events-none"
+      className={twMerge(
+        `flex gap-2 items-center p-3 cursor-pointer select-none outline-none data-[highlighted]:bg-gray-50 rounded-md data-[disabled]:pointer-events-none ${className}`,
+      )}
     >
       {children}
     </Dropdown.Item>

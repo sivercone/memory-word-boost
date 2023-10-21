@@ -23,7 +23,7 @@ const Login: NextPage = () => {
   };
 
   return (
-    <div className="flex h-full flex-col md:flex-row">
+    <div className="flex h-full flex-col-reverse md:flex-row">
       <div className="flex-1 flex flex-col bg-violet-900 p-4 md:px-8 md:py-10 gap-4">
         <h1 className="flex gap-1 items-center select-none">
           <span
@@ -39,7 +39,7 @@ const Login: NextPage = () => {
         <p className="mt-auto text-gray-50 leading-relaxed text-lg">Web app designed to catalyze the learning process.</p>
       </div>
 
-      <div className="flex-1 p-4">
+      <div className="flex-1 p-4 md:px-8 md:py-10">
         <form onSubmit={handleSubmit(onSubmit)} className="max-w-lg mx-auto flex flex-col gap-4 justify-center h-full">
           <h2 className="font-medium text-2xl text-center">Log in or Sign up</h2>
           <input
