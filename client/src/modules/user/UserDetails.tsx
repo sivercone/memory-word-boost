@@ -1,7 +1,7 @@
 import React from 'react';
 import { NextPage } from 'next';
 import { useQuery } from 'react-query';
-import { folderApi } from '@src/apis';
+import { authApi, folderApi } from '@src/apis';
 import { formatDate } from '@src/lib/utils';
 import { ActionList, ButtonSquare, Spinner } from '@src/ui';
 import { UserInterface } from '@src/interfaces';
@@ -47,10 +47,11 @@ const UserFolders: React.FC<{ userId: string }> = ({ userId }) => {
 
 const UserDetails: NextPage<{ queryId: string; data: UserInterface }> = ({ data: user }) => {
   const [edit, setEdit] = React.useState(false);
+  const { data = user } = useQuery('user', () => authApi.me(), { initialData: user });
 
   return (
     <>
-      <UserProfile user={user} onEdit={() => setEdit(true)} />
+      <UserProfile user={data} onEdit={() => setEdit(true)} />
       <ProfileForm open={edit} setOpen={setEdit} />
       <UserFolders userId={user.id} />
     </>

@@ -5,7 +5,7 @@ import { authApi, folderApi } from '@src/apis';
 
 const Dashboard: NextPage = () => {
   const user = useQuery('user', () => authApi.me()); // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const userFolders = useQuery('userFolders', () => folderApi.getByUser(user.data!.id), { enabled: !!user.data });
+  const userFolders = useQuery(['folders', user.data?.id], () => folderApi.getByUser(user.data!.id), { enabled: !!user.data });
   const folders = [...(userFolders.data || []), { id: 'sets', name: 'Sets' }].sort((a, b) =>
     a.id === 'sets' ? -1 : b.id === 'sets' ? 1 : a.name.localeCompare(b.name),
   );

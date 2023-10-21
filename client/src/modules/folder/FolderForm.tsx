@@ -28,8 +28,7 @@ export const FolderForm: React.FC<Props> = ({ open, setOpen, data }) => {
       setOpen(false);
       reset();
       if (router.pathname !== `/sets?folder=${res}`) router.push(`/sets?folder=${res}`);
-      queryClient.invalidateQueries('userFolders');
-      queryClient.invalidateQueries(['folder', res]);
+      queryClient.invalidateQueries(['folders', user?.id]);
     } catch (error) {
       console.error(error);
       notify('Hmm, something went wrong, please try again later.');

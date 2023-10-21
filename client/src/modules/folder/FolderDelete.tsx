@@ -5,6 +5,7 @@ import { folderApi } from '@src/apis';
 import { FolderInterfaceDraft } from '@src/interfaces';
 import { notify } from '@src/lib/notify';
 import { Dialog } from '@src/ui';
+import { useUserStore } from '@src/stores';
 
 interface Props {
   open: boolean;
@@ -14,11 +15,12 @@ interface Props {
 
 export const FolderDelete: React.FC<Props> = ({ open, setOpen, data }) => {
   const router = useRouter();
+  const { user } = useUserStore();
   const queryClient = useQueryClient();
 
   const fetchDelete = useMutation(folderApi.delete, {
     onSuccess: () => {
-      queryClient.invalidateQueries('userFolders');
+      queryClient.invalidateQueries(['folders', user?.id]);
       return router.push('/');
     },
   });
