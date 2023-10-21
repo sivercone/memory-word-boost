@@ -27,16 +27,19 @@ const UserProfile: React.FC<{ user: UserInterface; onEdit: () => void }> = ({ us
 
 const UserFolders: React.FC<{ userId: string }> = ({ userId }) => {
   const { data = [], isLoading } = useQuery(['folders', userId], () => folderApi.getByUser(userId), { enabled: !!userId });
+  const folders = [...data, { id: userId, name: 'Sets' }].sort((a, b) =>
+    a.name === 'Sets' ? -1 : b.name === 'Sets' ? 1 : a.name.localeCompare(b.name),
+  );
 
   if (isLoading) return <Spinner className="mx-auto m-8 h-8" />;
   return (
     <div className="max-w-3xl mx-auto p-4">
       <ActionList
         header={{ title: 'Folders' }}
-        data={data}
+        data={folders}
         keyExtractor={(item) => item.id}
         renderItem={(item, index) => (
-          <ActionList.Link href={`/sets?folder=${item.id}`} isFirst={index === 0}>
+          <ActionList.Link href={`/sets?${item.id === userId ? 'user' : 'folder'}=${item.id}`} isFirst={index === 0}>
             {item.name}
           </ActionList.Link>
         )}
