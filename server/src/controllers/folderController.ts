@@ -36,7 +36,7 @@ class FolderController {
   public createFolder = async (req: ReqWithSessionValues, res: Response, next: NextFunction) => {
     try {
       const payload = req.body;
-      const data = await folderService.create(payload);
+      const data = await folderService.create(payload, req.userId);
       res.status(201).json(data.id);
     } catch (error) {
       next(error);

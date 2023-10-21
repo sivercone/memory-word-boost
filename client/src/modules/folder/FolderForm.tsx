@@ -22,7 +22,6 @@ export const FolderForm: React.FC<Props> = ({ open, setOpen, data }) => {
   const save = useMutation(folderApi.save);
 
   const onSubmit = async (data: FolderInterfaceDraft) => {
-    if (user) data.user = user;
     try {
       const res = await save.mutateAsync(data);
       setOpen(false);
@@ -36,9 +35,9 @@ export const FolderForm: React.FC<Props> = ({ open, setOpen, data }) => {
   };
 
   React.useEffect(() => {
-    if (data?.id) reset({ ...data, user });
-    else reset({ id: '', name: '', description: '', user });
-  }, [data, user, open]);
+    if (data?.id) reset(data);
+    else reset({ id: '', name: '', description: '' });
+  }, [data, open]);
 
   return (
     <Dialog

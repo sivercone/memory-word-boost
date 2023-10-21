@@ -36,7 +36,7 @@ class SetController {
   public createSet = async (req: ReqWithSessionValues, res: Response, next: NextFunction) => {
     try {
       const payload = req.body;
-      const data = await setService.create(payload);
+      const data = await setService.create(payload, req.userId);
       res.status(201).json(data.id);
     } catch (error) {
       next(error);

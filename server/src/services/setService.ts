@@ -47,12 +47,12 @@ class SetService {
     }
   }
 
-  public async create(payload: SetInterface): Promise<SetInterface> {
-    if (isEmpty(payload) || !payload.user)
+  public async create(payload: Partial<Omit<SetInterface, 'user'>>, userId?: string): Promise<SetInterface> {
+    if (isEmpty(payload) || !userId)
       throw new HttpException(400, 'Payload is missed. Do not repeat this request without modification.');
     try {
       const generatedId = nanoid();
-      const saveSet = await this.setRepository.save({ ...payload, id: generatedId });
+      const saveSet = await this.setRepository.save({ ...payload, id: generatedId, user: { id: userId } });
       return saveSet;
     } catch (error) {
       logger.error('[SetService - create] >> Message:', error);
@@ -60,7 +60,7 @@ class SetService {
     }
   }
 
-  public async update(payload: SetInterface, userId: string): Promise<SetInterface> {
+  public async update(payload: Partial<Omit<SetInterface, 'user'>>, userId: string): Promise<SetInterface> {
     if (isEmpty(payload) || !userId)
       throw new HttpException(400, 'Payload is missed. Do not repeat this request without modification.');
     try {
@@ -75,14 +75,13 @@ class SetService {
     }
   }
 
-  public async delete(payload: string, userId: string): Promise<void> {
-    if (isEmpty(payload) || !userId)
-      throw new HttpException(400, 'Payload is missed. Do not repeat this request without modification.');
+  public async delete(setId: string, userId: string): Promise<void> {
+    if (!setId || !userId) throw new HttpException(400, 'Payload is missed. Do not repeat this request without modification.');
     try {
-      const data = await this.setRepository.findOne({ where: { id: payload }, relations: ['user'] });
+      const data = await this.setRepository.findOne({ where: { id: setId }, relations: ['user'] });
       if (!data) throw new HttpException(409, 'Conflict');
       if (data.user.id !== userId) throw new HttpException(403, 'Forbidden');
-      await this.setRepository.delete({ id: payload });
+      await this.setRepository.delete({ id: setId });
     } catch (error) {
       logger.error('[SetService - delete] >> Message:', error);
       throw new HttpException(error.status || 409, error.message || 'something went wrong');
