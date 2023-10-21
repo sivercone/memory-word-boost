@@ -38,27 +38,29 @@ const General: React.FC = () => {
       <div className="flex items-center gap-2">
         <h1 className="text-2xl font-medium">{currStudySet.id ? 'Edit Set' : 'New Set'}</h1>
         <div className="ml-auto flex gap-4 items-center">
-          {currStudySet.id ? (
+          {currStudySet.id && !save.isLoading ? (
             <ButtonSquare href={`/sets/${currStudySet.id}`}>
               <span className="font-medium">Cancel</span>
             </ButtonSquare>
           ) : null}
-          <ButtonSquare onClick={handleSubmit(onSubmit)}>
-            <span className="font-medium">Save</span>
+          <ButtonSquare onClick={handleSubmit(onSubmit)} disabled={save.isLoading}>
+            <span className="font-medium">{save.isLoading ? 'Loading..' : 'Save'}</span>
           </ButtonSquare>
         </div>
       </div>
-      <form autoComplete="off" className="flex flex-col gap-4">
-        <input
-          placeholder="Name"
-          {...register('name', { required: true, onChange: (event) => setCurrStudySet({ name: event.target.value }) })}
-          className="border border-gray-200 border-solid p-2 rounded-lg bg-white"
-        />
-        <input
-          placeholder="Description"
-          {...register('description', { onChange: (event) => setCurrStudySet({ description: event.target.value }) })}
-          className="border border-gray-200 border-solid p-2 rounded-lg bg-white"
-        />
+      <form autoComplete="off">
+        <fieldset className="flex flex-col gap-4" disabled={save.isLoading}>
+          <input
+            placeholder="Name"
+            {...register('name', { required: true, onChange: (event) => setCurrStudySet({ name: event.target.value }) })}
+            className="border border-gray-200 border-solid p-2 rounded-lg bg-white"
+          />
+          <input
+            placeholder="Description"
+            {...register('description', { onChange: (event) => setCurrStudySet({ description: event.target.value }) })}
+            className="border border-gray-200 border-solid p-2 rounded-lg bg-white"
+          />
+        </fieldset>
       </form>
 
       {[
@@ -75,7 +77,12 @@ const General: React.FC = () => {
           href: `${router.asPath}?tab=folders`,
         },
       ].map((item) => (
-        <ButtonSquare key={item.id} href={item.href} className="p-4 flex-col gap-1 overflow-hidden w-full items-stretch text-left">
+        <ButtonSquare
+          key={item.id}
+          onClick={() => router.push(item.href)}
+          className="p-4 flex-col gap-1 overflow-hidden w-full items-stretch text-left"
+          disabled={save.isLoading}
+        >
           <div className="flex items-center">
             <span className="font-medium">{item.name}</span>
             <ChevronRightIcon className="ml-auto fill-gray-600" />

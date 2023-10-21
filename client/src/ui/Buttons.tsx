@@ -8,7 +8,7 @@ type ButtonProps = DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HT
   // loading?: boolean;
 };
 
-const commonStyles = 'transition-colors hover:bg-gray-50 select-none';
+const commonStyles = 'transition-colors hover:bg-gray-50 select-none disabled:cursor-default disabled:hover:bg-white';
 
 export const ButtonSquare = forwardRef<HTMLButtonElement, ButtonProps>(({ children, className, href, ...props }, ref) => {
   const baseClasses = twMerge(

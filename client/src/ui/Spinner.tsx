@@ -1,10 +1,12 @@
+import { twMerge } from 'tailwind-merge';
+
 function Spinner({ className, ...rest }: { className?: string }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 27 27"
       {...rest}
-      className={`${className} animate-spin`}
+      className={twMerge(`h-4 ${className} animate-spin`)}
       style={{
         animationTimingFunction: 'steps(12, end)',
       }}
