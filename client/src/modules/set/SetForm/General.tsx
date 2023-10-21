@@ -31,7 +31,7 @@ const General: React.FC = () => {
   return (
     <div className="max-w-3xl mx-auto flex flex-col gap-4 py-4 px-4">
       <div className="flex items-center gap-2">
-        <h1 className="text-2xl font-medium">New Set</h1>
+        <h1 className="text-2xl font-medium">{currStudySet.id ? 'Edit Set' : 'New Set'}</h1>
         <div className="ml-auto flex gap-4 items-center">
           {currStudySet.id ? (
             <ButtonSquare href={`/sets/${currStudySet.id}`}>

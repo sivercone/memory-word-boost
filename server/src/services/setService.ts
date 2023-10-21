@@ -25,7 +25,7 @@ class SetService {
   public async findById(payload: string): Promise<SetInterface> {
     if (isEmpty(payload)) throw new HttpException(400, 'Payload is missed. Do not repeat this request without modification.');
     try {
-      const data = await this.setRepository.findOne({ where: { id: payload }, relations: { user: true } });
+      const data = await this.setRepository.findOne({ where: { id: payload }, relations: { user: true, folder: true } });
       if (!data) throw new HttpException(404, 'Not Found');
       return data;
     } catch (error) {
@@ -45,12 +45,20 @@ class SetService {
     }
   }
 
-  public async create(payload: Partial<Omit<SetInterface, 'user'>>, userId?: string): Promise<SetInterface> {
+  public async create(
+    payload: Partial<Omit<SetInterface, 'user' | 'folder'> & { folderId: string }>,
+    userId?: string,
+  ): Promise<SetInterface> {
     if (isEmpty(payload) || !userId)
       throw new HttpException(400, 'Payload is missed. Do not repeat this request without modification.');
     try {
       const generatedId = nanoid();
-      const saveSet = await this.setRepository.save({ ...payload, id: generatedId, user: { id: userId } });
+      const saveSet = await this.setRepository.save({
+        ...payload,
+        folder: { id: payload.folderId },
+        id: generatedId,
+        user: { id: userId },
+      });
       return saveSet;
     } catch (error) {
       logger.error('[SetService - create] >> Message:', error);
@@ -58,14 +66,17 @@ class SetService {
     }
   }
 
-  public async update(payload: Partial<Omit<SetInterface, 'user'>>, userId: string): Promise<SetInterface> {
+  public async update(
+    payload: Partial<Omit<SetInterface, 'user' | 'folder'> & { folderId: string }>,
+    userId: string,
+  ): Promise<SetInterface> {
     if (isEmpty(payload) || !userId)
       throw new HttpException(400, 'Payload is missed. Do not repeat this request without modification.');
     try {
       const findSet = await this.setRepository.findOne({ where: { id: payload.id }, relations: ['user'] });
       if (!findSet) throw new HttpException(409, 'Conflict');
       if (findSet.user.id !== userId) throw new HttpException(403, 'Forbidden');
-      const saveSet = await this.setRepository.save(payload);
+      const saveSet = await this.setRepository.save({ ...payload, folder: { id: payload.folderId } });
       return saveSet;
     } catch (error) {
       logger.error('[SetService - update] >> Message:', error);

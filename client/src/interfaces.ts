@@ -14,7 +14,7 @@ export interface SetInterface {
   createdAt: string;
   updatedAt: string;
 }
-export type SetInterfaceDraft = Partial<Omit<SetInterface, 'user' | 'createdAt' | 'updatedAt'>>;
+export type SetInterfaceDraft = Partial<Omit<SetInterface, 'folder' | 'user' | 'createdAt' | 'updatedAt'> & { folderId: string }>;
 
 export interface FolderInterface {
   id: string;
