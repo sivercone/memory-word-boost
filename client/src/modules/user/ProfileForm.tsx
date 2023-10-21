@@ -48,7 +48,8 @@ const ProfileForm: React.FC<{ open: boolean; setOpen: (value: boolean) => void }
             required: true,
             pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i, message: 'Invalid email address' },
           })}
-          className="border border-gray-200 border-solid p-2 rounded-lg bg-white"
+          className="border border-gray-200 border-solid p-2 rounded-lg bg-white read-only:bg-gray-100 read-only:text-gray-600"
+          readOnly
         />
         <input
           placeholder="Name"
