@@ -13,10 +13,10 @@ function MyApp({ Component, pageProps }: AppProps) {
     <QueryClientProvider client={queryClient}>
       <Hydrate state={pageProps.dehydratedState}>
         <NextHead />
+        <AuthCheck />
         <Layout>
           <Component {...pageProps} />
         </Layout>
-        <AuthCheck />
         <ToastContainer
           progressStyle={{ background: 'var(--color-primary)' }}
           position="bottom-right"
