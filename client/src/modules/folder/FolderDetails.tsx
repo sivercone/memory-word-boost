@@ -5,16 +5,17 @@ import { useQuery } from 'react-query';
 import { ActionList, ButtonSquare, DropdownMenu } from '@src/ui';
 import { DeleteIcon, EditIcon, MoreIcon, PersonIcon } from '@src/ui/Icons';
 import { FolderInterface } from '@src/interfaces';
-import { setApi } from '@src/apis';
+import { folderApi, setApi } from '@src/apis';
 import { FolderForm } from './FolderForm';
 import { FolderDelete } from './FolderDelete';
 
 const FolderDetails: NextPage<{ queryId: string; queryUser: string; data: FolderInterface | null }> = ({
   queryId,
   queryUser,
-  data: folder,
+  data,
 }) => {
   const router = useRouter();
+  const { data: folder = data } = useQuery(['folder', queryId], () => folderApi.getById(queryId));
   const [shownModal, setShownModal] = React.useState<'edit' | 'del' | null>(null);
   React.useEffect(() => {
     if (queryId === 'new') setShownModal('edit');

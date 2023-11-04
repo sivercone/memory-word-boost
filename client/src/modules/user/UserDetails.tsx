@@ -48,15 +48,15 @@ const UserFolders: React.FC<{ userId: string }> = ({ userId }) => {
   );
 };
 
-const UserDetails: NextPage<{ queryId: string; data: UserInterface }> = ({ data: user }) => {
+const UserDetails: NextPage<{ queryId: string; data: UserInterface | null }> = ({ queryId, data: user }) => {
   const [edit, setEdit] = React.useState(false);
   const { data = user } = useQuery('user', () => authApi.me(), { initialData: user });
 
   return (
     <>
-      <UserProfile user={data} onEdit={() => setEdit(true)} />
+      {data && <UserProfile user={data} onEdit={() => setEdit(true)} />}
       <ProfileForm open={edit} setOpen={setEdit} />
-      <UserFolders userId={user.id} />
+      <UserFolders userId={queryId} />
     </>
   );
 };

@@ -12,10 +12,10 @@ instance.interceptors.response.use(
     return response;
   },
   function (error) {
-    if (error.response?.status === 401 && typeof window !== 'undefined') {
+    if (error.response?.status === 401) {
       notify('Authorization is missing. You must sign in before continuing');
       Router.replace('/login');
-    }
+    } else if (error.response?.data) notify(error.response?.data);
 
     return Promise.reject(error);
   },

@@ -23,11 +23,12 @@ export const FolderForm: React.FC<Props> = ({ open, setOpen, data }) => {
 
   const onSubmit = async (data: FolderInterfaceDraft) => {
     try {
-      const res = await save.mutateAsync(data);
+      const folderId = await save.mutateAsync(data);
       setOpen(false);
       reset();
-      if (router.pathname !== `/sets?folder=${res}`) router.push(`/sets?folder=${res}`);
-      queryClient.invalidateQueries(['folders', user?.id]);
+      queryClient.invalidateQueries(['folder', folderId]);
+      if (user) queryClient.invalidateQueries(['folders', user.id]);
+      if (router.pathname !== `/sets?folder=${folderId}`) router.push(`/sets?folder=${folderId}`);
     } catch (error) {
       console.error(error);
       notify('Hmm, something went wrong, please try again later.');
