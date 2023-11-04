@@ -1,25 +1,23 @@
 import { NextPage } from 'next';
 import { useForm } from 'react-hook-form';
 import { ButtonSquare } from '@src/ui';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { authApi } from '@src/apis';
 import { useRouter } from 'next/router';
 
 const Login: NextPage = () => {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { register, handleSubmit } = useForm<{ email: string; password: string }>();
   const auth = useMutation(authApi.login, {
     onSuccess: () => {
       sessionStorage.setItem('logged', 'yes');
+      queryClient.invalidateQueries();
       router.replace('/');
     },
   });
   const onSubmit = async (data: { email: string; password: string }) => {
-    try {
-      await auth.mutateAsync(data);
-    } catch (error) {
-      console.log(error);
-    }
+    await auth.mutateAsync(data).catch((error) => console.log(error));
   };
 
   return (

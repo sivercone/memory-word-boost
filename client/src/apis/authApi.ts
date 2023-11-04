@@ -6,12 +6,14 @@ export const authApi = {
   async login(body: { email: string; password: string }): Promise<void> {
     if (consts.isBackendLess) {
       await Promise.resolve();
+      const user = JSON.parse(localStorage[`${consts.storageKey}_user`] || '{}');
       localStorage.setItem(
         `${consts.storageKey}_user`,
         JSON.stringify({
-          id: crypto.randomUUID(),
+          ...user,
+          id: user.id || crypto.randomUUID(),
           email: body.email,
-          createdAt: new Date().toISOString(),
+          createdAt: user.createdAt || new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         }),
       );
@@ -21,7 +23,7 @@ export const authApi = {
   async me(): Promise<UserInterface> {
     if (consts.isBackendLess) {
       await Promise.resolve();
-      return JSON.parse(localStorage[`${consts.storageKey}_user`]);
+      return JSON.parse(localStorage[`${consts.storageKey}_user`] || '{}');
     } else {
       const response = await http.get(`auth/me`);
       return response.data;
@@ -36,7 +38,7 @@ export const authApi = {
   async getById(payload: string): Promise<UserInterface> {
     if (consts.isBackendLess) {
       await Promise.resolve();
-      return JSON.parse(localStorage[`${consts.storageKey}_user`]);
+      return JSON.parse(localStorage[`${consts.storageKey}_user`] || '{}');
     } else {
       const response = await http.get(`auth/user/${payload}`);
       return response.data;
@@ -46,7 +48,7 @@ export const authApi = {
   async update(payload: UserInterface): Promise<void> {
     if (consts.isBackendLess) {
       await Promise.resolve();
-      const userObject = JSON.parse(localStorage[`${consts.storageKey}_user`]);
+      const userObject = JSON.parse(localStorage[`${consts.storageKey}_user`] || '{}');
       localStorage.setItem(
         `${consts.storageKey}_user`,
         JSON.stringify({ ...userObject, ...payload, updatedAt: new Date().toISOString() }),
