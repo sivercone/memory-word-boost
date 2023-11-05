@@ -5,7 +5,7 @@ import { SetInterfaceDraft } from '@src/interfaces';
 const initialState = {
   currStudySet: {
     id: '',
-    title: '',
+    name: '',
     description: '',
     folderId: 'sets',
   } as SetInterfaceDraft,

@@ -1,15 +1,18 @@
 import React from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
+import { useQuery } from 'react-query';
 import { SetInterface } from '@src/interfaces';
 import { useSetStore } from '@src/stores';
+import { setApi } from '@src/apis';
 import General from './General';
 import Cards from './Cards';
 import Folders from './Folders';
 
-const SetForm: NextPage<{ data?: SetInterface; queryId: string }> = ({ data: studySet, queryId }) => {
+const SetForm: NextPage<{ data?: SetInterface; queryId: string }> = ({ data, queryId }) => {
   const { query } = useRouter();
   const { setCurrStudySet, resetCurrStudySet } = useSetStore();
+  const { data: studySet = data } = useQuery(['set', queryId], () => setApi.getById(queryId));
 
   React.useEffect(() => {
     if (queryId === 'new') resetCurrStudySet();

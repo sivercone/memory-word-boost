@@ -1,13 +1,16 @@
 import React from 'react';
 import { NextPage } from 'next';
+import { useQuery } from 'react-query';
 import { SetInterface } from '@src/interfaces';
 import { useIsClient } from '@src/lib/hooks';
+import { setApi } from '@src/apis';
 import CardView from './CardView';
 import CompleteView from './CompleteView';
 
 const Flashcards: NextPage<{ data: SetInterface; queryId: string }> = ({ data, queryId }) => {
   const isClient = useIsClient();
-  const cards = data.cards;
+  const { data: studySet = data } = useQuery(['set', queryId], () => setApi.getById(queryId));
+  const cards = studySet?.cards || [];
   const [currentCardIndex, setCurrentCardIndex] = React.useState(0);
   const [correctAnswers, setCorrectAnswers] = React.useState(0);
   const scorePercentage = ((correctAnswers / cards.length) * 100).toFixed(0);

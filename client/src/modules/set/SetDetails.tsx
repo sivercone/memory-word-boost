@@ -1,13 +1,16 @@
 import React from 'react';
 import { useRouter } from 'next/router';
+import { useQuery } from 'react-query';
 import { SetInterface } from '@src/interfaces';
 import { ActionList, ButtonSquare, DropdownMenu } from '@src/ui';
 import { DeleteIcon, EditIcon, FolderIcon, MoreIcon, PersonIcon } from '@src/ui/Icons';
 import { SetDelete } from '@src/modules/set/SetDelete';
+import { setApi } from '@src/apis';
 
-const SetDetails: React.FC<{ queryId: string; data: SetInterface }> = ({ queryId, data: set }) => {
+const SetDetails: React.FC<{ queryId: string; data: SetInterface }> = ({ queryId, data }) => {
   const router = useRouter();
   const [deletion, setDeletion] = React.useState(false);
+  const { data: set = data } = useQuery(['set', queryId], () => setApi.getById(queryId));
 
   const studyMethods = [{ title: 'Flashcards', href: `${queryId}/flashcards` }];
   const menuOptions = [
@@ -17,6 +20,7 @@ const SetDetails: React.FC<{ queryId: string; data: SetInterface }> = ({ queryId
     { title: 'Delete', action: () => setDeletion(true), icon: <DeleteIcon /> },
   ];
 
+  if (!set) return null;
   return (
     <>
       <div className="bg-white py-8 border-b border-b-gray-200">

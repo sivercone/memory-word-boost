@@ -6,7 +6,7 @@ export const folderApi = {
   async get(excludeUserId: string | undefined): Promise<FolderInterface[]> {
     if (consts.isBackendLess) {
       await Promise.resolve();
-      return JSON.parse(localStorage[`${consts.storageKey}_folders`]);
+      return JSON.parse(localStorage[`${consts.storageKey}_folders`] || '[]');
     } else {
       const response = await http.get(`/folders${excludeUserId ? `?excludeUserId=${excludeUserId}` : ''}`);
       return response.data;
@@ -16,8 +16,10 @@ export const folderApi = {
   async getById(payload: string): Promise<FolderInterface> {
     if (consts.isBackendLess) {
       await Promise.resolve();
+      const sets = JSON.parse(localStorage[`${consts.storageKey}_sets`] || '[]');
       const folders = JSON.parse(localStorage[`${consts.storageKey}_folders`] || '[]');
       const folderById = Array.isArray(folders) ? folders.find((item) => item.id === payload) : null;
+      if (folderById) folderById.sets = Array.isArray(sets) ? sets.filter((item) => folderById.sets.includes(item.id)) : [];
       return folderById;
     } else {
       const response = await http.get(`/folder/${payload}`);

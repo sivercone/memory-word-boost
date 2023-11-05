@@ -19,6 +19,7 @@ const General: React.FC = () => {
   const queryClient = useQueryClient();
   const save = useMutation(setApi.save, {
     onSuccess: (res) => {
+      if (currStudySet.id) queryClient.invalidateQueries(['set', currStudySet.id]);
       queryClient.invalidateQueries('sets');
       router.push(`/sets/${res}`);
     },
@@ -26,7 +27,7 @@ const General: React.FC = () => {
   const onSubmit = async (payload: Pick<SetInterface, 'name' | 'description'>) => {
     const datus = {
       ...currStudySet,
-      title: payload.name,
+      name: payload.name,
       description: payload.description,
       folderId: currStudySet.folderId === 'sets' ? null : currStudySet.folderId,
     };
