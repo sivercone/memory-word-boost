@@ -57,7 +57,7 @@ export const setApi = {
       delete saveSet.folderId;
       const updatedFolders = Array.isArray(folders)
         ? folders.map((item) =>
-            item.id === saveSet.folder.id ? { ...item, sets: Array.from(new Set([...item.sets, saveSet.id])) } : item,
+            item.id === saveSet.folder?.id ? { ...item, sets: Array.from(new Set([...item.sets, saveSet.id])) } : item,
           )
         : [];
       localStorage.setItem(`${consts.storageKey}_folders`, JSON.stringify(updatedFolders));

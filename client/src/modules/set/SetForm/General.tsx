@@ -4,12 +4,13 @@ import { useMutation, useQueryClient } from 'react-query';
 import { useForm } from 'react-hook-form';
 import { setApi } from '@src/apis';
 import { ChevronRightIcon } from '@src/ui/Icons';
-import { useSetStore } from '@src/stores';
+import { useSetStore, useUserStore } from '@src/stores';
 import { SetInterface } from '@src/interfaces';
 import { ButtonSquare } from '@src/ui';
 
 const General: React.FC = () => {
   const router = useRouter();
+  const { user } = useUserStore();
   const { setCurrStudySet, currStudySet } = useSetStore();
   const { register, handleSubmit, reset } = useForm<Pick<SetInterface, 'name' | 'description'>>();
   React.useEffect(() => {
@@ -19,6 +20,7 @@ const General: React.FC = () => {
   const queryClient = useQueryClient();
   const save = useMutation(setApi.save, {
     onSuccess: (res) => {
+      if (user?.id) queryClient.invalidateQueries(['userSets', user.id]);
       if (currStudySet.id) queryClient.invalidateQueries(['set', currStudySet.id]);
       queryClient.invalidateQueries('sets');
       router.push(`/sets/${res}`);

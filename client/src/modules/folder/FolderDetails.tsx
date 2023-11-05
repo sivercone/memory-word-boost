@@ -30,7 +30,9 @@ const FolderDetails: NextPage<Props> = ({ queryId, queryUser, data }) => {
     { title: 'Delete', action: () => setShownModal('del'), icon: <DeleteIcon /> },
   ];
 
-  const { data: userSets = [] } = useQuery('userSets', () => setApi.getByUser(String(queryUser)), { enabled: Boolean(queryUser) });
+  const { data: userSets = [] } = useQuery(['userSets', queryUser], () => setApi.getByUser(String(queryUser)), {
+    enabled: Boolean(queryUser),
+  });
 
   return (
     <>
