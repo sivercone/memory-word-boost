@@ -1,31 +1,37 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
-import { authApi } from 'apis/authApi';
-import { useUserStore } from 'storage/useUserStore';
-import { sessionMemory } from 'lib/browserMemory';
+import { authApi } from '@src/apis';
+import { Spinner } from '@src/ui';
+import { useIsClient } from '@src/lib/hooks';
+import { useUserStore } from '@src/stores';
 
 export const AuthCheck: React.FC = () => {
-  const { setUser, setSignAccess, signAccess } = useUserStore();
-  const { data, status, refetch } = useQuery('user', () => authApi.me(signAccess), { enabled: false });
+  const isClient = useIsClient();
+  const router = useRouter();
+  const { setUser } = useUserStore();
+  const loggedInfo = isClient ? localStorage.logged : null;
+  const { refetch } = useQuery('user', () => authApi.me(), {
+    enabled: false,
+    onError: () => localStorage.setItem('logged', 'no'),
+    onSuccess: (data) => {
+      localStorage.setItem('logged', 'yes');
+      setUser(data);
+    },
+  });
 
   React.useEffect(() => {
-    const loggedInfo = sessionMemory.get('logged');
-    if (!loggedInfo || loggedInfo === 'yes') refetch();
-  }, []);
-
-  React.useEffect(() => {
-    if (status === 'error') sessionMemory.set('logged', 'no');
-    if (status === 'success' && data) {
-      const { signAccess, ...user } = data;
-      setUser(user);
-      setSignAccess(signAccess);
-      sessionMemory.set('logged', 'yes');
+    if (isClient) {
+      if (!loggedInfo) router.replace('/login');
+      else if (loggedInfo === 'yes') refetch();
     }
-  }, [status, data, setUser]);
+  }, [loggedInfo]);
 
-  React.useEffect(() => {
-    if (status === 'error') window.location.replace('/login');
-  }, [status]);
-
-  return <></>;
+  if (!loggedInfo)
+    return (
+      <div className="animate-fadeIn z-50 absolute top-0 bottom-0 left-0 right-0 w-full h-full flex items-center justify-center bg-white pointer-events-none select-none">
+        <Spinner className="mx-auto m-8 h-8" />
+      </div>
+    );
+  else return null;
 };

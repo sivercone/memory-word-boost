@@ -1,21 +1,22 @@
 export interface CardInterface {
   order: number;
-  term: string;
-  definition: string;
+  front: string;
+  back: string;
 }
 
 export interface SetInterface {
   id: string;
-  title: string;
+  name: string;
   description: string;
-  tags: string[];
   cards: CardInterface[];
-  folders: FolderInterface[];
+  folder: FolderInterface;
   user: UserInterface;
   createdAt: string;
   updatedAt: string;
 }
-export type SetInterfaceDraft = Omit<SetInterface, 'folders' | 'createdAt' | 'updatedAt'>;
+export type SetInterfaceDraft = Partial<
+  Omit<SetInterface, 'folder' | 'user' | 'createdAt' | 'updatedAt'> & { folderId: string | null }
+>;
 
 export interface FolderInterface {
   id: string;
@@ -26,14 +27,13 @@ export interface FolderInterface {
   createdAt: string;
   updatedAt: string;
 }
-export type FolderInterfaceDraft = Omit<FolderInterface, 'sets' | 'createdAt' | 'updatedAt'>;
+export type FolderInterfaceDraft = Partial<Omit<FolderInterface, 'user' | 'sets' | 'createdAt' | 'updatedAt'>>;
 
 export interface UserInterface {
   id: string;
   email: string;
   name: string;
   bio: string;
-  avatar: string;
   createdAt: string;
   updatedAt: string;
 }

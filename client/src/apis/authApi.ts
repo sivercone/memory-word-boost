@@ -1,39 +1,58 @@
-import { UserInterface } from 'interfaces';
-
-const path = 'http://localhost:7001/auth';
+import http from '@src/lib/http';
+import consts from '@src/lib/consts';
+import { UserInterface } from '@src/interfaces';
 
 export const authApi = {
-  async me(token: string | undefined): Promise<UserInterface & { signAccess: string | undefined }> {
-    const response = await fetch(`${path}/me`, {
-      headers: { Authorization: `Bearer ${token}` },
-      credentials: 'include',
-    });
-    if (!response.ok) throw await response.json();
-    return response.json();
+  async login(body: { email: string; password: string }): Promise<void> {
+    if (consts.isBackendLess) {
+      await Promise.resolve();
+      const user = JSON.parse(localStorage[`${consts.storageKey}_user`] || '{}');
+      localStorage.setItem(
+        `${consts.storageKey}_user`,
+        JSON.stringify({
+          ...user,
+          id: user.id || crypto.randomUUID(),
+          email: body.email,
+          createdAt: user.createdAt || new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        }),
+      );
+    } else await http.post(`auth/login`, body);
+  },
+
+  async me(): Promise<UserInterface> {
+    if (consts.isBackendLess) {
+      await Promise.resolve();
+      return JSON.parse(localStorage[`${consts.storageKey}_user`] || '{}');
+    } else {
+      const response = await http.get(`auth/me`);
+      return response.data;
+    }
+  },
+
+  async logout(): Promise<void> {
+    if (consts.isBackendLess) await Promise.resolve();
+    else await http.post(`auth/logout`);
   },
 
   async getById(payload: string): Promise<UserInterface> {
-    const response = await fetch(`${path}/user/${payload}`);
-    if (!response.ok) throw await response.json();
-    return response.json();
+    if (consts.isBackendLess) {
+      await Promise.resolve();
+      return JSON.parse(localStorage[`${consts.storageKey}_user`] || '{}');
+    } else {
+      const response = await http.get(`auth/user/${payload}`);
+      return response.data;
+    }
   },
 
-  async update(payload: { data: UserInterface; token: string | undefined }): Promise<void> {
-    const response = await fetch(`${path}/user/update`, {
-      method: 'PUT',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${payload.token}` },
-      body: JSON.stringify(payload.data),
-    });
-    if (!response.ok) throw await response.json();
-  },
-
-  async logout(token: string | undefined): Promise<void> {
-    const response = await fetch(`${path}/logout`, {
-      headers: { Authorization: `Bearer ${token}` },
-      credentials: 'include',
-    });
-    if (!response.ok) throw await response.json();
-    return response.json();
+  async update(payload: UserInterface): Promise<void> {
+    if (consts.isBackendLess) {
+      await Promise.resolve();
+      const userObject = JSON.parse(localStorage[`${consts.storageKey}_user`] || '{}');
+      localStorage.setItem(
+        `${consts.storageKey}_user`,
+        JSON.stringify({ ...userObject, ...payload, updatedAt: new Date().toISOString() }),
+      );
+    } else await http.put(`auth/user/update`, payload);
   },
 };

@@ -1,8 +1,7 @@
 import { Router } from 'express';
-import { authController } from '@/controllers/authController';
-import { isAuth } from '@/middlewares/isAuth';
-import { userController } from '@/controllers/userController';
-import { Routes } from '@/interfaces';
+import { isAuth } from '@src/middlewares';
+import { Routes } from '@src/interfaces';
+import { authController, userController } from '@src/controllers';
 
 class AuthRoute implements Routes {
   public path = '/auth';
@@ -13,10 +12,9 @@ class AuthRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}/google`, authController.ouathGoogle);
+    this.router.post(`${this.path}/login`, authController.logIn);
     this.router.get(`${this.path}/me`, isAuth, authController.me);
-    this.router.get(`${this.path}/logout`, isAuth, authController.logOut);
-    // this.router.get(`${this.path}/users`, userController.getUsers); // @todo - can be enabled when will be implemented middleware for admin permissions
+    this.router.post(`${this.path}/logout`, isAuth, authController.logOut);
     this.router.get(`${this.path}/user/:id`, userController.getUserById);
     this.router.put(`${this.path}/user/update`, isAuth, userController.updateUser);
     this.router.delete(`${this.path}/user/:id`, isAuth, userController.deleteUser);

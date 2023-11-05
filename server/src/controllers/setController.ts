@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-import { setService } from '@/services/setService';
-import { ReqWithSessionValues } from '@/interfaces';
+import { setService } from '@src/services';
+import { ReqWithSessionValues } from '@src/interfaces';
 
 class SetController {
   public getSets = async (req: Request, res: Response, next: NextFunction) => {
@@ -36,7 +36,7 @@ class SetController {
   public createSet = async (req: ReqWithSessionValues, res: Response, next: NextFunction) => {
     try {
       const payload = req.body;
-      const data = await setService.create(payload);
+      const data = await setService.create(payload, req.userId);
       res.status(201).json(data.id);
     } catch (error) {
       next(error);

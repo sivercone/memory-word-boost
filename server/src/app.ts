@@ -8,10 +8,10 @@ import express from 'express';
 import helmet from 'helmet';
 import hpp from 'hpp';
 import morgan from 'morgan';
-import { dataSource } from '@/core/db';
-import errorMiddleware from '@/middlewares/errorMiddleware';
-import { logger, stream } from '@utils/logger';
-import { Routes } from '@/interfaces';
+import { dataSource } from '@src/core/db';
+import { errorMiddleware } from '@src/middlewares';
+import { logger, stream } from '@src/lib/logger';
+import { Routes } from '@src/interfaces';
 
 class App {
   public app: express.Application;

@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { folderController } from '@/controllers/folderController';
-import { Routes } from '@/interfaces';
-import { isAuth } from '@/middlewares/isAuth';
+import { folderController } from '@src/controllers';
+import { Routes } from '@src/interfaces';
+import { isAuth } from '@src/middlewares';
 
 class FolderRoute implements Routes {
   public path = '/folder';

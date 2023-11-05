@@ -1,9 +1,8 @@
-import { dataSource } from '@/core/db';
-import { HttpException } from '@/utils/HttpException';
-import { isEmpty } from '@/utils/isEmpty';
-import UserEntity from '@/entities/UserEntity';
-import { UserInterface } from '@/interfaces';
-import { logger } from '@/utils/logger';
+import { dataSource } from '@src/core/db';
+import { HttpException, logger } from '@src/lib';
+import { isEmpty } from '@src/lib/utils';
+import { UserEntity } from '@src/entities';
+import { UserInterface } from '@src/interfaces';
 
 class UserService {
   private userRepository = dataSource.getRepository(UserEntity);
@@ -22,7 +21,7 @@ class UserService {
     if (!payload) throw new HttpException(400, 'Payload is missed. Do not repeat this request without modification.');
     try {
       const findUser = await this.userRepository.findOneBy({ id: payload });
-      if (!findUser) throw new HttpException(404, 'Not found');
+      if (!findUser) throw new HttpException(404, 'Not found'); // @todo - fix incorrect response for auth check..
       return findUser;
     } catch (error) {
       logger.error('[UserService - findById] >> Message:', error);

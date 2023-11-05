@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-import { folderService } from '@/services/folderService';
-import { ReqWithSessionValues } from '@/interfaces';
+import { folderService } from '@src/services';
+import { ReqWithSessionValues } from '@src/interfaces';
 
 class FolderController {
   public getFolders = async (req: Request, res: Response, next: NextFunction) => {
@@ -36,7 +36,7 @@ class FolderController {
   public createFolder = async (req: ReqWithSessionValues, res: Response, next: NextFunction) => {
     try {
       const payload = req.body;
-      const data = await folderService.create(payload);
+      const data = await folderService.create(payload, req.userId);
       res.status(201).json(data.id);
     } catch (error) {
       next(error);

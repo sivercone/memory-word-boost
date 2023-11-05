@@ -1,10 +1,9 @@
 import { Not } from 'typeorm';
-import { dataSource } from '@/core/db';
-import FolderEntity from '@/entities/FolderEntity';
-import { HttpException } from '@/utils/HttpException';
-import { isEmpty } from '@/utils/isEmpty';
-import { FolderInterface } from '@/interfaces';
-import { logger } from '@/utils/logger';
+import { dataSource } from '@src/core/db';
+import { FolderEntity } from '@src/entities';
+import { HttpException, logger } from '@src/lib';
+import { isEmpty, nanoid } from '@src/lib/utils';
+import { FolderInterface } from '@src/interfaces';
 
 class FolderService {
   private folderRepository = dataSource.getRepository(FolderEntity);
@@ -48,11 +47,13 @@ class FolderService {
     }
   }
 
-  public async create(payload: FolderInterface): Promise<FolderInterface> {
-    if (isEmpty(payload) || !payload.user)
+  public async create(payload: Partial<Omit<FolderInterface, 'user'>>, userId?: string): Promise<FolderInterface> {
+    if (isEmpty(payload) || !userId)
       throw new HttpException(400, 'Payload is missed. Do not repeat this request without modification.');
+
     try {
-      const data = await this.folderRepository.save(payload);
+      const generatedId = nanoid();
+      const data = await this.folderRepository.save({ ...payload, id: generatedId, user: { id: userId } });
       return data;
     } catch (error) {
       logger.error('[FolderService - create] >> Message:', error);
@@ -60,7 +61,7 @@ class FolderService {
     }
   }
 
-  public async update(payload: FolderInterface, userId: string): Promise<FolderInterface> {
+  public async update(payload: Partial<Omit<FolderInterface, 'user'>>, userId?: string): Promise<FolderInterface> {
     if (isEmpty(payload) || !userId)
       throw new HttpException(400, 'Payload is missed. Do not repeat this request without modification.');
     try {
@@ -75,14 +76,13 @@ class FolderService {
     }
   }
 
-  public async delete(payload: string, userId: string): Promise<void> {
-    if (isEmpty(payload) || !userId)
-      throw new HttpException(400, 'Payload is missed. Do not repeat this request without modification.');
+  public async delete(folderId: string, userId: string): Promise<void> {
+    if (!folderId || !userId) throw new HttpException(400, 'Payload is missed. Do not repeat this request without modification.');
     try {
-      const data = await this.folderRepository.findOne({ where: { id: payload }, relations: { user: true } });
+      const data = await this.folderRepository.findOne({ where: { id: folderId }, relations: { user: true } });
       if (!data) throw new HttpException(409, 'Conflict');
       if (data.user.id !== userId) throw new HttpException(403, 'Forbidden');
-      await this.folderRepository.delete({ id: payload });
+      await this.folderRepository.delete({ id: folderId });
     } catch (error) {
       logger.error('[FolderService - delete] >> Message:', error);
       throw new HttpException(error.status || 409, error.message || 'something went wrong');

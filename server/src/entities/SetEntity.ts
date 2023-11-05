@@ -1,28 +1,24 @@
-import { SetInterface } from '@/interfaces';
-import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import FolderEntity from './FolderEntity';
-import UserEntity from './UserEntity';
+import { Column, CreateDateColumn, Entity, JoinTable, ManyToOne, PrimaryColumn, UpdateDateColumn } from 'typeorm';
+import { SetInterface } from '@src/interfaces';
+import { FolderEntity, UserEntity } from '@src/entities';
 
 @Entity()
 class SetEntity implements SetInterface {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn()
   id: string;
 
-  @Column()
-  title: string;
+  @Column({ default: '' })
+  name: string;
 
-  @Column()
+  @Column({ default: '' })
   description: string;
 
-  @Column('simple-array')
-  tags: string[];
+  @Column('simple-json', { default: [] })
+  cards: { order: number; front: string; back: string }[];
 
-  @Column('simple-json')
-  cards: { order: number; term: string; definition: string }[];
-
-  @ManyToMany(() => FolderEntity, (x) => x.sets)
+  @ManyToOne(() => FolderEntity, (x) => x.sets)
   @JoinTable()
-  folders: FolderEntity[];
+  folder: FolderEntity;
 
   @ManyToOne(() => UserEntity, (x) => x.sets)
   user: UserEntity;

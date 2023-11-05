@@ -1,10 +1,8 @@
 process.env['NODE_CONFIG_DIR'] = __dirname + '/configs';
 
 import 'dotenv/config';
-import App from '@/app';
-import SetRoute from './routes/setRoute';
-import FolderRoute from './routes/folderRoute';
-import AuthRoute from './routes/authRoute';
+import App from '@src/app';
+import { SetRoute, FolderRoute, AuthRoute } from '@src/routes';
 
 const app = new App([new SetRoute(), new FolderRoute(), new AuthRoute()]);
 
