@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { useMutation, useQueryClient } from 'react-query';
 import { folderApi } from '@src/apis';
-import { FolderInterfaceDraft } from '@src/interfaces';
+import { FolderInterface } from '@src/interfaces';
 import { notify } from '@src/lib/notify';
 import { Dialog } from '@src/ui';
 import { useUserStore } from '@src/stores';
@@ -10,7 +10,7 @@ import { useUserStore } from '@src/stores';
 interface Props {
   open: boolean;
   setOpen: (value: boolean) => void;
-  data: FolderInterfaceDraft;
+  data: FolderInterface;
 }
 
 export const FolderDelete: React.FC<Props> = ({ open, setOpen, data }) => {

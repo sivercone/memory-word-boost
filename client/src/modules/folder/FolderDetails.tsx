@@ -8,14 +8,17 @@ import { FolderInterface } from '@src/interfaces';
 import { folderApi, setApi } from '@src/apis';
 import { FolderForm } from './FolderForm';
 import { FolderDelete } from './FolderDelete';
+import consts from '@src/lib/consts';
 
-const FolderDetails: NextPage<{ queryId: string; queryUser: string; data: FolderInterface | null }> = ({
-  queryId,
-  queryUser,
-  data,
-}) => {
+interface Props {
+  queryId: string;
+  queryUser: string;
+  data: FolderInterface | null;
+}
+
+const FolderDetails: NextPage<Props> = ({ queryId, queryUser, data }) => {
   const router = useRouter();
-  const { data: folder = data } = useQuery(['folder', queryId], () => folderApi.getById(queryId));
+  const { data: folder = data } = useQuery(['folder', queryId], () => folderApi.getById(queryId), { enabled: consts.isBackendLess });
   const [shownModal, setShownModal] = React.useState<'edit' | 'del' | null>(null);
   React.useEffect(() => {
     if (queryId === 'new') setShownModal('edit');
