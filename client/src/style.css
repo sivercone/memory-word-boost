@@ -17,6 +17,13 @@ body {
   @apply antialiased;
 }
 
+::selection {
+  @apply bg-violet-500 bg-opacity-30;
+}
+::-moz-selection {
+  @apply bg-violet-500 bg-opacity-30;
+}
+
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,
@@ -24,9 +31,7 @@ textarea:focus-visible {
   @apply shadow-[0_0_0_2px] shadow-violet-400 outline-none z-[1];
 }
 
-::selection {
-  @apply bg-violet-500 bg-opacity-30;
-}
-::-moz-selection {
-  @apply bg-violet-500 bg-opacity-30;
+button,
+a {
+  -webkit-tap-highlight-color: #0000;
 }

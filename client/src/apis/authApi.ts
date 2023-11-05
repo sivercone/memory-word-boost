@@ -22,8 +22,12 @@ export const authApi = {
 
   async me(): Promise<UserInterface> {
     if (consts.isBackendLess) {
-      await Promise.resolve();
-      return JSON.parse(localStorage[`${consts.storageKey}_user`] || '{}');
+      const user = JSON.parse(localStorage[`${consts.storageKey}_user`] || '{}');
+      if (!user?.id) return await Promise.reject({ message: 'Authorization is missing. You must sign in before continuing' });
+      else {
+        await Promise.resolve();
+        return user;
+      }
     } else {
       const response = await http.get(`auth/me`);
       return response.data;
