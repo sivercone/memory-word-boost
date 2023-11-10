@@ -5,25 +5,27 @@ interface NextHeadProps {
   title?: string;
   description?: string;
   image?: string;
-  themeColor?: string;
 }
 
 export const NextHead: NextPage<NextHeadProps> = ({
   title,
-  description = 'Web application that helps fast learning and memorizing anything',
+  description = 'Web app designed to catalyze the learning process.',
   image = '/logo.png',
-  themeColor = '#000000',
 }) => {
+  const headTitle = title ? `${title} – PROJECT MWB` : 'Memory Word Boost';
+
   return (
     <Head>
-      {title ? <title>{`${title} – PROJ MWB`}</title> : <title>MEMORY WORD BOOST</title>}
+      <title>{headTitle}</title>
       <meta name="description" content={description} />
-      <meta name="theme-color" content={themeColor} />
-      <meta name="og:title" content={title ? `${title} – PROJ MWB` : 'MEMORY WORD BOOST'} />
-      <meta name="og:description" content={description} />
-      <meta name="og:site_name" content="MEMORY WORD BOOST" />
-      <meta name="og:image" content={image} />
-      <meta name="og:type" content={'website'} />
+      <meta name="robots" content="index, follow" />
+
+      <meta property="og:type" content="website" />
+      <meta property="og:locale" content="en-US" />
+      <meta property="og:site_name" content="PROJECT MWB" />
+      <meta property="og:title" content={title} />
+      <meta property="og:description" content={description} />
+      <meta property="og:image" content={image} />
     </Head>
   );
 };
