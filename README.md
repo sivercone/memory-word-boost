@@ -6,7 +6,7 @@ This project serves as a prototype for a [subsequent project](https://qsets.sive
 
 You will need [node.js](https://nodejs.org/), [yarn](https://yarnpkg.com/) and [postgres](https://www.postgresql.org/) installed.
 
-### Client (react + next.js)
+### client (react + next.js)
 
 0. Change directory:
    `cd ./client/`
@@ -23,7 +23,7 @@ Note: To run the client independently without the server, please follow these st
 
 This will enable the client to operate in a "backendless" mode.
 
-### Server (node.js + postgres)
+### server (node.js + postgres)
 
 0. Change directory:
    `cd ./server/`
