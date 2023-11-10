@@ -6,12 +6,16 @@ import { FolderIcon, LogoutIcon, MenuIcon, PersonIcon, PlusIcon, SetIcon } from 
 import { DropdownMenu, ButtonCircle } from '@src/ui';
 import { useUserStore } from '@src/stores';
 import { authApi } from '@src/apis';
+import Head from 'next/head';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { pathname } = useRouter();
 
   return (
     <>
+      <Head>
+        <meta name="theme-color" content={`#ffffff`} />
+      </Head>
       {pathname !== '/login' && <Navigation />}
       {children}
     </>
