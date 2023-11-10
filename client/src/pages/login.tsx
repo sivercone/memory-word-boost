@@ -1,9 +1,10 @@
 import { NextPage } from 'next';
 import { useForm } from 'react-hook-form';
-import { ButtonSquare } from '@src/ui';
-import { useMutation, useQueryClient } from 'react-query';
-import { authApi } from '@src/apis';
 import { useRouter } from 'next/router';
+import { useMutation, useQueryClient } from 'react-query';
+import { ButtonSquare } from '@src/ui';
+import { authApi } from '@src/apis';
+import consts from '@src/lib/consts';
 
 const Login: NextPage = () => {
   const router = useRouter();
@@ -66,6 +67,12 @@ const Login: NextPage = () => {
           <ButtonSquare disabled={auth.isLoading}>
             <span className="font-medium">{auth.isLoading ? 'Entering..' : 'Enter'}</span>
           </ButtonSquare>
+          {consts.isBackendLess && (
+            <p className="text-center text-gray-600 text-xs">
+              This application currently runs locally, and all data is stored in your browser&#39;s local storage. We do not store any
+              credentials on our servers.
+            </p>
+          )}
         </form>
       </div>
     </div>
