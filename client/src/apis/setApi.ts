@@ -7,7 +7,7 @@ export const setApi = {
   async get(excludeUserId?: string): Promise<SetInterface[]> {
     if (consts.isBackendLess) {
       await Promise.resolve();
-      const sets = JSON.parse(localStorage[`${consts.storageKey}_sets`]);
+      const sets = JSON.parse(localStorage[`${consts.storageKey}_sets`] || '[]');
       return Array.isArray(sets) ? sets : [];
     } else {
       const response = await http.get(`/sets${excludeUserId ? `?excludeUserId=${excludeUserId}` : ''}`);

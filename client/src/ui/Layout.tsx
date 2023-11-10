@@ -13,9 +13,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   return (
     <>
-      <Head>
-        <meta name="theme-color" content={`#ffffff`} />
-      </Head>
+      <Head>{pathname !== '/login' && <meta name="theme-color" content={`#ffffff`} />}</Head>
       {pathname !== '/login' && <Navigation />}
       {children}
     </>
