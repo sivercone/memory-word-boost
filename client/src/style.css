@@ -35,3 +35,10 @@ button,
 a {
   -webkit-tap-highlight-color: #0000;
 }
+
+#nprogress .bar {
+  @apply bg-violet-500;
+}
+#nprogress .spinner {
+  display: none; /* Hide spinner */
+}
