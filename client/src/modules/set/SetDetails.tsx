@@ -14,7 +14,7 @@ const SetDetails: React.FC<{ queryId: string; data: SetInterface }> = ({ queryId
 
   const studyMethods = [{ title: 'Flashcards', href: `${queryId}/flashcards` }];
   const menuOptions = [
-    { title: 'Author', action: () => router.push(`/user/${set.user.id}`), icon: <PersonIcon /> },
+    { title: 'Author', action: () => router.push(`/user/${set?.user.id}`), icon: <PersonIcon /> },
     { title: 'Edit', action: () => router.push(`${queryId}/edit`), icon: <EditIcon /> },
     { title: 'Add to Folder', action: () => router.push(`${queryId}/edit?tab=folders`), icon: <FolderIcon /> },
     { title: 'Delete', action: () => setDeletion(true), icon: <DeleteIcon /> },
