@@ -22,8 +22,8 @@ export const AuthCheck: React.FC = () => {
 
   React.useEffect(() => {
     if (isClient) {
-      if (loggedInfo === 'yes') refetch();
-      else router.replace('/login');
+      if (loggedInfo !== 'no') refetch();
+      if (loggedInfo === 'no' && router.pathname !== '/login') router.replace('/login');
     }
   }, [loggedInfo]);
 

@@ -39,7 +39,7 @@ module.exports = {
     function ({ addBase, config }) {
       addBase({
         body: {
-          backgroundColor: config('theme.colors.gray.50'),
+          backgroundColor: config('theme.colors.gray.100'),
           color: config('theme.colors.gray.800'),
         },
         'html.dark body': {
