@@ -5,7 +5,7 @@ import { useMutation, useQueryClient } from 'react-query';
 import { folderApi } from '@src/apis';
 import { FolderInterfaceDraft } from '@src/interfaces';
 import { useUserStore } from '@src/stores';
-import { notify } from '@src/lib/notify';
+import { notify } from '@src/lib';
 import { Dialog } from '@src/ui';
 
 interface Props {

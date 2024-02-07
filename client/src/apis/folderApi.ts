@@ -1,6 +1,5 @@
-import http from '@src/lib/http';
+import { http, consts } from '@src/lib';
 import { FolderInterface, FolderInterfaceDraft } from '@src/interfaces';
-import consts from '@src/lib/consts';
 import { setApi, authApi } from '@src/apis';
 
 export const folderApi = {

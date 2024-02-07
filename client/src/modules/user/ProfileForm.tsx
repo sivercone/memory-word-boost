@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { authApi } from '@src/apis';
-import { notify } from '@src/lib/notify';
+import { notify } from '@src/lib';
 import { UserInterface } from '@src/interfaces';
 import { Dialog } from '@src/ui';
 

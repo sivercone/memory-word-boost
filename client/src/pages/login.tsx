@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { useMutation, useQueryClient } from 'react-query';
 import { ButtonSquare } from '@src/ui';
 import { authApi } from '@src/apis';
-import consts from '@src/lib/consts';
+import { consts } from '@src/lib';
 
 const Login: NextPage = () => {
   const router = useRouter();

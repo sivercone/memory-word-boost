@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useMutation, useQueryClient } from 'react-query';
 import { folderApi } from '@src/apis';
 import { FolderInterface } from '@src/interfaces';
-import { notify } from '@src/lib/notify';
+import { notify } from '@src/lib';
 import { Dialog } from '@src/ui';
 import { useUserStore } from '@src/stores';
 

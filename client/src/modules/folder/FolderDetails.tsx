@@ -8,7 +8,7 @@ import { FolderInterface } from '@src/interfaces';
 import { folderApi, setApi } from '@src/apis';
 import { FolderForm } from './FolderForm';
 import { FolderDelete } from './FolderDelete';
-import consts from '@src/lib/consts';
+import { consts } from '@src/lib';
 
 interface Props {
   queryId: string;

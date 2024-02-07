@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useMutation, useQueryClient } from 'react-query';
 import { setApi } from '@src/apis';
 import { SetInterface } from '@src/interfaces';
-import { notify } from '@src/lib/notify';
+import { notify } from '@src/lib';
 import { Dialog } from '@src/ui';
 
 interface Props {

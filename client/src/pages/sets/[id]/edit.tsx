@@ -2,7 +2,7 @@ import { GetServerSideProps } from 'next';
 import { QueryClient, dehydrate } from 'react-query';
 import SetForm from '@src/modules/set/SetForm';
 import { setApi } from '@src/apis';
-import consts from '@src/lib/consts';
+import { consts } from '@src/lib';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const queryId = typeof context.query.id === 'string' ? context.query.id : '';

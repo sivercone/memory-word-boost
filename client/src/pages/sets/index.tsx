@@ -2,7 +2,7 @@ import { GetServerSideProps } from 'next';
 import { QueryClient, dehydrate } from 'react-query';
 import { folderApi } from '@src/apis';
 import FolderDetails from '@src/modules/folder/FolderDetails';
-import consts from '@src/lib/consts';
+import { consts } from '@src/lib';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const queryId = typeof context.query.folder === 'string' ? context.query.folder : '';
