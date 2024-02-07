@@ -6,6 +6,7 @@ import { formatDate } from '@src/lib/utils';
 import { ActionList, ButtonSquare, Spinner } from '@src/ui';
 import { UserInterface } from '@src/interfaces';
 import ProfileForm from './ProfileForm';
+import { FolderIcon } from '@src/ui/Icons';
 
 const UserProfile: React.FC<{ user: UserInterface; onEdit: () => void }> = ({ user, onEdit }) => (
   <div className="bg-white py-8 border-b border-b-gray-200">
@@ -40,7 +41,8 @@ const UserFolders: React.FC<{ userId: string }> = ({ userId }) => {
         keyExtractor={(item) => item.id}
         renderItem={(item, index) => (
           <ActionList.Link href={`/sets?${item.id === userId ? 'user' : 'folder'}=${item.id}`} isFirst={index === 0}>
-            {item.name}
+            <FolderIcon />
+            <span>{item.name}</span>
           </ActionList.Link>
         )}
       />

@@ -5,7 +5,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
-import { queryClient } from '@src/lib/queryClient';
+import { queryClient } from '@src/lib';
 import { AuthCheck } from '@src/modules/AuthCheck';
 import { NextHead } from '@src/modules/NextHead';
 import { Layout } from '@src/ui';

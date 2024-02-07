@@ -3,12 +3,12 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
 import { ActionList, ButtonSquare, DropdownMenu } from '@src/ui';
-import { DeleteIcon, EditIcon, MoreIcon, PersonIcon } from '@src/ui/Icons';
+import { DeleteIcon, EditIcon, MoreIcon, PersonIcon, SetIcon } from '@src/ui/Icons';
 import { FolderInterface } from '@src/interfaces';
 import { folderApi, setApi } from '@src/apis';
 import { FolderForm } from './FolderForm';
 import { FolderDelete } from './FolderDelete';
-import consts from '@src/lib/consts';
+import { consts } from '@src/lib';
 
 interface Props {
   queryId: string;
@@ -75,7 +75,8 @@ const FolderDetails: NextPage<Props> = ({ queryId, queryUser, data }) => {
           keyExtractor={(item) => item.id}
           renderItem={(item, index) => (
             <ActionList.Link href={`/sets/${item.id}`} isFirst={index === 0}>
-              {item.name}
+              <SetIcon />
+              <span>{item.name}</span>
             </ActionList.Link>
           )}
         />

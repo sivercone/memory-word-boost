@@ -1,5 +1,4 @@
-import http from '@src/lib/http';
-import consts from '@src/lib/consts';
+import { http, consts } from '@src/lib';
 import { UserInterface } from '@src/interfaces';
 
 export const authApi = {
