@@ -12,7 +12,7 @@ export const NextHead: NextPage<NextHeadProps> = ({
   description = 'Web app designed to catalyze the learning process.',
   image = '/logo.png',
 }) => {
-  const headTitle = title ? `${title} – PROJECT MWB` : 'Memory Word Boost';
+  const headTitle = title ? `${title} – Project MWB` : 'Project MWB';
 
   return (
     <Head>

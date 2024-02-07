@@ -1,6 +1,6 @@
 {
-  "name": "Memory Word Boost",
-  "short_name": "PROJECT MWB",
+  "name": "Project MWB",
+  "short_name": "Project MWB",
   "description": "Web app designed to catalyze the learning process.",
   "display": "standalone",
   "orientation": "portrait",
