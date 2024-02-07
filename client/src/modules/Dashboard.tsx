@@ -2,6 +2,7 @@ import type { NextPage } from 'next';
 import { useQuery } from 'react-query';
 import { ActionList, ButtonSquare } from '@src/ui';
 import { authApi, folderApi } from '@src/apis';
+import { FolderIcon } from '@src/ui/Icons';
 
 const Dashboard: NextPage = () => {
   const user = useQuery('user', () => authApi.me()); // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -19,7 +20,8 @@ const Dashboard: NextPage = () => {
         keyExtractor={(item) => item.id}
         renderItem={(item, index) => (
           <ActionList.Link href={`/sets?${item.id === 'sets' ? `user=${user.data?.id}` : `folder=${item.id}`}`} isFirst={index === 0}>
-            {item.name}
+            <FolderIcon />
+            <span>{item.name}</span>
           </ActionList.Link>
         )}
       />

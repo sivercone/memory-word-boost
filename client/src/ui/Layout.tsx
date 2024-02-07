@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useMutation } from 'react-query';
-import { FolderIcon, LogoutIcon, MenuIcon, PersonIcon, PlusIcon, SetIcon } from '@src/ui/Icons';
+import { FolderPlusIcon, LogoutIcon, MenuIcon, PersonIcon, PlusIcon, SetIcon } from '@src/ui/Icons';
 import { DropdownMenu, ButtonCircle } from '@src/ui';
 import { useUserStore } from '@src/stores';
 import { authApi } from '@src/apis';
@@ -22,7 +22,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
 const creationOptions = [
   { id: 'set', title: 'Create Set', href: '/sets/new', icon: <SetIcon /> },
-  { id: 'folder', title: 'Create Folder', href: '/sets?folder=new', icon: <FolderIcon /> },
+  { id: 'folder', title: 'Create Folder', href: '/sets?folder=new', icon: <FolderPlusIcon /> },
 ];
 
 const Navigation = () => {
