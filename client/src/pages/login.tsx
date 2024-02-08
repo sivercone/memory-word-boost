@@ -57,14 +57,16 @@ const Login: NextPage = () => {
             placeholder="Email"
             {...register('email', { required: true })}
             className="border border-gray-200 border-solid p-2 rounded-lg bg-white"
+            data-testid="input.email"
           />
           <input
             type="password"
             placeholder="Password"
             {...register('password', { required: true })}
             className="border border-gray-200 border-solid p-2 rounded-lg bg-white"
+            data-testid="input.password"
           />
-          <ButtonSquare disabled={auth.isLoading}>
+          <ButtonSquare disabled={auth.isLoading} data-testid="button.submit">
             <span className="font-medium">{auth.isLoading ? 'Entering..' : 'Enter'}</span>
           </ButtonSquare>
           {consts.isBackendLess && (
