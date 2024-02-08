@@ -42,3 +42,5 @@ Cypress.Commands.add('login', (email, password) => {
   cy.get('[data-testid="input.password"]').type(password);
   cy.get('[data-testid="button.submit"]').click();
 });
+
+export {};
