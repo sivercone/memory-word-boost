@@ -1,4 +1,4 @@
-const mockValues = { email: 'user@example.com', password: '.password0123' };
+import datus from '../support/datus';
 
 describe('login functionality', () => {
   beforeEach(() => {
@@ -10,15 +10,13 @@ describe('login functionality', () => {
   it('requires email and password', () => {
     cy.get('[data-testid="button.submit"]').click();
     cy.get('[data-testid="input.email"]').should('be.focused');
-    cy.get('[data-testid="input.email"]').type(mockValues.email);
+    cy.get('[data-testid="input.email"]').type(datus.email);
     cy.get('[data-testid="button.submit"]').click();
     cy.get('[data-testid="input.password"]').should('be.focused');
   });
 
   it('allows a user to log in successfully', () => {
-    cy.get('[data-testid="input.email"]').type(mockValues.email);
-    cy.get('[data-testid="input.password"]').type(mockValues.password);
-    cy.get('[data-testid="button.submit"]').click();
+    cy.login(datus.email, datus.password);
     cy.url().should('eq', Cypress.config().baseUrl + '/');
   });
 });

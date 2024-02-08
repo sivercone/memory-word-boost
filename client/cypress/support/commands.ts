@@ -35,3 +35,10 @@
 //     }
 //   }
 // }
+
+Cypress.Commands.add('login', (email, password) => {
+  if (cy.url().should('not.be', '/login')) cy.visit('/login');
+  cy.get('[data-testid="input.email"]').type(email);
+  cy.get('[data-testid="input.password"]').type(password);
+  cy.get('[data-testid="button.submit"]').click();
+});
