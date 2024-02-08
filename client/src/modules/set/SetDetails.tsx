@@ -26,8 +26,14 @@ const SetDetails: React.FC<{ queryId: string; data: SetInterface }> = ({ queryId
       <div className="bg-white py-8 border-b border-b-gray-200">
         <div className="max-w-3xl mx-auto flex flex-col gap-4 px-4">
           <div>
-            <h1 className="text-2xl font-medium">{set.name}</h1>
-            {set.description ? <p className="leading-relaxed text-gray-600">{set.description}</p> : null}
+            <h1 className="text-2xl font-medium" data-testid="text.name">
+              {set.name}
+            </h1>
+            {set.description ? (
+              <p className="leading-relaxed text-gray-600" data-testid="text.description">
+                {set.description}
+              </p>
+            ) : null}
           </div>
           {studyMethods.map((item) => (
             <ButtonSquare key={item.title} href={item.href}>

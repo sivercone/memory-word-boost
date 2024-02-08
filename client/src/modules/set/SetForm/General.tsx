@@ -47,7 +47,9 @@ const General: React.FC = () => {
             </ButtonSquare>
           ) : null}
           <ButtonSquare onClick={handleSubmit(onSubmit)} disabled={save.isLoading}>
-            <span className="font-medium">Save</span>
+            <span className="font-medium" data-testid="button.submit">
+              Save
+            </span>
           </ButtonSquare>
         </div>
       </div>
@@ -57,11 +59,13 @@ const General: React.FC = () => {
             placeholder="Name"
             {...register('name', { required: true, onChange: (event) => setCurrStudySet({ name: event.target.value }) })}
             className="border border-gray-200 border-solid p-2 rounded-lg bg-white"
+            data-testid="input.name"
           />
           <input
             placeholder="Description"
             {...register('description', { onChange: (event) => setCurrStudySet({ description: event.target.value }) })}
             className="border border-gray-200 border-solid p-2 rounded-lg bg-white"
+            data-testid="input.description"
           />
         </fieldset>
       </form>
