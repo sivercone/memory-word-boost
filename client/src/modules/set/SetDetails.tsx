@@ -62,8 +62,8 @@ const SetDetails: React.FC<{ queryId: string; data: SetInterface }> = ({ queryId
         <ActionList.HeaderTitle className="mb-4">Overview</ActionList.HeaderTitle>
         {set.cards.length ? (
           <ul className="flex flex-col gap-2">
-            {set.cards.map((content, i) => (
-              <li key={i} className="flex border-b border-b-gray-200 p-2">
+            {set.cards.map((content) => (
+              <li key={content.order} className="flex border-b border-b-gray-200 py-2 gap-2">
                 <p className="basis-full">{content.front}</p>
                 <p className="basis-full">{content.back}</p>
               </li>
