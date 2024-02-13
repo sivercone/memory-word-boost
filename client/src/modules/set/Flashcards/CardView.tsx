@@ -1,5 +1,6 @@
 import React from 'react';
 import { ButtonSquare } from '@src/ui';
+import { TaskCompleteIcon, TaskIncompleteIcon } from '@src/ui/Icons';
 
 type CardViewProps = {
   front: string;
@@ -64,7 +65,7 @@ const CardView: React.FC<CardViewProps> = ({ front, back, onSwipeLeft, onSwipeRi
         >
           <div style={{ backfaceVisibility: 'hidden' }} className="absolute w-full h-full flex items-center justify-center">
             <span className="absolute top-[10px] left-[10px] text-gray-600 text-xs select-none">FRONT SIDE</span>
-            <span className="leading-relaxed text-xl max-h-[92%] overflow-y-auto">{front}</span>
+            <span className="leading-relaxed text-xl max-h-[92%] overflow-y-auto px-2">{front}</span>
             <span className="absolute bottom-[10px] text-gray-600 text-xs select-none">TAP TO FLIP</span>
           </div>
           <div
@@ -72,18 +73,20 @@ const CardView: React.FC<CardViewProps> = ({ front, back, onSwipeLeft, onSwipeRi
             className="absolute w-full h-full flex items-center justify-center"
           >
             <span className="absolute top-[10px] left-[10px] text-gray-600 text-xs select-none">BACK SIDE</span>
-            <span className="leading-relaxed text-xl max-h-[92%] overflow-y-auto">{back}</span>
+            <span className="leading-relaxed text-xl max-h-[92%] overflow-y-auto px-2">{back}</span>
             <span className="absolute bottom-[10px] text-gray-600 text-xs select-none">TAP TO FLIP</span>
           </div>
         </div>
       </button>
 
-      <div className="flex gap-4 w-full">
-        <ButtonSquare onClick={() => handleSwipe('left')} className="w-full">
-          <span className="font-medium">Missed</span>
+      <div className="flex gap-4 w-full flex-col sm:flex-row">
+        <ButtonSquare onClick={() => handleSwipe('left')} className="w-full gap-2 justify-start sm:justify-center py-4">
+          <TaskIncompleteIcon />
+          <span className="font-medium">Didn't Know that</span>
         </ButtonSquare>
-        <ButtonSquare onClick={() => handleSwipe('right')} className="w-full">
-          <span className="font-medium">Correct</span>
+        <ButtonSquare onClick={() => handleSwipe('right')} className="w-full gap-2 justify-start sm:justify-center py-4">
+          <TaskCompleteIcon />
+          <span className="font-medium">Already Know that</span>
         </ButtonSquare>
       </div>
     </>
