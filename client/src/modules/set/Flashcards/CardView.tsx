@@ -82,7 +82,7 @@ const CardView: React.FC<CardViewProps> = ({ front, back, onSwipeLeft, onSwipeRi
       <div className="flex gap-4 w-full flex-col sm:flex-row">
         <ButtonSquare onClick={() => handleSwipe('left')} className="w-full gap-2 justify-start sm:justify-center py-4">
           <TaskIncompleteIcon />
-          <span className="font-medium">Didn't Know that</span>
+          <span className="font-medium">Didn&#39;t Know that</span>
         </ButtonSquare>
         <ButtonSquare onClick={() => handleSwipe('right')} className="w-full gap-2 justify-start sm:justify-center py-4">
           <TaskCompleteIcon />
