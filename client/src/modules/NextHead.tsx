@@ -10,7 +10,7 @@ interface NextHeadProps {
 export const NextHead: NextPage<NextHeadProps> = ({
   title,
   description = 'Web app designed to catalyze the learning process.',
-  image = '/logo.png',
+  image = '/icon.png',
 }) => {
   const headTitle = title ? `${title} – Project MWB` : 'Project MWB';
 
