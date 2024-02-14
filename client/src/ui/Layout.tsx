@@ -2,14 +2,16 @@ import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useMutation } from 'react-query';
+import Head from 'next/head';
 import { FolderPlusIcon, LogoutIcon, MenuIcon, PersonIcon, PlusIcon, SetIcon } from '@src/ui/Icons';
 import { DropdownMenu, ButtonCircle } from '@src/ui';
 import { useUserStore } from '@src/stores';
 import { authApi } from '@src/apis';
-import Head from 'next/head';
+import { useInitiateDefaultData } from '@src/lib/hooks';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { pathname } = useRouter();
+  useInitiateDefaultData();
 
   return (
     <>

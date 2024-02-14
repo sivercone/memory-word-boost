@@ -1,6 +1,6 @@
 import React from 'react';
-import { authApi, setApi } from '@src/apis';
 import { useQuery } from 'react-query';
+import { authApi, setApi } from '@src/apis';
 import consts from '../consts';
 import { exampleSets } from '../datus';
 
@@ -10,9 +10,11 @@ const useInitiateDefaultData = () => {
   const sets = useQuery('allSets', () => setApi.get(), { enabled: consts.isBackendLess });
 
   const setInitialSets = async () => {
+    if (hasRunOnce.current && sets.data?.length) return;
     try {
-      await setApi.save(exampleSets[0]);
-      await setApi.save(exampleSets[1]);
+      for (const set of exampleSets) {
+        await setApi.save(set);
+      }
       hasRunOnce.current = true;
     } catch (error) {
       console.warn(error);
@@ -23,7 +25,7 @@ const useInitiateDefaultData = () => {
     if (user.data && sets.isSuccess && !sets.data?.length && consts.isBackendLess && !hasRunOnce.current) {
       setInitialSets();
     }
-  }, [user.data, sets.isSuccess]);
+  }, [user.data, sets.data]);
 };
 
 export default useInitiateDefaultData;

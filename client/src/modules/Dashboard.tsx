@@ -3,10 +3,8 @@ import { useQuery } from 'react-query';
 import { ActionList, ButtonSquare } from '@src/ui';
 import { authApi, folderApi } from '@src/apis';
 import { FolderIcon } from '@src/ui/Icons';
-import { useInitiateDefaultData } from '@src/lib/hooks';
 
 const Dashboard: NextPage = () => {
-  useInitiateDefaultData();
   const user = useQuery('user', () => authApi.me()); // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const userFolders = useQuery(['folders', user.data?.id], () => folderApi.getByUser(user.data!.id), { enabled: !!user.data });
   const folders = [...(userFolders.data || []), { id: 'sets', name: 'Sets' }].sort((a, b) =>
