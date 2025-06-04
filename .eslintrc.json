@@ -1,0 +1,57 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true,
+    "commonjs": true
+  },
+  "extends": [
+    "next",
+    "next/core-web-vitals",
+    "eslint:recommended",
+    "prettier",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "plugin:prettier/recommended",
+    "plugin:react/jsx-runtime"
+  ],
+  "plugins": ["eslint-plugin-prettier"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": { "jsx": true },
+    "ecmaVersion": "latest",
+    "sourceType": "module",
+    "project": "./tsconfig.json"
+  },
+  "settings": {
+    "react": { "version": "detect" }
+  },
+  "overrides": [
+    {
+      "files": ["**/*.{js,jsx,ts,tsx}"],
+      "rules": {
+        "react/react-in-jsx-scope": "off",
+        "react/prop-types": "off",
+        "no-empty": ["error", { "allowEmptyCatch": true }],
+        "prettier/prettier": "warn",
+        "react-hooks/exhaustive-deps": "off",
+        "@typescript-eslint/no-unused-vars": ["warn", { "varsIgnorePattern": "^_", "argsIgnorePattern": "^_" }],
+        "@typescript-eslint/no-explicit-any": "warn",
+        "import/order": [
+          "warn",
+          {
+            "groups": [
+              ["builtin", "external"],
+              ["internal", "parent"],
+              ["index", "sibling"]
+            ],
+            "pathGroups": [{ "pattern": "@{src}/**", "group": "internal", "position": "after" }],
+            "pathGroupsExcludedImportTypes": ["internal"],
+            "newlines-between": "always",
+            "alphabetize": { "order": "asc" }
+          }
+        ]
+      }
+    }
+  ],
+  "ignorePatterns": ["node_modules/", ".next/", ".vscode/", "public/", "next.config.js", "postcss.config.js", "tailwind.config.js"]
+}
