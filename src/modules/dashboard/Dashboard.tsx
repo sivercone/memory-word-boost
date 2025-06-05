@@ -1,5 +1,6 @@
 import type { NextPage } from 'next';
 
+import { utils } from '@src/lib';
 import { useLocalStore } from '@src/stores';
 import { ActionList, Icons } from '@src/ui';
 
@@ -7,10 +8,7 @@ import Banner from './Banner';
 
 const Dashboard: NextPage = () => {
   const { user, folders } = useLocalStore();
-  const userFolders = folders.filter((item) => item.userId === user?.id);
-  const sortedFolders = [...(userFolders || []), { id: 'sets', name: 'Sets' }].sort((a, b) =>
-    a.id === 'sets' ? -1 : b.id === 'sets' ? 1 : a.name.localeCompare(b.name),
-  );
+  const sortedFolders = utils.array.composeSortedFolders(folders.filter((item) => item.userId === user?.id));
 
   return (
     <div className="max-w-3xl mx-auto p-4 space-y-4">

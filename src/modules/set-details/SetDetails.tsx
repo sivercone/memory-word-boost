@@ -75,7 +75,7 @@ const SetDetails = () => {
         )}
       </div>
 
-      <DeleteDialog data={set} open={deletion} setOpen={setDeletion} />
+      <DeleteDialog data={set} open={deletion} close={() => setDeletion(false)} />
     </>
   );
 };

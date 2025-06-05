@@ -2,7 +2,8 @@ import dayjs from 'dayjs';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
 
-import ProfileForm from '../user-form';
+import UserForm from '../user-form';
+import { utils } from '@src/lib';
 import { useLocalStore } from '@src/stores';
 import * as Types from '@src/types';
 import { ActionList, Button, Spinner, Icons } from '@src/ui';
@@ -25,10 +26,7 @@ const UserProfile: React.FC<{ user: Types.UserModel; onEdit: () => void }> = ({ 
 
 const UserFolders: React.FC<{ userId: string }> = ({ userId }) => {
   const localStore = useLocalStore();
-  const userFolders = localStore.folders.filter((item) => item.userId === userId);
-  const sortedFolders = [...userFolders, { id: userId, name: 'Sets' }].sort((a, b) =>
-    a.name === 'Sets' ? -1 : b.name === 'Sets' ? 1 : a.name.localeCompare(b.name),
-  );
+  const sortedFolders = utils.array.composeSortedFolders(localStore.folders.filter((item) => item.userId === userId));
 
   if (!sortedFolders.length) return <Spinner center className="m-8 h-8" />;
   return (
@@ -56,7 +54,7 @@ const UserDetails = () => {
   return (
     <>
       {localStore.user && <UserProfile user={localStore.user} onEdit={() => setEdit(true)} />}
-      <ProfileForm open={edit} setOpen={setEdit} />
+      <UserForm open={edit} close={() => setEdit(false)} />
       <UserFolders userId={params.id} />
     </>
   );

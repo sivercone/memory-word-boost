@@ -61,12 +61,12 @@ const FolderDetails = () => {
         </div>
       )}
 
-      {folder && <DeleteDialog data={folder} open={shownModal === 'del'} setOpen={() => setShownModal(null)} />}
+      {folder && <DeleteDialog data={folder} open={shownModal === 'del'} close={() => setShownModal(null)} />}
 
       <div className="p-4 max-w-3xl mx-auto">
         <ActionList
           header={{ title: 'Sets' }}
-          placeholder={'Nothing yet'}
+          placeholder="Nothing yet"
           data={folderQuery !== 'new' ? folderSets || userSets : []}
           keyExtractor={(item) => item.id}
           renderItem={(item, index) => (
@@ -81,10 +81,7 @@ const FolderDetails = () => {
       <FolderForm
         data={folder && folderQuery !== 'new' ? folder : undefined}
         open={shownModal === 'edit'}
-        setOpen={() => {
-          if (folderQuery === 'new') router.push('/');
-          else setShownModal(null);
-        }}
+        close={() => setShownModal(null)}
       />
     </>
   );

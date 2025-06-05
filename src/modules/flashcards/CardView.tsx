@@ -29,14 +29,17 @@ const CardView: React.FC<CardViewProps> = ({ front, back, onSwipeLeft, onSwipeRi
 
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
-      if (['a', 'A', 'ArrowLeft'].includes(event.key)) handleSwipe('left');
-      if (['d', 'D', 'ArrowRight'].includes(event.key)) handleSwipe('right');
-      if (['w', 'W', 's', 'S', ' ', 'ArrowUp', 'ArrowDown'].includes(event.key)) handleCardClick();
+      const key = event.key.toLowerCase();
+      const leftKeys = new Set(['a', 'arrowleft']);
+      const rightKeys = new Set(['d', 'arrowright']);
+      const actionKeys = new Set(['w', 's', ' ', 'arrowup', 'arrowdown']);
+
+      if (leftKeys.has(key)) handleSwipe('left');
+      else if (rightKeys.has(key)) handleSwipe('right');
+      else if (actionKeys.has(key)) handleCardClick();
     };
     document.addEventListener('keyup', handleKeyPress);
-    return () => {
-      document.removeEventListener('keyup', handleKeyPress);
-    };
+    return () => document.removeEventListener('keyup', handleKeyPress);
   }, []);
 
   return (

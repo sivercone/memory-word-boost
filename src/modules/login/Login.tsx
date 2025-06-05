@@ -2,6 +2,7 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 
+import { utils } from '@src/lib';
 import { useLocalStore } from '@src/stores';
 import * as Types from '@src/types';
 import { Button } from '@src/ui';
@@ -25,7 +26,7 @@ const Login: NextPage = () => {
       });
       router.replace('/');
     } catch (error) {
-      console.error(error);
+      utils.func.handleError(error);
     }
   };
 
@@ -78,7 +79,7 @@ const Login: NextPage = () => {
             <span className="font-medium">Enter</span>
           </Button>
           <p className="text-center text-gray-600 text-xs">
-            This application currently runs locally, and all data is stored in your browser&#39;s local storage. We do not store any
+            This application currently runs locally, and all data is stored in your browser&#39;s web storage. We do not store any
             credentials on our servers.
           </p>
         </form>

@@ -1,7 +1,8 @@
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
+import { utils } from '@src/lib';
 import { useLocalStore, useRuntimeStore } from '@src/stores';
 import * as Types from '@src/types';
 import { Button, Icons } from '@src/ui';
@@ -41,7 +42,7 @@ const General: React.FC = () => {
       localStore.setValues({ sets: [...nextSets, newSet], folders: updatedFolders });
       router.push(`/sets/${newSet.id}`);
     } catch (error) {
-      console.error(error);
+      utils.func.handleError(error);
     }
   };
 

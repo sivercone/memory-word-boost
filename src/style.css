@@ -14,7 +14,7 @@ body,
 }
 
 body {
-  @apply antialiased;
+  @apply antialiased bg-background text-onBackground;
   text-rendering: optimizeLegibility;
 }
 

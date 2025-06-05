@@ -1,5 +1,8 @@
+import * as Dialog from '@radix-ui/react-dialog';
+import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
+import clsx from 'clsx';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 import { useIsClient } from '@src/lib/hooks';
 import { useLocalStore } from '@src/stores';
@@ -15,13 +18,28 @@ const AuthCheck: React.FC = () => {
     if (isClient && unauthenticated) router.replace('/login');
   }, [isClient]);
 
-  if (unauthenticated)
-    return (
-      <div className="animate-fadeIn z-50 absolute top-0 bottom-0 left-0 right-0 w-full h-full flex items-center justify-center bg-white pointer-events-none select-none">
-        <Spinner className="mx-auto m-8 h-8" />
-      </div>
-    );
-  else return null;
+  return (
+    <Dialog.Root open={unauthenticated}>
+      <Dialog.Portal>
+        <Dialog.Overlay
+          asChild
+          className={clsx(
+            'z-50 absolute inset-0',
+            'size-full flex items-center justify-center',
+            'animate-fadeIn bg-white select-none outline-none',
+          )}
+        >
+          <Dialog.Content role="status">
+            <VisuallyHidden.Root>
+              <Dialog.Title />
+              <Dialog.Description />
+            </VisuallyHidden.Root>
+            <Spinner className="mx-auto m-y-8 h-8" />
+          </Dialog.Content>
+        </Dialog.Overlay>
+      </Dialog.Portal>
+    </Dialog.Root>
+  );
 };
 
 export default AuthCheck;

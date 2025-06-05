@@ -21,7 +21,7 @@ const SVG: React.FC<PrimitiveProps> = ({
 
 /**
  * Icons sourced from Google Fonts - https://fonts.google.com/icons
- * Material Symbols (new):
+ * Material Symbols (new) / Outlined
  * Weight: 300
  * Grade: 0
  * Optical Size: 24
@@ -54,6 +54,12 @@ const CheckCircle = (props: Props) => (
 const ChevronRight = (props: Props) => (
   <SVG {...props}>
     <path d="m517.847-480-184-184L376-706.153 602.153-480 376-253.847 333.847-296l184-184Z" />
+  </SVG>
+);
+
+const Close = (props: Props) => (
+  <SVG {...props}>
+    <path d="M256-213.85 213.85-256l224-224-224-224L256-746.15l224 224 224-224L746.15-704l-224 224 224 224L704-213.85l-224-224-224 224Z" />
   </SVG>
 );
 
@@ -153,6 +159,7 @@ const Icons = {
   Check,
   CheckCircle,
   ChevronRight,
+  Close,
   Delete,
   Edit,
   Folder,

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 
 import { exampleSets } from '../datus';
+import utils from '../utils';
 import { useLocalStore } from '@src/stores';
 
 const useInitiateDefaultData = () => {
@@ -13,7 +14,7 @@ const useInitiateDefaultData = () => {
       localStore.setValues({ sets: exampleSets.map((item) => ({ ...item, userId: user.id })) });
       hasRunOnce.current = true;
     } catch (error) {
-      console.error(error);
+      utils.func.handleError(error);
     }
   };
 

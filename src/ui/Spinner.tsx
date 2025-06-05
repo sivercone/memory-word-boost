@@ -7,10 +7,8 @@ function Spinner({ className, center, ...rest }: { className?: string; center?: 
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 27 27"
         {...rest}
-        className={twMerge(`h-4 ${className} animate-spin`)}
-        style={{
-          animationTimingFunction: 'steps(12, end)',
-        }}
+        className={twMerge('h-4 animate-spin', className)}
+        style={{ animationTimingFunction: 'steps(12, end)' }}
       >
         <path
           style={{ opacity: 12 / 12 }}

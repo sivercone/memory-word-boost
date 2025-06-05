@@ -2,23 +2,21 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { notify } from '@src/lib';
+import { utils } from '@src/lib';
 import { useLocalStore } from '@src/stores';
 import * as Types from '@src/types';
 import { Dialog } from '@src/ui';
 
-interface Props {
-  open: boolean;
-  setOpen: (value: boolean) => void;
+interface Props extends Pick<React.ComponentProps<typeof Dialog>, 'open' | 'close'> {
   data?: Types.FolderForm;
 }
 
-const FolderForm: React.FC<Props> = ({ open, setOpen, data }) => {
+const FolderForm: React.FC<Props> = ({ open, close, data }) => {
   const router = useRouter();
   const { user, folders, ...localStore } = useLocalStore();
   const form = useForm<Types.FolderForm>();
 
-  const onSubmit = (data: Types.FolderForm) => {
+  const onSubmit = async (data: Types.FolderForm) => {
     if (!user) return;
     try {
       const nextFolders = folders.filter((item) => item.id !== data.id);
@@ -34,12 +32,12 @@ const FolderForm: React.FC<Props> = ({ open, setOpen, data }) => {
       } satisfies Types.FolderModel;
 
       localStore.setValues({ folders: [...nextFolders, saveFolder] });
-      setOpen(false);
+
+      close();
       form.reset();
-      if (router.pathname !== `/sets?folder=${saveFolder.id}`) router.push(`/sets?folder=${saveFolder.id}`);
+      router.replace({ pathname: router.pathname, query: { folder: saveFolder.id } });
     } catch (error) {
-      console.error(error);
-      notify('Hmm, something went wrong, please try again later.');
+      utils.func.handleError(error);
     }
   };
 
@@ -51,10 +49,10 @@ const FolderForm: React.FC<Props> = ({ open, setOpen, data }) => {
   return (
     <Dialog
       open={open}
-      setOpen={setOpen}
+      close={close}
       header={{
         title: data?.id ? 'Edit Folder' : 'New Folder',
-        left: <Dialog.Button onClick={() => setOpen(false)}>Cancel</Dialog.Button>,
+        left: <Dialog.Button onClick={close}>Cancel</Dialog.Button>,
         right: <Dialog.Button onClick={form.handleSubmit(onSubmit)}>Save</Dialog.Button>,
       }}
     >

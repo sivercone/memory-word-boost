@@ -1,27 +1,23 @@
 import { useRouter } from 'next/router';
-import React from 'react';
 import { useForm } from 'react-hook-form';
 
-import { notify } from '@src/lib';
+import { utils } from '@src/lib';
 import { useLocalStore } from '@src/stores';
 import * as Types from '@src/types';
 import { Dialog } from '@src/ui';
 
-const ProfileForm: React.FC<{ open: boolean; setOpen: (value: boolean) => void }> = ({ open, setOpen }) => {
+const ProfileForm = ({ open, close }: Pick<React.ComponentProps<typeof Dialog>, 'open' | 'close'>) => {
   const router = useRouter();
-  const localStore = useLocalStore();
-  const form = useForm<Types.UserForm>({
-    defaultValues: { email: localStore.user?.email, name: localStore.user?.name, bio: localStore.user?.bio },
-  });
+  const { user, ...localStore } = useLocalStore();
+  const form = useForm<Types.UserForm>({ defaultValues: { email: user?.email, name: user?.name, bio: user?.bio } });
 
   const onSubmit = (payload: Types.UserForm) => {
-    if (!localStore.user) return;
+    if (!user) return;
     try {
-      localStore.setValues({ user: { ...localStore.user, ...payload, updatedAt: new Date().toISOString() } });
-      setOpen(false);
+      localStore.setValues({ user: { ...user, ...payload, updatedAt: new Date().toISOString() } });
+      close();
     } catch (error) {
-      console.error(error);
-      notify('Hmm, something went wrong, please try again later.');
+      utils.func.handleError(error);
     }
   };
 
@@ -29,10 +25,10 @@ const ProfileForm: React.FC<{ open: boolean; setOpen: (value: boolean) => void }
     <Dialog
       defaultOpen={router.pathname === '/user/[id]/edit'}
       open={open}
-      setOpen={setOpen}
+      close={close}
       header={{
         title: 'Edit Profile',
-        left: <Dialog.Button onClick={() => setOpen(false)}>Cancel</Dialog.Button>,
+        left: <Dialog.Button onClick={close}>Cancel</Dialog.Button>,
         right: <Dialog.Button onClick={form.handleSubmit(onSubmit)}>Save</Dialog.Button>,
       }}
     >

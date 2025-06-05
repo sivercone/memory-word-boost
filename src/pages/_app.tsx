@@ -5,7 +5,7 @@ import { ToastContainer } from 'react-toastify';
 
 import { NextHead } from '@src/lib';
 import AuthCheck from '@src/modules/auth-check';
-import { Layout } from '@src/ui';
+import Layout from '@src/modules/layout';
 
 import '@src/style.css';
 import 'nprogress/nprogress.css';
@@ -24,7 +24,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Component {...pageProps} />
       </Layout>
       <ToastContainer
-        progressStyle={{ background: 'var(--color-primary)' }}
+        progressStyle={{ background: 'var(--color-primary-600)' }}
         position="bottom-right"
         autoClose={6000}
         draggable={false}

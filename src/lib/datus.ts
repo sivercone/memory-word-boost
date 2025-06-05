@@ -1,5 +1,7 @@
 import * as Types from '@src/types';
 
+export const FALLBACK_ERROR_MESSAGE = 'Hmm, something went wrong, please try again later.';
+
 export const exampleSets = [
   {
     id: 'example-01',
