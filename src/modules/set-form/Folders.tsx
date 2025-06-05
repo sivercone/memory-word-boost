@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 
+import { utils } from '@src/lib';
 import { useLocalStore, useRuntimeStore } from '@src/stores';
 import { ActionList, ButtonLink, Icons } from '@src/ui';
 
@@ -8,14 +9,10 @@ const Folders: React.FC = () => {
   const { user, folders } = useLocalStore();
   const { studySetDraft, ...rtStore } = useRuntimeStore();
 
-  const userFolders = folders.filter((item) => item.userId === user?.id);
-  const sortedFolders = [...userFolders, { id: 'sets', name: 'Sets' }].sort((a, b) =>
-    a.id === 'sets' ? -1 : b.id === 'sets' ? 1 : a.name.localeCompare(b.name),
-  );
+  const sortedFolders = utils.array.composeSortedFolders(folders.filter((item) => item.userId === user?.id));
 
-  const onSelect = (id: string) => {
-    rtStore.setValues({ studySetDraft: { ...studySetDraft, folderId: id } });
-
+  const onSelect = (folderId: string) => {
+    rtStore.setValues({ studySetDraft: { ...studySetDraft, folderId } });
     router.push({ pathname: router.pathname, query: studySetDraft.id && { id: router.query.id } });
   };
 

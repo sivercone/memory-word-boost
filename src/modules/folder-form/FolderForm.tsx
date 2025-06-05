@@ -16,6 +16,14 @@ const FolderForm: React.FC<Props> = ({ open, close, data }) => {
   const { user, folders, ...localStore } = useLocalStore();
   const form = useForm<Types.FolderForm>();
 
+  const handleClose = (folderId?: string) => {
+    close();
+    if (!data) {
+      if (folderId) router.replace({ pathname: router.pathname, query: { folder: folderId } });
+      else router.push('/');
+    }
+  };
+
   const onSubmit = async (data: Types.FolderForm) => {
     if (!user) return;
     try {
@@ -33,9 +41,8 @@ const FolderForm: React.FC<Props> = ({ open, close, data }) => {
 
       localStore.setValues({ folders: [...nextFolders, saveFolder] });
 
-      close();
       form.reset();
-      router.replace({ pathname: router.pathname, query: { folder: saveFolder.id } });
+      handleClose(saveFolder.id);
     } catch (error) {
       utils.func.handleError(error);
     }
@@ -49,10 +56,10 @@ const FolderForm: React.FC<Props> = ({ open, close, data }) => {
   return (
     <Dialog
       open={open}
-      close={close}
+      close={() => handleClose()}
       header={{
         title: data?.id ? 'Edit Folder' : 'New Folder',
-        left: <Dialog.Button onClick={close}>Cancel</Dialog.Button>,
+        left: <Dialog.Button onClick={() => handleClose()}>Cancel</Dialog.Button>,
         right: <Dialog.Button onClick={form.handleSubmit(onSubmit)}>Save</Dialog.Button>,
       }}
     >

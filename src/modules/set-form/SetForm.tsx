@@ -7,6 +7,12 @@ import Cards from './Cards';
 import Folders from './Folders';
 import General from './General';
 
+const tabComponentMapping = {
+  cards: <Cards />,
+  folders: <Folders />,
+  default: <General />,
+};
+
 const SetForm = () => {
   const { query } = useRouter();
   const rtStore = useRuntimeStore();
@@ -25,12 +31,6 @@ const SetForm = () => {
     else nav?.classList.add('sticky');
     return () => nav?.classList.add('sticky');
   }, [query]);
-
-  const tabComponentMapping = {
-    cards: <Cards />,
-    folders: <Folders />,
-    default: <General />,
-  };
 
   return tabComponentMapping[String(query.tab) as 'cards' | 'folders'] || tabComponentMapping['default'];
 };

@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { useParams } from 'next/navigation';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import UserForm from '../user-form';
@@ -36,7 +36,7 @@ const UserFolders: React.FC<{ userId: string }> = ({ userId }) => {
         data={sortedFolders}
         keyExtractor={(item) => item.id}
         renderItem={(item, index) => (
-          <ActionList.Link href={`/sets?${item.id === userId ? 'user' : 'folder'}=${item.id}`} isFirst={index === 0}>
+          <ActionList.Link href={`/sets?${item.id === 'sets' ? `user=${userId}` : `folder=${item.id}`}`} isFirst={index === 0}>
             <Icons.Folder />
             <span>{item.name}</span>
           </ActionList.Link>
@@ -47,7 +47,7 @@ const UserFolders: React.FC<{ userId: string }> = ({ userId }) => {
 };
 
 const UserDetails = () => {
-  const params = useParams<{ id: string }>();
+  const { query } = useRouter();
   const localStore = useLocalStore();
   const [edit, setEdit] = useState(false);
 
@@ -55,7 +55,7 @@ const UserDetails = () => {
     <>
       {localStore.user && <UserProfile user={localStore.user} onEdit={() => setEdit(true)} />}
       <UserForm open={edit} close={() => setEdit(false)} />
-      <UserFolders userId={params.id} />
+      <UserFolders userId={String(query.id)} />
     </>
   );
 };
