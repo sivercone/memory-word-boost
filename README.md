@@ -2,35 +2,43 @@
 
 This project serves as a prototype for a [subsequent project](https://qsets.sivercone.com/).
 
-## How to run locally
+## Development Philosophy
 
-You will need [node.js](https://nodejs.org/), [yarn](https://yarnpkg.com/) and [postgres](https://www.postgresql.org/) installed.
+Outlines of key principles and practices I follow in this application to maintain code quality, consistency, and ease of collaboration.
 
-### client (react + next.js)
+### Code Style
 
-0. Change directory:
-   `cd ./client/`
-1. Install dependencies:
-   `yarn`
-2. Start dev environment:
-   `yarn dev`
-3. Visit [localhost:3000](http://localhost:3000) to view the application
+- **Language:** TypeScript
+- **Package Manager:** [Yarn](https://yarnpkg.com/)
+- **Linter:** [ESLint](https://eslint.org/) for code consistency
+- **Formatter:** [Prettier](https://prettier.io/) for code formatting
+- **Naming Conventions:**
+  - Folders: `kebab-case`
+  - Files, variables and functions: `camelCase`
+  - Components: `PascalCase`
 
-Note: To run the client independently without the server, please follow these steps:
+### Core Principles
 
-1. Create a `.env` file in the `./client/` directory.
-2. Add the following line to the file: `NEXT_PUBLIC_BACKENDLESS=true`
+- **Clarity and Simplicity:** Code should be easy to read and understand. Prioritize simplicity over clever solutions.
+- Components should follow the **Single Responsibility Principle (SRP):** Each component should do one thing well.
+- **Reusability:** Strive to create reusable components and utilities to avoid duplication and improve maintainability.
+- **Consistency:** Follow consistent coding patterns, naming conventions, and folder structures.
 
-This will enable the client to operate in a "backendless" mode.
+### Project Structure
 
-### server (node.js + postgres)
+I follow a structured approach to organize files and directories:
 
-0. Change directory:
-   `cd ./server/`
-1. Install dependencies:
-   `yarn`
-2. Start dev environment:
-   `yarn dev`
+```
+src
+├── lib                 # Collection of tools and data
+│   ├── hooks           # Custom React hooks
+│   └── utils           # Utility functions and helpers
+├── modules             # Screen-level components
+├── pages               # File-based routing components
+├── stores              # Global state management
+├── types               # TypeScript types and interfaces
+└── ui                  # Reusable React components
+```
 
 ## License
 
