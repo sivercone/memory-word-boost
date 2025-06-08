@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { utils } from '@src/lib';
 import { useLocalStore } from '@src/stores';
 import * as Types from '@src/types';
-import { Dialog } from '@src/ui';
+import { Dialog, Input } from '@src/ui';
 
 const ProfileForm = ({ open, close }: Pick<React.ComponentProps<typeof Dialog>, 'open' | 'close'>) => {
   const router = useRouter();
@@ -33,23 +33,18 @@ const ProfileForm = ({ open, close }: Pick<React.ComponentProps<typeof Dialog>, 
       }}
     >
       <form onSubmit={form.handleSubmit(onSubmit)} className="p-4 flex flex-col gap-4 overflow-y-auto">
-        <input
+        <Input
           type="email"
           placeholder="Email"
           {...form.register('email', {
             required: true,
             pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i, message: 'Invalid email address' },
           })}
-          className="border border-gray-200 border-solid p-2 rounded-lg bg-white read-only:bg-gray-100 read-only:text-gray-600"
           readOnly
         />
-        <input
-          placeholder="Name"
-          {...form.register('name', { required: true })}
-          className="border border-gray-200 border-solid p-2 rounded-lg bg-white"
-        />
-        <input placeholder="Bio" {...form.register('bio')} className="border border-gray-200 border-solid p-2 rounded-lg bg-white" />
-        <input type="submit" aria-hidden="true" style={{ display: 'none' }} />
+        <Input placeholder="Name" {...form.register('name', { required: true })} />
+        <Input placeholder="Bio" {...form.register('bio')} />
+        <input type="submit" aria-hidden="true" hidden className="hidden" />
       </form>
     </Dialog>
   );

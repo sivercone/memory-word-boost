@@ -64,21 +64,21 @@ const CardView: React.FC<CardViewProps> = ({ front, back, onSwipeLeft, onSwipeRi
             transition: !swipeDirection ? 'transform 0.35s' : 'border-color 0.1s',
           }}
           className={`${
-            swipeDirection === 'left' ? 'border-rose-500' : swipeDirection === 'right' ? 'border-violet-500' : 'border-gray-200'
-          } bg-white h-full relative border border-solid rounded-lg group-focus-visible:shadow-[0_0_0_2px] group-focus-visible:shadow-violet-400`}
+            swipeDirection === 'left' ? 'border-rose-500' : swipeDirection === 'right' ? 'border-primary-500' : 'border-outline'
+          } bg-surface text-onSurface h-full relative border border-solid rounded-lg group-focus-visible:shadow-[0_0_0_2px] group-focus-visible:shadow-primary-400`}
         >
           <div style={{ backfaceVisibility: 'hidden' }} className="absolute w-full h-full flex items-center justify-center">
-            <span className="absolute top-[10px] left-[10px] text-gray-600 text-xs select-none">FRONT SIDE</span>
+            <span className="absolute top-[10px] left-[10px] text-onBackground text-xs select-none">FRONT SIDE</span>
             <span className="leading-relaxed text-xl max-h-[92%] overflow-y-auto px-2">{front}</span>
-            <span className="absolute bottom-[10px] text-gray-600 text-xs select-none">TAP TO FLIP</span>
+            <span className="absolute bottom-[10px] text-onBackground text-xs select-none">TAP TO FLIP</span>
           </div>
           <div
             style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
             className="absolute w-full h-full flex items-center justify-center"
           >
-            <span className="absolute top-[10px] left-[10px] text-gray-600 text-xs select-none">BACK SIDE</span>
+            <span className="absolute top-[10px] left-[10px] text-onBackground text-xs select-none">BACK SIDE</span>
             <span className="leading-relaxed text-xl max-h-[92%] overflow-y-auto px-2">{back}</span>
-            <span className="absolute bottom-[10px] text-gray-600 text-xs select-none">TAP TO FLIP</span>
+            <span className="absolute bottom-[10px] text-onBackground text-xs select-none">TAP TO FLIP</span>
           </div>
         </div>
       </button>

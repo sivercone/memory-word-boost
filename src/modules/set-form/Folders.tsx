@@ -19,7 +19,7 @@ const Folders: React.FC = () => {
   return (
     <div className="max-w-3xl mx-auto flex flex-col gap-4 py-4 px-4">
       <div className="flex items-center gap-2">
-        <h1 className="text-2xl font-medium">Folders</h1>
+        <h1 className="text-2xl font-medium text-onSurface">Folders</h1>
         <div className="ml-auto flex items-center gap-4">
           <ButtonLink href={{ pathname: router.pathname, query: studySetDraft.id && { id: router.query.id } }} title="Back">
             <Icons.ArrowLeft />

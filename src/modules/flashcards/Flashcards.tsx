@@ -40,7 +40,7 @@ const Flashcards = () => {
         <CompleteView queryId={studySet.id} scorePercentage={scorePercentage} cardsLength={cards.length} />
       ) : (
         <div className="flex-1 flex items-center justify-center">
-          <p className="text-gray-600">There are no cards..</p>
+          <p className="text-onBackground">There are no cards..</p>
         </div>
       )}
     </div>

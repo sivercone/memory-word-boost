@@ -32,7 +32,7 @@ const FolderDelete: React.FC<Props> = ({ open, close, data }) => {
         right: <Dialog.Button onClick={onDelete}>Delete</Dialog.Button>,
       }}
     >
-      <div className="px-4 py-20 text-center text-lg">
+      <div className="px-4 py-20 text-center text-lg text-onSurface">
         <p className="leading-relaxed">Are you sure you want to delete &#39;{data.name}&#39;?</p>
         <p className="leading-relaxed">Sets in this folder will not be deleted.</p>
       </div>

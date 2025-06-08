@@ -20,7 +20,7 @@ function ActionList<T>({ data, renderItem, keyExtractor, header, footer, placeho
       )}
       {data.length ? (
         <>
-          <div className={`rounded-lg bg-white border border-gray-200 overflow-hidden`}>
+          <div className={`rounded-lg bg-surface border border-outline overflow-hidden`}>
             {data.map((item, index) => (
               <div key={keyExtractor(item, index)} className="bg-transparent">
                 {renderItem(item, index)}
@@ -34,7 +34,7 @@ function ActionList<T>({ data, renderItem, keyExtractor, header, footer, placeho
           )}
         </>
       ) : (
-        <p className="text-gray-600">{placeholder}</p>
+        <p className="text-onBackground">{placeholder}</p>
       )}
     </div>
   );

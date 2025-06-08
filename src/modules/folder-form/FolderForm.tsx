@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { utils } from '@src/lib';
 import { useLocalStore } from '@src/stores';
 import * as Types from '@src/types';
-import { Dialog } from '@src/ui';
+import { Dialog, Input } from '@src/ui';
 
 interface Props extends Pick<React.ComponentProps<typeof Dialog>, 'open' | 'close'> {
   data?: Types.FolderForm;
@@ -64,16 +64,8 @@ const FolderForm: React.FC<Props> = ({ open, close, data }) => {
       }}
     >
       <form onSubmit={form.handleSubmit(onSubmit)} className="p-4 flex flex-col gap-4 overflow-y-auto">
-        <input
-          placeholder="Name"
-          {...form.register('name', { required: true })}
-          className="border border-gray-200 border-solid p-2 rounded-lg bg-white"
-        />
-        <input
-          placeholder="Description"
-          {...form.register('description')}
-          className="border border-gray-200 border-solid p-2 rounded-lg bg-white"
-        />
+        <Input placeholder="Name" {...form.register('name', { required: true })} />
+        <Input placeholder="Description" {...form.register('description')} />
         <input type="submit" aria-hidden="true" hidden />
       </form>
     </Dialog>

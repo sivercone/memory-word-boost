@@ -67,9 +67,9 @@ const Cards: React.FC = () => {
 
   return (
     <>
-      <div className={clsx('sticky z-10 top-0', scrolled && 'bg-white border-b border-b-gray-200')}>
+      <div className={clsx('sticky z-10 top-0', scrolled && 'bg-surface border-b border-b-outline')}>
         <div className="p-4 flex items-center gap-2 max-w-3xl mx-auto">
-          <h1 className="text-2xl font-medium">Cards</h1>
+          <h1 className="text-2xl font-medium text-onSurface">Cards</h1>
           <div className="ml-auto flex items-center gap-4">
             <ButtonLink href={{ pathname: router.pathname, query: studySetDraft.id && { id: router.query.id } }} title="Back">
               <Icons.ArrowLeft />
@@ -102,12 +102,12 @@ const Cards: React.FC = () => {
           {fieldArray.fields.map((content, i) => (
             <li key={content.id} className="flex gap-4 items-end">
               <div className="flex flex-col justify-center items-center gap-4">
-                <p className="text-gray-600 text-sm">{i + 1}</p>
+                <p className="text-onBackground text-sm">{i + 1}</p>
                 <Button onClick={() => fieldArray.remove(i)} title="Remove">
                   <Icons.Minus />
                 </Button>
               </div>
-              <div className="flex flex-col border border-gray-200 border-solid rounded-lg bg-white w-full">
+              <div className="flex flex-col border border-outline border-solid rounded-lg bg-surface w-full">
                 <Textarea
                   placeholder="Front"
                   {...form.register(`cards.${i}.front`, { required: true })}
@@ -115,7 +115,7 @@ const Cards: React.FC = () => {
                   rows={1}
                   onPaste={(e) => handlePaste(i, e)}
                 />
-                <hr className="border-gray-200" />
+                <hr className="border-outline" />
                 <Textarea
                   placeholder="Back"
                   {...form.register(`cards.${i}.back`, { required: true })}

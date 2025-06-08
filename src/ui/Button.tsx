@@ -12,12 +12,12 @@ function getButtonClasses(variant: ButtonVariant, align: AlignVariant, shape: Sh
     clsx(
       // Base classes shared by all buttons/links
       'flex',
-      'transition-colors hover:bg-gray-50 select-none disabled:cursor-default disabled:hover:bg-white',
+      'transition-colors hover:bg-surfaceDim select-none disabled:cursor-default disabled:hover:bg-white',
 
       // Variant-specific classes
       {
         elevated: '',
-        filled: 'bg-white border border-gray-200 border-solid',
+        filled: 'bg-surface text-onSurface border border-outline border-solid',
         tonal: '',
         outlined: '',
       }[variant],

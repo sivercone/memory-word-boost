@@ -39,13 +39,13 @@ const FolderDetails = () => {
   return (
     <>
       {(folderQuery === 'new' || folder) && (
-        <div className="bg-white py-8 border-b border-b-gray-200">
+        <div className="bg-surface py-8 border-b border-b-outline">
           <div className="max-w-3xl mx-auto flex flex-col gap-4 px-4">
             <div className="flex items-center gap-4">
-              <div className="h-20 w-20 rounded-md bg-white border border-solid border-gray-200" />
+              <div className="h-20 w-20 rounded-md bg-surface border border-solid border-outline" />
               <div>
                 <h1 className="text-2xl font-medium">{folder?.name || 'New Folder'}</h1>
-                {folder?.description && <p className="leading-relaxed text-gray-600">{folder.description}</p>}
+                {folder?.description && <p className="leading-relaxed text-onBackground">{folder.description}</p>}
               </div>
             </div>
             <DropdownMenu

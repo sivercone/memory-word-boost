@@ -9,9 +9,11 @@ module.exports = {
       colors: {
         background: '#f3f4f6',
         onBackground: '#4b5563',
+        surfaceDim: '#f9fafb',
         surface: '#ffffff',
         onSurface: '#1f2937',
         outline: '#e5e7eb',
+        overlay: '#1f2937',
         primary: {
           50: '#f5f3ff',
           100: '#ede9fe',
@@ -24,6 +26,12 @@ module.exports = {
           800: '#5b21b6',
           900: '#4c1d95',
           950: '#2e1065',
+        },
+        rose: {
+          400: '#fb7185',
+          500: '#f43f5e',
+          600: '#e11d48',
+          700: '#be123c',
         },
       },
       keyframes: {
@@ -56,18 +64,5 @@ module.exports = {
       },
     },
   },
-  plugins: [
-    function ({ addBase, config }) {
-      addBase({
-        body: {
-          backgroundColor: config('theme.colors.gray.100'),
-          color: config('theme.colors.gray.800'),
-        },
-        'html.dark body': {
-          backgroundColor: config('theme.colors.zinc.900'),
-          color: config('theme.colors.zinc.300'),
-        },
-      });
-    },
-  ],
+  plugins: [],
 };

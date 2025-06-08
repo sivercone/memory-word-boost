@@ -22,7 +22,7 @@ function Dialog({ defaultOpen, open, close, header, children }: DialogProps) {
           className={clsx(
             open ? 'animate-fadeIn' : 'animate-fadeOut',
             'z-50 fixed inset-0',
-            'bg-gray-800 bg-opacity-50',
+            'bg-overlay bg-opacity-50',
             'data-[state=open]:animate-fadeIn',
           )}
         />
@@ -34,7 +34,7 @@ function Dialog({ defaultOpen, open, close, header, children }: DialogProps) {
             'z-50 fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]',
             'flex flex-col',
             'max-h-[85vh] w-[90vw] max-w-[450px]',
-            'rounded-[6px] bg-gray-50 focus:outline-none overflow-hidden',
+            'rounded-[6px] bg-background focus:outline-none overflow-hidden',
             'data-[state=open]:animate-scaleIn',
             'shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px]',
           )}
@@ -43,7 +43,7 @@ function Dialog({ defaultOpen, open, close, header, children }: DialogProps) {
             {typeof header.title !== 'string' && <Primitive.Title />}
             <Primitive.Description />
           </VisuallyHidden.Root>
-          <div className="flex items-center border-b border-b-gray-200 bg-white p-4">
+          <div className="flex items-center border-b border-b-outline bg-surface text-onSurface p-4">
             {header.left}
             {typeof header.title === 'string' ? <Dialog.Title>{header.title}</Dialog.Title> : header.title}
             {header.right}
