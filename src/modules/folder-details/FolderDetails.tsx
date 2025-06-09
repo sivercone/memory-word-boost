@@ -39,10 +39,10 @@ const FolderDetails = () => {
   return (
     <>
       {(folderQuery === 'new' || folder) && (
-        <div className="bg-surface py-8 border-b border-b-outline">
-          <div className="max-w-3xl mx-auto flex flex-col gap-4 px-4">
+        <div className="border-b border-b-outline bg-surface py-8">
+          <div className="mx-auto flex max-w-3xl flex-col gap-4 px-4">
             <div className="flex items-center gap-4">
-              <div className="h-20 w-20 rounded-md bg-surface border border-solid border-outline" />
+              <div className="h-20 w-20 flex-shrink-0 rounded-md border border-solid border-outline bg-surface" />
               <div>
                 <h1 className="text-2xl font-medium">{folder?.name || 'New Folder'}</h1>
                 {folder?.description && <p className="leading-relaxed text-onBackground">{folder.description}</p>}
@@ -69,7 +69,7 @@ const FolderDetails = () => {
 
       {folder && <DeleteDialog data={folder} open={shownModal === 'del'} close={() => setShownModal(null)} />}
 
-      <div className="p-4 max-w-3xl mx-auto">
+      <div className="mx-auto max-w-3xl p-4">
         <ActionList
           header={{ title: 'Sets' }}
           placeholder="Nothing yet"
@@ -77,7 +77,7 @@ const FolderDetails = () => {
           keyExtractor={(item) => item.id}
           renderItem={(item, index) => (
             <ActionList.Link href={`/sets/${item.id}`} isFirst={index === 0}>
-              <Icons.Set />
+              <Icons.Set className="flex-shrink-0" />
               <span>{item.name}</span>
             </ActionList.Link>
           )}

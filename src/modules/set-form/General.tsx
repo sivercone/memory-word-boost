@@ -47,10 +47,10 @@ const General: React.FC = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto flex flex-col gap-4 py-4 px-4">
+    <div className="mx-auto flex max-w-3xl flex-col gap-4 px-4 py-4">
       <div className="flex items-center gap-2">
         <h1 className="text-2xl font-medium text-onSurface">{studySetDraft.id ? 'Edit Set' : 'New Set'}</h1>
-        <div className="ml-auto flex gap-4 items-center">
+        <div className="ml-auto flex items-center gap-4">
           {studySetDraft.id ? (
             <Button onClick={() => router.push(`/sets/${studySetDraft.id}`)}>
               <span className="font-medium">Cancel</span>
@@ -100,13 +100,13 @@ const General: React.FC = () => {
         <Button
           key={item.id}
           onClick={() => router.push(item.href)}
-          className="p-4 flex-col gap-1 overflow-hidden w-full items-stretch text-left"
+          className="w-full flex-col items-stretch gap-1 overflow-hidden p-4 text-left"
         >
           <div className="flex items-center">
             <span className="font-medium">{item.name}</span>
             <Icons.ChevronRight className="ml-auto fill-onBackground" />
           </div>
-          <span className="block text-sm max-w-[89%] text-onBackground">{item.lore}</span>
+          <span className="block max-w-[89%] text-sm text-onBackground">{item.lore}</span>
         </Button>
       ))}
     </div>

@@ -24,16 +24,16 @@ const Navigation = () => {
   ];
 
   return (
-    <nav id="navigation" className="py-[16px] border-b border-b-outline bg-surface sticky top-0 z-10">
-      <div className="flex items-center max-w-3xl mx-auto px-4">
-        <Link href="/" className="flex gap-1 items-center select-none" legacyBehavior={false}>
+    <nav id="navigation" className="sticky top-0 z-10 border-b border-b-outline bg-surface py-[16px]">
+      <div className="mx-auto flex max-w-3xl items-center px-4">
+        <Link href="/" className="flex select-none items-center gap-1" aria-label="Project MWB logo, go to homepage">
           <span
-            className="font-semibold bg-gradient-to-br from-primary-500 to-[#111827] box-decoration-slice bg-clip-text text-transparent"
+            className="bg-gradient-to-br from-primary-500 to-[#111827] box-decoration-slice bg-clip-text font-semibold text-transparent"
             style={{ letterSpacing: '-0.9px', lineHeight: '0.8' }}
           >
             PROJECT MWB
           </span>
-          <span className="bg-background text-xs font-medium rounded-lg px-1 text-[#6b7280]" style={{ letterSpacing: '-0.8px' }}>
+          <span className="rounded-lg bg-background px-1 text-xs font-medium text-[#6b7280]" style={{ letterSpacing: '-0.8px' }}>
             Prototype
           </span>
         </Link>

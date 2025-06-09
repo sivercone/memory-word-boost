@@ -24,9 +24,9 @@ const AuthCheck: React.FC = () => {
         <Dialog.Overlay
           asChild
           className={clsx(
-            'z-50 absolute inset-0',
-            'size-full flex items-center justify-center',
-            'animate-fadeIn bg-white select-none outline-none',
+            'absolute inset-0 z-50',
+            'flex size-full items-center justify-center',
+            'animate-fadeIn select-none bg-white outline-none',
           )}
         >
           <Dialog.Content role="status">
@@ -34,7 +34,7 @@ const AuthCheck: React.FC = () => {
               <Dialog.Title />
               <Dialog.Description />
             </VisuallyHidden.Root>
-            <Spinner className="mx-auto m-y-8 h-8" />
+            <Spinner className="m-y-8 mx-auto h-8" />
           </Dialog.Content>
         </Dialog.Overlay>
       </Dialog.Portal>

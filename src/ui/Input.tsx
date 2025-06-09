@@ -8,7 +8,7 @@ const Input = forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputEl
       className={twMerge(
         'p-2',
         'bg-surface text-onSurface',
-        'border border-outline border-solid rounded-lg',
+        'rounded-lg border border-solid border-outline',
         'read-only:bg-background read-only:text-onBackground',
         className,
       )}

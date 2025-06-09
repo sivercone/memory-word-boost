@@ -74,8 +74,8 @@ const Cards: React.FC = () => {
 
   return (
     <>
-      <div className={clsx('sticky z-10 top-0', scrolled && 'bg-surface border-b border-b-outline')}>
-        <div className="p-4 flex items-center gap-2 max-w-3xl mx-auto">
+      <div className={clsx('sticky top-0 z-10', scrolled && 'border-b border-b-outline bg-surface')}>
+        <div className="mx-auto flex max-w-3xl items-center gap-2 p-4">
           <h1 className="text-2xl font-medium text-onSurface">Cards</h1>
           <div className="ml-auto flex items-center gap-4">
             <ButtonLink href={{ pathname: router.pathname, query: studySetDraft.id && { id: router.query.id } }} title="Back">
@@ -91,7 +91,7 @@ const Cards: React.FC = () => {
         </div>
       </div>
 
-      <div className="max-w-3xl mx-auto p-4">
+      <div className="mx-auto max-w-3xl p-4">
         <Banner
           visible={tipBannerShown}
           close={() => showTipBanner(false)}
@@ -107,18 +107,18 @@ const Cards: React.FC = () => {
 
         <ul className="flex flex-col gap-4">
           {fieldArray.fields.map((content, i) => (
-            <li key={content.id} className="flex gap-4 items-end">
-              <div className="flex flex-col justify-center items-center gap-4">
-                <p className="text-onBackground text-sm">{i + 1}</p>
+            <li key={content.id} className="flex items-end gap-4">
+              <div className="flex flex-col items-center justify-center gap-4">
+                <p className="text-sm text-onBackground">{i + 1}</p>
                 <Button onClick={() => fieldArray.remove(i)} title="Remove">
                   <Icons.Minus />
                 </Button>
               </div>
-              <div className="flex flex-col border border-outline border-solid rounded-lg bg-surface w-full">
+              <div className="flex w-full flex-col rounded-lg border border-solid border-outline bg-surface">
                 <Textarea
                   placeholder="Front"
                   {...form.register(`cards.${i}.front`, { required: true })}
-                  className="p-2 rounded-t-lg"
+                  className="rounded-t-lg p-2"
                   rows={1}
                   onPaste={(e) => handlePaste(i, e)}
                 />
@@ -126,7 +126,7 @@ const Cards: React.FC = () => {
                 <Textarea
                   placeholder="Back"
                   {...form.register(`cards.${i}.back`, { required: true })}
-                  className="p-2 rounded-b-lg"
+                  className="rounded-b-lg p-2"
                   rows={1}
                 />
               </div>

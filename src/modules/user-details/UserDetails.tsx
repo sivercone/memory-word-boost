@@ -9,13 +9,13 @@ import * as Types from '@src/types';
 import { ActionList, Button, Spinner, Icons } from '@src/ui';
 
 const UserProfile: React.FC<{ user: Types.UserModel; onEdit: () => void }> = ({ user, onEdit }) => (
-  <div className="bg-surface py-8 border-b border-b-outline">
-    <div className="max-w-3xl mx-auto flex flex-col gap-4 px-4">
+  <div className="border-b border-b-outline bg-surface py-8">
+    <div className="mx-auto flex max-w-3xl flex-col gap-4 px-4">
       <div className="flex items-center gap-4">
-        <div className="h-20 w-20 rounded-full bg-surface border border-solid border-outline" />
+        <div className="h-20 w-20 flex-shrink-0 rounded-full border border-solid border-outline bg-surface" />
         <div>
           <h1 className="text-2xl font-medium text-onSurface">{user.name}</h1>
-          <p className="leading-relaxed text-onBackground text-sm">{`On project since ${dayjs(user.createdAt).format('d MMM YYYY')}`}</p>
+          <p className="text-sm leading-relaxed text-onBackground">{`On project since ${dayjs(user.createdAt).format('d MMM YYYY')}`}</p>
           {user.bio ? <p className="leading-relaxed text-onBackground">{user.bio}</p> : null}
         </div>
       </div>
@@ -30,14 +30,14 @@ const UserFolders: React.FC<{ userId: string }> = ({ userId }) => {
 
   if (!sortedFolders.length) return <Spinner center className="m-8 h-8" />;
   return (
-    <div className="max-w-3xl mx-auto p-4">
+    <div className="mx-auto max-w-3xl p-4">
       <ActionList
         header={{ title: 'Folders' }}
         data={sortedFolders}
         keyExtractor={(item) => item.id}
         renderItem={(item, index) => (
           <ActionList.Link href={`/sets?${item.id === 'sets' ? `user=${userId}` : `folder=${item.id}`}`} isFirst={index === 0}>
-            <Icons.Folder />
+            <Icons.Folder className="flex-shrink-0" />
             <span>{item.name}</span>
           </ActionList.Link>
         )}

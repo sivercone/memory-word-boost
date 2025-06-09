@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 
 import { Button, Icons } from '@src/ui';
@@ -47,7 +48,7 @@ const CardView: React.FC<CardViewProps> = ({ front, back, onSwipeLeft, onSwipeRi
       <button
         onClick={handleCardClick}
         onKeyUp={(event) => event.key === ' ' && handleCardClick()}
-        className="flex-1 rounded-lg focus-visible:shadow-none group"
+        className="group flex-1 rounded-lg focus-visible:shadow-none"
         style={{
           transition: 'transform 0.35s, opacity 0.35s',
           opacity: swipeDirection ? 0 : 1,
@@ -63,32 +64,36 @@ const CardView: React.FC<CardViewProps> = ({ front, back, onSwipeLeft, onSwipeRi
             transform: isFlipped ? 'rotateY(180deg)' : '',
             transition: !swipeDirection ? 'transform 0.35s' : 'border-color 0.1s',
           }}
-          className={`${
-            swipeDirection === 'left' ? 'border-rose-500' : swipeDirection === 'right' ? 'border-primary-500' : 'border-outline'
-          } bg-surface text-onSurface h-full relative border border-solid rounded-lg group-focus-visible:shadow-[0_0_0_2px] group-focus-visible:shadow-primary-400`}
+          className={clsx(
+            swipeDirection === 'left' ? 'border-rose-500' : swipeDirection === 'right' ? 'border-primary-500' : 'border-outline',
+            'relative h-full',
+            'bg-surface text-onSurface',
+            'rounded-lg border border-solid',
+            'group-focus-visible:shadow-[0_0_0_2px] group-focus-visible:shadow-primary-400',
+          )}
         >
-          <div style={{ backfaceVisibility: 'hidden' }} className="absolute w-full h-full flex items-center justify-center">
-            <span className="absolute top-[10px] left-[10px] text-onBackground text-xs select-none">FRONT SIDE</span>
-            <span className="leading-relaxed text-xl max-h-[92%] overflow-y-auto px-2">{front}</span>
-            <span className="absolute bottom-[10px] text-onBackground text-xs select-none">TAP TO FLIP</span>
+          <div style={{ backfaceVisibility: 'hidden' }} className="absolute flex h-full w-full items-center justify-center">
+            <span className="absolute left-[10px] top-[10px] select-none text-xs text-onBackground">FRONT SIDE</span>
+            <span className="max-h-[92%] overflow-y-auto px-2 text-xl leading-relaxed">{front}</span>
+            <span className="absolute bottom-[10px] select-none text-xs text-onBackground">TAP TO FLIP</span>
           </div>
           <div
             style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
-            className="absolute w-full h-full flex items-center justify-center"
+            className="absolute flex h-full w-full items-center justify-center"
           >
-            <span className="absolute top-[10px] left-[10px] text-onBackground text-xs select-none">BACK SIDE</span>
-            <span className="leading-relaxed text-xl max-h-[92%] overflow-y-auto px-2">{back}</span>
-            <span className="absolute bottom-[10px] text-onBackground text-xs select-none">TAP TO FLIP</span>
+            <span className="absolute left-[10px] top-[10px] select-none text-xs text-onBackground">BACK SIDE</span>
+            <span className="max-h-[92%] overflow-y-auto px-2 text-xl leading-relaxed">{back}</span>
+            <span className="absolute bottom-[10px] select-none text-xs text-onBackground">TAP TO FLIP</span>
           </div>
         </div>
       </button>
 
-      <div className="flex gap-4 w-full flex-col sm:flex-row">
-        <Button onClick={() => handleSwipe('left')} className="w-full gap-2 justify-start sm:justify-center py-4">
+      <div className="flex w-full flex-col gap-4 sm:flex-row">
+        <Button onClick={() => handleSwipe('left')} className="w-full justify-start gap-2 py-4 sm:justify-center">
           <Icons.TaskIncomplete />
           <span className="font-medium">Didn&#39;t Know that</span>
         </Button>
-        <Button onClick={() => handleSwipe('right')} className="w-full gap-2 justify-start sm:justify-center py-4">
+        <Button onClick={() => handleSwipe('right')} className="w-full justify-start gap-2 py-4 sm:justify-center">
           <Icons.TaskComplete />
           <span className="font-medium">Already Know that</span>
         </Button>

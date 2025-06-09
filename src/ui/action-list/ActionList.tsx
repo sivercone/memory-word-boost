@@ -13,14 +13,14 @@ function ActionList<T>({ data, renderItem, keyExtractor, header, footer, placeho
   return (
     <div className="space-y-2">
       {header && (
-        <div className="flex justify-between items-center bg-transparent">
+        <div className="flex items-center justify-between bg-transparent">
           <HeaderTitle>{header.title}</HeaderTitle>
           {header.action}
         </div>
       )}
       {data.length ? (
         <>
-          <div className={`rounded-lg bg-surface border border-outline overflow-hidden`}>
+          <div className="overflow-hidden rounded-lg border border-outline bg-surface">
             {data.map((item, index) => (
               <div key={keyExtractor(item, index)} className="bg-transparent">
                 {renderItem(item, index)}

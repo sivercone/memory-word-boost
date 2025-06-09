@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { useRouter } from 'next/router';
 
 import { utils } from '@src/lib';
@@ -17,7 +18,7 @@ const Folders: React.FC = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto flex flex-col gap-4 py-4 px-4">
+    <div className="mx-auto flex max-w-3xl flex-col gap-4 px-4 py-4">
       <div className="flex items-center gap-2">
         <h1 className="text-2xl font-medium text-onSurface">Folders</h1>
         <div className="ml-auto flex items-center gap-4">
@@ -32,7 +33,7 @@ const Folders: React.FC = () => {
         keyExtractor={(item) => item.id}
         renderItem={(item, index) => (
           <ActionList.Button onClick={() => onSelect(item.id)} isFirst={index === 0} className="flex items-center">
-            <Icons.Check className={studySetDraft.folderId === item.id ? 'visible' : 'invisible'} />
+            <Icons.Check className={clsx('flex-shrink-0', studySetDraft.folderId === item.id ? 'visible' : 'invisible')} />
             <span>{item.name}</span>
           </ActionList.Button>
         )}

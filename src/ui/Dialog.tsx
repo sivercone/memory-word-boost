@@ -21,7 +21,7 @@ function Dialog({ defaultOpen, open, close, header, children }: DialogProps) {
           onClick={close}
           className={clsx(
             open ? 'animate-fadeIn' : 'animate-fadeOut',
-            'z-50 fixed inset-0',
+            'fixed inset-0 z-50',
             'bg-overlay bg-opacity-50',
             'data-[state=open]:animate-fadeIn',
           )}
@@ -31,10 +31,10 @@ function Dialog({ defaultOpen, open, close, header, children }: DialogProps) {
           onEscapeKeyDown={close}
           className={clsx(
             open ? 'animate-scaleIn' : 'animate-scaleOut',
-            'z-50 fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]',
+            'fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%]',
             'flex flex-col',
             'max-h-[85vh] w-[90vw] max-w-[450px]',
-            'rounded-[6px] bg-background focus:outline-none overflow-hidden',
+            'overflow-hidden rounded-[6px] bg-background focus:outline-none',
             'data-[state=open]:animate-scaleIn',
             'shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px]',
           )}
@@ -43,7 +43,7 @@ function Dialog({ defaultOpen, open, close, header, children }: DialogProps) {
             {typeof header.title !== 'string' && <Primitive.Title />}
             <Primitive.Description />
           </VisuallyHidden.Root>
-          <div className="flex items-center border-b border-b-outline bg-surface text-onSurface p-4">
+          <div className="flex items-center border-b border-b-outline bg-surface p-4 text-onSurface">
             {header.left}
             {typeof header.title === 'string' ? <Dialog.Title>{header.title}</Dialog.Title> : header.title}
             {header.right}

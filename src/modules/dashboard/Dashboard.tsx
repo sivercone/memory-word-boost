@@ -11,7 +11,7 @@ const Dashboard: NextPage = () => {
   const sortedFolders = utils.array.composeSortedFolders(folders.filter((item) => item.userId === user?.id));
 
   return (
-    <div className="max-w-3xl mx-auto p-4 space-y-4">
+    <div className="mx-auto max-w-3xl space-y-4 p-4">
       <Banner />
       <ActionList
         header={{ title: 'Folders' }}
@@ -19,7 +19,7 @@ const Dashboard: NextPage = () => {
         keyExtractor={(item) => item.id}
         renderItem={(item, index) => (
           <ActionList.Link href={`/sets?${item.id === 'sets' ? `user=${user?.id}` : `folder=${item.id}`}`} isFirst={index === 0}>
-            <Icons.Folder />
+            <Icons.Folder className="flex-shrink-0" />
             <span>{item.name}</span>
           </ActionList.Link>
         )}

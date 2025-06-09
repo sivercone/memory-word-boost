@@ -28,21 +28,23 @@ const Flashcards = () => {
 
   if (!isClient || !studySet) return null;
   return (
-    <div className="max-w-3xl mx-auto flex flex-col gap-4 p-4" style={{ height: 'calc(100% - 65px)' }}>
-      {currentCardIndex < cards.length ? (
-        <CardView
-          front={cards[currentCardIndex].front}
-          back={cards[currentCardIndex].back}
-          onSwipeLeft={() => onSwipe(false)}
-          onSwipeRight={() => onSwipe(true)}
-        />
-      ) : cards.length ? (
-        <CompleteView queryId={studySet.id} scorePercentage={scorePercentage} cardsLength={cards.length} />
-      ) : (
-        <div className="flex-1 flex items-center justify-center">
-          <p className="text-onBackground">There are no cards..</p>
-        </div>
-      )}
+    <div className="h-[calc(100%-65px)] overflow-x-hidden">
+      <div className="mx-auto flex h-full max-w-3xl flex-col gap-4 p-4">
+        {currentCardIndex < cards.length ? (
+          <CardView
+            front={cards[currentCardIndex].front}
+            back={cards[currentCardIndex].back}
+            onSwipeLeft={() => onSwipe(false)}
+            onSwipeRight={() => onSwipe(true)}
+          />
+        ) : cards.length ? (
+          <CompleteView queryId={studySet.id} scorePercentage={scorePercentage} cardsLength={cards.length} />
+        ) : (
+          <div className="flex flex-1 items-center justify-center">
+            <p className="text-onBackground">There are no cards..</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

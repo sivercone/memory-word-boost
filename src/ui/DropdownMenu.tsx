@@ -20,8 +20,8 @@ function DropdownMenu<T>({ trigger, options, renderItem, keyExtractor }: Dropdow
       <Dropdown.Portal>
         <Dropdown.Content
           className={clsx(
-            'z-50 p-2 min-w-[220px] mx-2 lg:mx-auto',
-            'bg-surface text-onSurface rounded-md',
+            'z-50 mx-2 min-w-[220px] p-2 lg:mx-auto',
+            'rounded-md bg-surface text-onSurface',
             'data-[side=bottom]:animate-slideUpAndFade',
             'shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]',
             'will-change-[opacity,transform]',
@@ -46,10 +46,11 @@ const DropdownItem: React.FC<{ children: React.ReactNode; onClick?: React.MouseE
     <Dropdown.Item
       onClick={onClick}
       className={twMerge(
-        'flex gap-2 items-center p-3',
+        'flex items-center gap-2 p-3',
         'rounded-md',
-        'data-[highlighted]:bg-surfaceDim data-[disabled]:pointer-events-none',
+        'data-[disabled]:pointer-events-none data-[highlighted]:bg-surfaceDim',
         'cursor-pointer select-none outline-none',
+        'data-[highlighted]:z-[1] data-[highlighted]:shadow-[0_0_0_2px] data-[highlighted]:shadow-primary-400',
         className,
       )}
     >

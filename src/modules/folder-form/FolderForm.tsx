@@ -63,7 +63,7 @@ const FolderForm: React.FC<Props> = ({ open, close, data }) => {
         right: <Dialog.Button onClick={form.handleSubmit(onSubmit)}>Save</Dialog.Button>,
       }}
     >
-      <form onSubmit={form.handleSubmit(onSubmit)} className="p-4 flex flex-col gap-4 overflow-y-auto">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4 overflow-y-auto p-4">
         <Input placeholder="Name" {...form.register('name', { required: true })} />
         <Input placeholder="Description" {...form.register('description')} />
         <input type="submit" aria-hidden="true" hidden />

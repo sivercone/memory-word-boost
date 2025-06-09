@@ -32,7 +32,7 @@ const ProfileForm = ({ open, close }: Pick<React.ComponentProps<typeof Dialog>, 
         right: <Dialog.Button onClick={form.handleSubmit(onSubmit)}>Save</Dialog.Button>,
       }}
     >
-      <form onSubmit={form.handleSubmit(onSubmit)} className="p-4 flex flex-col gap-4 overflow-y-auto">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4 overflow-y-auto p-4">
         <Input
           type="email"
           placeholder="Email"
