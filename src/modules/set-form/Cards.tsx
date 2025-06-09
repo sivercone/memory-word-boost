@@ -3,14 +3,15 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 
+import { utils } from '@src/lib';
 import { useScroll } from '@src/lib/hooks';
 import { useRuntimeStore } from '@src/stores';
 import * as Types from '@src/types';
 import { Button, ButtonLink, Textarea, Icons, Banner } from '@src/ui';
 
 const Cards: React.FC = () => {
-  const { scrolled } = useScroll();
   const router = useRouter();
+  const { scrolled } = useScroll();
   const { studySetDraft, ...rtStore } = useRuntimeStore();
   const form = useForm<Pick<Types.SetModel, 'cards'>>();
   const fieldArray = useFieldArray({ name: 'cards', control: form.control });
@@ -18,25 +19,13 @@ const Cards: React.FC = () => {
   const [tipBannerShown, showTipBanner] = useState<boolean>(true);
 
   const flipCards = () => {
-    const flippedCards = form.watch('cards').map((card) => ({ ...card, front: card.back, back: card.front }));
-    form.reset({ cards: flippedCards });
+    const flippedCards = form.getValues('cards').map((card) => ({ ...card, front: card.back, back: card.front }));
+    form.setValue('cards', flippedCards, { shouldDirty: true });
   };
 
-  /**
-   * Handles pasting a 2-column table into the 'Front' input.
-   *
-   * Populates the current card with the first row,
-   * and appends new cards for the remaining rows.
-   * Falls back to default behavior if data isn't tab-separated.
-   *
-   * @param i - Index of the current card.
-   * @param event - Clipboard paste event.
-   */
   const handlePaste = (i: number, event: React.ClipboardEvent<HTMLTextAreaElement>) => {
     const pastedData = event.clipboardData.getData('text');
-    if (!pastedData.includes('\t')) {
-      return;
-    }
+    if (!pastedData.includes('\t')) return;
 
     event.preventDefault();
     const pastedRows = pastedData.split('\n');
@@ -45,24 +34,42 @@ const Cards: React.FC = () => {
       const [firstFront, firstBack] = pastedRows[0].split('\t');
 
       // Fill current card's front with the first column of the first row and back with the second column
-      form.reset((prev) => {
-        const cardsCopy = [...prev.cards];
-        cardsCopy[i].front = firstFront;
-        cardsCopy[i].back = firstBack;
-        return { cards: cardsCopy };
-      });
+      form.reset(
+        (prev) => {
+          const cardsCopy = [...prev.cards];
+          cardsCopy[i].front = firstFront;
+          cardsCopy[i].back = firstBack;
+          return { cards: cardsCopy };
+        },
+        { keepDirty: true },
+      );
 
       // For the remaining rows, append them as new cards
+      const currentCards = form.getValues('cards');
+      let nextOrder = Math.max(0, ...currentCards.map((c) => c.order ?? 0)) + 1;
       for (let j = 1; j < pastedRows.length; j++) {
         const [front, back] = pastedRows[j].split('\t');
-        fieldArray.append({ order: fieldArray.fields.length + j, front, back });
+        fieldArray.append({ order: nextOrder++, front, back });
       }
     }
   };
 
-  useEffect(() => form.reset(studySetDraft), [form.reset, studySetDraft]);
   useEffect(() => {
-    return () => rtStore.setValues({ studySetDraft: { ...studySetDraft, cards: form.watch('cards') } });
+    if (studySetDraft.id) form.reset({ cards: studySetDraft.cards });
+  }, [form.reset, studySetDraft]);
+
+  useEffect(() => {
+    return () => {
+      if (form.formState.isDirty)
+        rtStore.setValues({
+          studySetDraft: {
+            ...studySetDraft,
+            cards: form
+              .getValues('cards')
+              .filter(({ front, back }) => utils.string.trimExtraSpaces(front) && utils.string.trimExtraSpaces(back)),
+          },
+        });
+    };
   }, []);
 
   return (

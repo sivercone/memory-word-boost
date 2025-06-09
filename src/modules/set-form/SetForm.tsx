@@ -17,13 +17,15 @@ const SetForm = () => {
   const { query } = useRouter();
   const rtStore = useRuntimeStore();
   const localStore = useLocalStore();
-  const studySet = localStore.sets.find((item) => item.id === query.id);
 
   useEffect(() => {
-    if (!query.id) rtStore.destroy(['studySetDraft']);
-    else if (studySet) rtStore.setValues({ studySetDraft: { ...studySet } });
+    if (query.id) {
+      const studySet = localStore.sets.find((item) => item.id === query.id);
+      if (studySet) rtStore.setValues({ studySetDraft: studySet });
+    } else rtStore.destroy(['studySetDraft']);
+
     return () => rtStore.destroy(['studySetDraft']);
-  }, [query.id, studySet]);
+  }, [query.id]);
 
   useEffect(() => {
     const nav = document.querySelector('#navigation');
