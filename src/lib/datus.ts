@@ -4,7 +4,7 @@ export const FALLBACK_ERROR_MESSAGE = 'Hmm, something went wrong, please try aga
 
 export const exampleSets = [
   {
-    id: 'example-01',
+    id: crypto.randomUUID(),
     name: 'Famous Quotes',
     description: 'Learn quoutes from famous people in history',
     folderId: 'sets',
@@ -67,7 +67,7 @@ export const exampleSets = [
     ],
   },
   {
-    id: 'example-02',
+    id: crypto.randomUUID(),
     name: 'Computer Science Fundamentals',
     description: 'Study set to help you learn the basics of computer science',
     folderId: 'sets',

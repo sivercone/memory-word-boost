@@ -7,10 +7,10 @@ import { ActionList, ButtonLink, Icons } from '@src/ui';
 
 const Folders: React.FC = () => {
   const router = useRouter();
-  const { user, folders } = useLocalStore();
+  const { userId, folders } = useLocalStore();
   const { studySetDraft, ...rtStore } = useRuntimeStore();
 
-  const sortedFolders = utils.array.composeSortedFolders(folders.filter((item) => item.userId === user?.id));
+  const sortedFolders = utils.array.composeSortedFolders(folders.filter((item) => item.userId === userId));
 
   const onSelect = (folderId: string) => {
     rtStore.setValues({ studySetDraft: { ...studySetDraft, folderId } });

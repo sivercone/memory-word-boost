@@ -11,15 +11,15 @@ const creationOptions = [
 
 const Navigation = () => {
   const router = useRouter();
-  const { user, ...localStorage } = useLocalStore();
+  const { userId, ...localStorage } = useLocalStore();
 
   const logout = () => {
-    localStorage.setValues({ user: undefined });
+    localStorage.setValues({ userId: undefined });
     router.push('/login');
   };
 
   const menuOptions = [
-    { id: 'profile', title: 'Profile', action: () => router.push(`/user/${user?.id}`), icon: <Icons.Person /> },
+    { id: 'profile', title: 'Profile', action: () => router.push(`/user/${userId}`), icon: <Icons.Person /> },
     { id: 'logout', title: 'Log out', action: logout, icon: <Icons.Logout /> },
   ];
 

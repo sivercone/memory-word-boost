@@ -12,17 +12,11 @@ const Login: NextPage = () => {
   const form = useForm<Types.LoginForm>();
   const localStore = useLocalStore();
 
-  const onSubmit = (data: Types.LoginForm) => {
+  const onSubmit = (formData: Types.LoginForm) => {
     try {
-      localStore.setValues({
-        user: {
-          id: crypto.randomUUID(),
-          email: data.email,
-          name: '',
-          bio: '',
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        },
+      localStore.setValues((prev) => {
+        const res = utils.array.upsertUser({ users: prev.users, data: formData, allowCreate: true });
+        return { ...prev, userId: res.userId, users: res.users } satisfies Parameters<typeof localStore.setValues>[0];
       });
       router.replace('/');
     } catch (error) {

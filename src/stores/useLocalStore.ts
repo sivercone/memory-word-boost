@@ -6,13 +6,15 @@ import * as Types from '@src/types';
 interface InitialState {
   sets: Types.SetModel[];
   folders: Types.FolderModel[];
-  user: Types.UserModel | undefined;
+  userId: Types.UserModel['id'] | undefined;
+  users: Types.UserModel[];
 }
 
 const initialState: InitialState = {
   sets: [],
   folders: [],
-  user: undefined,
+  userId: undefined,
+  users: [],
 };
 
 const useLocalStore = create(

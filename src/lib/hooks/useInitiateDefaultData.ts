@@ -6,12 +6,12 @@ import { useLocalStore } from '@src/stores';
 
 const useInitiateDefaultData = () => {
   const hasRunOnce = useRef(false);
-  const { user, sets, ...localStore } = useLocalStore();
+  const { userId, ...localStore } = useLocalStore();
+  const userStudySets = localStore.sets.filter((item) => item.userId === userId);
 
-  const setInitialSets = () => {
-    if (!user || (hasRunOnce.current && sets.length)) return;
+  const setInitialSets = (userId: string) => {
     try {
-      localStore.setValues({ sets: exampleSets.map((item) => ({ ...item, userId: user.id })) });
+      localStore.setValues((prev) => ({ ...prev, sets: [...prev.sets, ...exampleSets.map((item) => ({ ...item, userId }))] }));
       hasRunOnce.current = true;
     } catch (error) {
       utils.func.handleError(error);
@@ -19,10 +19,10 @@ const useInitiateDefaultData = () => {
   };
 
   useEffect(() => {
-    if (user && !sets?.length && !hasRunOnce.current) {
-      setInitialSets();
+    if (userId && !userStudySets.length && !hasRunOnce.current) {
+      setInitialSets(userId);
     }
-  }, [user, sets]);
+  }, [userId, userStudySets]);
 };
 
 export default useInitiateDefaultData;

@@ -8,18 +8,18 @@ import { useLocalStore } from '@src/stores';
 import * as Types from '@src/types';
 import { ActionList, Button, Spinner, Icons } from '@src/ui';
 
-const UserProfile: React.FC<{ user: Types.UserModel; onEdit: () => void }> = ({ user, onEdit }) => (
+const UserProfile: React.FC<{ data: Types.UserModel; onEdit?: () => void }> = ({ data, onEdit }) => (
   <div className="border-b border-b-outline bg-surface py-8">
     <div className="mx-auto flex max-w-3xl flex-col gap-4 px-4">
       <div className="flex items-center gap-4">
         <div className="h-20 w-20 flex-shrink-0 rounded-full border border-solid border-outline bg-surface" />
         <div>
-          <h1 className="text-2xl font-medium text-onSurface">{user.name}</h1>
-          <p className="text-sm leading-relaxed text-onBackground">{`On project since ${dayjs(user.createdAt).format('d MMM YYYY')}`}</p>
-          {user.bio ? <p className="leading-relaxed text-onBackground">{user.bio}</p> : null}
+          <h1 className="text-2xl font-medium text-onSurface">{data.name}</h1>
+          <p className="text-sm leading-relaxed text-onBackground">{`On project since ${dayjs(data.createdAt).format('d MMM YYYY')}`}</p>
+          {data.bio ? <p className="leading-relaxed text-onBackground">{data.bio}</p> : null}
         </div>
       </div>
-      <Button onClick={onEdit}>Edit</Button>
+      {typeof onEdit === 'function' && <Button onClick={onEdit}>Edit</Button>}
     </div>
   </div>
 );
@@ -48,13 +48,15 @@ const UserFolders: React.FC<{ userId: string }> = ({ userId }) => {
 
 const UserDetails = () => {
   const { query } = useRouter();
-  const localStore = useLocalStore();
+  const { users, userId } = useLocalStore();
+  const activeUser = users.find((user) => user.id === query.id);
   const [edit, setEdit] = useState(false);
 
+  if (!activeUser) return;
   return (
     <>
-      {localStore.user && <UserProfile user={localStore.user} onEdit={() => setEdit(true)} />}
-      <UserForm open={edit} close={() => setEdit(false)} />
+      <UserProfile data={activeUser} onEdit={activeUser.id === userId ? () => setEdit(true) : undefined} />
+      <UserForm data={activeUser} open={edit} close={() => setEdit(false)} />
       <UserFolders userId={String(query.id)} />
     </>
   );

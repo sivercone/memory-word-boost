@@ -1,4 +1,4 @@
-import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { utils } from '@src/lib';
@@ -6,24 +6,32 @@ import { useLocalStore } from '@src/stores';
 import * as Types from '@src/types';
 import { Dialog, Input } from '@src/ui';
 
-const ProfileForm = ({ open, close }: Pick<React.ComponentProps<typeof Dialog>, 'open' | 'close'>) => {
-  const router = useRouter();
-  const { user, ...localStore } = useLocalStore();
-  const form = useForm<Types.UserForm>({ defaultValues: { email: user?.email, name: user?.name, bio: user?.bio } });
+interface Props extends Pick<React.ComponentProps<typeof Dialog>, 'open' | 'close'> {
+  data: Types.UserModel;
+}
 
-  const onSubmit = (payload: Types.UserForm) => {
-    if (!user) return;
+const UserForm = ({ data, open, close }: Props) => {
+  const localStore = useLocalStore();
+  const form = useForm<Types.UserForm>({ defaultValues: { email: data.email, name: data.name, bio: data.bio } });
+
+  const onSubmit = (formData: Types.UserForm) => {
     try {
-      localStore.setValues({ user: { ...user, ...payload, updatedAt: new Date().toISOString() } });
+      localStore.setValues((prev) => {
+        const res = utils.array.upsertUser({ users: prev.users, data: formData, allowCreate: false });
+        return { ...prev, userId: res.userId, users: res.users } satisfies Parameters<typeof localStore.setValues>[0];
+      });
       close();
     } catch (error) {
       utils.func.handleError(error);
     }
   };
 
+  useEffect(() => {
+    if (data) form.reset({ email: data.email, name: data.name, bio: data.bio });
+  }, [data]);
+
   return (
     <Dialog
-      defaultOpen={router.pathname === '/user/[id]/edit'}
       open={open}
       close={close}
       header={{
@@ -50,4 +58,4 @@ const ProfileForm = ({ open, close }: Pick<React.ComponentProps<typeof Dialog>, 
   );
 };
 
-export default ProfileForm;
+export default UserForm;

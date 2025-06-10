@@ -5,11 +5,11 @@ import { useInitiateDefaultData } from '@src/lib/hooks';
 
 import Navigation from './Navigation';
 
-const Layout = ({ children }: React.PropsWithChildren) => {
+const Layout = ({ children }: React.PropsWithChildren): React.ReactElement => {
   const { pathname } = useRouter();
   useInitiateDefaultData();
 
-  if (pathname === '/login') return children;
+  if (pathname === '/login') return <>{children}</>;
   return (
     <>
       <Head>

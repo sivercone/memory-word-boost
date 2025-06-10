@@ -12,7 +12,7 @@ const AuthCheck: React.FC = () => {
   const router = useRouter();
   const localStore = useLocalStore();
   const isClient = useIsClient();
-  const unauthenticated = !localStore.user && router.pathname !== '/login';
+  const unauthenticated = !localStore.userId && router.pathname !== '/login';
 
   useEffect(() => {
     if (isClient && unauthenticated) router.replace('/login');

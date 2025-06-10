@@ -13,7 +13,7 @@ interface Props extends Pick<React.ComponentProps<typeof Dialog>, 'open' | 'clos
 
 const FolderForm: React.FC<Props> = ({ open, close, data }) => {
   const router = useRouter();
-  const { user, folders, ...localStore } = useLocalStore();
+  const { userId, folders, ...localStore } = useLocalStore();
   const form = useForm<Types.FolderForm>();
 
   const handleClose = (folderId?: string) => {
@@ -25,7 +25,7 @@ const FolderForm: React.FC<Props> = ({ open, close, data }) => {
   };
 
   const onSubmit = async (data: Types.FolderForm) => {
-    if (!user) return;
+    if (!userId) return;
     try {
       const nextFolders = folders.filter((item) => item.id !== data.id);
       const currFolder = data.id ? folders.find((item) => item.id === data.id) : null;
@@ -34,7 +34,7 @@ const FolderForm: React.FC<Props> = ({ open, close, data }) => {
         ...data,
         id: currFolder?.id || crypto.randomUUID(),
         setIds: currFolder?.setIds || [],
-        userId: user.id,
+        userId,
         createdAt: currFolder?.createdAt || new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       } satisfies Types.FolderModel;

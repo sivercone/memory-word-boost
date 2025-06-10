@@ -9,14 +9,14 @@ import { Button, Icons, Input } from '@src/ui';
 
 const General: React.FC = () => {
   const router = useRouter();
-  const { user, sets, folders, ...localStore } = useLocalStore();
+  const { userId, sets, folders, ...localStore } = useLocalStore();
   const { studySetDraft, ...rtStore } = useRuntimeStore();
   const form = useForm<Pick<Types.SetForm, 'name' | 'description'>>();
 
   useEffect(() => form.reset(studySetDraft), [form.reset, studySetDraft]);
 
   const onSubmit = (formData: Pick<Types.SetForm, 'name' | 'description'>) => {
-    if (!user) return;
+    if (!userId) return;
     try {
       const currSet = studySetDraft.id ? sets.find((item) => item.id === studySetDraft.id) : null;
       const nextSets = sets.filter((item) => item.id !== studySetDraft.id);
@@ -27,7 +27,7 @@ const General: React.FC = () => {
         name: formData.name,
         description: formData.description,
         id: currSet?.id || crypto.randomUUID(),
-        userId: user.id,
+        userId,
         folderId: studySetDraft.folderId,
         createdAt: currSet?.createdAt || new Date().toISOString(),
         updatedAt: new Date().toISOString(),
