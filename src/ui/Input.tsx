@@ -10,6 +10,7 @@ const Input = forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputEl
         'bg-surface text-onSurface',
         'rounded-lg border border-solid border-outline',
         'read-only:bg-background read-only:text-onBackground',
+        'disabled:bg-background disabled:text-onBackground',
         className,
       )}
       {...props}

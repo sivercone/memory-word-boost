@@ -56,13 +56,13 @@ const Navigation = () => {
           <DropdownMenu
             options={menuOptions}
             trigger={
-              <Button title="Menu" shape="pill">
+              <Button title="Menu" shape="pill" data-testid="dropdown-menu">
                 <Icons.Menu />
               </Button>
             }
             keyExtractor={(item) => item.id}
             renderItem={(item) => (
-              <DropdownMenu.Item onClick={item.action} className="justify-between">
+              <DropdownMenu.Item onClick={item.action} className="justify-between" data-testid={`dropdown-menu-${item.id}`}>
                 <span>{item.title}</span>
                 {item.icon}
               </DropdownMenu.Item>

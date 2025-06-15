@@ -26,7 +26,7 @@ const General: React.FC = () => {
         ...studySetDraft,
         name: formData.name,
         description: formData.description,
-        id: currSet?.id || crypto.randomUUID(),
+        id: currSet?.id || utils.string.nanoid(),
         userId,
         folderId: studySetDraft.folderId,
         createdAt: currSet?.createdAt || new Date().toISOString(),

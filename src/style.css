@@ -36,11 +36,3 @@ button,
 a {
   -webkit-tap-highlight-color: #0000;
 }
-
-/*-------- foreign components start --------*/
-
-#nprogress .bar {
-  @apply bg-primary-500;
-}
-
-/*-------- foreign components end --------*/

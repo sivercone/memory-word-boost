@@ -15,7 +15,9 @@ const UserProfile: React.FC<{ data: Types.UserModel; onEdit?: () => void }> = ({
         <div className="h-20 w-20 flex-shrink-0 rounded-full border border-solid border-outline bg-surface" />
         <div>
           <h1 className="text-2xl font-medium text-onSurface">{data.name}</h1>
-          <p className="text-sm leading-relaxed text-onBackground">{`On project since ${dayjs(data.createdAt).format('d MMM YYYY')}`}</p>
+          <p className="text-sm leading-relaxed text-onBackground">
+            {`On project since ${dayjs(data.createdAt).format('D MMM YYYY')}`}
+          </p>
           {data.bio ? <p className="leading-relaxed text-onBackground">{data.bio}</p> : null}
         </div>
       </div>

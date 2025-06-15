@@ -15,7 +15,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "baseUrl": ".",
-    "paths": { "@src/*": ["src/*"] },
+    "paths": { "@src/*": ["src/*"], "@tests/*": ["tests/*"] },
     "incremental": true
   },
   "include": ["cypress", "next-env.d.ts", "**/*.ts", "**/*.tsx"],

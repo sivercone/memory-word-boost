@@ -10,7 +10,7 @@
     "lint:fix": "eslint --fix",
     "format": "prettier --write 'src/**/*.{js,jsx,ts,tsx,css}' --config ./.prettierrc",
     "type-check": "tsc --noEmit",
-    "cypress:open": "cypress open"
+    "test": "playwright test"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.14",
@@ -18,24 +18,23 @@
     "@radix-ui/react-visually-hidden": "^1.2.3",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.13",
+    "nanoid": "^3",
     "next": "^13",
-    "nprogress": "^0.2.0",
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.46.1",
-    "react-toastify": "^9.0.8",
+    "sonner": "^2.0.5",
     "tailwind-merge": "^2",
     "zustand": "^4"
   },
   "devDependencies": {
+    "@playwright/test": "^1.53.0",
     "@types/node": "^20",
-    "@types/nprogress": "^0.2.3",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@typescript-eslint/eslint-plugin": "^8",
     "@typescript-eslint/parser": "^8",
     "autoprefixer": "^10.4",
-    "cypress": "^13.6.4",
     "eslint": "^8",
     "eslint-config-next": "^13",
     "eslint-config-prettier": "^9",

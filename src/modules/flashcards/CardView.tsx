@@ -74,7 +74,7 @@ const CardView: React.FC<CardViewProps> = ({ front, back, onSwipeLeft, onSwipeRi
         >
           <div style={{ backfaceVisibility: 'hidden' }} className="absolute flex h-full w-full items-center justify-center">
             <span className="absolute left-[10px] top-[10px] select-none text-xs text-onBackground">FRONT SIDE</span>
-            <span className="max-h-[92%] overflow-y-auto px-2 text-xl leading-relaxed">{front}</span>
+            <span className="max-h-[92%] overflow-y-auto text-balance px-2 text-xl leading-relaxed">{front}</span>
             <span className="absolute bottom-[10px] select-none text-xs text-onBackground">TAP TO FLIP</span>
           </div>
           <div
@@ -82,7 +82,7 @@ const CardView: React.FC<CardViewProps> = ({ front, back, onSwipeLeft, onSwipeRi
             className="absolute flex h-full w-full items-center justify-center"
           >
             <span className="absolute left-[10px] top-[10px] select-none text-xs text-onBackground">BACK SIDE</span>
-            <span className="max-h-[92%] overflow-y-auto px-2 text-xl leading-relaxed">{back}</span>
+            <span className="max-h-[92%] overflow-y-auto text-balance px-2 text-xl leading-relaxed">{back}</span>
             <span className="absolute bottom-[10px] select-none text-xs text-onBackground">TAP TO FLIP</span>
           </div>
         </div>

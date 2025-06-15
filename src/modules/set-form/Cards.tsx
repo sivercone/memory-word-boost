@@ -74,7 +74,13 @@ const Cards: React.FC = () => {
 
   return (
     <>
-      <div className={clsx('sticky top-0 z-10', scrolled && 'border-b border-b-outline bg-surface')}>
+      <div
+        className={clsx(
+          'sticky top-0 z-10',
+          scrolled && 'border-b border-b-outline bg-surface',
+          'transition-colors duration-500 ease-out',
+        )}
+      >
         <div className="mx-auto flex max-w-3xl items-center gap-2 p-4">
           <h1 className="text-2xl font-medium text-onSurface">Cards</h1>
           <div className="ml-auto flex items-center gap-4">
@@ -114,7 +120,7 @@ const Cards: React.FC = () => {
                   <Icons.Minus />
                 </Button>
               </div>
-              <div className="flex w-full flex-col rounded-lg border border-solid border-outline bg-surface">
+              <div className="flex w-full flex-col rounded-lg border border-solid border-outline bg-surface text-onSurface">
                 <Textarea
                   placeholder="Front"
                   {...form.register(`cards.${i}.front`, { required: true })}

@@ -37,11 +37,12 @@ function DropdownMenu<T>({ trigger, options, renderItem, keyExtractor }: Dropdow
   );
 }
 
-const DropdownItem: React.FC<{ children: React.ReactNode; onClick?: React.MouseEventHandler<HTMLDivElement>; className?: string }> = ({
+const DropdownItem = ({
   children,
   onClick,
   className,
-}) => {
+  ...props
+}: Dropdown.DropdownMenuItemProps & React.RefAttributes<HTMLDivElement>) => {
   return (
     <Dropdown.Item
       onClick={onClick}
@@ -53,6 +54,7 @@ const DropdownItem: React.FC<{ children: React.ReactNode; onClick?: React.MouseE
         'data-[highlighted]:z-[1] data-[highlighted]:shadow-[0_0_0_2px] data-[highlighted]:shadow-primary-400',
         className,
       )}
+      {...props}
     >
       {children}
     </Dropdown.Item>

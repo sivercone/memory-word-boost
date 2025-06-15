@@ -55,17 +55,30 @@ const Login: NextPage = () => {
         </h1>
         <form onSubmit={form.handleSubmit(onSubmit)} className="mx-auto flex h-full max-w-lg flex-col justify-center gap-4">
           <h2 className="text-center text-2xl font-medium text-onSurface">Log in or Sign up</h2>
-          <Input type="email" placeholder="Email" {...form.register('email', { required: true })} data-testid="input.email" />
+          <Input
+            type="email"
+            placeholder="Email"
+            {...form.register('email', { required: true })}
+            autoComplete="email"
+            data-testid="input-email"
+          />
           <Input
             type="password"
             placeholder="Password"
             {...form.register('password', { required: true })}
-            data-testid="input.password"
+            data-testid="input-password"
           />
-          <Button type="submit" data-testid="button.submit">
+          <Button type="submit" data-testid="button-submit">
             <span className="font-medium">Enter</span>
           </Button>
-          <p className="text-center text-xs text-onBackground">
+          <button
+            onClick={() => onSubmit({ email: 'guest@sivercone.com', password: '1234' })}
+            className="w-fit self-center font-medium text-primary-800 underline-offset-2 hover:underline"
+            data-testid="button-continue-as-guest"
+          >
+            Continue as Guest
+          </button>
+          <p className="text-balance text-center text-xs text-onBackground">
             This application currently runs locally, and all data is stored in your browser&#39;s web storage. We do not store any
             credentials on our servers.
           </p>

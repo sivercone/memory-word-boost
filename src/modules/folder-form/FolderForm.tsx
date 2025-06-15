@@ -32,7 +32,7 @@ const FolderForm: React.FC<Props> = ({ open, close, data }) => {
       const saveFolder = {
         ...currFolder,
         ...data,
-        id: currFolder?.id || crypto.randomUUID(),
+        id: currFolder?.id || utils.string.nanoid(),
         setIds: currFolder?.setIds || [],
         userId,
         createdAt: currFolder?.createdAt || new Date().toISOString(),
