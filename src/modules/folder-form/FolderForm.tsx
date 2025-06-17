@@ -62,6 +62,7 @@ const FolderForm: React.FC<Props> = ({ open, close, data }) => {
         left: <Dialog.Button onClick={() => handleClose()}>Cancel</Dialog.Button>,
         right: <Dialog.Button onClick={form.handleSubmit(onSubmit)}>Save</Dialog.Button>,
       }}
+      data-testid="dialog-folder-form"
     >
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4 overflow-y-auto p-4">
         <Input placeholder="Name" {...form.register('name', { required: true })} />

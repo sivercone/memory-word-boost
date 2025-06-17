@@ -39,6 +39,7 @@ const UserForm = ({ data, open, close }: Props) => {
         left: <Dialog.Button onClick={close}>Cancel</Dialog.Button>,
         right: <Dialog.Button onClick={form.handleSubmit(onSubmit)}>Save</Dialog.Button>,
       }}
+      data-testid="dialog-user-form"
     >
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4 overflow-y-auto p-4">
         <Input

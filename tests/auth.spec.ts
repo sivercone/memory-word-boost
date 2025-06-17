@@ -1,5 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 
+import { loginAsGuest } from '@tests/utils';
+
 function getLoginElements(page: Page) {
   return {
     inputEmail: page.getByTestId('input-email'),
@@ -32,5 +34,19 @@ test.describe('Login functionality', () => {
     await buttonSubmit.click();
 
     await expect(page).toHaveURL(/\/$/);
+  });
+});
+
+test.describe('Logout functionality', () => {
+  test('should clear auth data and redirect to login page', async ({ page }) => {
+    await loginAsGuest(page);
+    await page.goto('/');
+
+    await page.getByTestId('dropdown-menu').click();
+    await page.getByTestId('dropdown-menu-logout').click();
+
+    await page.goto('/');
+
+    await expect(page).toHaveURL(/\/login$/);
   });
 });

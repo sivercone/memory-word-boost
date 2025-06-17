@@ -57,9 +57,7 @@ const General: React.FC = () => {
             </Button>
           ) : null}
           <Button onClick={form.handleSubmit(onSubmit)}>
-            <span className="font-medium" data-testid="button.submit">
-              Save
-            </span>
+            <span className="font-medium">Save</span>
           </Button>
         </div>
       </div>
@@ -71,14 +69,12 @@ const General: React.FC = () => {
               required: true,
               onChange: (event) => rtStore.setValues({ studySetDraft: { ...studySetDraft, name: event.target.value } }),
             })}
-            data-testid="input.name"
           />
           <Input
             placeholder="Description"
             {...form.register('description', {
               onChange: (event) => rtStore.setValues({ studySetDraft: { ...studySetDraft, description: event.target.value } }),
             })}
-            data-testid="input.description"
           />
         </fieldset>
       </form>

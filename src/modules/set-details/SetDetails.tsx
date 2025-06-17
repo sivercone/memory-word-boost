@@ -27,14 +27,8 @@ const SetDetails = () => {
       <div className="border-b border-b-outline bg-surface py-8">
         <div className="mx-auto flex max-w-3xl flex-col gap-4 px-4">
           <div>
-            <h1 className="text-2xl font-medium text-onSurface" data-testid="text.name">
-              {set.name}
-            </h1>
-            {set.description ? (
-              <p className="leading-relaxed text-onBackground" data-testid="text.description">
-                {set.description}
-              </p>
-            ) : null}
+            <h1 className="text-2xl font-medium text-onSurface">{set.name}</h1>
+            {set.description ? <p className="leading-relaxed text-onBackground">{set.description}</p> : null}
           </div>
           {studyMethods.map((item) => (
             <ButtonLink key={item.title} href={item.href}>

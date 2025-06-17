@@ -5,15 +5,14 @@ import { DetailedHTMLProps, ButtonHTMLAttributes } from 'react';
 
 import { Button } from './Button';
 
-interface DialogProps {
+interface DialogProps extends React.HTMLAttributes<HTMLDivElement> {
   defaultOpen?: boolean;
   open: boolean;
   close: () => void;
   header: { title: React.ReactNode; left: React.ReactNode; right: React.ReactNode };
-  children: React.ReactNode;
 }
 
-function Dialog({ defaultOpen, open, close, header, children }: DialogProps) {
+function Dialog({ defaultOpen, open, close, header, children, className, ...props }: DialogProps) {
   return (
     <Primitive.Root open={open} defaultOpen={defaultOpen} modal>
       <Primitive.Portal>
@@ -37,7 +36,9 @@ function Dialog({ defaultOpen, open, close, header, children }: DialogProps) {
             'overflow-hidden rounded-[6px] bg-background focus:outline-none',
             'data-[state=open]:animate-scaleIn',
             'shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px]',
+            className,
           )}
+          {...props}
         >
           <VisuallyHidden.Root>
             {typeof header.title !== 'string' && <Primitive.Title />}

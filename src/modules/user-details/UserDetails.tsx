@@ -21,7 +21,11 @@ const UserProfile: React.FC<{ data: Types.UserModel; onEdit?: () => void }> = ({
           {data.bio ? <p className="leading-relaxed text-onBackground">{data.bio}</p> : null}
         </div>
       </div>
-      {typeof onEdit === 'function' && <Button onClick={onEdit}>Edit</Button>}
+      {typeof onEdit === 'function' && (
+        <Button onClick={onEdit} data-testid="button-edit">
+          Edit
+        </Button>
+      )}
     </div>
   </div>
 );

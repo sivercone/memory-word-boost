@@ -41,13 +41,17 @@ const Navigation = () => {
           <DropdownMenu
             options={creationOptions}
             trigger={
-              <Button title="Create new.." shape="pill">
+              <Button title="Create new.." shape="pill" data-testid="dropdown-create">
                 <Icons.Plus />
               </Button>
             }
             keyExtractor={(item) => item.id}
             renderItem={(item) => (
-              <DropdownMenu.Item onClick={() => router.push(item.href)} className="justify-between">
+              <DropdownMenu.Item
+                onClick={() => router.push(item.href)}
+                className="justify-between"
+                data-testid={`dropdown-create-${item.id}`}
+              >
                 <span>{item.title}</span>
                 {item.icon}
               </DropdownMenu.Item>
