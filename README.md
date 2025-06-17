@@ -1,5 +1,7 @@
 # Memory Word Boost
 
+Minimalistic flashcard-based learning web tool.
+
 This project serves as a prototype for a [subsequent project](https://qsets.sivercone.com/).
 
 ## Development Philosophy
