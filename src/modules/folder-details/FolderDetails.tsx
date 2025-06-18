@@ -44,7 +44,7 @@ const FolderDetails = () => {
             <div className="flex items-center gap-4">
               <div className="h-20 w-20 flex-shrink-0 rounded-md border border-solid border-outline bg-surface" />
               <div>
-                <h1 className="text-2xl font-medium">{folder?.name || 'New Folder'}</h1>
+                <h1 className="text-2xl font-medium text-onSurface">{folder?.name || 'New Folder'}</h1>
                 {folder?.description && <p className="leading-relaxed text-onBackground">{folder.description}</p>}
               </div>
             </div>
