@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-import { useIsClient } from '@src/lib/hooks';
 import { useLocalStore } from '@src/stores';
 
 import CardView from './CardView';
@@ -9,7 +8,7 @@ import CompleteView from './CompleteView';
 
 const Flashcards = () => {
   const router = useRouter();
-  const isClient = useIsClient();
+
   const localStore = useLocalStore();
   const studySet = localStore.sets.find((item) => item.id === router.query.id);
   const cards = studySet?.cards || [];
@@ -26,7 +25,7 @@ const Flashcards = () => {
     });
   };
 
-  if (!isClient || !studySet) return null;
+  if (!studySet) return null;
   return (
     <div className="h-[calc(100%-65px)] overflow-x-hidden">
       <div className="mx-auto flex h-full max-w-3xl flex-col gap-4 p-4">
