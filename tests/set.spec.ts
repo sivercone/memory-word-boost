@@ -19,6 +19,14 @@ test('should create a new study set', async ({ page }) => {
   await page.getByRole('textbox', { name: 'Back' }).fill('Back card text');
 
   await page.getByRole('link', { name: 'Back' }).click();
+
+  await page.getByRole('button', { name: 'Cards' }).click();
+
+  await expect(page.getByRole('textbox', { name: 'Front' })).toHaveValue('Front card text');
+  await expect(page.getByRole('textbox', { name: 'Back' })).toHaveValue('Back card text');
+
+  await page.getByRole('link', { name: 'Back' }).click();
+
   await page.getByRole('textbox', { name: 'Name' }).fill('Study Set Experiment');
   await page.getByRole('button', { name: 'Save' }).click();
 

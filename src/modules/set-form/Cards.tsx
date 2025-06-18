@@ -55,7 +55,7 @@ const Cards: React.FC = () => {
   };
 
   useEffect(() => {
-    if (studySetDraft.id) form.reset({ cards: studySetDraft.cards });
+    if (studySetDraft.id || studySetDraft.cards.length) form.reset({ cards: studySetDraft.cards });
   }, [form.reset, studySetDraft]);
 
   useEffect(() => {
