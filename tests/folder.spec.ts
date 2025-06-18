@@ -7,8 +7,6 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('should create a new folder', async ({ page }) => {
-  await page.goto('/');
-
   await page.getByTestId('dropdown-create').click();
   await page.getByTestId('dropdown-create-folder').click();
 

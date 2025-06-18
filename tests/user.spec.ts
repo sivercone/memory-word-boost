@@ -7,8 +7,6 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('should be able to reach and edit user details', async ({ page }) => {
-  await page.goto('/');
-
   await page.getByTestId('dropdown-menu').click();
   await page.getByTestId('dropdown-menu-profile').click();
 

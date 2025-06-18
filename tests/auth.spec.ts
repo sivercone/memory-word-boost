@@ -40,7 +40,6 @@ test.describe('Login functionality', () => {
 test.describe('Logout functionality', () => {
   test('should clear auth data and redirect to login page', async ({ page }) => {
     await loginAsGuest(page);
-    await page.goto('/');
 
     await page.getByTestId('dropdown-menu').click();
     await page.getByTestId('dropdown-menu-logout').click();
