@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 
 import { utils } from '@src/lib';
@@ -15,6 +15,12 @@ const Cards: React.FC = () => {
   const { studySetDraft, ...rtStore } = useRuntimeStore();
   const form = useForm<Pick<Types.SetModel, 'cards'>>();
   const fieldArray = useFieldArray({ name: 'cards', control: form.control });
+
+  // Keep latest isDirty in ref because RHF updates it only when read during render
+  const isDirtyRef = useRef<boolean>(form.formState.isDirty);
+  useEffect(() => {
+    isDirtyRef.current = form.formState.isDirty;
+  });
 
   const [tipBannerShown, showTipBanner] = useState<boolean>(true);
 
@@ -60,7 +66,7 @@ const Cards: React.FC = () => {
 
   useEffect(() => {
     return () => {
-      if (form.formState.isDirty)
+      if (isDirtyRef.current)
         rtStore.setValues({
           studySetDraft: {
             ...studySetDraft,
