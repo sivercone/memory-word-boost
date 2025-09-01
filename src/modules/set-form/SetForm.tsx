@@ -27,13 +27,6 @@ const SetForm = () => {
     return () => rtStore.destroy(['studySetDraft']);
   }, [query.id]);
 
-  useEffect(() => {
-    const nav = document.querySelector('#navigation');
-    if (query.tab === 'cards') nav?.classList.remove('sticky');
-    else nav?.classList.add('sticky');
-    return () => nav?.classList.add('sticky');
-  }, [query]);
-
   return tabComponentMapping[String(query.tab) as 'cards' | 'folders'] || tabComponentMapping['default'];
 };
 

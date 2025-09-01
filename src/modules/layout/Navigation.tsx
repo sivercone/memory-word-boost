@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -13,6 +14,8 @@ const Navigation = () => {
   const router = useRouter();
   const { userId, ...localStorage } = useLocalStore();
 
+  const shouldBeSticky = !((router.pathname === '/sets/[id]/edit' || router.pathname === '/sets/new') && router.query.tab === 'cards');
+
   const logout = () => {
     localStorage.setValues({ userId: undefined });
     router.push('/login');
@@ -24,7 +27,11 @@ const Navigation = () => {
   ];
 
   return (
-    <nav id="navigation" className="sticky top-0 z-10 border-b border-b-outline bg-surface py-[16px]">
+    <nav
+      id="navigation"
+      role="navigation"
+      className={clsx(shouldBeSticky && 'sticky', 'top-0 z-10 border-b border-b-outline bg-surface py-[16px]')}
+    >
       <div className="mx-auto flex max-w-3xl items-center px-4">
         <Link href="/" className="flex select-none items-center gap-1" aria-label="Project MWB logo, go to homepage">
           <span
