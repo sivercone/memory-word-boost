@@ -66,6 +66,7 @@ const Login: NextPage = () => {
             type="password"
             placeholder="Password"
             {...form.register('password', { required: true })}
+            autoComplete="current-password"
             data-testid="input-password"
           />
           <Button type="submit" data-testid="button-submit">
