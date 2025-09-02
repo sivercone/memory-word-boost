@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-import { loginAsGuest } from '@tests/utils';
+import { loginAsGuest } from '@__e2e__/utils';
 
 test.beforeEach(async ({ page }) => {
   await loginAsGuest(page);

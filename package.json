@@ -23,7 +23,7 @@
     "lint:fix": "eslint --fix",
     "format": "prettier --write 'src/**/*.{js,jsx,ts,tsx,css}' --config ./.prettierrc",
     "type-check": "tsc --noEmit",
-    "test": "playwright test"
+    "e2e": "playwright test"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.14",

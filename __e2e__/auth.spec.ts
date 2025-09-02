@@ -1,6 +1,6 @@
 import { test, expect, type Page } from '@playwright/test';
 
-import { loginAsGuest } from '@tests/utils';
+import { loginAsGuest } from '@__e2e__/utils';
 
 function getLoginElements(page: Page) {
   return {
