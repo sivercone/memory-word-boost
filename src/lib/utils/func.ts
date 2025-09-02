@@ -1,4 +1,4 @@
-import { FALLBACK_ERROR_MESSAGE } from '../datus';
+import { FALLBACK_ERROR_MESSAGE } from '../constants';
 import notify from '../notify';
 
 export function handleError(error: unknown): void {
