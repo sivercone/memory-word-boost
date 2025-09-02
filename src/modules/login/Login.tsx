@@ -2,7 +2,8 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 
-import { utils } from '@src/lib';
+import { upsertUser } from '@src/lib/utils/array';
+import { handleError } from '@src/lib/utils/func';
 import { useLocalStore } from '@src/stores';
 import * as Types from '@src/types';
 import { Button, Input } from '@src/ui';
@@ -15,12 +16,12 @@ const Login: NextPage = () => {
   const onSubmit = (formData: Types.LoginForm) => {
     try {
       localStore.setValues((prev) => {
-        const res = utils.array.upsertUser({ users: prev.users, data: formData, allowCreate: true });
+        const res = upsertUser({ users: prev.users, data: formData, allowCreate: true });
         return { ...prev, userId: res.userId, users: res.users } satisfies Parameters<typeof localStore.setValues>[0];
       });
       router.replace('/');
     } catch (error) {
-      utils.func.handleError(error);
+      handleError(error);
     }
   };
 

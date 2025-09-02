@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
 
-import { utils } from '@src/lib';
+import { composeSortedFolders } from '@src/lib/utils/array';
 import { useLocalStore, useRuntimeStore } from '@src/stores';
 import { ActionList, ButtonLink, Icons } from '@src/ui';
 
@@ -10,7 +10,7 @@ const Folders: React.FC = () => {
   const { userId, folders } = useLocalStore();
   const { studySetDraft, ...rtStore } = useRuntimeStore();
 
-  const sortedFolders = utils.array.composeSortedFolders(folders.filter((item) => item.userId === userId));
+  const sortedFolders = composeSortedFolders(folders.filter((item) => item.userId === userId));
 
   const onSelect = (folderId: string) => {
     rtStore.setValues({ studySetDraft: { ...studySetDraft, folderId } });

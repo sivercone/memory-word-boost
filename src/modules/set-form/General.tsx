@@ -2,7 +2,8 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { utils } from '@src/lib';
+import { handleError } from '@src/lib/utils/func';
+import { nanoid } from '@src/lib/utils/string';
 import { useLocalStore, useRuntimeStore } from '@src/stores';
 import * as Types from '@src/types';
 import { Button, Icons, Input } from '@src/ui';
@@ -26,7 +27,7 @@ const General: React.FC = () => {
         ...studySetDraft,
         name: formData.name,
         description: formData.description,
-        id: currSet?.id || utils.string.nanoid(),
+        id: currSet?.id || nanoid(),
         userId,
         folderId: studySetDraft.folderId,
         createdAt: currSet?.createdAt || new Date().toISOString(),
@@ -42,7 +43,7 @@ const General: React.FC = () => {
       localStore.setValues({ sets: [...nextSets, newSet], folders: updatedFolders });
       router.push(`/sets/${newSet.id}`);
     } catch (error) {
-      utils.func.handleError(error);
+      handleError(error);
     }
   };
 

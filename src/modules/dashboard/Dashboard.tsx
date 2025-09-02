@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 
-import { utils } from '@src/lib';
+import { composeSortedFolders } from '@src/lib/utils/array';
 import { useLocalStore } from '@src/stores';
 import { ActionList, Icons } from '@src/ui';
 
@@ -8,7 +8,7 @@ import Banner from './Banner';
 
 const Dashboard: NextPage = () => {
   const { userId, folders } = useLocalStore();
-  const sortedFolders = utils.array.composeSortedFolders(folders.filter((item) => item.userId === userId));
+  const sortedFolders = composeSortedFolders(folders.filter((item) => item.userId === userId));
 
   return (
     <div className="mx-auto max-w-3xl space-y-4 p-4">
