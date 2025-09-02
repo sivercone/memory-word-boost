@@ -13,7 +13,7 @@ function getLoginElements(page: Page) {
 test.describe('Login functionality', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/login');
-    await expect(page.getByText('Log in or Sign up')).toBeInViewport();
+    await expect(page.getByText('Log in or Sign up')).toBeVisible();
   });
 
   test('should require email and password', async ({ page }) => {

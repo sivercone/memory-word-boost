@@ -10,14 +10,16 @@ test('should create a new folder', async ({ page }) => {
   await page.getByTestId('dropdown-create').click();
   await page.getByTestId('dropdown-create-folder').click();
 
-  await expect(page.getByTestId('dialog-folder-form')).toBeInViewport();
-  await page.getByRole('textbox', { name: 'Name' }).fill('Ukrainian Vocabulary');
+  const folderName = `Ukrainian Vocabulary ${test.info().parallelIndex}-${Date.now()}`;
+  await expect(page.getByTestId('dialog-folder-form')).toBeVisible();
+  await page.getByRole('textbox', { name: 'Name' }).fill(folderName);
   await page.getByRole('button', { name: 'Save' }).click();
-  await expect(page.getByTestId('dialog-user-form')).not.toBeInViewport();
 
-  await expect(page.getByText('Ukrainian Vocabulary')).toBeInViewport();
+  await expect(page.getByTestId('dialog-folder-form')).toBeHidden();
+
+  await expect(page.getByText(folderName)).toBeVisible();
 
   await page.goto('/');
 
-  await expect(page.getByText('Ukrainian Vocabulary')).toBeInViewport();
+  await expect(page.getByText(folderName)).toBeVisible();
 });

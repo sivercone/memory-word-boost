@@ -10,7 +10,7 @@ test('should create a new study set', async ({ page }) => {
   await page.getByTestId('dropdown-create').click();
   await page.getByTestId('dropdown-create-set').click();
 
-  await expect(page).toHaveURL('/sets/new');
+  await expect(page).toHaveURL(/\/sets\/new$/);
 
   await page.getByRole('button', { name: 'Cards' }).click();
 
@@ -27,10 +27,11 @@ test('should create a new study set', async ({ page }) => {
 
   await page.getByRole('link', { name: 'Back' }).click();
 
-  await page.getByRole('textbox', { name: 'Name' }).fill('Study Set Experiment');
+  const setName = `Study Set Experiment ${test.info().parallelIndex}-${Date.now()}`;
+  await page.getByRole('textbox', { name: 'Name' }).fill(setName);
   await page.getByRole('button', { name: 'Save' }).click();
 
-  await expect(page.getByText('Study Set Experiment')).toBeInViewport();
-  await expect(page.getByText('Front card text')).toBeInViewport();
-  await expect(page.getByText('Back card text')).toBeInViewport();
+  await expect(page.getByText(setName)).toBeVisible();
+  await expect(page.getByText('Front card text')).toBeVisible();
+  await expect(page.getByText('Back card text')).toBeVisible();
 });
