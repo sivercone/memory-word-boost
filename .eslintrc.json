@@ -53,5 +53,14 @@
       }
     }
   ],
-  "ignorePatterns": ["node_modules/", ".next/", ".vscode/", "public/", "next.config.js", "postcss.config.js", "tailwind.config.js"]
+  "ignorePatterns": [
+    "node_modules/",
+    ".next/",
+    ".vscode/",
+    "public/",
+    "next.config.js",
+    "postcss.config.js",
+    "tailwind.config.js",
+    "jest.config.js"
+  ]
 }
