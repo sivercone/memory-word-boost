@@ -6,7 +6,7 @@ import { upsertUser } from '@src/lib/utils/array';
 import { handleError } from '@src/lib/utils/func';
 import { useLocalStore } from '@src/stores';
 import * as Types from '@src/types';
-import { Button, Input } from '@src/ui';
+import { Button, Input, Logo } from '@src/ui';
 
 const Login: NextPage = () => {
   const router = useRouter();
@@ -28,32 +28,12 @@ const Login: NextPage = () => {
   return (
     <div className="flex h-full flex-col-reverse lg:flex-row">
       <div className="hidden flex-1 flex-col gap-4 bg-primary-900 p-4 lg:flex lg:px-8 lg:py-10">
-        <h1 className="flex select-none items-center gap-1">
-          <span
-            className="bg-gradient-to-br from-primary-500 to-white/90 box-decoration-slice bg-clip-text text-xl font-semibold text-transparent"
-            style={{ letterSpacing: '-0.9px', lineHeight: '0.8' }}
-          >
-            PROJECT MWB
-          </span>
-          <span className="rounded-lg bg-background px-1 text-xs font-medium text-onSurface" style={{ letterSpacing: '-0.8px' }}>
-            Prototype
-          </span>
-        </h1>
+        <Logo as="h1" variant="light" size="xl" />
         <p className="mt-auto text-lg leading-relaxed text-white/90">Web app designed to catalyze the learning process.</p>
       </div>
 
       <div className="flex-1 p-4 lg:px-8 lg:py-10">
-        <h1 className="flex select-none items-center gap-1 lg:hidden">
-          <span
-            className="bg-gradient-to-br from-primary-500 to-[#111827] box-decoration-slice bg-clip-text text-xl font-semibold text-transparent"
-            style={{ letterSpacing: '-0.9px', lineHeight: '0.8' }}
-          >
-            PROJECT MWB
-          </span>
-          <span className="rounded-lg bg-background px-1 text-xs font-medium text-[#6b7280]" style={{ letterSpacing: '-0.8px' }}>
-            Prototype
-          </span>
-        </h1>
+        <Logo as="h1" variant="dark" size="xl" className="lg:hidden" />
         <form onSubmit={form.handleSubmit(onSubmit)} className="mx-auto flex h-full max-w-lg flex-col justify-center gap-4">
           <h2 className="text-center text-2xl font-medium text-onSurface">Log in or Sign up</h2>
           <Input

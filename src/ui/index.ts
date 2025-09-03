@@ -7,3 +7,4 @@ export { Button, ButtonLink } from './Button';
 export { default as Icons } from './Icons';
 export { default as Banner } from './Banner';
 export { default as Input } from './Input';
+export { default as Logo } from './Logo';
