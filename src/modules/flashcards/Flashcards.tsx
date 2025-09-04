@@ -14,7 +14,7 @@ const Flashcards = () => {
   const cards = studySet?.cards || [];
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [correctAnswers, setCorrectAnswers] = useState(0);
-  const scorePercentage = cards.length ? ((correctAnswers / cards.length) * 100).toFixed(0) : '0';
+  const scorePercentage = cards.length ? Math.min(100, (correctAnswers / cards.length) * 100).toFixed(0) : '0';
 
   const onSwipe = useCallback(
     (markAsCorrect: boolean) => {
