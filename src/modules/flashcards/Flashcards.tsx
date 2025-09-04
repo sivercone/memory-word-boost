@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { useLocalStore } from '@src/stores';
 
@@ -14,16 +14,20 @@ const Flashcards = () => {
   const cards = studySet?.cards || [];
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [correctAnswers, setCorrectAnswers] = useState(0);
-  const scorePercentage = ((correctAnswers / cards.length) * 100).toFixed(0);
+  const scorePercentage = cards.length ? ((correctAnswers / cards.length) * 100).toFixed(0) : '0';
 
-  const onSwipe = (markAsCorrect: boolean) => {
-    setCurrentCardIndex((prev) => {
-      if (prev < cards.length) {
-        if (markAsCorrect) setCorrectAnswers((prev) => prev + 1);
-        return prev + 1;
-      } else return prev;
-    });
-  };
+  const onSwipe = useCallback(
+    (markAsCorrect: boolean) => {
+      setCurrentCardIndex((prev) => {
+        if (prev < cards.length) {
+          if (markAsCorrect) setCorrectAnswers((v) => v + 1);
+          return prev + 1;
+        }
+        return prev;
+      });
+    },
+    [cards.length],
+  );
 
   if (!studySet) return null;
   return (
