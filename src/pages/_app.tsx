@@ -1,7 +1,7 @@
 import type { AppProps } from 'next/app';
+import Head from 'next/head';
 import { Toaster } from 'sonner';
 
-import { NextHead } from '@src/lib';
 import AuthCheck from '@src/modules/auth-check';
 import Layout from '@src/modules/layout';
 import { Icons } from '@src/ui';
@@ -11,7 +11,11 @@ import '@src/style.css';
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
-      <NextHead />
+      <Head>
+        <title>Project MWB</title>
+        <meta name="description" content="Web app designed to catalyze the learning process." />
+        <meta name="robots" content="index, follow" />
+      </Head>
       <AuthCheck />
       <Layout>
         <Component {...pageProps} />
@@ -26,4 +30,5 @@ function MyApp({ Component, pageProps }: AppProps) {
     </>
   );
 }
+
 export default MyApp;

@@ -8,7 +8,7 @@ import { twMerge } from 'tailwind-merge';
  * and allows for an external ref to be passed in for external access to the textarea DOM element.
  */
 const Textarea = forwardRef<HTMLTextAreaElement, React.TextareaHTMLAttributes<HTMLTextAreaElement>>(
-  ({ className, ...props }, forwardedRef) => {
+  ({ className, placeholder, 'aria-label': ariaLabel, required, ...props }, forwardedRef) => {
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
     // Merge internal ref and forwarded ref
@@ -37,7 +37,17 @@ const Textarea = forwardRef<HTMLTextAreaElement, React.TextareaHTMLAttributes<HT
       };
     }, []);
 
-    return <textarea ref={textareaRef} className={twMerge('resize-none overflow-hidden', className)} {...props} />;
+    return (
+      <textarea
+        ref={textareaRef}
+        className={twMerge('resize-none overflow-hidden', className)}
+        aria-label={ariaLabel || placeholder}
+        aria-required={required}
+        placeholder={placeholder}
+        required={required}
+        {...props}
+      />
+    );
   },
 );
 

@@ -2,7 +2,8 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { utils } from '@src/lib';
+import { handleError } from '@src/lib/utils/func';
+import { nanoid } from '@src/lib/utils/string';
 import { useLocalStore } from '@src/stores';
 import * as Types from '@src/types';
 import { Dialog, Input } from '@src/ui';
@@ -32,7 +33,7 @@ const FolderForm: React.FC<Props> = ({ open, close, data }) => {
       const saveFolder = {
         ...currFolder,
         ...data,
-        id: currFolder?.id || utils.string.nanoid(),
+        id: currFolder?.id || nanoid(),
         setIds: currFolder?.setIds || [],
         userId,
         createdAt: currFolder?.createdAt || new Date().toISOString(),
@@ -44,7 +45,7 @@ const FolderForm: React.FC<Props> = ({ open, close, data }) => {
       form.reset();
       handleClose(saveFolder.id);
     } catch (error) {
-      utils.func.handleError(error);
+      handleError(error);
     }
   };
 

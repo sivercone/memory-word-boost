@@ -1,21 +1,36 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const useScroll = () => {
   const [scrolled, setScrolled] = useState(false);
   const [scrollY, setScrollY] = useState(0);
 
   useEffect(() => {
-    const element = document.querySelector('#__next');
+    const container = document.getElementById('__next');
+    if (!container) return;
 
-    const handleScroll = () => {
-      const scrollTop = element?.scrollTop || 0;
-      setScrollY(scrollTop);
-      setScrolled(scrollTop > 0);
+    let frame: number | null = null;
+
+    const update = () => {
+      frame = null;
+      const y = container.scrollTop || 0;
+      setScrollY(y);
+      setScrolled(y > 0);
     };
 
-    element?.addEventListener('scroll', handleScroll);
+    // Batch setState updates so we don’t update React state on every scroll event
+    const onScroll = () => {
+      if (frame !== null) cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(update);
+    };
+
+    // Initialize state immediately to match current position
+    update();
+
+    container.addEventListener('scroll', onScroll, { passive: true });
+
     return () => {
-      element?.removeEventListener('scroll', handleScroll);
+      if (frame !== null) cancelAnimationFrame(frame);
+      container.removeEventListener('scroll', onScroll);
     };
   }, []);
 

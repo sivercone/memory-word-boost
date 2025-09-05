@@ -1,4 +1,3 @@
-import clsx from 'clsx';
 import Link, { LinkProps } from 'next/link';
 import { forwardRef } from 'react';
 import { twMerge } from 'tailwind-merge';
@@ -9,34 +8,32 @@ type ShapeVariant = 'square' | 'pill';
 
 function getButtonClasses(variant: ButtonVariant, align: AlignVariant, shape: ShapeVariant, className?: string) {
   return twMerge(
-    clsx(
-      // Base classes shared by all buttons/links
-      'flex',
-      'font-medium',
-      'transition-colors hover:bg-surfaceDim select-none',
-      'disabled:cursor-default disabled:hover:bg-white',
+    // Base classes shared by all buttons/links
+    'flex',
+    'font-medium',
+    'transition-colors hover:bg-surfaceDim select-none',
+    'disabled:cursor-default disabled:hover:bg-white',
 
-      // Variant-specific classes
-      {
-        elevated: '',
-        filled: 'bg-surface text-onSurface border border-outline border-solid shadow-sm',
-        tonal: '',
-        outlined: '',
-      }[variant],
+    // Variant-specific classes
+    {
+      elevated: '',
+      filled: 'bg-surface text-onSurface border border-outline border-solid shadow-sm',
+      tonal: '',
+      outlined: '',
+    }[variant],
 
-      {
-        start: 'text-left',
-        center: 'justify-center text-center',
-      }[align],
+    {
+      start: 'text-left',
+      center: 'justify-center text-center',
+    }[align],
 
-      {
-        square: 'items-center p-2 rounded-lg',
-        pill: 'size-[32px] rounded-full py-2 items-center relative',
-      }[shape],
+    {
+      square: 'items-center p-2 rounded-lg',
+      pill: 'size-[32px] rounded-full py-2 items-center relative',
+    }[shape],
 
-      // Merge any className passed in
-      className,
-    ),
+    // Merge any className passed in
+    className,
   );
 }
 

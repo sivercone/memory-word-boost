@@ -3,8 +3,8 @@ import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 
-import { utils } from '@src/lib';
 import { useScroll } from '@src/lib/hooks';
+import { trimExtraSpaces } from '@src/lib/utils/string';
 import { useRuntimeStore } from '@src/stores';
 import * as Types from '@src/types';
 import { Button, ButtonLink, Textarea, Icons, Banner } from '@src/ui';
@@ -70,9 +70,7 @@ const Cards: React.FC = () => {
         rtStore.setValues({
           studySetDraft: {
             ...studySetDraft,
-            cards: form
-              .getValues('cards')
-              .filter(({ front, back }) => utils.string.trimExtraSpaces(front) && utils.string.trimExtraSpaces(back)),
+            cards: form.getValues('cards').filter(({ front, back }) => trimExtraSpaces(front) && trimExtraSpaces(back)),
           },
         });
     };

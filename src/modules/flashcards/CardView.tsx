@@ -1,7 +1,10 @@
 import clsx from 'clsx';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { Button, Icons } from '@src/ui';
+
+const TRANSITION_MS = 350;
+const SWIPE_RESET_EXTRA_MS = 10;
 
 type CardViewProps = {
   front: string;
@@ -13,6 +16,7 @@ type CardViewProps = {
 const CardView: React.FC<CardViewProps> = ({ front, back, onSwipeLeft, onSwipeRight }) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null);
+  const cardButtonRef = useRef<HTMLButtonElement>(null);
 
   const handleCardClick = () => {
     if (!swipeDirection) setIsFlipped((prev) => !prev);
@@ -24,8 +28,8 @@ const CardView: React.FC<CardViewProps> = ({ front, back, onSwipeLeft, onSwipeRi
       if (direction === 'left') onSwipeLeft();
       else if (direction === 'right') onSwipeRight();
       setIsFlipped(false); // Set card to its initial state (not flipped)
-    }, 350); // matches the transition duration
-    setTimeout(() => setSwipeDirection(null), 360); // keeps smooth animation
+    }, TRANSITION_MS); // matches the transition duration
+    setTimeout(() => setSwipeDirection(null), TRANSITION_MS + SWIPE_RESET_EXTRA_MS); // keeps smooth animation
   };
 
   useEffect(() => {
@@ -37,7 +41,11 @@ const CardView: React.FC<CardViewProps> = ({ front, back, onSwipeLeft, onSwipeRi
 
       if (leftKeys.has(key)) handleSwipe('left');
       else if (rightKeys.has(key)) handleSwipe('right');
-      else if (actionKeys.has(key)) handleCardClick();
+      else if (actionKeys.has(key)) {
+        const target = event.target as Node | null;
+        if (target && cardButtonRef.current && cardButtonRef.current.contains(target)) return;
+        handleCardClick();
+      }
     };
     document.addEventListener('keyup', handleKeyPress);
     return () => document.removeEventListener('keyup', handleKeyPress);
@@ -46,11 +54,14 @@ const CardView: React.FC<CardViewProps> = ({ front, back, onSwipeLeft, onSwipeRi
   return (
     <>
       <button
+        ref={cardButtonRef}
         onClick={handleCardClick}
-        onKeyUp={(event) => event.key === ' ' && handleCardClick()}
+        type="button"
+        aria-pressed={isFlipped}
+        aria-label={`Flashcard. ${isFlipped ? 'Back side' : 'Front side'}. Tap to flip.`}
         className="group flex-1 rounded-lg focus-visible:shadow-none"
         style={{
-          transition: 'transform 0.35s, opacity 0.35s',
+          transition: `transform ${TRANSITION_MS}ms, opacity ${TRANSITION_MS}ms`,
           opacity: swipeDirection ? 0 : 1,
           transform: swipeDirection === 'left' ? 'translateX(-100%)' : swipeDirection === 'right' ? 'translateX(100%)' : '',
           transformStyle: 'preserve-3d',
@@ -62,7 +73,7 @@ const CardView: React.FC<CardViewProps> = ({ front, back, onSwipeLeft, onSwipeRi
             transformStyle: 'preserve-3d',
             perspective: '20000px',
             transform: isFlipped ? 'rotateY(180deg)' : '',
-            transition: !swipeDirection ? 'transform 0.35s' : 'border-color 0.1s',
+            transition: !swipeDirection ? `transform ${TRANSITION_MS}ms` : 'border-color 0.1s',
           }}
           className={clsx(
             swipeDirection === 'left' ? 'border-rose-500' : swipeDirection === 'right' ? 'border-primary-500' : 'border-outline',

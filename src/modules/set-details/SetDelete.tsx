@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 
-import { utils } from '@src/lib';
+import { handleError } from '@src/lib/utils/func';
 import { useLocalStore } from '@src/stores';
 import * as Types from '@src/types';
 import { Dialog } from '@src/ui';
@@ -18,7 +18,7 @@ const SetDelete: React.FC<Props> = ({ open, close, data }) => {
       localStore.setValues({ sets: localStore.sets.filter((item) => item.id !== data.id) });
       router.push('/');
     } catch (error) {
-      utils.func.handleError(error);
+      handleError(error);
     }
   };
 

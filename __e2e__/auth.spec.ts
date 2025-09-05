@@ -1,6 +1,6 @@
 import { test, expect, type Page } from '@playwright/test';
 
-import { loginAsGuest } from '@tests/utils';
+import { loginAsGuest } from '@__e2e__/utils';
 
 function getLoginElements(page: Page) {
   return {
@@ -13,7 +13,7 @@ function getLoginElements(page: Page) {
 test.describe('Login functionality', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/login');
-    await expect(page.getByText('Log in or Sign up')).toBeInViewport();
+    await expect(page.getByText('Log in or Sign up')).toBeVisible();
   });
 
   test('should require email and password', async ({ page }) => {

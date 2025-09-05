@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 
-import { utils } from '@src/lib';
+import { handleError } from '@src/lib/utils/func';
 import { useLocalStore } from '@src/stores';
 import * as Types from '@src/types';
 import { Dialog } from '@src/ui';
@@ -21,7 +21,7 @@ const FolderDelete: React.FC<Props> = ({ open, close, data }) => {
       });
       router.push('/');
     } catch (error) {
-      utils.func.handleError(error);
+      handleError(error);
     }
   };
 

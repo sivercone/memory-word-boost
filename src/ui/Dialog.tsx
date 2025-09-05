@@ -21,7 +21,7 @@ function Dialog({ defaultOpen, open, close, header, children, className, ...prop
           className={clsx(
             open ? 'animate-fadeIn' : 'animate-fadeOut',
             'fixed inset-0 z-50',
-            'bg-overlay bg-opacity-50',
+            'bg-overlay/30',
             'data-[state=open]:animate-fadeIn',
           )}
         />

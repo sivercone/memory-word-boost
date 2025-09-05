@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 
-import utils from '../utils';
+import { getSampleSets } from '../utils/array';
+import { handleError } from '../utils/func';
 import { useLocalStore } from '@src/stores';
 
 const useInitiateDefaultData = () => {
@@ -10,10 +11,10 @@ const useInitiateDefaultData = () => {
 
   const setInitialSets = (userId: string) => {
     try {
-      localStore.setValues((prev) => ({ ...prev, sets: [...prev.sets, ...utils.array.getSampleSets(userId)] }));
+      localStore.setValues((prev) => ({ ...prev, sets: [...prev.sets, ...getSampleSets(userId)] }));
       hasRunOnce.current = true;
     } catch (error) {
-      utils.func.handleError(error);
+      handleError(error);
     }
   };
 

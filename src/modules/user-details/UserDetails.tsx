@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import UserForm from '../user-form';
-import { utils } from '@src/lib';
+import { composeSortedFolders } from '@src/lib/utils/array';
 import { useLocalStore } from '@src/stores';
 import * as Types from '@src/types';
 import { ActionList, Button, Spinner, Icons } from '@src/ui';
@@ -32,7 +32,7 @@ const UserProfile: React.FC<{ data: Types.UserModel; onEdit?: () => void }> = ({
 
 const UserFolders: React.FC<{ userId: string }> = ({ userId }) => {
   const localStore = useLocalStore();
-  const sortedFolders = utils.array.composeSortedFolders(localStore.folders.filter((item) => item.userId === userId));
+  const sortedFolders = composeSortedFolders(localStore.folders.filter((item) => item.userId === userId));
 
   if (!sortedFolders.length) return <Spinner center className="m-8 h-8" />;
   return (

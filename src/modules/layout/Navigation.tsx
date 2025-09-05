@@ -1,8 +1,9 @@
+import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { useLocalStore } from '@src/stores';
-import { Button, Icons, DropdownMenu } from '@src/ui';
+import { Button, Icons, DropdownMenu, Logo } from '@src/ui';
 
 const creationOptions = [
   { id: 'set', title: 'Create Set', href: '/sets/new', icon: <Icons.Set /> },
@@ -12,6 +13,8 @@ const creationOptions = [
 const Navigation = () => {
   const router = useRouter();
   const { userId, ...localStorage } = useLocalStore();
+
+  const shouldBeSticky = !((router.pathname === '/sets/[id]/edit' || router.pathname === '/sets/new') && router.query.tab === 'cards');
 
   const logout = () => {
     localStorage.setValues({ userId: undefined });
@@ -24,18 +27,14 @@ const Navigation = () => {
   ];
 
   return (
-    <nav id="navigation" className="sticky top-0 z-10 border-b border-b-outline bg-surface py-[16px]">
+    <nav
+      id="navigation"
+      role="navigation"
+      className={clsx(shouldBeSticky && 'sticky', 'top-0 z-10 border-b border-b-outline bg-surface py-[16px]')}
+    >
       <div className="mx-auto flex max-w-3xl items-center px-4">
-        <Link href="/" className="flex select-none items-center gap-1" aria-label="Project MWB logo, go to homepage">
-          <span
-            className="bg-gradient-to-br from-primary-500 to-[#111827] box-decoration-slice bg-clip-text font-semibold text-transparent"
-            style={{ letterSpacing: '-0.9px', lineHeight: '0.8' }}
-          >
-            PROJECT MWB
-          </span>
-          <span className="rounded-lg bg-background px-1 text-xs font-medium text-[#6b7280]" style={{ letterSpacing: '-0.8px' }}>
-            Prototype
-          </span>
+        <Link href="/" aria-label="Project MWB logo, go to homepage">
+          <Logo variant="dark" />
         </Link>
         <div className="ml-auto flex items-center gap-4">
           <DropdownMenu
