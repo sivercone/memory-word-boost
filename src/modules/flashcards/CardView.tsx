@@ -43,7 +43,8 @@ const CardView: React.FC<CardViewProps> = ({ front, back, onSwipeLeft, onSwipeRi
       else if (rightKeys.has(key)) handleSwipe('right');
       else if (actionKeys.has(key)) {
         const target = event.target as Node | null;
-        if (target && cardButtonRef.current && cardButtonRef.current.contains(target)) return;
+        const isSpaceKey = key === ' ';
+        if (isSpaceKey && target && cardButtonRef.current?.contains(target)) return;
         handleCardClick();
       }
     };
